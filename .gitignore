@@ -1,0 +1,9 @@
+# Custom
+*.*~
+logs/*.log
+icons/more/*
+lib/gtk2/*
+
+# Python cache
+__pycache__/
+*.pyc
