@@ -7,6 +7,8 @@ gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
 from . import tools
 from . import logger
+from . import data
+from .threads import BotThread
 
 class LogType:
 	Normal, Info, Success, Error = range(4)
@@ -15,6 +17,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	game_window = None
 	bot_path = None
+	bot_thread = None
 
 	def __init__(self, title='Dindo Bot'):
 		Gtk.Window.__init__(self, title=title)
@@ -86,9 +89,6 @@ class BotWindow(Gtk.ApplicationWindow):
 		hb = Gtk.HeaderBar(title=title)
 		hb.set_show_close_button(True)
 		self.set_titlebar(hb)
-		## Menu button
-		#menu_button = Gtk.Button()
-		#menu_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/drago_24.png')))
 		## Settings button
 		settings_button = Gtk.Button()
 		settings_button.set_image(Gtk.Image(stock=Gtk.STOCK_PROPERTIES))
@@ -113,7 +113,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		about_button.set_image(Gtk.Image(stock=Gtk.STOCK_ABOUT))
 		about_button.connect('clicked', self.on_about_button_clicked)
 		box.add(about_button)
-		#hb.pack_start(menu_button)
+		hb.pack_start(Gtk.Image(file=tools.get_resource_path('../icons/drago_24.png')))
 		hb.pack_end(settings_button)
 
 	def create_tabs(self):
@@ -183,6 +183,29 @@ class BotWindow(Gtk.ApplicationWindow):
 		filechooserbutton.set_margin_left(10)
 		filechooserbutton.connect('file-set', self.on_bot_path_changed)
 		bot_page.add(filechooserbutton)
+		## Start
+		self.start_button = Gtk.Button(' Start ')
+		self.start_button.set_image(self.add_image_margin(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY)))
+		self.start_button.connect('clicked', self.on_start_button_clicked)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		container_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hbox.pack_start(container_hbox, True, False, 0)
+		container_hbox.add(self.start_button)
+		bot_page.pack_end(hbox, False, False, 0)
+		## Pause
+		self.pause_button = Gtk.Button()
+		self.pause_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PAUSE))
+		self.pause_button.set_tooltip_text('Pause')
+		self.pause_button.set_sensitive(False)
+		self.pause_button.connect('clicked', self.on_pause_button_clicked)
+		container_hbox.add(self.pause_button)
+		## Stop
+		self.stop_button = Gtk.Button()
+		self.stop_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_STOP))
+		self.stop_button.set_tooltip_text('Stop')
+		self.stop_button.set_sensitive(False)
+		self.stop_button.connect('clicked', self.on_stop_button_clicked)
+		container_hbox.add(self.stop_button)
 		### Path Tab
 		path_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		path_page.set_border_width(10)
@@ -192,7 +215,6 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Up
 		up_button = Gtk.Button()
 		up_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_UP))
-		up_button.set_tooltip_text('Up')
 		up_button.connect('clicked', self.on_up_button_clicked)
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.pack_start(up_button, True, False, 0)
@@ -200,7 +222,6 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Left
 		left_button = Gtk.Button()
 		left_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_BACK))
-		left_button.set_tooltip_text('Left')
 		left_button.connect('clicked', self.on_left_button_clicked)
 		left_right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=40)
 		left_right_box.add(left_button)
@@ -210,13 +231,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Right
 		right_button = Gtk.Button()
 		right_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_FORWARD))
-		right_button.set_tooltip_text('Right')
 		right_button.connect('clicked', self.on_right_button_clicked)
 		left_right_box.add(right_button)
 		# Down
 		down_button = Gtk.Button()
 		down_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_DOWN))
-		down_button.set_tooltip_text('Down')
 		down_button.connect('clicked', self.on_down_button_clicked)
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.pack_start(down_button, True, False, 0)
@@ -228,10 +247,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(5)
 		hbox.add(self.enclos_radio)
-		enclos_combo = Gtk.ComboBoxText()
-		enclos_combo.set_margin_left(14)
-		enclos_combo.connect('changed', lambda self, combo: self.enclos_radio.set_active(True))
-		hbox.pack_start(enclos_combo, True, True, 0)
+		self.enclos_combo = CustomComboBox(data=data.Enclos.keys())
+		self.enclos_combo.set_margin_left(14)
+		self.enclos_combo.connect('changed', lambda combo: self.enclos_radio.set_active(True))
+		hbox.pack_start(self.enclos_combo, True, True, 0)
 		path_page.add(hbox)
 		## Zaap
 		self.zaap_radio = Gtk.RadioButton('Zaap', group=self.enclos_radio)
@@ -241,19 +260,19 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
 		hbox.add(self.create_bold_label('From'))
-		zaap_from_combo = Gtk.ComboBoxText()
-		zaap_from_combo.set_margin_left(12)
-		zaap_from_combo.connect('changed', lambda self, combo: self.zaap_radio.set_active(True))
-		hbox.pack_start(zaap_from_combo, True, True, 0)
+		self.zaap_from_combo = CustomComboBox(data=data.Zaap['From'].keys())
+		self.zaap_from_combo.set_margin_left(12)
+		self.zaap_from_combo.connect('changed', lambda combo: self.zaap_radio.set_active(True))
+		hbox.pack_start(self.zaap_from_combo, True, True, 0)
 		path_page.add(hbox)
 		# To
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
 		hbox.add(self.create_bold_label('To'))
-		zaap_to_combo = Gtk.ComboBoxText()
-		zaap_to_combo.set_margin_left(30)
-		zaap_to_combo.connect('changed', lambda self, combo: self.zaap_radio.set_active(True))
-		hbox.pack_start(zaap_to_combo, True, True, 0)
+		self.zaap_to_combo = CustomComboBox(data=data.Zaap['To'].keys())
+		self.zaap_to_combo.set_margin_left(30)
+		self.zaap_to_combo.connect('changed', lambda combo: self.zaap_radio.set_active(True))
+		hbox.pack_start(self.zaap_to_combo, True, True, 0)
 		path_page.add(hbox)
 		## Zaapi
 		self.zaapi_radio = Gtk.RadioButton('Zaapi', group=self.enclos_radio)
@@ -263,19 +282,19 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
 		hbox.add(self.create_bold_label('From'))
-		zaapi_from_combo = Gtk.ComboBoxText()
-		zaapi_from_combo.set_margin_left(12)
-		zaapi_from_combo.connect('changed', lambda self, combo: self.zaapi_radio.set_active(True))
-		hbox.pack_start(zaapi_from_combo, True, True, 0)
+		self.zaapi_from_combo = CustomComboBox(data=data.Zaapi['From'].keys())
+		self.zaapi_from_combo.set_margin_left(12)
+		self.zaapi_from_combo.connect('changed', lambda combo: self.zaapi_radio.set_active(True))
+		hbox.pack_start(self.zaapi_from_combo, True, True, 0)
 		path_page.add(hbox)
 		# To
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
 		hbox.add(self.create_bold_label('To'))
-		zaapi_to_combo = Gtk.ComboBoxText()
-		zaapi_to_combo.set_margin_left(30)
-		zaapi_to_combo.connect('changed', lambda self, combo: self.zaapi_radio.set_active(True))
-		hbox.pack_start(zaapi_to_combo, True, True, 0)
+		self.zaapi_to_combo = CustomComboBox(data=data.Zaapi['To'].keys())
+		self.zaapi_to_combo.set_margin_left(30)
+		self.zaapi_to_combo.connect('changed', lambda combo: self.zaapi_radio.set_active(True))
+		hbox.pack_start(self.zaapi_to_combo, True, True, 0)
 		path_page.add(hbox)
 		## Separator
 		path_page.add(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL, margin=5))
@@ -287,20 +306,20 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox.pack_start(container_hbox, True, False, 0)
 		container_hbox.add(add_action_button)
 		## Save
-		menu_button = Gtk.MenuButton('   Save  |')
-		menu_button.set_image(Gtk.Arrow(Gtk.ArrowType.DOWN, Gtk.ShadowType.NONE))
-		menu_button.set_image_position(Gtk.PositionType.RIGHT)
+		save_menu_button = Gtk.MenuButton('   Save  |')
+		save_menu_button.set_image(Gtk.Arrow(Gtk.ArrowType.DOWN, Gtk.ShadowType.NONE))
+		save_menu_button.set_image_position(Gtk.PositionType.RIGHT)
 		menu = Gtk.Menu()
-		menu.connect('show', self.on_menu_show)
-		self.save_menu_item = Gtk.MenuItem('Save')
-		self.save_menu_item.connect("activate", self.on_save_menu_item_activated)
-		menu.append(self.save_menu_item)
-		clear_menu_item = Gtk.MenuItem('Clear All')
-		clear_menu_item.connect("activate", self.on_clear_menu_item_activated)
-		menu.append(clear_menu_item)
+		menu.connect('show', self.on_save_menu_show)
+		self.save_path = Gtk.MenuItem('Save')
+		self.save_path.connect("activate", self.on_save_path_activated)
+		menu.append(self.save_path)
+		clear_path = Gtk.MenuItem('Clear All')
+		clear_path.connect("activate", self.on_clear_path_activated)
+		menu.append(clear_path)
 		menu.show_all()
-		menu_button.set_popup(menu)
-		container_hbox.add(menu_button)
+		save_menu_button.set_popup(menu)
+		container_hbox.add(save_menu_button)
 		path_page.add(hbox)
 		## Listbox
 		frame = Gtk.Frame()
@@ -311,13 +330,44 @@ class BotWindow(Gtk.ApplicationWindow):
 		frame.add(scrolled_window)
 		path_page.pack_end(frame, True, True, 0)
 
-	def on_menu_show(self, menu):
-		if self.path_listbox.get_children():
-			self.save_menu_item.set_sensitive(True)
+	def on_start_button_clicked(self, button):
+		# start bot thread or resume it
+		if self.start_button.get_label() == ' Start ':
+			self.bot_thread = BotThread(self)
+			self.bot_thread.start()
 		else:
-			self.save_menu_item.set_sensitive(False)
+			self.bot_thread.resume()
+		# enable/disable buttons
+		self.start_button.set_image(self.add_image_margin(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif'))))
+		self.start_button.set_sensitive(False)
+		self.pause_button.set_sensitive(True)
+		self.stop_button.set_sensitive(True)
 
-	def on_save_menu_item_activated(self, item):
+	def on_pause_button_clicked(self, button):
+		self.bot_thread.pause()
+		self.start_button.set_label(' Resume ')
+		self.start_button.set_image(self.add_image_margin(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY)))
+		self.start_button.set_sensitive(True)
+		self.pause_button.set_sensitive(False)
+
+	def reset_buttons(self):
+		self.start_button.set_label(' Start ')
+		self.start_button.set_image(self.add_image_margin(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY)))
+		self.stop_button.set_sensitive(False)
+		self.pause_button.set_sensitive(False)
+		self.start_button.set_sensitive(True)
+
+	def on_stop_button_clicked(self, button):
+		self.bot_thread.stop()
+		self.reset_buttons()
+
+	def on_save_menu_show(self, menu):
+		if self.path_listbox.get_children():
+			self.save_path.set_sensitive(True)
+		else:
+			self.save_path.set_sensitive(False)
+
+	def on_save_path_activated(self, item):
 		filechooserdialog = Gtk.FileChooserDialog(title='Save as', transient_for=self, action=Gtk.FileChooserAction.SAVE)
 		filechooserdialog.set_current_folder(tools.get_resource_path('../paths'))
 		filechooserdialog.set_current_name('path_' + tools.get_date_time() + '.path')
@@ -333,16 +383,16 @@ class BotWindow(Gtk.ApplicationWindow):
 		if response == Gtk.ResponseType.OK:
 			# get all rows text
 			text = ''
-			for children in self.path_listbox.get_children():
-				text += self.path_listbox.get_row_text(children) + '\n'
+			for row in self.path_listbox.get_children():
+				text += self.path_listbox.get_row_text(row) + '\n'
 			# save it to file
 			tools.save_text_to_file(text, filechooserdialog.get_filename())
 
 		filechooserdialog.destroy()
 
-	def on_clear_menu_item_activated(self, item):
-		for children in self.path_listbox.get_children():
-			self.path_listbox.remove(children)
+	def on_clear_path_activated(self, item):
+		for row in self.path_listbox.get_children():
+			self.path_listbox.remove(row)
 
 	def on_up_button_clicked(self, button):
 		self.path_listbox.append_text('Move(UP)')
@@ -357,15 +407,24 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.path_listbox.append_text('Move(DOWN)')
 
 	def on_add_action_button_clicked(self, button):
-		print('action added')
+		if self.enclos_radio.get_active():
+			self.path_listbox.append_text('Enclos(%s)' % self.enclos_combo.get_active_text())
+		elif self.zaap_radio.get_active():
+			self.path_listbox.append_text('Zaap(from=%s,to=%s)' % (self.zaap_from_combo.get_active_text(), self.zaap_to_combo.get_active_text()))
+		elif self.zaapi_radio.get_active():
+			self.path_listbox.append_text('Zaapi(from=%s,to=%s)' % (self.zaapi_from_combo.get_active_text(), self.zaapi_to_combo.get_active_text()))
 
 	def on_bot_path_changed(self, filechooserbutton):
 		self.bot_path = filechooserbutton.get_filename()
 
+	def add_image_margin(self, image, margin=5):
+		image.set_margin_left(margin)
+
+		return image
+
 	def create_bold_label(self, text):
-		label = Gtk.Label()
+		label = Gtk.Label(xalign=0)
 		label.set_markup('<b>' + text + '</b>')
-		label.set_alignment(0, 0.5)
 
 		return label
 
@@ -437,8 +496,12 @@ class BotWindow(Gtk.ApplicationWindow):
 
 		# We only terminate when the user presses the OK button
 		if response == Gtk.ResponseType.OK:
+			# move game window to desktop
 			if not self.close_game_checkbox.get_active():
 				self.move_game_window_to_desktop()
+			# stop bot thread
+			if self.bot_thread and self.bot_thread.isAlive():
+				self.bot_thread.stop()
 			return False
 
 		# Otherwise we keep the application open
@@ -446,6 +509,13 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def main(self):
 		Gtk.main()
+
+class CustomComboBox(Gtk.ComboBoxText):
+
+	def __init__(self, data=[]):
+		Gtk.ComboBoxText.__init__(self)
+		for text in data:
+			self.append_text(text)
 
 class CustomListBox(Gtk.ListBox):
 
@@ -497,7 +567,7 @@ class AboutDialog(Gtk.AboutDialog):
 		self.set_website("https://github.com/AXeL-dev")
 		self.set_website_label("AXeL-dev")
 		self.set_authors(["AXeL"])
-		logo = GdkPixbuf.Pixbuf.new_from_file(tools.get_resource_path("../icons/dragox2.png"))
+		logo = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path("../icons/cover.png"), 64, 64)
 		self.set_logo(logo)
 		self.connect("response", self.on_response)
 

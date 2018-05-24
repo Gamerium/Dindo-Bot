@@ -24,7 +24,7 @@ def get_game_window_list():
 		for window in window_list:
 			window_name = window.get_name()
 			instance_name = window.get_class_instance_name()
-			#print(window_name + ', ' + instance_name)
+			#print('[' + instance_name + '] ' + window_name)
 			if instance_name == 'Dofus':
 				game_window_list[window_name] = window.get_xid()
 	# Win32
@@ -106,3 +106,11 @@ def save_text_to_file(text, filename, mode='w'):
 	file = open(filename, mode)
 	file.write(text)
 	file.close()
+
+# Return file content
+def read_file(filename):
+	file = open(filename, 'r')
+	content = file.read()
+	file.close()
+
+	return content
