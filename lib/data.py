@@ -20,8 +20,8 @@ class EnclosType:
 	Endurance, Maturity, Amour, Energy, NegativeSerenity, PositiveSerenity = range(6)
 
 Enclos = {
-	'[-20, 11]': {'x': 200, 'y': 10, 'type': EnclosType.Endurance},
-	'[-20, 12]': {'x': 200, 'y': 10, 'type': EnclosType.Amour}
+	'[-20,11]': {'x': 200, 'y': 10, 'type': EnclosType.Endurance},
+	'[-20,12]': {'x': 200, 'y': 10, 'type': EnclosType.Amour}
 }
 
 # Zaap

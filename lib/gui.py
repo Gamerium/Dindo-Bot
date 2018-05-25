@@ -3,15 +3,12 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-gi.require_version('Gdk', '3.0')
-from gi.repository import Gtk, Gdk, GdkPixbuf
+from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 from . import tools
 from . import logger
 from . import data
+from .shared import LogType
 from .threads import BotThread
-
-class LogType:
-	Normal, Info, Success, Error = range(4)
 
 class BotWindow(Gtk.ApplicationWindow):
 
@@ -56,8 +53,6 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.log_buf.insert_with_tags(position, new_text, self.blue_text_tag)
 		else:
 			self.log_buf.insert(position, new_text)
-		# scroll
-		self.log_view.scroll_to_mark(self.log_buf.get_insert(), 0.0, False, 0.5, 0.5)
 		# call logger
 		if type == LogType.Error:
 			logger.error(text)
@@ -67,7 +62,6 @@ class BotWindow(Gtk.ApplicationWindow):
 	def _debug(self, text):
 		position = self.debug_buf.get_end_iter()
 		self.debug_buf.insert(position, '[' + tools.get_time() + '] ' + text + '\n')
-		self.debug_view.scroll_to_mark(self.debug_buf.get_insert(), 0.0, False, 0.5, 0.5)
 		logger.debug(text)
 
 	def on_settings_button_clicked(self, button):
@@ -116,6 +110,14 @@ class BotWindow(Gtk.ApplicationWindow):
 		hb.pack_start(Gtk.Image(file=tools.get_resource_path('../icons/drago_24.png')))
 		hb.pack_end(settings_button)
 
+	def log_view_auto_scroll(self, textview, event):
+		adj = textview.get_vadjustment()
+		adj.set_value(adj.get_upper() - adj.get_page_size())
+
+	def debug_view_auto_scroll(self, textview, event):
+		adj = textview.get_vadjustment()
+		adj.set_value(adj.get_upper() - adj.get_page_size())
+
 	def create_tabs(self):
 		log_notebook = Gtk.Notebook()
 		log_notebook.set_border_width(2)
@@ -129,6 +131,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.log_view.set_border_width(5)
 		self.log_view.set_editable(False)
 		self.log_view.set_wrap_mode(Gtk.WrapMode.WORD)
+		self.log_view.connect('size-allocate', self.log_view_auto_scroll)
 		self.log_buf = self.log_view.get_buffer()
 		self.red_text_tag = self.log_buf.create_tag('red', foreground='#FF0000')
 		self.green_text_tag = self.log_buf.create_tag('green', foreground='#00FF00')
@@ -143,6 +146,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.debug_view.set_wrap_mode(Gtk.WrapMode.WORD)
 		self.debug_view.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse('black'))
 		self.debug_view.modify_fg(Gtk.StateType.NORMAL, Gdk.color_parse('white'))
+		self.debug_view.connect('size-allocate', self.debug_view_auto_scroll)
 		self.debug_buf = self.debug_view.get_buffer()
 		debug_page.add(self.debug_view)
 		log_notebook.append_page(debug_page, Gtk.Label('Debug'))
@@ -330,7 +334,19 @@ class BotWindow(Gtk.ApplicationWindow):
 		frame.add(scrolled_window)
 		path_page.pack_end(frame, True, True, 0)
 
+	def show_message(self, message):
+		dialog = Gtk.MessageDialog(self, True, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, message)
+		dialog.run()
+		dialog.destroy()
+
 	def on_start_button_clicked(self, button):
+		'''
+		if not self.game_window:
+			self.show_message('Please select a game window')
+		elif not self.bot_path:
+			self.show_message('Please select a bot path')
+		else:
+		'''
 		# start bot thread or resume it
 		if self.start_button.get_label() == ' Start ':
 			self.bot_thread = BotThread(self)
@@ -454,7 +470,7 @@ class BotWindow(Gtk.ApplicationWindow):
 						self.game_window.show() # force show (when minimized)
 						allocation = self.game_area.get_allocation()
 						self.game_window.move_resize(allocation.x, allocation.y, allocation.width, allocation.height)
-						# enable/disable controls
+						# enable/disable widgets
 						self.take_screenshot_button.set_sensitive(True)
 						combo.set_sensitive(False)
 						self.refresh_button.hide()
@@ -470,7 +486,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_undo_button_clicked(self, button):
 		self.move_game_window_to_desktop()
-		# enable/disable controls
+		# enable/disable widgets
 		self.undo_button.hide()
 		self.refresh_button.show()
 		self.game_window_combo.set_sensitive(True)
@@ -508,6 +524,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		return True
 
 	def main(self):
+		GObject.threads_init() # allow threads to update GUI
 		Gtk.main()
 
 class CustomComboBox(Gtk.ComboBoxText):

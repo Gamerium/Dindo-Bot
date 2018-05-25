@@ -5,7 +5,7 @@
 	Rearing bot for Dofus game
 '''
 
-from lib.ui import BotWindow
+from lib.gui import BotWindow
 from lib.tools import internet_on
 
 bot = BotWindow()
