@@ -3,13 +3,18 @@
 
 import sys
 import os
-import urllib2
 import gi
 gi.require_version('Wnck', '3.0')
 gi.require_version('Gdk', '3.0')
-gi.require_version('GdkX11', '3.0')
 from gi.repository import Wnck, Gdk, GdkX11
 from datetime import datetime
+
+try:
+	# For Python 3.0 and later
+	import urllib.request as urllib2
+except ImportError:
+	# Fall back to Python 2's urllib2
+	import urllib2
 
 # Return active game window(s) list
 def get_game_window_list():

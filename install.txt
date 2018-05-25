@@ -1,0 +1,8 @@
+# Dependencies
+
+### Linux
+
+# Xlib
+sudo apt install python-xlib
+# or for python 3
+sudo apt install python3-xlib

@@ -7,8 +7,8 @@ from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 from . import tools
 from . import logger
 from . import data
-from .shared import LogType
 from .threads import BotThread
+from .shared import LogType, __version__
 
 class BotWindow(Gtk.ApplicationWindow):
 
@@ -76,7 +76,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			screenshot_name = 'screenshot_' + tools.get_date_time()
 			screenshot_path = tools.get_resource_path('../' + screenshot_name)
 			tools.take_window_screenshot(self.game_window, screenshot_path)
-			self._log("Screenshot saved to '" + screenshot_path + "'", LogType.Info)
+			self._log('Screenshot saved to: ' + screenshot_path, LogType.Info)
 
 	def create_header_bar(self, title):
 		### Header Bar
@@ -316,10 +316,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		menu = Gtk.Menu()
 		menu.connect('show', self.on_save_menu_show)
 		self.save_path = Gtk.MenuItem('Save')
-		self.save_path.connect("activate", self.on_save_path_activated)
+		self.save_path.connect('activate', self.on_save_path_activated)
 		menu.append(self.save_path)
 		clear_path = Gtk.MenuItem('Clear All')
-		clear_path.connect("activate", self.on_clear_path_activated)
+		clear_path.connect('activate', self.on_clear_path_activated)
 		menu.append(clear_path)
 		menu.show_all()
 		save_menu_button.set_popup(menu)
@@ -391,8 +391,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		pathfilter.set_name('Bot Path (*.path)')
 		pathfilter.add_pattern('*.path')
 		filechooserdialog.add_filter(pathfilter)
-		filechooserdialog.add_button("_Cancel", Gtk.ResponseType.CANCEL)
-		filechooserdialog.add_button("_Save", Gtk.ResponseType.OK)
+		filechooserdialog.add_button('_Cancel', Gtk.ResponseType.CANCEL)
+		filechooserdialog.add_button('_Save', Gtk.ResponseType.OK)
 		filechooserdialog.set_default_response(Gtk.ResponseType.OK)
 		response = filechooserdialog.run()
 
@@ -578,15 +578,15 @@ class AboutDialog(Gtk.AboutDialog):
 
 	def __init__(self, transient_for):
 		Gtk.AboutDialog.__init__(self, transient_for=transient_for)
-		self.set_program_name("Dindo Bot")
-		self.set_version("1.0.0")
-		self.set_comments("Rearing bot for Dofus game")
-		self.set_website("https://github.com/AXeL-dev")
-		self.set_website_label("AXeL-dev")
-		self.set_authors(["AXeL"])
-		logo = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path("../icons/cover.png"), 64, 64)
+		self.set_program_name('Dindo Bot')
+		self.set_version(__version__)
+		self.set_comments('Rearing bot for Dofus game')
+		self.set_website('https://github.com/AXeL-dev')
+		self.set_website_label('AXeL-dev')
+		self.set_authors(['AXeL'])
+		logo = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/cover.png'), 64, 64)
 		self.set_logo(logo)
-		self.connect("response", self.on_response)
+		self.connect('response', self.on_response)
 
 	def on_response(self, dialog, response):
 		self.destroy()

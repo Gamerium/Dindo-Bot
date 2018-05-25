@@ -3,14 +3,14 @@
 
 import threading
 import time
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import GObject
 from .tools import read_file, internet_on
 from .shared import LogType
 from . import parser
 from . import data
-
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import GObject
+import pyautogui
 
 '''
 	TimerThread is a quick implementation of thread class with a timer (not really powerful, but it do the job)
