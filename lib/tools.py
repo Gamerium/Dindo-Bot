@@ -8,6 +8,7 @@ gi.require_version('Wnck', '3.0')
 gi.require_version('Gdk', '3.0')
 from gi.repository import Wnck, Gdk, GdkX11
 from datetime import datetime
+import pyautogui
 
 try:
 	# For Python 3.0 and later
@@ -34,8 +35,10 @@ def get_game_window_list():
 				game_window_list[window_name] = window.get_xid()
 	# Win32
 	elif sys.platform == 'win32':
-		print('Not implemented')
-		# ToDo: add implementation using windows API library
+		windows = pyautogui.getWindows()
+		for window_name in windows:
+			if 'Dofus' in window_name: # TODO: check process/instance name instead of window name
+				game_window_list[window_name] = windows[window_name]
 
 	return game_window_list
 
@@ -49,8 +52,8 @@ def get_game_window(window_xid):
 		game_window = GdkX11.X11Window.foreign_new_for_display(gdk_display, window_xid)
 	# Win32
 	elif sys.platform == 'win32':
-		print('Not implemented')
-		# ToDo: add implementation using windows API library
+		hwnd = window_xid
+		game_window = pyautogui.Window(hwnd)
 
 	return game_window
 
@@ -79,8 +82,9 @@ def take_window_screenshot(window, save_to='screenshot'):
 		pb.savev(save_to + '.png', 'png', (), ())
 	# Win32
 	elif sys.platform == 'win32':
-		print('Not implemented')
-		# ToDo: add implementation using windows API library (@see also PIL module)
+		region = window.get_geometry() # or window.get_parent().get_allocation() ?
+		screenshot = pyautogui.screenshot(region=(region.x, region.y, region.width, region.height))
+		screenshot.save(save_to + '.png')
 
 # Return pixel color of given window & pixel
 def get_window_pixel_color(window, x, y):
@@ -91,8 +95,7 @@ def get_window_pixel_color(window, x, y):
 		return pb.get_pixels()
 	# Win32
 	elif sys.platform == 'win32':
-		print('Not implemented')
-		# ToDo: add implementation using windows API library
+		return pyautogui.pixel(x, y) # x & y should be related to desktop for this to work
 
 # Return date as a string
 def get_date():
@@ -119,3 +122,7 @@ def read_file(filename):
 	file.close()
 
 	return content
+
+# Return platform name
+def get_platform():
+	return sys.platform
