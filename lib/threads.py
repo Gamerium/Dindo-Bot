@@ -71,7 +71,7 @@ class BotThread(TimerThread):
 		# reset bot window buttons
 		self.reset()
 
-		self.debug('Bot thread ended (elapsed time: %s)' % self.get_elapsed_time())
+		self.debug('Bot thread ended, elapsed time: ' + self.get_elapsed_time())
 
 	def interpret(self, instructions):
 		# split instructions

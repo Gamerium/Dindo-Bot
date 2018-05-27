@@ -5,8 +5,8 @@ import sys
 import os
 import gi
 gi.require_version('Wnck', '3.0')
-gi.require_version('Gdk', '3.0')
-from gi.repository import Wnck, Gdk, GdkX11
+gi.require_version('Gtk', '3.0')
+from gi.repository import Wnck, Gtk, Gdk, GdkX11
 from datetime import datetime
 import pyautogui
 
@@ -80,22 +80,23 @@ def take_window_screenshot(window, save_to='screenshot'):
 		size = window.get_geometry()
 		pb = Gdk.pixbuf_get_from_window(window, 0, 0, size.width, size.height)
 		pb.savev(save_to + '.png', 'png', (), ())
-	# Win32
-	elif sys.platform == 'win32':
-		region = window.get_geometry() # or window.get_parent().get_allocation() ?
-		screenshot = pyautogui.screenshot(region=(region.x, region.y, region.width, region.height))
+	# Others
+	else:
+		x, y = window.get_position()
+		region = window.get_geometry() # or window.get_allocation() ?
+		screenshot = pyautogui.screenshot(region=(x, y, region.width, region.height))
 		screenshot.save(save_to + '.png')
 
-# Return pixel color of given window & pixel
-def get_window_pixel_color(window, x, y):
+# Return pixel color of given x, y coordinates
+def get_pixel_color(x, y):
 	# Linux X11
 	if sys.platform.startswith('linux'):
-		#window.show()
+		window = Gdk.get_default_root_window()
 		pb = Gdk.pixbuf_get_from_window(window, x, y, 1, 1)
-		return pb.get_pixels()
-	# Win32
-	elif sys.platform == 'win32':
-		return pyautogui.pixel(x, y) # x & y should be related to desktop for this to work
+		return tuple(pb.get_pixels()) # value returned isn't RGB, maybe a GTK3 bug?
+	# Others
+	else:
+		return pyautogui.pixel(x, y)
 
 # Return date as a string
 def get_date():
@@ -126,3 +127,36 @@ def read_file(filename):
 # Return platform name
 def get_platform():
 	return sys.platform
+
+# Return command line arguments
+def get_cmd_args():
+	return sys.argv[1:]
+
+# Return widget absolute position
+def get_widget_absolute_position(widget):
+	# get widget position (relative to root window)
+	if type(widget) in (Gtk.DrawingArea, Gtk.EventBox, Gtk.Socket):
+		pos = widget.get_window().get_origin()
+		return (pos.x, pos.y)
+	else:
+		pos = widget.get_allocation()
+		abs_x, abs_y = widget.get_window().get_root_coords(pos.x, pos.y)
+		return (abs_x, abs_y)
+
+# Check if point is out of bounds
+def point_is_inside_bounds(point_x, point_y, bound_x, bound_y, bound_width, bound_height):
+	if point_x > bound_x and point_x < (bound_x + bound_width) and point_y > bound_y and point_y < (bound_y + bound_height):
+		return True
+	else:
+		return False
+
+# Fit point coordinates to given size
+def fit_point_to_size(x, y, width, height, new_width, new_height):
+	if width > new_width and height > new_height:
+		new_x = x / (new_width / float(width))
+		new_y = y / (new_height / float(height))
+	else:
+		new_x = x * new_width / float(width)
+		new_y = y * new_height / float(height)
+
+	return (int(new_x), int(new_y))

@@ -9,12 +9,14 @@ from . import logger
 from . import data
 from .threads import BotThread
 from .shared import LogType, __version__
+import pyautogui
 
 class BotWindow(Gtk.ApplicationWindow):
 
 	game_window = None
 	bot_path = None
 	bot_thread = None
+	args = tools.get_cmd_args()
 
 	def __init__(self, title='Dindo Bot'):
 		Gtk.Window.__init__(self, title=title)
@@ -27,7 +29,6 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.add(self.htable)
 		# Game Area
 		self.game_area = Gtk.DrawingArea()
-		self.game_area.set_events(Gdk.EventMask.ALL_EVENTS_MASK)
 		#self.game_area.set_sensitive(False)
 		#self.game_area.connect('size-allocate', self.on_resize)
 		self.vtable.attach(self.game_area, 0, 1, 0, 3)
@@ -36,10 +37,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Window
 		self.set_icon_from_file(tools.get_resource_path('../icons/drago.png'))
 		self.set_size_request(900, 700)
-		self.set_resizable(False)
+		#self.set_resizable(False)
 		self.connect('destroy', Gtk.main_quit)
 		self.show_all()
-		self.undo_button.hide()
+		self.unplug_button.hide()
 
 	def _log(self, text, type=LogType.Normal):
 		# append to text view
@@ -90,10 +91,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.popover = Gtk.Popover(relative_to=settings_button, position=Gtk.PositionType.BOTTOM)
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		self.popover.add(box)
-		# Close game checkbox
-		self.close_game_checkbox = Gtk.CheckButton('Close game when closing bot')
-		#self.close_game_checkbox.set_active(True)
-		box.add(self.close_game_checkbox)
+		# Move game checkbox
+		self.unplug_game_on_close_checkbox = Gtk.CheckButton('Unplug game when closing bot')
+		#self.unplug_game_on_close_checkbox.set_active(True)
+		box.add(self.unplug_game_on_close_checkbox)
 		# Take game screenshot button
 		self.take_screenshot_button = Gtk.ModelButton(' Take game screenshot')
 		self.take_screenshot_button.set_alignment(0.1, 0.5)
@@ -118,7 +119,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		adj = textview.get_vadjustment()
 		adj.set_value(adj.get_upper() - adj.get_page_size())
 
-	def create_tabs(self):
+	def create_tabs(self, args=[]):
 		log_notebook = Gtk.Notebook()
 		log_notebook.set_border_width(2)
 		self.vtable.attach(log_notebook, 0, 1, 3, 4)
@@ -150,6 +151,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.debug_buf = self.debug_view.get_buffer()
 		debug_page.add(self.debug_view)
 		log_notebook.append_page(debug_page, Gtk.Label('Debug'))
+		# Dev tools Tab
+		if '--enable-dev-tools' in self.args:
+			dev_tools_page = DevToolsWidget(self)
+			log_notebook.insert_page(dev_tools_page, Gtk.Label('Dev Tools'), 0)
+			#log_notebook.set_current_page(2)
 		### Bot Tab
 		bot_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		bot_page.set_border_width(10)
@@ -169,12 +175,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.refresh_button.set_tooltip_text('Refresh')
 		self.refresh_button.connect('clicked', self.on_refresh_button_clicked)
 		game_window_box.add(self.refresh_button)
-		# Undo
-		self.undo_button = Gtk.Button()
-		self.undo_button.set_image(Gtk.Image(stock=Gtk.STOCK_LEAVE_FULLSCREEN))
-		self.undo_button.set_tooltip_text('Undo')
-		self.undo_button.connect('clicked', self.on_undo_button_clicked)
-		game_window_box.add(self.undo_button)
+		# Unplug
+		self.unplug_button = Gtk.Button()
+		self.unplug_button.set_image(Gtk.Image(stock=Gtk.STOCK_LEAVE_FULLSCREEN))
+		self.unplug_button.set_tooltip_text('Unplug')
+		self.unplug_button.connect('clicked', self.on_unplug_button_clicked)
+		game_window_box.add(self.unplug_button)
 		bot_page.add(game_window_box)
 		## Bot Path
 		bot_page.add(self.create_bold_label('Bot Path'))
@@ -251,7 +257,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(5)
 		hbox.add(self.enclos_radio)
-		self.enclos_combo = CustomComboBox(data=data.Enclos.keys())
+		self.enclos_combo = CustomComboBox(data=data.Enclos)
 		self.enclos_combo.set_margin_left(14)
 		self.enclos_combo.connect('changed', lambda combo: self.enclos_radio.set_active(True))
 		hbox.pack_start(self.enclos_combo, True, True, 0)
@@ -264,7 +270,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
 		hbox.add(self.create_bold_label('From'))
-		self.zaap_from_combo = CustomComboBox(data=data.Zaap['From'].keys())
+		self.zaap_from_combo = CustomComboBox(data=data.Zaap['From'])
 		self.zaap_from_combo.set_margin_left(12)
 		self.zaap_from_combo.connect('changed', lambda combo: self.zaap_radio.set_active(True))
 		hbox.pack_start(self.zaap_from_combo, True, True, 0)
@@ -273,7 +279,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
 		hbox.add(self.create_bold_label('To'))
-		self.zaap_to_combo = CustomComboBox(data=data.Zaap['To'].keys())
+		self.zaap_to_combo = CustomComboBox(data=data.Zaap['To'])
 		self.zaap_to_combo.set_margin_left(30)
 		self.zaap_to_combo.connect('changed', lambda combo: self.zaap_radio.set_active(True))
 		hbox.pack_start(self.zaap_to_combo, True, True, 0)
@@ -286,7 +292,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
 		hbox.add(self.create_bold_label('From'))
-		self.zaapi_from_combo = CustomComboBox(data=data.Zaapi['From'].keys())
+		self.zaapi_from_combo = CustomComboBox(data=data.Zaapi['From'])
 		self.zaapi_from_combo.set_margin_left(12)
 		self.zaapi_from_combo.connect('changed', lambda combo: self.zaapi_radio.set_active(True))
 		hbox.pack_start(self.zaapi_from_combo, True, True, 0)
@@ -295,7 +301,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
 		hbox.add(self.create_bold_label('To'))
-		self.zaapi_to_combo = CustomComboBox(data=data.Zaapi['To'].keys())
+		self.zaapi_to_combo = CustomComboBox(data=data.Zaapi['To'])
 		self.zaapi_to_combo.set_margin_left(30)
 		self.zaapi_to_combo.connect('changed', lambda combo: self.zaapi_radio.set_active(True))
 		hbox.pack_start(self.zaapi_to_combo, True, True, 0)
@@ -453,47 +459,51 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.game_window_combo.append_text(window_name)
 		self.game_window_combo_ignore_change = False
 
-	def on_game_window_combo_changed(self, combo):
-		if not self.game_window_combo_ignore_change:
-			if self.game_windowList:
-				selected = combo.get_active_text()
-				window_xid = self.game_windowList[selected]
-				self.game_window = tools.get_game_window(window_xid)
-				if self.game_window:
-					self.game_window_geometry = self.game_window.get_geometry() # save geometry
-					window_to = self.game_area.get_window()
-					if window_to:
-						# reparent game window
-						geo = self.game_window_geometry
-						self._debug('Reparent game window, x:%s y:%s width:%s height:%s' % (geo.x, geo.y, geo.width, geo.height))
-						self.game_window.reparent(window_to, 0, 0)
-						self.game_window.show() # force show (when minimized)
-						allocation = self.game_area.get_allocation()
-						self.game_window.move_resize(allocation.x, allocation.y, allocation.width, allocation.height)
-						# enable/disable widgets
-						self.take_screenshot_button.set_sensitive(True)
-						combo.set_sensitive(False)
-						self.refresh_button.hide()
-						self.undo_button.show()
+	def focus_game(self):
+		self._debug('Focus game')
+		# set keyboard focus
+		self.game_area.set_can_focus(True)
+		self.game_area.child_focus(Gtk.DirectionType.TAB_BACKWARD)
 
-	def move_game_window_to_desktop(self):
+	def plug_game_window(self):
 		if self.game_window:
-			self._debug('Move game window to desktop')
-			desktop = Gdk.get_default_root_window()
-			self.game_window.reparent(desktop, self.game_window_geometry.x, self.game_window_geometry.y)
-			self.game_window = None
-			self.take_screenshot_button.set_sensitive(False)
+			self._debug('Plug game window')
+			self.game_window.reparent(self.game_area.get_window(), 0, 0)
+			self.game_window.show() # force show (when minimized)
+			allocation = self.game_area.get_allocation()
+			self.game_window.move_resize(allocation.x, allocation.y, allocation.width, allocation.height)
+			self.focus_game()
+			# enable/disable widgets
+			self.refresh_button.hide()
+			self.unplug_button.show()
+			self.game_window_combo.set_sensitive(False)
+			self.take_screenshot_button.set_sensitive(True)
 
-	def on_undo_button_clicked(self, button):
-		self.move_game_window_to_desktop()
+	def on_game_window_combo_changed(self, combo):
+		if self.game_windowList and not self.game_window_combo_ignore_change:
+			# get game window
+			selected = combo.get_active_text()
+			window_xid = self.game_windowList[selected]
+			self.game_window = tools.get_game_window(window_xid)
+			# plug game window
+			self.plug_game_window()
+
+	def unplug_game_window(self):
+		if self.game_window and not self.game_window.is_destroyed():
+			self._debug('Unplug game window')
+			desktop = Gdk.get_default_root_window()
+			self.game_window.reparent(desktop, 0, 0)
+
+		self.game_window = None
+
+	def on_unplug_button_clicked(self, button):
+		self.unplug_game_window()
 		# enable/disable widgets
-		self.undo_button.hide()
+		self.unplug_button.hide()
 		self.refresh_button.show()
 		self.game_window_combo.set_sensitive(True)
-		#self.game_window_combo_ignore_change = True
-		#self.game_window_combo.set_active(-1)
-		#self.game_window_combo_ignore_change = False
 		self.populate_game_window_combo()
+		self.take_screenshot_button.set_sensitive(False)
 
 	def on_refresh_button_clicked(self, button):
 		self.populate_game_window_combo()
@@ -512,9 +522,9 @@ class BotWindow(Gtk.ApplicationWindow):
 
 		# We only terminate when the user presses the OK button
 		if response == Gtk.ResponseType.OK:
-			# move game window to desktop
-			if not self.close_game_checkbox.get_active():
-				self.move_game_window_to_desktop()
+			# unplug game window
+			if self.unplug_game_on_close_checkbox.get_active():
+				self.unplug_game_window()
 			# stop bot thread
 			if self.bot_thread and self.bot_thread.isAlive():
 				self.bot_thread.stop()
@@ -573,6 +583,147 @@ class CustomListBox(Gtk.ListBox):
 	def on_delete_button_clicked(self, button):
 		row = button.get_parent().get_parent()
 		self.remove(row)
+
+class DevToolsWidget(Gtk.Table):
+
+	perform_scroll = False
+
+	def __init__(self, parent):
+		Gtk.Table.__init__(self, 1, 3, True)
+		self.set_border_width(10)
+		self.parent = parent
+		#self.parent.connect('button-press-event', self.on_click)
+		## Pixel
+		left_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		left_box.add(parent.create_bold_label('Pixel'))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+		left_box.pack_start(hbox, True, True, 0)
+		self.attach(left_box, 0, 2, 0, 1)
+		# TreeView
+		frame = Gtk.Frame()
+		scrolled_window = Gtk.ScrolledWindow()
+		self.pixels_list = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str, str, str, str)
+		pixbuf = Gdk.Cursor(Gdk.CursorType.ARROW).get_image()
+		self.mouse_icon = pixbuf.scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
+		tree_view = Gtk.TreeView(self.pixels_list)
+		tree_view.append_column(Gtk.TreeViewColumn('', Gtk.CellRendererPixbuf(), pixbuf=0))
+		tree_view.append_column(Gtk.TreeViewColumn('X', Gtk.CellRendererText(), text=1))
+		tree_view.append_column(Gtk.TreeViewColumn('Y', Gtk.CellRendererText(), text=2))
+		tree_view.append_column(Gtk.TreeViewColumn('Width', Gtk.CellRendererText(), text=3))
+		tree_view.append_column(Gtk.TreeViewColumn('Height', Gtk.CellRendererText(), text=4))
+		tree_view.append_column(Gtk.TreeViewColumn('Color', Gtk.CellRendererText(), text=5))
+		tree_view.connect('size-allocate', self.scroll_tree_view)
+		self.tree_view_selection = tree_view.get_selection()
+		self.tree_view_selection.connect('changed', self.on_selection_changed)
+		scrolled_window.add(tree_view)
+		frame.add(scrolled_window)
+		hbox.pack_start(frame, True, True, 0)
+		# Select
+		buttons_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+		hbox.add(buttons_box)
+		select_button = Gtk.Button()
+		select_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
+		select_button.set_tooltip_text('Select')
+		select_button.connect('clicked', self.on_select_button_clicked)
+		buttons_box.add(select_button)
+		# Simulate
+		self.simulate_click_button = Gtk.Button()
+		self.simulate_click_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.HAND1).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
+		self.simulate_click_button.set_tooltip_text('Simulate Click')
+		self.simulate_click_button.set_sensitive(False)
+		self.simulate_click_button.connect('clicked', self.on_simulate_click_button_clicked)
+		buttons_box.add(self.simulate_click_button)
+		# Separator
+		right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		right_box.add(Gtk.Separator(orientation=Gtk.Orientation.VERTICAL, margin=10))
+		self.attach(right_box, 2, 3, 0, 1)
+		## Key Press
+		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		vbox.add(parent.create_bold_label('Key Press'))
+		right_box.pack_start(vbox, True, True, 0)
+		# ComboBox
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		self.keys_combo = CustomComboBox(data.KeyboardShortcuts.values())
+		hbox.pack_start(self.keys_combo, True, True, 0)
+		vbox.add(hbox)
+		# Simulate
+		simulate_key_press_button = Gtk.Button()
+		simulate_key_press_button.set_image(Gtk.Image(icon_name='input-keyboard'))
+		simulate_key_press_button.set_tooltip_text('Simulate')
+		simulate_key_press_button.connect('clicked', self.on_simulate_key_press_button_clicked)
+		hbox.add(simulate_key_press_button)
+
+	def on_select_button_clicked(self, button):
+		button.set_sensitive(False)
+		# wait for click
+		pyautogui.waitForMouseEvent('left_down')
+		# get mouse position
+		x, y = pyautogui.position()
+		# get pixel color
+		color = pyautogui.pixel(x, y)
+		# get game area allocation (relative to parent)
+		game_alloc = self.parent.game_area.get_allocation()
+		#print('game_alloc.x: %s, game_alloc.y: %s, game_alloc.width: %s, game_alloc.height: %s' % (game_alloc.x, game_alloc.y, game_alloc.width, game_alloc.height))
+		# get game area position (relative to root window)
+		game_x, game_y = tools.get_widget_absolute_position(self.parent.game_area)
+		#print('x: %s, y: %s, game_x: %s, game_y: %s' % (x, y, game_x, game_y))
+		# scale to game area
+		if tools.point_is_inside_bounds(x, y, game_x, game_y, game_alloc.width, game_alloc.height):
+			# pixel is inside game area, so we fit x & y to it
+			x = x - game_x
+			y = y - game_y
+			width = game_alloc.width
+			height = game_alloc.height
+		else:
+			width, height = pyautogui.size()
+		# append to treeview
+		self.pixels_list.append([self.mouse_icon, str(x), str(y), str(width), str(height), str(color)])
+		self.perform_scroll = True
+		button.set_sensitive(True)
+		# select last row in treeview
+		last_row_index = len(self.pixels_list) - 1
+		self.tree_view_selection.select_path(Gtk.TreePath(last_row_index))
+
+	def on_simulate_click_button_clicked(self, button):
+		(model, rowlist) = self.tree_view_selection.get_selected_rows()
+		for row in rowlist:
+			# get click coordinates
+			tree_iter = model.get_iter(row)
+			x = int(model.get_value(tree_iter, 1))
+			y = int(model.get_value(tree_iter, 2))
+			width = int(model.get_value(tree_iter, 3))
+			height = int(model.get_value(tree_iter, 4))
+			#print('x: %s, y: %s, width: %s, height: %s' % (x, y, width, height))
+			# scale to screen
+			screen_width, screen_height = pyautogui.size()
+			if screen_width > width and screen_height > height:
+				game_x, game_y = tools.get_widget_absolute_position(self.parent.game_area)
+				click_x = x + game_x
+				click_y = y + game_y
+			else:
+				click_x = x
+				click_y = y
+			#print('click_x: %s, click_y: %s' % (click_x, click_y))
+			# perform click
+			pyautogui.click(x=click_x, y=click_y)
+
+	def on_simulate_key_press_button_clicked(self, button):
+		key = self.keys_combo.get_active_text()
+		self.parent.focus_game()
+		pyautogui.press(key)
+
+	def on_click(self, widget, event):
+		print('x: %s, y: %s' % (event.x, event.y))
+
+	def on_selection_changed(self, selection):
+		if not self.simulate_click_button.get_sensitive():
+			self.simulate_click_button.set_sensitive(True)
+
+	def scroll_tree_view(self, widget, event):
+		if self.perform_scroll:
+			adj = widget.get_vadjustment()
+			adj.set_value(adj.get_upper() - adj.get_page_size())
+			self.perform_scroll = False
 
 class AboutDialog(Gtk.AboutDialog):
 
