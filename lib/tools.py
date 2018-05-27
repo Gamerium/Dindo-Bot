@@ -93,7 +93,7 @@ def get_pixel_color(x, y):
 	if sys.platform.startswith('linux'):
 		window = Gdk.get_default_root_window()
 		pb = Gdk.pixbuf_get_from_window(window, x, y, 1, 1)
-		return tuple(pb.get_pixels()) # value returned isn't RGB, maybe a GTK3 bug?
+		return tuple(pb.get_pixels()) # value returned isn't numeric RGB, maybe a GTK3 bug?
 	# Others
 	else:
 		return pyautogui.pixel(x, y)
@@ -143,7 +143,7 @@ def get_widget_absolute_position(widget):
 		abs_x, abs_y = widget.get_window().get_root_coords(pos.x, pos.y)
 		return (abs_x, abs_y)
 
-# Check if point is out of bounds
+# Check if point is inside given bounds
 def point_is_inside_bounds(point_x, point_y, bound_x, bound_y, bound_width, bound_height):
 	if point_x > bound_x and point_x < (bound_x + bound_width) and point_y > bound_y and point_y < (bound_y + bound_height):
 		return True
@@ -153,10 +153,10 @@ def point_is_inside_bounds(point_x, point_y, bound_x, bound_y, bound_width, boun
 # Fit point coordinates to given size
 def fit_point_to_size(x, y, width, height, new_width, new_height):
 	if width > new_width and height > new_height:
-		new_x = x / (new_width / float(width))
-		new_y = y / (new_height / float(height))
+		new_x = x / (width / float(new_width))
+		new_y = y / (height / float(new_height))
 	else:
-		new_x = x * new_width / float(width)
-		new_y = y * new_height / float(height)
+		new_x = x * (width / float(new_width))
+		new_y = y * (height / float(new_height))
 
 	return (int(new_x), int(new_y))
