@@ -8,7 +8,7 @@ from lib import tools
 from lib import logger
 from lib import data
 from lib.threads import BotThread
-from lib.shared import LogType
+from lib.shared import LogType, __program_name__
 from .dev import DevToolsWidget
 from .custom import *
 from .dialog import *
@@ -21,7 +21,7 @@ class BotWindow(Gtk.ApplicationWindow):
 	bot_thread = None
 	args = tools.get_cmd_args()
 
-	def __init__(self, title='Dindo Bot'):
+	def __init__(self, title=__program_name__):
 		GObject.threads_init() # allow threads to update GUI
 		Gtk.Window.__init__(self, title=title)
 		# Header Bar

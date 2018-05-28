@@ -7,6 +7,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf
 from lib import tools
 from lib import data
 from .custom import CustomComboBox
+from .dialog import TextDialog
 import pyautogui
 
 class DevToolsWidget(Gtk.Table):
@@ -38,6 +39,7 @@ class DevToolsWidget(Gtk.Table):
 		tree_view.append_column(Gtk.TreeViewColumn('Height', Gtk.CellRendererText(), text=4))
 		tree_view.append_column(Gtk.TreeViewColumn('Color', Gtk.CellRendererText(), text=5))
 		tree_view.connect('size-allocate', self.scroll_tree_view)
+		tree_view.connect('button-press-event', self.on_double_click)
 		self.tree_view_selection = tree_view.get_selection()
 		self.tree_view_selection.connect('changed', self.on_selection_changed)
 		scrolled_window.add(tree_view)
@@ -86,21 +88,18 @@ class DevToolsWidget(Gtk.Table):
 		x, y = pyautogui.position()
 		width, height = pyautogui.size()
 		# get pixel color
-		color = pyautogui.pixel(x, y)
+		color = tools.get_pixel_color(x, y)
 		if self.parent.game_area:
-			# get game area allocation (relative to parent)
-			game_alloc = self.parent.game_area.get_allocation()
-			#print('game_alloc.x: %s, game_alloc.y: %s, game_alloc.width: %s, game_alloc.height: %s' % (game_alloc.x, game_alloc.y, game_alloc.width, game_alloc.height))
-			# get game area position (relative to root window)
-			game_x, game_y = tools.get_widget_absolute_position(self.parent.game_area)
-			#print('x: %s, y: %s, game_x: %s, game_y: %s' % (x, y, game_x, game_y))
+			# get game area geometry
+			game_x, game_y, game_width, game_height = tools.get_widget_geometry(self.parent.game_area)
+			#print('x: %s, y: %s, game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (x, y, game_x, game_y, game_width, game_height))
 			# scale to game area
-			if tools.point_is_inside_bounds(x, y, game_x, game_y, game_alloc.width, game_alloc.height):
-				# pixel is inside game area, so we fit x & y to it
+			if tools.position_is_inside_bounds(x, y, game_x, game_y, game_width, game_height):
+				# position is inside game area, so we fit x & y to it
 				x = x - game_x
 				y = y - game_y
-				width = game_alloc.width
-				height = game_alloc.height
+				width = game_width
+				height = game_height
 		# append to treeview
 		self.pixels_list.append([self.mouse_icon, str(x), str(y), str(width), str(height), str(color)])
 		self.perform_scroll = True
@@ -109,42 +108,48 @@ class DevToolsWidget(Gtk.Table):
 		last_row_index = len(self.pixels_list) - 1
 		self.tree_view_selection.select_path(Gtk.TreePath(last_row_index))
 
-	def on_simulate_click_button_clicked(self, button):
-		(model, rowlist) = self.tree_view_selection.get_selected_rows()
-		for row in rowlist:
-			# get click coordinates
-			tree_iter = model.get_iter(row)
+	def get_selected_row(self):
+		model, tree_iter = self.tree_view_selection.get_selected()
+		if tree_iter:
 			x = int(model.get_value(tree_iter, 1))
 			y = int(model.get_value(tree_iter, 2))
 			width = int(model.get_value(tree_iter, 3))
 			height = int(model.get_value(tree_iter, 4))
-			#print('x: %s, y: %s, width: %s, height: %s' % (x, y, width, height))
-			if self.parent.game_area:
-				# scale to screen
-				screen_width, screen_height = pyautogui.size()
-				if screen_width > width and screen_height > height:
-					game_x, game_y = tools.get_widget_absolute_position(self.parent.game_area)
-					click_x = x + game_x
-					click_y = y + game_y
-				else:
-					click_x = x
-					click_y = y
-			else:
-				click_x = x
-				click_y = y
-			#print('click_x: %s, click_y: %s' % (click_x, click_y))
-			# perform click
-			self.parent._debug('Click on x: %s y: %s' % (click_x, click_y))
-			pyautogui.click(x=click_x, y=click_y)
+			color = model.get_value(tree_iter, 5)
+			return (x, y, width, height, color)
+		else:
+			return None
+
+	def on_simulate_click_button_clicked(self, button):
+		# get click coordinates
+		x, y, width, height, color = self.get_selected_row()
+		#print('x: %s, y: %s, width: %s, height: %s' % (x, y, width, height))
+		# fit to game area
+		if self.parent.game_area:
+			game_x, game_y, game_width, game_height = tools.get_widget_geometry(self.parent.game_area)
+			#print('game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (game_x, game_y, game_width, game_height))
+			click_x, click_y = tools.fit_click_position(x, y, width, height, game_x, game_y, game_width, game_height)
+		else:
+			click_x = x
+			click_y = y
+		# perform click
+		self.parent._debug('Click on x: %s, y: %s' % (click_x, click_y))
+		tools.perform_click(click_x, click_y)
 
 	def on_simulate_key_press_button_clicked(self, button):
 		key = self.keys_combo.get_active_text()
 		self.parent.focus_game()
 		self.parent._debug('Press key: %s' % key)
-		pyautogui.press(key)
+		tools.press_key(key)
 
 	def on_click(self, widget, event):
 		print('x: %s, y: %s' % (event.x, event.y))
+
+	def on_double_click(self, widget, event):
+		if event.type == Gdk.EventType.DOUBLE_BUTTON_PRESS:
+			selected_row = self.get_selected_row()
+			if selected_row:
+				TextDialog(self.parent, "{'x': %s, 'y': %s, 'width': %s, 'height': %s, 'color': '%s'}" % selected_row)
 
 	def on_selection_changed(self, selection):
 		if not self.simulate_click_button.get_sensitive():

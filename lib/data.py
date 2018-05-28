@@ -11,8 +11,17 @@ Movements = {
 
 # Keyboard shortcuts
 KeyboardShortcuts = {
-	'Havre-sac':  'H',
-	'Inventaire': 'I'
+	'Havre-sac':  'h',
+	'Inventory':  'i'
+	#'Up':         'up',
+	#'Down':       'down',
+	#'Left':       'left',
+	#'Right':      'right',
+	#'Backspace':  'backspace',
+	#'Tab':        'tab',
+	#'Copy':       'ctrl+c',
+	#'Cut':        'ctrl+x',
+	#'Paste':      'ctrl+v'
 }
 
 # Enclos

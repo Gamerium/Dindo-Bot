@@ -8,6 +8,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Wnck', '3.0')
 from gi.repository import Gtk, Gdk, GdkX11, Wnck
 from datetime import datetime
+from . import parser
 import pyautogui
 
 try:
@@ -87,13 +88,18 @@ def take_window_screenshot(window, save_to='screenshot'):
 		screenshot = pyautogui.screenshot(region=(x, y, region.width, region.height))
 		screenshot.save(save_to + '.png')
 
+# Convert bytes to integer
+def bytes_to_int(bytes):
+	return int(bytes.encode('hex'), 16)
+
 # Return pixel color of given x, y coordinates
 def get_pixel_color(x, y):
 	# Linux X11
 	if sys.platform.startswith('linux'):
 		window = Gdk.get_default_root_window()
 		pb = Gdk.pixbuf_get_from_window(window, x, y, 1, 1)
-		return tuple(pb.get_pixels()) # value returned isn't numeric RGB, maybe a GTK3 bug?
+		barray = pb.get_pixels()
+		return '(%s, %s, %s)' % (bytes_to_int(barray[0]), bytes_to_int(barray[1]), bytes_to_int(barray[2]))
 	# Others
 	else:
 		return pyautogui.pixel(x, y)
@@ -132,31 +138,59 @@ def get_platform():
 def get_cmd_args():
 	return sys.argv[1:]
 
-# Return widget absolute position
-def get_widget_absolute_position(widget):
+# Return widget geometry
+def get_widget_geometry(widget):
+	# get widget allocation (relative to parent)
+	allocation = widget.get_allocation()
 	# get widget position (relative to root window)
 	if type(widget) in (Gtk.DrawingArea, Gtk.EventBox, Gtk.Socket):
 		pos = widget.get_window().get_origin()
-		return (pos.x, pos.y)
+		return (pos.x, pos.y, allocation.width, allocation.height)
 	else:
-		pos = widget.get_allocation()
-		abs_x, abs_y = widget.get_window().get_root_coords(pos.x, pos.y)
-		return (abs_x, abs_y)
+		pos_x, pos_y = widget.get_window().get_root_coords(allocation.x, allocation.y)
+		return (pos_x, pos_y, allocation.width, allocation.height)
 
-# Check if point is inside given bounds
-def point_is_inside_bounds(point_x, point_y, bound_x, bound_y, bound_width, bound_height):
-	if point_x > bound_x and point_x < (bound_x + bound_width) and point_y > bound_y and point_y < (bound_y + bound_height):
+# Check if position is inside given bounds
+def position_is_inside_bounds(pos_x, pos_y, bounds_x, bounds_y, bounds_width, bounds_height):
+	if pos_x > bounds_x and pos_x < (bounds_x + bounds_width) and pos_y > bounds_y and pos_y < (bounds_y + bounds_height):
 		return True
 	else:
 		return False
 
-# Fit point coordinates to given size
-def fit_point_to_size(x, y, width, height, new_width, new_height):
-	if width > new_width and height > new_height:
-		new_x = x / (width / float(new_width))
-		new_y = y / (height / float(new_height))
-	else:
-		new_x = x * (width / float(new_width))
-		new_y = y * (height / float(new_height))
+# Fit position coordinates to given destination
+def fit_position_to_destination(x, y, window_width, window_height, dest_width, dest_height):
+	# new coordinate = old coordinate / (window size / destination size)
+	new_x = x / (window_width / float(dest_width))
+	new_y = y / (window_height / float(dest_height))
 
 	return (int(new_x), int(new_y))
+
+# Fit click position
+def fit_click_position(click_x, click_y, window_width, window_height, dest_x, dest_y, dest_width, dest_height):
+	# get screen size
+	screen_width, screen_height = pyautogui.size()
+	if screen_width > window_width and screen_height > window_height:
+		# fit position to destination size
+		new_x, new_y = fit_position_to_destination(click_x, click_y, window_width, window_height, dest_width, dest_height)
+		#print('new_x: %s, new_y: %s' % (new_x, new_y))
+		# scale to screen
+		x = new_x + dest_x
+		y = new_y + dest_y
+	else:
+		x = click_x
+		y = click_y
+
+	return (x, y)
+
+# Perform click (can be useful if we want to change click behavior without rewriting too much code)
+def perform_click(x, y):
+	pyautogui.click(x=x, y=y)
+
+# Press key
+def press_key(key):
+	keys = parser.parse_key(key)
+	count = len(keys)
+	if count == 1:
+		pyautogui.press(keys[0])
+	elif count == 2:
+		pyautogui.hotkey(keys[0], keys[1])

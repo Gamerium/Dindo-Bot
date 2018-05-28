@@ -50,3 +50,13 @@ def parse_data(data, key, subkeys=[]):
 			return data[key]
 
 	return None
+
+def parse_key(key):
+	result = []
+
+	keys = key.split('+')
+
+	for part in keys:
+		result.append(part.strip())
+
+	return result
