@@ -23,3 +23,10 @@ class AboutDialog(Gtk.AboutDialog):
 
 	def on_response(self, dialog, response):
 		self.destroy()
+
+class MessageDialog(Gtk.MessageDialog):
+
+	def __init__(self, transient_for, message):
+		Gtk.MessageDialog.__init__(self, transient_for=transient_for, use_markup=True, text=message, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK)
+		self.run()
+		self.destroy()

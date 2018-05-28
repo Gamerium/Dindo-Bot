@@ -4,9 +4,9 @@
 import sys
 import os
 import gi
-gi.require_version('Wnck', '3.0')
 gi.require_version('Gtk', '3.0')
-from gi.repository import Wnck, Gtk, Gdk, GdkX11
+gi.require_version('Wnck', '3.0')
+from gi.repository import Gtk, Gdk, GdkX11, Wnck
 from datetime import datetime
 import pyautogui
 

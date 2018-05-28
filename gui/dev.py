@@ -82,25 +82,25 @@ class DevToolsWidget(Gtk.Table):
 		button.set_sensitive(False)
 		# wait for click
 		pyautogui.waitForMouseEvent('left_down')
-		# get mouse position
+		# get mouse position & screen size
 		x, y = pyautogui.position()
+		width, height = pyautogui.size()
 		# get pixel color
 		color = pyautogui.pixel(x, y)
-		# get game area allocation (relative to parent)
-		game_alloc = self.parent.game_area.get_allocation()
-		#print('game_alloc.x: %s, game_alloc.y: %s, game_alloc.width: %s, game_alloc.height: %s' % (game_alloc.x, game_alloc.y, game_alloc.width, game_alloc.height))
-		# get game area position (relative to root window)
-		game_x, game_y = tools.get_widget_absolute_position(self.parent.game_area)
-		#print('x: %s, y: %s, game_x: %s, game_y: %s' % (x, y, game_x, game_y))
-		# scale to game area
-		if tools.point_is_inside_bounds(x, y, game_x, game_y, game_alloc.width, game_alloc.height):
-			# pixel is inside game area, so we fit x & y to it
-			x = x - game_x
-			y = y - game_y
-			width = game_alloc.width
-			height = game_alloc.height
-		else:
-			width, height = pyautogui.size()
+		if self.parent.game_area:
+			# get game area allocation (relative to parent)
+			game_alloc = self.parent.game_area.get_allocation()
+			#print('game_alloc.x: %s, game_alloc.y: %s, game_alloc.width: %s, game_alloc.height: %s' % (game_alloc.x, game_alloc.y, game_alloc.width, game_alloc.height))
+			# get game area position (relative to root window)
+			game_x, game_y = tools.get_widget_absolute_position(self.parent.game_area)
+			#print('x: %s, y: %s, game_x: %s, game_y: %s' % (x, y, game_x, game_y))
+			# scale to game area
+			if tools.point_is_inside_bounds(x, y, game_x, game_y, game_alloc.width, game_alloc.height):
+				# pixel is inside game area, so we fit x & y to it
+				x = x - game_x
+				y = y - game_y
+				width = game_alloc.width
+				height = game_alloc.height
 		# append to treeview
 		self.pixels_list.append([self.mouse_icon, str(x), str(y), str(width), str(height), str(color)])
 		self.perform_scroll = True
@@ -119,22 +119,28 @@ class DevToolsWidget(Gtk.Table):
 			width = int(model.get_value(tree_iter, 3))
 			height = int(model.get_value(tree_iter, 4))
 			#print('x: %s, y: %s, width: %s, height: %s' % (x, y, width, height))
-			# scale to screen
-			screen_width, screen_height = pyautogui.size()
-			if screen_width > width and screen_height > height:
-				game_x, game_y = tools.get_widget_absolute_position(self.parent.game_area)
-				click_x = x + game_x
-				click_y = y + game_y
+			if self.parent.game_area:
+				# scale to screen
+				screen_width, screen_height = pyautogui.size()
+				if screen_width > width and screen_height > height:
+					game_x, game_y = tools.get_widget_absolute_position(self.parent.game_area)
+					click_x = x + game_x
+					click_y = y + game_y
+				else:
+					click_x = x
+					click_y = y
 			else:
 				click_x = x
 				click_y = y
 			#print('click_x: %s, click_y: %s' % (click_x, click_y))
 			# perform click
+			self.parent._debug('Click on x: %s y: %s' % (click_x, click_y))
 			pyautogui.click(x=click_x, y=click_y)
 
 	def on_simulate_key_press_button_clicked(self, button):
 		key = self.keys_combo.get_active_text()
 		self.parent.focus_game()
+		self.parent._debug('Press key: %s' % key)
 		pyautogui.press(key)
 
 	def on_click(self, widget, event):
