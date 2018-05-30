@@ -4,5 +4,14 @@
 
 # Xlib
 sudo apt install python-xlib
-# or for python 3
+# for python 3
 sudo apt install python3-xlib
+
+# Pillow
+sudo apt install python-imaging
+# or
+sudo apt install python-pil
+# for python 3
+sudo apt install python3-imaging
+# or
+sudo apt install python3-pil

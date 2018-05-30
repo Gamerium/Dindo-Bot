@@ -6,9 +6,9 @@
 '''
 
 from gui.main import BotWindow
-from lib.tools import internet_on
+from lib.tools import print_internet_state
 
 bot = BotWindow()
 bot._log('Bot window loaded')
-bot._debug('Internet is ' + ('on' if internet_on() else 'off'))
+bot._debug(print_internet_state())
 bot.main()

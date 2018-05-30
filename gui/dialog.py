@@ -45,3 +45,27 @@ class TextDialog(Gtk.MessageDialog):
 		self.show_all()
 		self.run()
 		self.destroy()
+
+class PlugDialog(Gtk.Dialog):
+
+	def __init__(self, transient_for):
+		Gtk.Dialog.__init__(self, transient_for=transient_for, title='Plug Game Window')
+		self.parent = transient_for
+		self.set_resizable(False)
+		content_area = self.get_content_area()
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hbox.set_border_width(10)
+		hbox.add(Gtk.Label('Window id'))
+		self.entry = Gtk.Entry()
+		hbox.add(self.entry)
+		content_area.add(hbox)
+		self.action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
+		plug_button = Gtk.Button('Plug')
+		plug_button.connect('clicked', self.on_plug_button_clicked)
+		self.add_action_widget(plug_button, Gtk.ResponseType.OK)
+		self.show_all()
+
+	def on_plug_button_clicked(self, button):
+		window_xid = self.entry.get_text().strip()
+		if window_xid:
+			self.parent.plug_game_window(int(window_xid))

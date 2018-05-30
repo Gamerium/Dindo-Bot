@@ -8,6 +8,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Wnck', '3.0')
 from gi.repository import Gtk, Gdk, GdkX11, Wnck
 from datetime import datetime
+from PIL import Image
 from . import parser
 import pyautogui
 
@@ -73,11 +74,14 @@ def internet_on():
 	except urllib2.URLError as err: 
 		return False
 
+# Return internet state as a string
+def print_internet_state():
+	return 'Internet is ' + ('on' if internet_on() else 'off')
+
 # Take a screenshot of given window
 def take_window_screenshot(window, save_to='screenshot'):
 	# Linux X11
 	if sys.platform.startswith('linux'):
-		#window.show()
 		size = window.get_geometry()
 		pb = Gdk.pixbuf_get_from_window(window, 0, 0, size.width, size.height)
 		pb.savev(save_to + '.png', 'png', (), ())
@@ -87,6 +91,33 @@ def take_window_screenshot(window, save_to='screenshot'):
 		region = window.get_geometry() # or window.get_allocation() ?
 		screenshot = pyautogui.screenshot(region=(x, y, region.width, region.height))
 		screenshot.save(save_to + '.png')
+
+# Convert Gdk.Pixbuf to Pillow image
+def pixbuf2image(pix):
+	data = pix.get_pixels()
+	width = pix.props.width
+	height = pix.props.height
+	stride = pix.props.rowstride
+	mode = 'RGB'
+	if pix.props.has_alpha == True:
+		mode = 'RGBA'
+	image = Image.frombytes(mode, (width, height), data, 'raw', mode, stride)
+	return image
+
+# Return a screenshot of the game
+def screen_game(region):
+	# Linux X11
+	if sys.platform.startswith('linux'):
+		window = Gdk.get_default_root_window()
+		x, y, width, height = region
+		pb = Gdk.pixbuf_get_from_window(window, x, y, width, height)
+		#pb.savev(get_date_time() + '.png', 'png', (), ())
+		screenshot = pixbuf2image(pb)
+		return screenshot
+	# Others
+	else:
+		screenshot = pyautogui.screenshot(region=region)
+		return screenshot
 
 # Convert bytes to integer
 def bytes_to_int(bytes):
@@ -165,8 +196,8 @@ def fit_position_to_destination(x, y, window_width, window_height, dest_width, d
 
 	return (int(new_x), int(new_y))
 
-# Fit click position
-def fit_click_position(click_x, click_y, window_width, window_height, dest_x, dest_y, dest_width, dest_height):
+# Adjust click position
+def adjust_click_position(click_x, click_y, window_width, window_height, dest_x, dest_y, dest_width, dest_height):
 	# get screen size
 	screen_width, screen_height = pyautogui.size()
 	if screen_width > window_width and screen_height > window_height:
@@ -182,9 +213,11 @@ def fit_click_position(click_x, click_y, window_width, window_height, dest_x, de
 
 	return (x, y)
 
-# Perform click (can be useful if we want to change click behavior without rewriting too much code)
+# Perform click
 def perform_click(x, y):
+	old_position = pyautogui.position()
 	pyautogui.click(x=x, y=y)
+	pyautogui.moveTo(old_position)
 
 # Press key
 def press_key(key):

@@ -124,11 +124,11 @@ class DevToolsWidget(Gtk.Table):
 		# get click coordinates
 		x, y, width, height, color = self.get_selected_row()
 		#print('x: %s, y: %s, width: %s, height: %s' % (x, y, width, height))
-		# fit to game area
+		# adjust for game area
 		if self.parent.game_area:
 			game_x, game_y, game_width, game_height = tools.get_widget_geometry(self.parent.game_area)
 			#print('game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (game_x, game_y, game_width, game_height))
-			click_x, click_y = tools.fit_click_position(x, y, width, height, game_x, game_y, game_width, game_height)
+			click_x, click_y = tools.adjust_click_position(x, y, width, height, game_x, game_y, game_width, game_height)
 		else:
 			click_x = x
 			click_y = y

@@ -38,10 +38,27 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.set_size_request(900, 700)
 		#self.set_resizable(False)
 		self.connect('destroy', Gtk.main_quit)
+		self.connect('size-allocate', self.on_resize)
 		self.show_all()
 		self.unplug_button.hide()
+		logger.add_separator()
+
+	def on_resize(self, widget, size):
+		if self.game_area and self.bot_thread and self.bot_thread.isAlive():
+			game_geometry = tools.get_widget_geometry(self.game_area)
+			self.bot_thread.update_game_geometry(game_geometry)
+
+	def _pop(self, text_buffer, max=100):
+		start_iter = text_buffer.get_start_iter()
+		end_iter = text_buffer.get_end_iter()
+		lines = text_buffer.get_text(start_iter, end_iter, True).splitlines()
+		if len(lines) >= max:
+			new_text = '\n'.join(lines[1:]) + '\n' # [1:] to remove the first line
+			text_buffer.set_text(new_text)
 
 	def _log(self, text, type=LogType.Normal):
+		# pop first line if we reached the max number of lines
+		self._pop(self.log_buf)
 		# append to text view
 		position = self.log_buf.get_end_iter()
 		new_text = '[' + tools.get_time() + '] ' + text + '\n'
@@ -60,6 +77,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			logger.new_entry(text)
 
 	def _debug(self, text):
+		self._pop(self.debug_buf)
 		position = self.debug_buf.get_end_iter()
 		self.debug_buf.insert(position, '[' + tools.get_time() + '] ' + text + '\n')
 		logger.debug(text)
@@ -92,7 +110,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.popover.add(box)
 		# Keep game checkbox
 		self.keep_game_on_unplug_checkbox = Gtk.CheckButton('Keep game open when unplug')
-		#self.keep_game_on_unplug_checkbox.set_active(True)
+		if '--enable-dev-env' in self.args:
+			self.keep_game_on_unplug_checkbox.set_active(True)
 		box.add(self.keep_game_on_unplug_checkbox)
 		# Take game screenshot button
 		self.take_screenshot_button = Gtk.ModelButton(' Take game screenshot')
@@ -151,10 +170,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		debug_page.add(self.debug_view)
 		log_notebook.append_page(debug_page, Gtk.Label('Debug'))
 		# Dev tools Tab
-		if '--enable-dev-tools' in self.args:
+		if '--enable-dev-env' in self.args:
 			dev_tools_page = DevToolsWidget(self)
-			log_notebook.insert_page(dev_tools_page, Gtk.Label('Dev Tools'), 0)
-			#log_notebook.set_current_page(2)
+			log_notebook.append_page(dev_tools_page, Gtk.Label('Dev Tools'))
+			log_notebook.show_all()
+			log_notebook.set_current_page(2)
 		### Bot Tab
 		bot_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		bot_page.set_border_width(10)
@@ -162,6 +182,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		## Game Window
 		bot_page.add(self.create_bold_label('Game Window'))
 		game_window_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		bot_page.add(game_window_box)
 		# ComboBox
 		self.game_window_combo = Gtk.ComboBoxText()
 		self.game_window_combo.set_margin_left(10)
@@ -180,7 +201,13 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.unplug_button.set_tooltip_text('Unplug')
 		self.unplug_button.connect('clicked', self.on_unplug_button_clicked)
 		game_window_box.add(self.unplug_button)
-		bot_page.add(game_window_box)
+		# Plug
+		if '--enable-dev-env' in self.args:
+			self.plug_button = Gtk.Button()
+			self.plug_button.set_image(Gtk.Image(stock=Gtk.STOCK_JUMP_TO))
+			self.plug_button.set_tooltip_text('Plug')
+			self.plug_button.connect('clicked', self.on_plug_button_clicked)
+			game_window_box.add(self.plug_button)
 		## Bot Path
 		bot_page.add(self.create_bold_label('Bot Path'))
 		filechooserbutton = Gtk.FileChooserButton(title='Choose bot path')
@@ -340,31 +367,34 @@ class BotWindow(Gtk.ApplicationWindow):
 		path_page.pack_end(frame, True, True, 0)
 
 	def on_start_button_clicked(self, button):
-		'''
 		if not self.game_window:
 			MessageDialog(self, 'Please select a game window')
 		elif not self.bot_path:
 			MessageDialog(self, 'Please select a bot path')
 		else:
-		'''
-		# start bot thread or resume it
-		if self.start_button.get_label() == ' Start ':
-			self.bot_thread = BotThread(self)
-			self.bot_thread.start()
-		else:
-			self.bot_thread.resume()
-		# enable/disable buttons
-		self.start_button.set_image(self.add_image_margin(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif'))))
-		self.start_button.set_sensitive(False)
-		self.pause_button.set_sensitive(True)
-		self.stop_button.set_sensitive(True)
+			# start bot thread or resume it
+			if self.start_button.get_label() == ' Start ':
+				game_geometry = tools.get_widget_geometry(self.game_area)
+				self.bot_thread = BotThread(self, game_geometry)
+				self.bot_thread.start()
+				self.unplug_button.set_sensitive(False)
+			else:
+				self.bot_thread.resume()
+			# enable/disable buttons
+			self.start_button.set_image(self.add_image_margin(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif'))))
+			self.start_button.set_sensitive(False)
+			self.pause_button.set_sensitive(True)
+			self.stop_button.set_sensitive(True)
 
-	def on_pause_button_clicked(self, button):
-		self.bot_thread.pause()
+	def set_buttons_to_paused(self):
 		self.start_button.set_label(' Resume ')
 		self.start_button.set_image(self.add_image_margin(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY)))
 		self.start_button.set_sensitive(True)
 		self.pause_button.set_sensitive(False)
+
+	def on_pause_button_clicked(self, button):
+		self.bot_thread.pause()
+		self.set_buttons_to_paused()
 
 	def reset_buttons(self):
 		self.start_button.set_label(' Start ')
@@ -372,6 +402,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.stop_button.set_sensitive(False)
 		self.pause_button.set_sensitive(False)
 		self.start_button.set_sensitive(True)
+		self.unplug_button.set_sensitive(True)
 
 	def on_stop_button_clicked(self, button):
 		self.bot_thread.stop()
@@ -468,6 +499,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		# enable/disable widgets
 		self.unplug_button.hide()
 		self.refresh_button.show()
+		if '--enable-dev-env' in self.args:
+			self.plug_button.show()
 		self.game_window_combo.set_sensitive(True)
 		self.populate_game_window_combo()
 		self.take_screenshot_button.set_sensitive(False)
@@ -482,24 +515,8 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.game_area = None
 
 	def plug_game_window(self, window_xid):
-		if self.game_window and self.game_area:
-			self._debug('Plug game window')
-			self.game_area.add_id(window_xid)
-			#self.game_window.reparent(self.game_area.get_window(), 0, 0)
-			#self.game_window.show() # force show (when minimized)
-			self.focus_game()
-			# enable/disable widgets
-			self.refresh_button.hide()
-			self.unplug_button.show()
-			self.game_window_combo.set_sensitive(False)
-			self.take_screenshot_button.set_sensitive(True)
-
-	def on_game_window_combo_changed(self, combo):
-		if self.game_windowList and not self.game_window_combo_ignore_change:
-			# get game window
-			selected = combo.get_active_text()
-			window_xid = self.game_windowList[selected]
-			self.game_window = tools.get_game_window(window_xid)
+		self.game_window = tools.get_game_window(window_xid)
+		if self.game_window:
 			# create socket if not exist
 			if not self.game_area:
 				self.game_area = Gtk.Socket()
@@ -508,6 +525,25 @@ class BotWindow(Gtk.ApplicationWindow):
 				self.game_area.show_all()
 				self.vtable.attach(self.game_area, 0, 1, 0, 3)
 			# plug game window
+			self._debug('Plug game window (id: %s)' % window_xid)
+			self.game_area.add_id(window_xid)
+			#self.game_window.reparent(self.game_area.get_window(), 0, 0)
+			#self.game_window.show() # force show (when minimized)
+			self.focus_game()
+			# enable/disable widgets
+			self.refresh_button.hide()
+			if '--enable-dev-env' in self.args:
+				self.plug_button.hide()
+			self.unplug_button.show()
+			self.game_window_combo.set_sensitive(False)
+			self.take_screenshot_button.set_sensitive(True)
+
+	def on_game_window_combo_changed(self, combo):
+		if self.game_windowList and not self.game_window_combo_ignore_change:
+			# get selected game window
+			selected = combo.get_active_text()
+			window_xid = self.game_windowList[selected]
+			# plug it
 			self.plug_game_window(window_xid)
 
 	def unplug_game_window(self):
@@ -524,6 +560,11 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.unplug_game_window()
 		else:
 			self.game_window.destroy()
+
+	def on_plug_button_clicked(self, button):
+		dialog = PlugDialog(self)
+		dialog.run()
+		dialog.destroy()
 
 	def on_refresh_button_clicked(self, button):
 		self.populate_game_window_combo()

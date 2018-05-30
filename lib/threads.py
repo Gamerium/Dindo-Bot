@@ -6,10 +6,11 @@ import time
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import GObject
-from .tools import read_file, internet_on
 from .shared import LogType
+from . import tools
 from . import parser
 from . import data
+from . import imgcompare
 import pyautogui
 
 '''
@@ -47,9 +48,10 @@ class TimerThread(threading.Thread):
 
 class BotThread(TimerThread):
 
-	def __init__(self, bot_window):
+	def __init__(self, parent, game_geometry):
 		TimerThread.__init__(self)
-		self.bot_window = bot_window
+		self.parent = parent
+		self.game_geometry = game_geometry
 		self.pause_event = threading.Event()
 		self.pause_event.set()
 		self.suspend = False
@@ -59,9 +61,9 @@ class BotThread(TimerThread):
 		self.debug('Bot thread started')
 
 		# get instructions & interpret them
-		self.debug('Bot path: %s' % self.bot_window.bot_path)
-		if self.bot_window.bot_path:
-			instructions = read_file(self.bot_window.bot_path)
+		self.debug('Bot path: %s' % self.parent.bot_path)
+		if self.parent.bot_path:
+			instructions = tools.read_file(self.parent.bot_path)
 			self.interpret(instructions)
 
 			# tell user that we have complete the path
@@ -89,8 +91,7 @@ class BotThread(TimerThread):
 
 			# begin interpretation
 			if instruction['name'] == 'Move':
-				position = parser.parse_data(data.Movements, instruction['value'])
-				print(str(position))
+				self.move(instruction['value'])
 
 			elif instruction['name'] == 'Enclos':
 				enclos_pos = parser.parse_data(data.Enclos, instruction['value'], ['x', 'y'])
@@ -110,16 +111,84 @@ class BotThread(TimerThread):
 			else:
 				self.debug('Unknown instruction')
 
-			time.sleep(1)
+	def click(self, coord):
+		# adjust coordinates
+		if self.game_geometry:
+			game_x, game_y, game_width, game_height = self.game_geometry
+			#print('game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (game_x, game_y, game_width, game_height))
+			x, y = tools.adjust_click_position(coord['x'], coord['y'], coord['width'], coord['height'], game_x, game_y, game_width, game_height)
+		else:
+			x, y = (coord['x'], coord['y'])
+		# click
+		self.debug('Click on x: %s, y: %s' % (x, y))
+		tools.perform_click(x, y)
+
+	def monitor_game_screen(self, timeout=30, tolerance=0.0):
+		if self.game_geometry:
+			# screen game
+			prev_screen = tools.screen_game(self.game_geometry)
+			elapsed_time = 0
+			# wait for game screen to change
+			while elapsed_time < timeout:
+				# wait 1 second
+				time.sleep(1)
+				# check for pause or suspend
+				self.pause_event.wait()
+				if self.suspend: break
+				# take a new screen & compare it with the previous one
+				screen = tools.screen_game(self.game_geometry)
+				if screen.size != prev_screen.size:
+					self.debug('Screen size has changed, retry')
+				else:
+					diff_percent = round(imgcompare.image_diff_percent(prev_screen, screen), 2)
+					has_changed = diff_percent > tolerance
+					self.debug('Game screen has changed: {}, diff: {}%, tolerance: {}, timeout: {}'.format(has_changed, diff_percent, tolerance, timeout))
+					if has_changed:
+						return True
+				prev_screen = screen
+				elapsed_time += 1
+			# if game screen hasn't change before timeout
+			if elapsed_time == timeout:
+				self.await()
+				self.log('Game screen don\'t change', LogType.Error)
+				self.debug(tools.print_internet_state())
+
+		return False
+
+	def move(self, direction):
+		# get coordinates
+		coordinates = parser.parse_data(data.Movements, direction)
+		if coordinates:
+			# click
+			self.click(coordinates)
+			# wait for map to change
+			self.debug('Waiting for map to change')
+			if self.monitor_game_screen(tolerance=2.5):
+				# wait for map to load
+				self.debug('Waiting for map to load')
+				time.sleep(3)
+
+	def update_game_geometry(self, game_geometry):
+		self.game_geometry = game_geometry
+
+	def slow_down(self):
+		# reduce thread speed
+		time.sleep(0.15)
 
 	def log(self, text, type=LogType.Normal):
-		GObject.idle_add(self.bot_window._log, text, type)
+		GObject.idle_add(self.parent._log, text, type)
+		self.slow_down()
 
 	def debug(self, text):
-		GObject.idle_add(self.bot_window._debug, text)
+		GObject.idle_add(self.parent._debug, text)
+		self.slow_down()
 
 	def reset(self):
-		GObject.idle_add(self.bot_window.reset_buttons)
+		GObject.idle_add(self.parent.reset_buttons)
+
+	def await(self):
+		self.pause()
+		GObject.idle_add(self.parent.set_buttons_to_paused)
 
 	def pause(self):
 		self.pause_timer()

@@ -1,6 +1,7 @@
 # Dindo Bot
 # Copyright (c) 2018 - 2019 AXeL
 
+# Parse instruction string, e.: 'Move(UP)', 'Enclos([-20,10])'
 def parse_instruction(line):
 	result = {}
 	# extract name
@@ -29,6 +30,7 @@ def parse_instruction(line):
 
 	return result
 
+# Parse data dictionary, e.: {'x': 200, 'y': 10}, {'Zaap Bonta': {'x': 100, 'y': 50}}
 def parse_data(data, key, subkeys=[]):
 	if key in data:
 		if subkeys:
@@ -51,6 +53,7 @@ def parse_data(data, key, subkeys=[]):
 
 	return None
 
+# Parse key string, e.: 'a', 'ctrl+c'
 def parse_key(key):
 	result = []
 
@@ -60,3 +63,15 @@ def parse_key(key):
 		result.append(part.strip())
 
 	return result
+
+# Parse color string, e.: '(255, 255, 255)'
+def parse_color(color):
+	if string.startswith('(') and string.endswith(')'):
+		rgb = color[1:-1].split(',') # [1:-1] will remove the first & last parentheses '(' ')'
+	else:
+		return None
+
+	if len(rgb) == 3:
+		return {'red': int(rgb[0]), 'green': int(rgb[1]), 'blue': int(rgb[2])}
+	else:
+		return None

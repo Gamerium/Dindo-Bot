@@ -3,15 +3,15 @@
 
 # Movements
 Movements = {
-	'UP':    {'x': 200, 'y': 10},
-	'LEFT':  {'x': 200, 'y': 10},
-	'RIGHT': {'x': 200, 'y': 10},
-	'DOWN':  {'x': 200, 'y': 10}
+	'UP':    {'x': 266, 'y': 4, 'width': 566, 'height': 456},
+	'LEFT':  {'x': 5, 'y': 224, 'width': 566, 'height': 456},
+	'RIGHT': {'x': 561, 'y': 225, 'width': 566, 'height': 456},
+	'DOWN':  {'x': 263, 'y': 397, 'width': 566, 'height': 456}
 }
 
 # Keyboard shortcuts
 KeyboardShortcuts = {
-	'Havre-sac':  'h',
+	'Havenbag':  'h',
 	'Inventory':  'i'
 	#'Up':         'up',
 	#'Down':       'down',
@@ -36,7 +36,7 @@ Enclos = {
 # Zaap
 Zaap = {
 	'From': {
-		'Havre-sac': {'x': 100, 'y': 50},
+		'Havenbag': {'x': 100, 'y': 50},
 		'Bonta':     {'x': 100, 'y': 50},
 		'Brakmar':   {'x': 100, 'y': 50},
 		'Astrub':    {'x': 100, 'y': 50}
