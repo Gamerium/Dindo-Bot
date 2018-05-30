@@ -2,6 +2,7 @@
 *.*~
 logs/*.log
 icons/more/*
+accounts.json
 
 # Python cache
 __pycache__/

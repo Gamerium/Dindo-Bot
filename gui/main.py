@@ -45,8 +45,8 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_resize(self, widget, size):
 		if self.game_area and self.bot_thread and self.bot_thread.isAlive():
-			game_geometry = tools.get_widget_geometry(self.game_area)
-			self.bot_thread.update_game_geometry(game_geometry)
+			game_location = tools.get_widget_location(self.game_area)
+			self.bot_thread.update_game_location(game_location)
 
 	def _pop(self, text_buffer, max=100):
 		start_iter = text_buffer.get_start_iter()
@@ -374,8 +374,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		else:
 			# start bot thread or resume it
 			if self.start_button.get_label() == ' Start ':
-				game_geometry = tools.get_widget_geometry(self.game_area)
-				self.bot_thread = BotThread(self, game_geometry)
+				game_location = tools.get_widget_location(self.game_area)
+				self.bot_thread = BotThread(self, game_location)
 				self.bot_thread.start()
 				self.unplug_button.set_sensitive(False)
 			else:

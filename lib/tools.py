@@ -169,8 +169,8 @@ def get_platform():
 def get_cmd_args():
 	return sys.argv[1:]
 
-# Return widget geometry
-def get_widget_geometry(widget):
+# Return widget location
+def get_widget_location(widget):
 	# get widget allocation (relative to parent)
 	allocation = widget.get_allocation()
 	# get widget position (relative to root window)
@@ -203,7 +203,7 @@ def adjust_click_position(click_x, click_y, window_width, window_height, dest_x,
 	if screen_width > window_width and screen_height > window_height:
 		# fit position to destination size
 		new_x, new_y = fit_position_to_destination(click_x, click_y, window_width, window_height, dest_width, dest_height)
-		#print('new_x: %s, new_y: %s' % (new_x, new_y))
+		#print('new_x: %s, new_y: %s, dest_x: %s, dest_y: %s' % (new_x, new_y, dest_x, dest_y))
 		# scale to screen
 		x = new_x + dest_x
 		y = new_y + dest_y
@@ -213,10 +213,13 @@ def adjust_click_position(click_x, click_y, window_width, window_height, dest_x,
 
 	return (x, y)
 
-# Perform click
-def perform_click(x, y):
+# Perform a simple click or double click on x, y position
+def perform_click(x, y, double=False):
 	old_position = pyautogui.position()
-	pyautogui.click(x=x, y=y)
+	if double:
+		pyautogui.doubleClick(x=x, y=y)
+	else:
+		pyautogui.click(x=x, y=y)
 	pyautogui.moveTo(old_position)
 
 # Press key
@@ -227,3 +230,7 @@ def press_key(key):
 		pyautogui.press(keys[0])
 	elif count == 2:
 		pyautogui.hotkey(keys[0], keys[1])
+
+# Scroll to value
+def scroll_to(value, x=None, y=None):
+	pyautogui.scroll(value, x, y)

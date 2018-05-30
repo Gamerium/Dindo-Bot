@@ -67,5 +67,5 @@ class PlugDialog(Gtk.Dialog):
 
 	def on_plug_button_clicked(self, button):
 		window_xid = self.entry.get_text().strip()
-		if window_xid:
-			self.parent.plug_game_window(int(window_xid))
+		if window_xid.startswith('0x') or window_xid.isdigit():
+			self.parent.plug_game_window(int(window_xid, 0))

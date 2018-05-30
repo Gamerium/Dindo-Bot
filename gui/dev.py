@@ -66,19 +66,63 @@ class DevToolsWidget(Gtk.Table):
 		self.attach(right_box, 2, 3, 0, 1)
 		## Key Press
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		vbox.add(parent.create_bold_label('Key Press'))
 		right_box.pack_start(vbox, True, True, 0)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		vbox.add(hbox)
+		hbox.add(parent.create_bold_label('Key Press'))
+		# Label
+		self.keys_label = Gtk.Label()
+		hbox.add(self.keys_label)
 		# ComboBox
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-		self.keys_combo = CustomComboBox(data.KeyboardShortcuts.values())
-		hbox.pack_start(self.keys_combo, True, True, 0)
 		vbox.add(hbox)
+		self.keys_combo = CustomComboBox(data.KeyboardShortcuts)
+		self.keys_combo.connect('changed', self.on_keys_combo_changed)
+		hbox.pack_start(self.keys_combo, True, True, 0)
 		# Simulate
-		simulate_key_press_button = Gtk.Button()
-		simulate_key_press_button.set_image(Gtk.Image(icon_name='input-keyboard'))
-		simulate_key_press_button.set_tooltip_text('Simulate')
-		simulate_key_press_button.connect('clicked', self.on_simulate_key_press_button_clicked)
-		hbox.add(simulate_key_press_button)
+		self.simulate_key_press_button = Gtk.Button()
+		self.simulate_key_press_button.set_image(Gtk.Image(icon_name='input-keyboard'))
+		self.simulate_key_press_button.set_tooltip_text('Simulate')
+		self.simulate_key_press_button.set_sensitive(False)
+		self.simulate_key_press_button.connect('clicked', self.on_simulate_key_press_button_clicked)
+		hbox.add(self.simulate_key_press_button)
+		## Scroll
+		vbox.add(parent.create_bold_label('Scroll'))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		vbox.add(hbox)
+		# Direction
+		self.scroll_direction_combo = CustomComboBox(['up', 'down'])
+		self.scroll_direction_combo.set_active(1)
+		hbox.pack_start(self.scroll_direction_combo, True, True, 0)
+		# Value
+		adjustment = Gtk.Adjustment(value=1, lower=1, upper=25, step_increment=1, page_increment=5, page_size=0)
+		self.scroll_spin_button = Gtk.SpinButton(adjustment=adjustment)
+		hbox.pack_start(self.scroll_spin_button, True, True, 0)
+		# Simulate
+		simulate_scroll_button = Gtk.Button()
+		simulate_scroll_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.SB_V_DOUBLE_ARROW).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
+		simulate_scroll_button.set_tooltip_text('Simulate Scroll')
+		simulate_scroll_button.connect('clicked', self.on_simulate_scroll_button_clicked)
+		hbox.add(simulate_scroll_button)
+
+	def on_simulate_scroll_button_clicked(self, button):
+		# get scroll value
+		direction = self.scroll_direction_combo.get_active_text()
+		value = self.scroll_spin_button.get_value_as_int()
+		clicks = value if direction == 'up' else -value
+		# get game area location
+		game_location = tools.get_widget_location(self.parent.game_area)
+		# get the center of the game location
+		x, y = pyautogui.center(game_location)
+		# scroll
+		self.parent._debug('Scroll: %s' % clicks)
+		tools.scroll_to(clicks, x, y)
+
+	def on_keys_combo_changed(self, combo):
+		selected = combo.get_active_text()
+		self.keys_label.set_text('(' + data.KeyboardShortcuts[selected] + ')')
+		if not self.simulate_key_press_button.get_sensitive():
+			self.simulate_key_press_button.set_sensitive(True)
 
 	def on_select_button_clicked(self, button):
 		button.set_sensitive(False)
@@ -90,8 +134,8 @@ class DevToolsWidget(Gtk.Table):
 		# get pixel color
 		color = tools.get_pixel_color(x, y)
 		if self.parent.game_area:
-			# get game area geometry
-			game_x, game_y, game_width, game_height = tools.get_widget_geometry(self.parent.game_area)
+			# get game area location
+			game_x, game_y, game_width, game_height = tools.get_widget_location(self.parent.game_area)
 			#print('x: %s, y: %s, game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (x, y, game_x, game_y, game_width, game_height))
 			# scale to game area
 			if tools.position_is_inside_bounds(x, y, game_x, game_y, game_width, game_height):
@@ -126,7 +170,7 @@ class DevToolsWidget(Gtk.Table):
 		#print('x: %s, y: %s, width: %s, height: %s' % (x, y, width, height))
 		# adjust for game area
 		if self.parent.game_area:
-			game_x, game_y, game_width, game_height = tools.get_widget_geometry(self.parent.game_area)
+			game_x, game_y, game_width, game_height = tools.get_widget_location(self.parent.game_area)
 			#print('game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (game_x, game_y, game_width, game_height))
 			click_x, click_y = tools.adjust_click_position(x, y, width, height, game_x, game_y, game_width, game_height)
 		else:
@@ -137,7 +181,8 @@ class DevToolsWidget(Gtk.Table):
 		tools.perform_click(click_x, click_y)
 
 	def on_simulate_key_press_button_clicked(self, button):
-		key = self.keys_combo.get_active_text()
+		selected = self.keys_combo.get_active_text()
+		key = data.KeyboardShortcuts[selected]
 		self.parent.focus_game()
 		self.parent._debug('Press key: %s' % key)
 		tools.press_key(key)

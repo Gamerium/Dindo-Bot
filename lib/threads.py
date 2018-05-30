@@ -11,7 +11,6 @@ from . import tools
 from . import parser
 from . import data
 from . import imgcompare
-import pyautogui
 
 '''
 	TimerThread is a quick implementation of thread class with a timer (not really powerful, but it do the job)
@@ -48,10 +47,10 @@ class TimerThread(threading.Thread):
 
 class BotThread(TimerThread):
 
-	def __init__(self, parent, game_geometry):
+	def __init__(self, parent, game_location):
 		TimerThread.__init__(self)
 		self.parent = parent
-		self.game_geometry = game_geometry
+		self.game_location = game_location
 		self.pause_event = threading.Event()
 		self.pause_event.set()
 		self.suspend = False
@@ -68,12 +67,12 @@ class BotThread(TimerThread):
 
 			# tell user that we have complete the path
 			if not self.suspend:
-				self.log('Bot path completed', LogType.Success)
+				self.log('Bot path completed', LogType.Success, False)
 
 		# reset bot window buttons
 		self.reset()
 
-		self.debug('Bot thread ended, elapsed time: ' + self.get_elapsed_time())
+		self.debug('Bot thread ended, elapsed time: ' + self.get_elapsed_time(), False)
 
 	def interpret(self, instructions):
 		# split instructions
@@ -111,22 +110,25 @@ class BotThread(TimerThread):
 			else:
 				self.debug('Unknown instruction')
 
-	def click(self, coord):
+	def click(self, coord, double=False):
 		# adjust coordinates
-		if self.game_geometry:
-			game_x, game_y, game_width, game_height = self.game_geometry
+		if self.game_location:
+			game_x, game_y, game_width, game_height = self.game_location
 			#print('game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (game_x, game_y, game_width, game_height))
 			x, y = tools.adjust_click_position(coord['x'], coord['y'], coord['width'], coord['height'], game_x, game_y, game_width, game_height)
 		else:
 			x, y = (coord['x'], coord['y'])
 		# click
-		self.debug('Click on x: %s, y: %s' % (x, y))
-		tools.perform_click(x, y)
+		self.debug('Click on x: %s, y: %s, double: %s' % (x, y, double))
+		tools.perform_click(x, y, double)
+
+	def double_click(self, coord):
+		self.click(x, y, True)
 
 	def monitor_game_screen(self, timeout=30, tolerance=0.0):
-		if self.game_geometry:
+		if self.game_location:
 			# screen game
-			prev_screen = tools.screen_game(self.game_geometry)
+			prev_screen = tools.screen_game(self.game_location)
 			elapsed_time = 0
 			# wait for game screen to change
 			while elapsed_time < timeout:
@@ -136,7 +138,7 @@ class BotThread(TimerThread):
 				self.pause_event.wait()
 				if self.suspend: break
 				# take a new screen & compare it with the previous one
-				screen = tools.screen_game(self.game_geometry)
+				screen = tools.screen_game(self.game_location)
 				if screen.size != prev_screen.size:
 					self.debug('Screen size has changed, retry')
 				else:
@@ -168,20 +170,21 @@ class BotThread(TimerThread):
 				self.debug('Waiting for map to load')
 				time.sleep(3)
 
-	def update_game_geometry(self, game_geometry):
-		self.game_geometry = game_geometry
+	def update_game_location(self, game_location):
+		self.game_location = game_location
 
 	def slow_down(self):
-		# reduce thread speed
-		time.sleep(0.15)
+		time.sleep(0.5) # reduce thread speed
 
-	def log(self, text, type=LogType.Normal):
+	def log(self, text, type=LogType.Normal, slow_down=True):
 		GObject.idle_add(self.parent._log, text, type)
-		self.slow_down()
+		if slow_down:
+			self.slow_down()
 
-	def debug(self, text):
+	def debug(self, text, slow_down=True):
 		GObject.idle_add(self.parent._debug, text)
-		self.slow_down()
+		if slow_down:
+			self.slow_down()
 
 	def reset(self):
 		GObject.idle_add(self.parent.reset_buttons)
@@ -193,7 +196,7 @@ class BotThread(TimerThread):
 	def pause(self):
 		self.pause_timer()
 		self.pause_event.clear()
-		self.debug('Bot thread paused')
+		self.debug('Bot thread paused', False)
 
 	def resume(self):
 		self.resume_timer()
@@ -205,4 +208,4 @@ class BotThread(TimerThread):
 		self.suspend = True
 		self.pause_event.set() # ensure that thread is resumed (if ever paused)
 		self.join() # wait for thread to exit
-		self.debug('Bot thread stopped')
+		self.debug('Bot thread stopped', False)
