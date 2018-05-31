@@ -6,7 +6,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
 from lib import tools
 from lib import data
-from .custom import CustomComboBox
+from .custom import CustomComboBox, CustomSpinButton
 from .dialog import TextDialog
 import pyautogui
 
@@ -16,7 +16,7 @@ class DevToolsWidget(Gtk.Table):
 
 	def __init__(self, parent):
 		Gtk.Table.__init__(self, 1, 3, True)
-		self.set_border_width(10)
+		self.set_border_width(5)
 		self.parent = parent
 		#self.parent.connect('button-press-event', self.on_click)
 		## Pixel
@@ -76,7 +76,7 @@ class DevToolsWidget(Gtk.Table):
 		# ComboBox
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 		vbox.add(hbox)
-		self.keys_combo = CustomComboBox(data.KeyboardShortcuts)
+		self.keys_combo = CustomComboBox(data.KeyboardShortcuts, True)
 		self.keys_combo.connect('changed', self.on_keys_combo_changed)
 		hbox.pack_start(self.keys_combo, True, True, 0)
 		# Simulate
@@ -95,9 +95,8 @@ class DevToolsWidget(Gtk.Table):
 		self.scroll_direction_combo.set_active(1)
 		hbox.pack_start(self.scroll_direction_combo, True, True, 0)
 		# Value
-		adjustment = Gtk.Adjustment(value=1, lower=1, upper=25, step_increment=1, page_increment=5, page_size=0)
-		self.scroll_spin_button = Gtk.SpinButton(adjustment=adjustment)
-		hbox.pack_start(self.scroll_spin_button, True, True, 0)
+		self.scroll_spin_button = CustomSpinButton(value=1, min=1, max=10)
+		hbox.add(self.scroll_spin_button)
 		# Simulate
 		simulate_scroll_button = Gtk.Button()
 		simulate_scroll_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.SB_V_DOUBLE_ARROW).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
@@ -108,12 +107,15 @@ class DevToolsWidget(Gtk.Table):
 	def on_simulate_scroll_button_clicked(self, button):
 		# get scroll value
 		direction = self.scroll_direction_combo.get_active_text()
-		value = self.scroll_spin_button.get_value_as_int()
+		value = self.scroll_spin_button.get_value()
 		clicks = value if direction == 'up' else -value
-		# get game area location
-		game_location = tools.get_widget_location(self.parent.game_area)
-		# get the center of the game location
-		x, y = pyautogui.center(game_location)
+		if self.parent.game_area:
+			# get game area location
+			game_location = tools.get_widget_location(self.parent.game_area)
+			# get the center of the game location
+			x, y = pyautogui.center(game_location)
+		else:
+			x, y = (None, None)
 		# scroll
 		self.parent._debug('Scroll: %s' % clicks)
 		tools.scroll_to(clicks, x, y)

@@ -11,6 +11,7 @@ from . import tools
 from . import parser
 from . import data
 from . import imgcompare
+import pyautogui
 
 '''
 	TimerThread is a quick implementation of thread class with a timer (not really powerful, but it do the job)
@@ -70,7 +71,8 @@ class BotThread(TimerThread):
 				self.log('Bot path completed', LogType.Success, False)
 
 		# reset bot window buttons
-		self.reset()
+		if not self.suspend:
+			self.reset()
 
 		self.debug('Bot thread ended, elapsed time: ' + self.get_elapsed_time(), False)
 
@@ -93,19 +95,13 @@ class BotThread(TimerThread):
 				self.move(instruction['value'])
 
 			elif instruction['name'] == 'Enclos':
-				enclos_pos = parser.parse_data(data.Enclos, instruction['value'], ['x', 'y'])
-				enclos_type = parser.parse_data(data.Enclos, instruction['value'], ['type'])
-				print(str(enclos_pos) + ', type: ' + str(enclos_type))
+				self.elevate(instruction['value'])
 
 			elif instruction['name'] == 'Zaap':
-				zaap_from = parser.parse_data(data.Zaap['From'], instruction['from'])
-				zaap_to = parser.parse_data(data.Zaap['To'], instruction['to'])
-				print(str(zaap_from) + ' - ' + str(zaap_to))
+				self.use_zaap(instruction['from'], instruction['to'])
 
 			elif instruction['name'] == 'Zaapi':
-				zaapi_from = parser.parse_data(data.Zaapi['From'], instruction['from'])
-				zaapi_to = parser.parse_data(data.Zaapi['To'], instruction['to'])
-				print(str(zaapi_from) + ' - ' + str(zaapi_to))
+				self.use_zaapi(instruction['from'], instruction['to'])
 
 			else:
 				self.debug('Unknown instruction')
@@ -123,7 +119,7 @@ class BotThread(TimerThread):
 		tools.perform_click(x, y, double)
 
 	def double_click(self, coord):
-		self.click(x, y, True)
+		self.click(coord, True)
 
 	def monitor_game_screen(self, timeout=30, tolerance=0.0):
 		if self.game_location:
@@ -133,10 +129,10 @@ class BotThread(TimerThread):
 			# wait for game screen to change
 			while elapsed_time < timeout:
 				# wait 1 second
-				time.sleep(1)
+				self.sleep(1)
 				# check for pause or suspend
 				self.pause_event.wait()
-				if self.suspend: break
+				if self.suspend: return False
 				# take a new screen & compare it with the previous one
 				screen = tools.screen_game(self.game_location)
 				if screen.size != prev_screen.size:
@@ -168,7 +164,117 @@ class BotThread(TimerThread):
 			if self.monitor_game_screen(tolerance=2.5):
 				# wait for map to load
 				self.debug('Waiting for map to load')
-				time.sleep(3)
+				self.sleep(3)
+
+	def press_key(self, key):
+		# focus game
+		self.debug('Trying to get game focus')
+		GObject.idle_add(self.parent.focus_game)
+		self.sleep(2)
+		# press key
+		self.debug('Press key: ' + key)
+		tools.press_key(key)
+
+	def scroll(self, value):
+		# scroll game center to given value
+		self.debug('Scroll to: %s' % value)
+		if self.game_location:
+			x, y = pyautogui.center(self.game_location)
+		else:
+			x, y = (None, None)
+		tools.scroll_to(value, x, y)
+
+	def use_zaap(self, zaap_from, zaap_to):
+		# get coordinates
+		zaap_from_coordinates = parser.parse_data(data.Zaap['From'], zaap_from)
+		zaap_to_coordinates = parser.parse_data(data.Zaap['To'], zaap_to)
+		if zaap_from_coordinates and zaap_to_coordinates:
+			# if a keyboard shortcut is set (like for Havenbag)
+			if 'keyboard_shortcut' in zaap_from_coordinates:
+				# press key
+				self.press_key(zaap_from_coordinates['keyboard_shortcut'])
+				# wait for game screen to change
+				self.debug('Waiting for game screen to change')
+				if self.monitor_game_screen(tolerance=2.5):
+					# wait for game screen to load
+					self.debug('Waiting for game screen to load')
+					self.sleep(3)
+				# check for pause or suspend
+				self.pause_event.wait()
+				if self.suspend: return
+			# click on zaap from
+			self.click(zaap_from_coordinates)
+			# wait for zaap list to show
+			self.debug('Waiting for zaap list to show')
+			if zaap_from == 'Havenbag':
+				self.sleep(3)
+			else:
+				self.monitor_game_screen(tolerance=2.5)
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# if we need to scroll zaap list
+			if 'scroll' in zaap_to_coordinates:
+				# scroll
+				self.scroll(zaap_to_coordinates['scroll'])
+				self.sleep(2)
+				# check for pause or suspend
+				self.pause_event.wait()
+				if self.suspend: return
+			# double click on zaap to
+			self.double_click(zaap_to_coordinates)
+			# wait for game screen to load
+			self.debug('Waiting for game screen to load')
+			self.sleep(3)
+
+	def use_zaapi(self, zaapi_from, zaapi_to):
+		# get coordinates
+		zaapi_from_coordinates = parser.parse_data(data.Zaapi['From'], zaapi_from)
+		zaapi_to_coordinates = parser.parse_data(data.Zaapi['To'], zaapi_to)
+		if zaapi_from_coordinates and zaapi_to_coordinates:
+			# click on zaapi from
+			self.click(zaapi_from_coordinates)
+			# wait for zaapi list to show
+			self.debug('Waiting for zaapi list to show')
+			self.monitor_game_screen(tolerance=2.5)
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# choose zaapi to location/list tab
+			self.click(zaapi_to_coordinates['location'])
+			self.sleep(2)
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# if we need to scroll zaapi list
+			if 'scroll' in zaapi_to_coordinates:
+				# scroll
+				self.scroll(zaapi_to_coordinates['scroll'])
+				self.sleep(2)
+				# check for pause or suspend
+				self.pause_event.wait()
+				if self.suspend: return
+			# double click on zaapi to
+			self.double_click(zaapi_to_coordinates)
+			# wait for game screen to load
+			self.debug('Waiting for game screen to load')
+			self.sleep(3)
+
+	def elevate(self, enclos):
+		# get enclos coordinates
+		enclos = parser.parse_data(data.Enclos, enclos)
+		if enclos:
+			# click on enclos
+			self.click(enclos)
+			# wait for enclos to show
+			self.debug('Waiting for enclos to show')
+			if self.monitor_game_screen(tolerance=2.5):
+				# close it
+				self.debug('Closing enclos')
+				self.press_key(data.KeyboardShortcuts['Esc'])
+				# wait for enclos to close
+				self.debug('Waiting for enclos to close')
+				self.sleep(3)
 
 	def update_game_location(self, game_location):
 		self.game_location = game_location
@@ -192,6 +298,16 @@ class BotThread(TimerThread):
 	def await(self):
 		self.pause()
 		GObject.idle_add(self.parent.set_buttons_to_paused)
+
+	def sleep(self, timeout=1):
+		elapsed_time = 0
+		while elapsed_time < timeout:
+			# sleep
+			time.sleep(1)
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: break
+			elapsed_time += 1
 
 	def pause(self):
 		self.pause_timer()

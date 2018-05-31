@@ -7,8 +7,10 @@ from gi.repository import Gtk
 
 class CustomComboBox(Gtk.ComboBoxText):
 
-	def __init__(self, data=[]):
+	def __init__(self, data=[], sort=False):
 		Gtk.ComboBoxText.__init__(self)
+		if sort:
+			data = sorted(data)
 		for text in data:
 			self.append_text(text)
 
@@ -51,3 +53,49 @@ class CustomListBox(Gtk.ListBox):
 	def on_delete_button_clicked(self, button):
 		row = button.get_parent().get_parent()
 		self.remove(row)
+
+class CustomScaleButton(Gtk.Button):
+
+	def __init__(self, value=0, min=0, max=100, step=1):
+		Gtk.Button.__init__(self, value)
+		adjustment = Gtk.Adjustment(value=value, lower=min, upper=max, step_increment=step, page_increment=step, page_size=0)
+		self.scale = Gtk.Scale(orientation=Gtk.Orientation.HORIZONTAL, adjustment=adjustment, digits=0)
+		self.scale.set_size_request(100, -1)
+		self.scale.connect('value-changed', self.on_value_changed)
+		self.popover = Gtk.Popover(relative_to=self, position=Gtk.PositionType.TOP)
+		self.popover.add(self.scale)
+		self.connect('clicked', self.on_clicked)
+
+	def on_clicked(self, button):
+		self.popover.show_all()
+
+	def on_value_changed(self, button):
+		value = int(self.scale.get_value())
+		self.set_label(str(value))
+
+	def get_value(self):
+		return int(self.get_label())
+
+class CustomSpinButton(Gtk.Button):
+
+	def __init__(self, value=0, min=0, max=100, step=1):
+		Gtk.Button.__init__(self, value)
+		adjustment = Gtk.Adjustment(value=value, lower=min, upper=max, step_increment=step, page_increment=step, page_size=0)
+		self.spin_button = Gtk.SpinButton(adjustment=adjustment)
+		self.spin_button.connect('value-changed', self.on_value_changed)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.set_border_width(5)
+		hbox.add(self.spin_button)
+		self.popover = Gtk.Popover(relative_to=self, position=Gtk.PositionType.TOP)
+		self.popover.add(hbox)
+		self.connect('clicked', self.on_clicked)
+
+	def on_clicked(self, button):
+		self.popover.show_all()
+
+	def on_value_changed(self, button):
+		value = self.spin_button.get_value_as_int()
+		self.set_label(str(value))
+
+	def get_value(self):
+		return int(self.get_label())
