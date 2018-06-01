@@ -318,12 +318,14 @@ class BotThread(TimerThread):
 		else:
 			return None
 
-	def take_dragodinde_image(self, name):
+	def take_dragodinde_image(self, name, location=None):
 		# create directory(s) to store dragodindes images
 		#directory = tools.get_resource_path('../dragodindes') + '/' + tools.get_date()
 		#tools.create_directory(directory)
+		# get location
+		if not location:
+			location = self.get_location('Dragodinde Card')
 		# take dragodinde image
-		location = self.get_location('Dragodinde Card')
 		if location:
 			save_to = None #directory + '/' + name
 			return tools.screen_game(location, save_to)
@@ -341,24 +343,25 @@ class BotThread(TimerThread):
 		else:
 			return None
 
-	def move_dragodinde(self, action, dragodinde_image=None):
-		dragodinde_location = self.get_location('Dragodinde Card')
+	def move_dragodinde(self, action, dragodinde_image=None, dragodinde_location=None):
+		if not dragodinde_location:
+			dragodinde_location = self.get_location('Dragodinde Card')
 		if not dragodinde_image:
 			dragodinde_image = tools.screen_game(dragodinde_location)
 		self.press_key(data.KeyboardShortcuts[action])
 		self.monitor_game_screen(screen=dragodinde_image, location=dragodinde_location)
 
-	def move_dragodinde_to_inventory(self, dragodinde_image=None):
+	def move_dragodinde_to_inventory(self, dragodinde_image=None, dragodinde_location=None):
 		self.debug('Moving dragodinde to inventory')
 		self.move_dragodinde('Exchange', dragodinde_image)
 		return True
 
-	def move_dragodinde_to_enclos(self, enclos_type, dragodinde_image=None):
+	def move_dragodinde_to_enclos(self, enclos_type, dragodinde_image=None, dragodinde_location=None):
 		self.debug("Moving dragodinde to '%s' enclos" % enclos_type)
 		self.move_dragodinde('Elevate', dragodinde_image)
 		return True
 
-	def move_dragodinde_to_cowshed(self, dragodinde_image=None):
+	def move_dragodinde_to_cowshed(self, dragodinde_image=None, dragodinde_location=None):
 		self.debug('Moving dragodinde to cowshed')
 		self.move_dragodinde('Store', dragodinde_image)
 		return True
@@ -383,7 +386,6 @@ class BotThread(TimerThread):
 		self.debug('Waiting for dragodinde card to show')
 		self.monitor_game_screen(tolerance=2.5, screen=screen)
 		# manage dragodinde(s)
-		checked_dragodinde_images = []
 		dragodinde_number = 0
 		moved_dragodinde_number = 0
 		dragodinde_location = self.get_location('Dragodinde Card')
@@ -395,73 +397,67 @@ class BotThread(TimerThread):
 			if self.enclos_is_empty():
 				break
 			# take dragodinde image
-			already_checked = False
 			dragodinde_name = self.get_dragodinde_name()
-			dragodinde_image = self.take_dragodinde_image(dragodinde_name)
-			# verify if dragodinde is already checked
-			for image in checked_dragodinde_images:
-				if imgcompare.is_equal(dragodinde_image, image):
-					already_checked = True
-			self.debug('Dragodinde already checked: %s' % already_checked)
-			if not already_checked:
-				# check dragodinde
-				checked_dragodinde_images.append(dragodinde_image)
-				# increase dragodindes number
-				dragodinde_number += 1
-				# get dragodinde stats
-				self.debug("Get dragodinde '%s' stats" % dragodinde_name)
-				stats = self.get_dragodinde_stats(dragodinde_image)
-				if stats:
-					Stats = data.DragodindeStats
-					Serenity = data.DragodindeSenerity
-					# move dragodinde
-					dragodinde_moved = False
-					energy, amour, maturity, endurance, serenity = stats
-					energy_percent, energy_state = energy
-					amour_percent, amour_state = amour
-					maturity_percent, maturity_state = maturity
-					endurance_percent, endurance_state = endurance
-					serenity_percent, serenity_state = serenity
-					# get dragodinde needs
-					need_energy = energy_state in (Stats.Empty, Stats.InProgress)
-					need_amour = amour_state in (Stats.Empty, Stats.InProgress)
-					need_maturity = maturity_state in (Stats.Empty, Stats.InProgress)
-					need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
-					self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance))
-					# enclos 'Amour'
-					if enclos_type == data.EnclosType.Amour:
-						if amour_state == Stats.Full:
-							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
-					# enclos 'Endurance'
-					elif enclos_type == data.EnclosType.Endurance:
-						if endurance_state == Stats.Full:
-							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
-					# enclos 'NegativeSerenity'
-					elif enclos_type == data.EnclosType.NegativeSerenity:
-						if serenity_state == Serenity.Negative or (serenity_state == Serenity.Medium and need_maturity):
-							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
-					# enclos 'PositiveSerenity'
-					elif enclos_type == data.EnclosType.PositiveSerenity:
-						if serenity_state == Serenity.Positive or (serenity_state == Serenity.Medium and need_maturity):
-							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
-					# enclos 'Energy'
-					elif enclos_type == data.EnclosType.Energy:
-						if all(state == Stats.Full for state in (energy_state, amour_state, maturity_state, endurance_state)):
-							dragodinde_moved = self.move_dragodinde_to_cowshed(dragodinde_image)
-						elif energy_state == Stats.Full:
-							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
-					# enclos 'Maturity'
-					elif enclos_type == data.EnclosType.Maturity:
-						if serenity_state == Serenity.Medium and maturity_state == Stats.Full:
-							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
-					# Nothing to do
-					if not dragodinde_moved:
-						self.debug('Nothing to do')
-					else:
-						moved_dragodinde_number += 1
-						continue
+			dragodinde_image = self.take_dragodinde_image(dragodinde_name, dragodinde_location)
+			# increase dragodindes number
+			dragodinde_number += 1
+			# get dragodinde stats
+			self.debug("Get dragodinde '%s' stats" % dragodinde_name)
+			stats = self.get_dragodinde_stats(dragodinde_image)
+			if stats:
+				Stats = data.DragodindeStats
+				Serenity = data.DragodindeSenerity
+				# move dragodinde
+				dragodinde_moved = False
+				energy, amour, maturity, endurance, serenity = stats
+				energy_percent, energy_state = energy
+				amour_percent, amour_state = amour
+				maturity_percent, maturity_state = maturity
+				endurance_percent, endurance_state = endurance
+				serenity_percent, serenity_state = serenity
+				# get dragodinde needs
+				need_energy = energy_state in (Stats.Empty, Stats.InProgress)
+				need_amour = amour_state in (Stats.Empty, Stats.InProgress)
+				need_maturity = maturity_state in (Stats.Empty, Stats.InProgress)
+				need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
+				self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance))
+				# enclos 'Amour'
+				if enclos_type == data.EnclosType.Amour:
+					if amour_state == Stats.Full:
+						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
+				# enclos 'Endurance'
+				elif enclos_type == data.EnclosType.Endurance:
+					if endurance_state == Stats.Full:
+						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
+				# enclos 'NegativeSerenity'
+				elif enclos_type == data.EnclosType.NegativeSerenity:
+					if serenity_state == Serenity.Negative or (serenity_state == Serenity.Medium and need_maturity):
+						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
+				# enclos 'PositiveSerenity'
+				elif enclos_type == data.EnclosType.PositiveSerenity:
+					if serenity_state == Serenity.Positive or (serenity_state == Serenity.Medium and need_maturity):
+						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
+				# enclos 'Energy'
+				elif enclos_type == data.EnclosType.Energy:
+					if all(state == Stats.Full for state in (energy_state, amour_state, maturity_state, endurance_state)):
+						dragodinde_moved = self.move_dragodinde_to_cowshed(dragodinde_image, dragodinde_location)
+					elif energy_state == Stats.Full:
+						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
+				# enclos 'Maturity'
+				elif enclos_type == data.EnclosType.Maturity:
+					if serenity_state == Serenity.Medium and maturity_state == Stats.Full:
+						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
+				# Nothing to do
+				if not dragodinde_moved:
+					self.debug('Nothing to do')
 				else:
+					moved_dragodinde_number += 1
 					continue
+				# break if managed dragodinde number equal 10
+				if dragodinde_number == 10:
+					break
+			else:
+				continue
 			# check for pause or suspend
 			self.pause_event.wait()
 			if self.suspend: return 0
@@ -469,7 +465,7 @@ class BotThread(TimerThread):
 			self.debug('Check next dragodinde')
 			self.press_key(data.KeyboardShortcuts['Down'])
 			# break if there is no more dragodinde
-			if not self.monitor_game_screen(tolerance=0.01, screen=dragodinde_image, location=dragodinde_location, await_after_timeout=False):
+			if not self.monitor_game_screen(screen=dragodinde_image, location=dragodinde_location, await_after_timeout=False):
 				if not self.suspend:
 					self.debug('No more dragodinde')
 					break
@@ -498,9 +494,8 @@ class BotThread(TimerThread):
 		self.click(data.Locations['Select From Inventory'])
 		# wait for dragodinde card to show
 		self.debug('Waiting for dragodinde card to show')
-		self.monitor_game_screen(tolerance=0.5, screen=screen)
+		self.monitor_game_screen(tolerance=0.1, screen=screen)
 		# manage dragodinde(s)
-		checked_dragodinde_images = []
 		dragodinde_number = 0
 		moved_dragodinde_number = 0
 		dragodinde_location = self.get_location('Dragodinde Card')
@@ -512,71 +507,62 @@ class BotThread(TimerThread):
 			if self.inventory_is_empty():
 				break
 			# take dragodinde image
-			already_checked = False
 			dragodinde_name = self.get_dragodinde_name()
-			dragodinde_image = self.take_dragodinde_image(dragodinde_name)
-			# verify if dragodinde is already checked
-			for image in checked_dragodinde_images:
-				if imgcompare.is_equal(dragodinde_image, image):
-					already_checked = True
-			self.debug('Dragodinde already checked: %s' % already_checked)
-			if not already_checked:
-				# check dragodinde
-				checked_dragodinde_images.append(dragodinde_image)
-				# increase dragodindes number
-				dragodinde_number += 1
-				# get dragodinde stats
-				self.debug("Get dragodinde '%s' stats" % dragodinde_name)
-				stats = self.get_dragodinde_stats(dragodinde_image)
-				if stats:
-					Stats = data.DragodindeStats
-					Serenity = data.DragodindeSenerity
-					# move dragodinde
-					dragodinde_moved = False
-					energy, amour, maturity, endurance, serenity = stats
-					energy_percent, energy_state = energy
-					amour_percent, amour_state = amour
-					maturity_percent, maturity_state = maturity
-					endurance_percent, endurance_state = endurance
-					serenity_percent, serenity_state = serenity
-					# get dragodinde needs
-					need_energy = energy_state in (Stats.Empty, Stats.InProgress)
-					need_amour = amour_state in (Stats.Empty, Stats.InProgress)
-					need_maturity = maturity_state in (Stats.Empty, Stats.InProgress)
-					need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
-					self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance))
-					# enclos 'Amour'
-					if enclos_type == data.EnclosType.Amour:
-						if need_amour and serenity_state == Serenity.Positive:
-							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
-					# enclos 'Endurance'
-					elif enclos_type == data.EnclosType.Endurance:
-						if need_endurance and serenity_state == Serenity.Negative:
-							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
-					# enclos 'NegativeSerenity'
-					elif enclos_type == data.EnclosType.NegativeSerenity:
-						if ((need_maturity or (need_endurance and not need_amour)) and serenity_state == Serenity.Positive)  or (need_endurance and serenity_state == Serenity.Medium and maturity_state == Stats.Full):
-							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
-					# enclos 'PositiveSerenity'
-					elif enclos_type == data.EnclosType.PositiveSerenity:
-						if ((need_maturity or (need_amour and not need_endurance)) and serenity_state == Serenity.Negative) or (need_amour and serenity_state == Serenity.Medium and maturity_state == Stats.Full):
-							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
-					# enclos 'Energy'
-					elif enclos_type == data.EnclosType.Energy:
-						if need_energy and all(state == Stats.Full for state in (amour_state, maturity_state, endurance_state)):
-							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
-					# enclos 'Maturity'
-					elif enclos_type == data.EnclosType.Maturity:
-						if need_maturity and serenity_state == Serenity.Medium:
-							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
-					# Nothing to do
-					if not dragodinde_moved:
-						self.debug('Nothing to do')
-					else:
-						moved_dragodinde_number += 1
-						continue
+			dragodinde_image = self.take_dragodinde_image(dragodinde_name, dragodinde_location)
+			# increase dragodindes number
+			dragodinde_number += 1
+			# get dragodinde stats
+			self.debug("Get dragodinde '%s' stats" % dragodinde_name)
+			stats = self.get_dragodinde_stats(dragodinde_image)
+			if stats:
+				Stats = data.DragodindeStats
+				Serenity = data.DragodindeSenerity
+				# move dragodinde
+				dragodinde_moved = False
+				energy, amour, maturity, endurance, serenity = stats
+				energy_percent, energy_state = energy
+				amour_percent, amour_state = amour
+				maturity_percent, maturity_state = maturity
+				endurance_percent, endurance_state = endurance
+				serenity_percent, serenity_state = serenity
+				# get dragodinde needs
+				need_energy = energy_state in (Stats.Empty, Stats.InProgress)
+				need_amour = amour_state in (Stats.Empty, Stats.InProgress)
+				need_maturity = maturity_state in (Stats.Empty, Stats.InProgress)
+				need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
+				self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance))
+				# enclos 'Amour'
+				if enclos_type == data.EnclosType.Amour:
+					if need_amour and serenity_state == Serenity.Positive:
+						dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image, dragodinde_location)
+				# enclos 'Endurance'
+				elif enclos_type == data.EnclosType.Endurance:
+					if need_endurance and serenity_state == Serenity.Negative:
+						dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image, dragodinde_location)
+				# enclos 'NegativeSerenity'
+				elif enclos_type == data.EnclosType.NegativeSerenity:
+					if ((need_maturity or (need_endurance and not need_amour)) and serenity_state == Serenity.Positive)  or (need_endurance and serenity_state == Serenity.Medium and maturity_state == Stats.Full):
+						dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image, dragodinde_location)
+				# enclos 'PositiveSerenity'
+				elif enclos_type == data.EnclosType.PositiveSerenity:
+					if ((need_maturity or (need_amour and not need_endurance)) and serenity_state == Serenity.Negative) or (need_amour and serenity_state == Serenity.Medium and maturity_state == Stats.Full):
+						dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image, dragodinde_location)
+				# enclos 'Energy'
+				elif enclos_type == data.EnclosType.Energy:
+					if need_energy and all(state == Stats.Full for state in (amour_state, maturity_state, endurance_state)):
+						dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image, dragodinde_location)
+				# enclos 'Maturity'
+				elif enclos_type == data.EnclosType.Maturity:
+					if need_maturity and serenity_state == Serenity.Medium:
+						dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image, dragodinde_location)
+				# Nothing to do
+				if not dragodinde_moved:
+					self.debug('Nothing to do')
 				else:
+					moved_dragodinde_number += 1
 					continue
+			else:
+				continue
 			# check for pause or suspend
 			self.pause_event.wait()
 			if self.suspend: return
@@ -584,7 +570,7 @@ class BotThread(TimerThread):
 			self.debug('Check next dragodinde')
 			self.press_key(data.KeyboardShortcuts['Down'])
 			# break if there is no more dragodinde
-			if not self.monitor_game_screen(tolerance=0.01, screen=dragodinde_image, location=dragodinde_location, await_after_timeout=False):
+			if not self.monitor_game_screen(screen=dragodinde_image, location=dragodinde_location, await_after_timeout=False):
 				if not self.suspend:
 					self.debug('No more dragodinde')
 					break
@@ -632,7 +618,7 @@ class BotThread(TimerThread):
 		self.game_location = game_location
 
 	def slow_down(self):
-		time.sleep(0.1) # reduce thread speed
+		time.sleep(0.2) # reduce thread speed
 
 	def log(self, text, type=LogType.Normal, slow_down=True):
 		GObject.idle_add(self.parent._log, text, type)
@@ -654,6 +640,9 @@ class BotThread(TimerThread):
 	def monitor_internet_state(self, timeout=30):
 		elapsed_time = 0
 		while elapsed_time < timeout:
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
 			# get internet state
 			state = tools.internet_on()
 			if state:

@@ -12,13 +12,7 @@ from PIL import Image
 from . import parser
 import pyautogui
 import time
-
-try:
-	# For Python 3.0 and later
-	import urllib.request as urllib2
-except ImportError:
-	# Fall back to Python 2's urllib2
-	import urllib2
+import socket
 
 # Return active game window(s) list
 def get_game_window_list():
@@ -68,11 +62,18 @@ def get_resource_path(rel_path):
 	return abs_path_to_resource
 
 # Return internet state
-def internet_on():
+def internet_on(host='8.8.8.8', port=53, timeout=3):
+	'''
+	Host: 8.8.8.8 (google-public-dns-a.google.com)
+	OpenPort: 53/tcp
+	Service: domain (DNS/TCP)
+	'''
 	try:
-		urllib2.urlopen('http://www.google.com', timeout=2)
+		socket.setdefaulttimeout(timeout)
+		socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
 		return True
-	except urllib2.URLError as err: 
+	except Exception as ex:
+		#print(ex.message)
 		return False
 
 # Return internet state as a string
