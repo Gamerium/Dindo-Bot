@@ -2,6 +2,7 @@
 *.*~
 logs/*.log
 icons/more/*
+dragodindes/*
 accounts.json
 
 # Python cache

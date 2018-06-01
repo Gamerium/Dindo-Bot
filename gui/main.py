@@ -24,6 +24,7 @@ class BotWindow(Gtk.ApplicationWindow):
 	def __init__(self, title=__program_name__):
 		GObject.threads_init() # allow threads to update GUI
 		Gtk.Window.__init__(self, title=title)
+		logger.add_separator()
 		# Header Bar
 		self.create_header_bar(title)
 		# Tables
@@ -36,12 +37,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Window
 		self.set_icon_from_file(tools.get_resource_path('../icons/drago.png'))
 		self.set_size_request(900, 700)
-		#self.set_resizable(False)
+		self.set_resizable(False)
 		self.connect('destroy', Gtk.main_quit)
-		self.connect('size-allocate', self.on_resize)
+		#self.connect('size-allocate', self.on_resize)
 		self.show_all()
 		self.unplug_button.hide()
-		logger.add_separator()
 
 	def on_resize(self, widget, size):
 		if self.game_area and self.bot_thread and self.bot_thread.isAlive():
@@ -94,7 +94,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			screenshot_name = 'screenshot_' + tools.get_date_time()
 			screenshot_path = tools.get_resource_path('../' + screenshot_name)
 			tools.take_window_screenshot(self.game_window, screenshot_path)
-			self._log('Screenshot saved to: ' + screenshot_path, LogType.Info)
+			self._log("Screenshot saved to '%s'" % screenshot_path, LogType.Info)
 
 	def create_header_bar(self, title):
 		### Header Bar
@@ -490,6 +490,9 @@ class BotWindow(Gtk.ApplicationWindow):
 			# set keyboard focus
 			self.game_area.set_can_focus(True)
 			self.game_area.child_focus(Gtk.DirectionType.TAB_BACKWARD)
+			# report it to bot thread
+			if self.bot_thread and self.bot_thread.isAlive():
+				self.bot_thread.game_has_focus = True
 
 	def on_plug_added(self, widget):
 		self._debug('Game window plugged')

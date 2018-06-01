@@ -196,7 +196,7 @@ class DevToolsWidget(Gtk.Table):
 		if event.type == Gdk.EventType.DOUBLE_BUTTON_PRESS:
 			selected_row = self.get_selected_row()
 			if selected_row:
-				TextDialog(self.parent, "{'x': %s, 'y': %s, 'width': %s, 'height': %s, 'color': '%s'}" % selected_row)
+				TextDialog(self.parent, "{'x': %s, 'y': %s, 'width': %s, 'height': %s, 'color': %s}" % selected_row)
 
 	def on_selection_changed(self, selection):
 		if not self.simulate_click_button.get_sensitive():

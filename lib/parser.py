@@ -72,6 +72,6 @@ def parse_color(color):
 		return None
 
 	if len(rgb) == 3:
-		return {'red': int(rgb[0]), 'green': int(rgb[1]), 'blue': int(rgb[2])}
+		return (int(rgb[0]), int(rgb[1]), int(rgb[2]))
 	else:
 		return None

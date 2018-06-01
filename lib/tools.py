@@ -11,6 +11,7 @@ from datetime import datetime
 from PIL import Image
 from . import parser
 import pyautogui
+import time
 
 try:
 	# For Python 3.0 and later
@@ -61,10 +62,10 @@ def get_game_window(window_xid):
 
 # Return absolute path to resource
 def get_resource_path(rel_path):
-    dir_of_py_file = os.path.dirname(__file__)
-    rel_path_to_resource = os.path.join(dir_of_py_file, rel_path)
-    abs_path_to_resource = os.path.abspath(rel_path_to_resource)
-    return abs_path_to_resource
+	dir_of_py_file = os.path.dirname(__file__)
+	rel_path_to_resource = os.path.join(dir_of_py_file, rel_path)
+	abs_path_to_resource = os.path.abspath(rel_path_to_resource)
+	return abs_path_to_resource
 
 # Return internet state
 def internet_on():
@@ -75,8 +76,10 @@ def internet_on():
 		return False
 
 # Return internet state as a string
-def print_internet_state():
-	return 'Internet is ' + ('on' if internet_on() else 'off')
+def print_internet_state(state=None):
+	if not state:
+		state = internet_on()
+	return 'Internet is ' + ('on' if state else 'off')
 
 # Take a screenshot of given window
 def take_window_screenshot(window, save_to='screenshot'):
@@ -105,13 +108,14 @@ def pixbuf2image(pix):
 	return image
 
 # Return a screenshot of the game
-def screen_game(region):
+def screen_game(region, save_to=None):
 	# Linux X11
 	if sys.platform.startswith('linux'):
 		window = Gdk.get_default_root_window()
 		x, y, width, height = region
 		pb = Gdk.pixbuf_get_from_window(window, x, y, width, height)
-		#pb.savev(get_date_time() + '.png', 'png', (), ())
+		if save_to:
+			pb.savev(save_to + '.png', 'png', (), ())
 		screenshot = pixbuf2image(pb)
 		return screenshot
 	# Others
@@ -135,17 +139,22 @@ def get_pixel_color(x, y):
 	else:
 		return pyautogui.pixel(x, y)
 
-# Return date as a string
-def get_date():
-	return datetime.now().strftime('%d-%m-%y')
+# Return date as a string in the given format
+def get_date(format='%d-%m-%y'):
+	return datetime.now().strftime(format)
 
 # Return time as a string
 def get_time():
-	return datetime.now().strftime('%H:%M:%S')
+	return get_date('%H:%M:%S')
 
 # Return date & time as a string
 def get_date_time():
-	return datetime.now().strftime('%d-%m-%y_%H-%M-%S')
+	return get_date('%d-%m-%y_%H-%M-%S')
+
+# Return timestamp
+def get_timestamp(as_int=True):
+	timestamp = time.mktime(datetime.now().timetuple())
+	return int(timestamp) if as_int else timestamp
 
 # Save text to file
 def save_text_to_file(text, filename, mode='w'):
@@ -234,3 +243,33 @@ def press_key(key):
 # Scroll to value
 def scroll_to(value, x=None, y=None):
 	pyautogui.scroll(value, x, y)
+
+# Create directory(s) if not exist
+def create_directory(directory):
+	if not os.path.exists(directory):
+		os.makedirs(directory)
+
+# Check if color matches expected color
+def color_matches(color, expected_color, tolerance=0):
+	r, g, b = color
+	red, green, blue = expected_color
+
+	return (abs(r - red) <= tolerance) and (abs(g - green) <= tolerance) and (abs(b - blue) <= tolerance)
+
+# Return the percentage of a color in an image
+def get_color_percentage(image, expected_color, tolerance=10):
+	# get image colors
+	width, height = image.size
+	image = image.convert('RGB')
+	colors = image.getcolors(width * height)
+	# check if the expected color exist
+	expected_color_count = 0
+	for count, color in colors:
+		if color_matches(color, expected_color, tolerance):
+			expected_color_count += count
+	# convert to percentage
+	if height == 0: height = 1
+	if width == 0: width = 1
+	percentage = ((expected_color_count / height) / float(width)) * 100
+
+	return round(percentage, 2)

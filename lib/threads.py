@@ -52,6 +52,7 @@ class BotThread(TimerThread):
 		TimerThread.__init__(self)
 		self.parent = parent
 		self.game_location = game_location
+		self.game_has_focus = False
 		self.pause_event = threading.Event()
 		self.pause_event.set()
 		self.suspend = False
@@ -88,14 +89,14 @@ class BotThread(TimerThread):
 			# parse instruction
 			self.debug('Instruction: ' + line)
 			instruction = parser.parse_instruction(line)
-			self.debug('Parse result: ' + str(instruction))
+			#self.debug('Parse result: ' + str(instruction))
 
 			# begin interpretation
 			if instruction['name'] == 'Move':
 				self.move(instruction['value'])
 
 			elif instruction['name'] == 'Enclos':
-				self.elevate(instruction['value'])
+				self.check_enclos(instruction['value'])
 
 			elif instruction['name'] == 'Zaap':
 				self.use_zaap(instruction['from'], instruction['to'])
@@ -121,10 +122,15 @@ class BotThread(TimerThread):
 	def double_click(self, coord):
 		self.click(coord, True)
 
-	def monitor_game_screen(self, timeout=30, tolerance=0.0):
-		if self.game_location:
+	def monitor_game_screen(self, timeout=10, tolerance=0.0, screen=None, location=None, await_after_timeout=True):
+		if self.game_location or location:
 			# screen game
-			prev_screen = tools.screen_game(self.game_location)
+			if not location:
+				location = self.game_location
+			if not screen:
+				prev_screen = tools.screen_game(location)
+			else:
+				prev_screen = screen
 			elapsed_time = 0
 			# wait for game screen to change
 			while elapsed_time < timeout:
@@ -134,24 +140,31 @@ class BotThread(TimerThread):
 				self.pause_event.wait()
 				if self.suspend: return False
 				# take a new screen & compare it with the previous one
-				screen = tools.screen_game(self.game_location)
-				if screen.size != prev_screen.size:
+				new_screen = tools.screen_game(location)
+				if new_screen.size != prev_screen.size:
 					self.debug('Screen size has changed, retry')
 				else:
-					diff_percent = round(imgcompare.image_diff_percent(prev_screen, screen), 2)
+					diff_percent = round(imgcompare.image_diff_percent(prev_screen, new_screen), 2)
 					has_changed = diff_percent > tolerance
 					self.debug('Game screen has changed: {}, diff: {}%, tolerance: {}, timeout: {}'.format(has_changed, diff_percent, tolerance, timeout))
 					if has_changed:
 						return True
-				prev_screen = screen
+				prev_screen = new_screen
 				elapsed_time += 1
 			# if game screen hasn't change before timeout
-			if elapsed_time == timeout:
+			if await_after_timeout and elapsed_time == timeout:
 				self.await()
 				self.log('Game screen don\'t change', LogType.Error)
-				self.debug(tools.print_internet_state())
 
 		return False
+
+	def wait_for_map_change(self, timeout=30, tolerance=2.5, screen=None):
+		# wait for map to change
+		self.debug('Waiting for map to change')
+		if self.monitor_game_screen(timeout=timeout, tolerance=tolerance, screen=screen):
+			# wait for map to load
+			self.debug('Waiting for map to load')
+			self.sleep(3)
 
 	def move(self, direction):
 		# get coordinates
@@ -160,29 +173,40 @@ class BotThread(TimerThread):
 			# click
 			self.click(coordinates)
 			# wait for map to change
-			self.debug('Waiting for map to change')
-			if self.monitor_game_screen(tolerance=2.5):
-				# wait for map to load
-				self.debug('Waiting for map to load')
-				self.sleep(3)
+			self.wait_for_map_change()
 
 	def press_key(self, key):
 		# focus game
-		self.debug('Trying to get game focus')
 		GObject.idle_add(self.parent.focus_game)
-		self.sleep(2)
+		# wait for focus
+		elapsed_time = 0
+		while not self.game_has_focus and elapsed_time < 5:
+			self.sleep(1)
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			elapsed_time += 1
 		# press key
 		self.debug('Press key: ' + key)
 		tools.press_key(key)
+		# set game focus to false
+		self.game_has_focus = False
 
 	def scroll(self, value):
-		# scroll game center to given value
 		self.debug('Scroll to: %s' % value)
+		# save mouse position
+		mouse_position = pyautogui.position()
 		if self.game_location:
+			# get game center
 			x, y = pyautogui.center(self.game_location)
 		else:
 			x, y = (None, None)
+		# scroll
 		tools.scroll_to(value, x, y)
+		# wait for scroll to end
+		self.sleep(2)
+		# get back mouse to initial position
+		pyautogui.moveTo(mouse_position)
 
 	def use_zaap(self, zaap_from, zaap_to):
 		# get coordinates
@@ -193,23 +217,17 @@ class BotThread(TimerThread):
 			if 'keyboard_shortcut' in zaap_from_coordinates:
 				# press key
 				self.press_key(zaap_from_coordinates['keyboard_shortcut'])
-				# wait for game screen to change
-				self.debug('Waiting for game screen to change')
-				if self.monitor_game_screen(tolerance=2.5):
-					# wait for game screen to load
-					self.debug('Waiting for game screen to load')
-					self.sleep(3)
+				# wait for map to change
+				self.wait_for_map_change()
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: return
 			# click on zaap from
+			screen = tools.screen_game(self.game_location)
 			self.click(zaap_from_coordinates)
 			# wait for zaap list to show
 			self.debug('Waiting for zaap list to show')
-			if zaap_from == 'Havenbag':
-				self.sleep(3)
-			else:
-				self.monitor_game_screen(tolerance=2.5)
+			self.monitor_game_screen(tolerance=2.5, screen=screen)
 			# check for pause or suspend
 			self.pause_event.wait()
 			if self.suspend: return
@@ -217,15 +235,14 @@ class BotThread(TimerThread):
 			if 'scroll' in zaap_to_coordinates:
 				# scroll
 				self.scroll(zaap_to_coordinates['scroll'])
-				self.sleep(2)
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: return
 			# double click on zaap to
+			screen = tools.screen_game(self.game_location)
 			self.double_click(zaap_to_coordinates)
-			# wait for game screen to load
-			self.debug('Waiting for game screen to load')
-			self.sleep(3)
+			# wait for map to change
+			self.wait_for_map_change(screen=screen)
 
 	def use_zaapi(self, zaapi_from, zaapi_to):
 		# get coordinates
@@ -233,14 +250,15 @@ class BotThread(TimerThread):
 		zaapi_to_coordinates = parser.parse_data(data.Zaapi['To'], zaapi_to)
 		if zaapi_from_coordinates and zaapi_to_coordinates:
 			# click on zaapi from
+			screen = tools.screen_game(self.game_location)
 			self.click(zaapi_from_coordinates)
 			# wait for zaapi list to show
 			self.debug('Waiting for zaapi list to show')
-			self.monitor_game_screen(tolerance=2.5)
+			self.monitor_game_screen(tolerance=2.5, screen=screen)
 			# check for pause or suspend
 			self.pause_event.wait()
 			if self.suspend: return
-			# choose zaapi to location/list tab
+			# choose tab/location from zaapi list
 			self.click(zaapi_to_coordinates['location'])
 			self.sleep(2)
 			# check for pause or suspend
@@ -250,37 +268,371 @@ class BotThread(TimerThread):
 			if 'scroll' in zaapi_to_coordinates:
 				# scroll
 				self.scroll(zaapi_to_coordinates['scroll'])
-				self.sleep(2)
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: return
 			# double click on zaapi to
+			screen = tools.screen_game(self.game_location)
 			self.double_click(zaapi_to_coordinates)
-			# wait for game screen to load
-			self.debug('Waiting for game screen to load')
-			self.sleep(3)
+			# wait for map to change
+			self.wait_for_map_change(screen=screen)
 
-	def elevate(self, enclos):
+	def get_dragodinde_spec(self, name, dragodinde_screen):
+		# crop dragodinde image
+		location = data.Locations[name]
+		x, y, w, h = (location['x'], location['y'], location['width'], location['height'])
+		image = dragodinde_screen.crop((x, y, w+x, h+y))
+		# get specification percentage & state
+		state = data.DragodindeStats.Full
+		percentage = tools.get_color_percentage(image, data.Colors['Full'])
+		if percentage == 0:
+			state = data.DragodindeStats.InProgress
+			percentage = tools.get_color_percentage(image, data.Colors['In Progress'])
+			if percentage == 0:
+				state = data.DragodindeStats.Empty
+
+		return [percentage, state]
+
+	def get_dragodinde_stats(self, dragodinde_image):
+		if dragodinde_image:
+			# get dragodinde specifications (percent & state)
+			energy = self.get_dragodinde_spec('Dragodinde Energy', dragodinde_image)
+			amour = self.get_dragodinde_spec('Dragodinde Amour', dragodinde_image)
+			maturity = self.get_dragodinde_spec('Dragodinde Maturity', dragodinde_image)
+			endurance = self.get_dragodinde_spec('Dragodinde Endurance', dragodinde_image)
+			serenity = self.get_dragodinde_spec('Dragodinde Serenity', dragodinde_image)
+			# correct energy state
+			if energy[1] == data.DragodindeStats.Full and energy[0] < data.DragodindeEnergy.Max:
+				energy[1] = data.DragodindeStats.InProgress
+			# set serenity state
+			if serenity[1] == data.DragodindeStats.Full:
+				serenity[1] = data.DragodindeSenerity.Medium
+			elif serenity[0] > 50:
+				serenity[1] = data.DragodindeSenerity.Positive
+			else:
+				serenity[1] = data.DragodindeSenerity.Negative
+			# return dragodinde stats
+			stats = (energy, amour, maturity, endurance, serenity)
+			self.debug('Energy: {0[0][0]}% ({0[0][1]}), Amour: {0[1][0]}% ({0[1][1]}), Maturity: {0[2][0]}% ({0[2][1]}), Endurance: {0[3][0]}% ({0[3][1]}), Serenity: {0[4][0]}% ({0[4][1]})'.format(stats))
+			return stats
+		else:
+			return None
+
+	def take_dragodinde_image(self, name):
+		# create directory(s) to store dragodindes images
+		#directory = tools.get_resource_path('../dragodindes') + '/' + tools.get_date()
+		#tools.create_directory(directory)
+		# take dragodinde image
+		location = self.get_location('Dragodinde Card')
+		if location:
+			save_to = None #directory + '/' + name
+			return tools.screen_game(location, save_to)
+		else:
+			return None
+
+	def get_location(self, location):
+		if self.game_location:
+			game_x, game_y, game_width, game_height = self.game_location
+			x = data.Locations[location]['x'] + game_x
+			y = data.Locations[location]['y'] + game_y
+			width = data.Locations[location]['width']
+			height = data.Locations[location]['height']
+			return (x, y, width, height)
+		else:
+			return None
+
+	def move_dragodinde(self, action, dragodinde_image=None):
+		dragodinde_location = self.get_location('Dragodinde Card')
+		if not dragodinde_image:
+			dragodinde_image = tools.screen_game(dragodinde_location)
+		self.press_key(data.KeyboardShortcuts[action])
+		self.monitor_game_screen(screen=dragodinde_image, location=dragodinde_location)
+
+	def move_dragodinde_to_inventory(self, dragodinde_image=None):
+		self.debug('Moving dragodinde to inventory')
+		self.move_dragodinde('Exchange', dragodinde_image)
+		return True
+
+	def move_dragodinde_to_enclos(self, enclos_type, dragodinde_image=None):
+		self.debug("Moving dragodinde to '%s' enclos" % enclos_type)
+		self.move_dragodinde('Elevate', dragodinde_image)
+		return True
+
+	def move_dragodinde_to_cowshed(self, dragodinde_image=None):
+		self.debug('Moving dragodinde to cowshed')
+		self.move_dragodinde('Store', dragodinde_image)
+		return True
+
+	def enclos_is_empty(self):
+		location = self.get_location('Enclos First Place')
+		screen = tools.screen_game(location)
+		percentage = tools.get_color_percentage(screen, data.Colors['Enclos Empty'])
+		is_empty = percentage >= 99
+		self.debug('Enclos is empty: {}, percentage: {}%'.format(is_empty, percentage))
+		return is_empty
+
+	def get_dragodinde_name(self):
+		return 'dd_%s' % tools.get_timestamp()
+
+	def manage_enclos(self, enclos_type):
+		# select dragodinde from enclos
+		self.debug('Select dragodinde from enclos')
+		screen = tools.screen_game(self.game_location)
+		self.click(data.Locations['Select From Enclos'])
+		# wait for dragodinde card to show
+		self.debug('Waiting for dragodinde card to show')
+		self.monitor_game_screen(tolerance=2.5, screen=screen)
+		# manage dragodinde(s)
+		checked_dragodinde_images = []
+		dragodinde_number = 0
+		moved_dragodinde_number = 0
+		dragodinde_location = self.get_location('Dragodinde Card')
+		while dragodinde_number < 10:
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return 0
+			# break if enclos is empty
+			if self.enclos_is_empty():
+				break
+			# take dragodinde image
+			already_checked = False
+			dragodinde_name = self.get_dragodinde_name()
+			dragodinde_image = self.take_dragodinde_image(dragodinde_name)
+			# verify if dragodinde is already checked
+			for image in checked_dragodinde_images:
+				if imgcompare.is_equal(dragodinde_image, image):
+					already_checked = True
+			self.debug('Dragodinde already checked: %s' % already_checked)
+			if not already_checked:
+				# check dragodinde
+				checked_dragodinde_images.append(dragodinde_image)
+				# increase dragodindes number
+				dragodinde_number += 1
+				# get dragodinde stats
+				self.debug("Get dragodinde '%s' stats" % dragodinde_name)
+				stats = self.get_dragodinde_stats(dragodinde_image)
+				if stats:
+					Stats = data.DragodindeStats
+					Serenity = data.DragodindeSenerity
+					# move dragodinde
+					dragodinde_moved = False
+					energy, amour, maturity, endurance, serenity = stats
+					energy_percent, energy_state = energy
+					amour_percent, amour_state = amour
+					maturity_percent, maturity_state = maturity
+					endurance_percent, endurance_state = endurance
+					serenity_percent, serenity_state = serenity
+					# get dragodinde needs
+					need_energy = energy_state in (Stats.Empty, Stats.InProgress)
+					need_amour = amour_state in (Stats.Empty, Stats.InProgress)
+					need_maturity = maturity_state in (Stats.Empty, Stats.InProgress)
+					need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
+					self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance))
+					# enclos 'Amour'
+					if enclos_type == data.EnclosType.Amour:
+						if amour_state == Stats.Full:
+							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
+					# enclos 'Endurance'
+					elif enclos_type == data.EnclosType.Endurance:
+						if endurance_state == Stats.Full:
+							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
+					# enclos 'NegativeSerenity'
+					elif enclos_type == data.EnclosType.NegativeSerenity:
+						if serenity_state == Serenity.Negative or (serenity_state == Serenity.Medium and need_maturity):
+							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
+					# enclos 'PositiveSerenity'
+					elif enclos_type == data.EnclosType.PositiveSerenity:
+						if serenity_state == Serenity.Positive or (serenity_state == Serenity.Medium and need_maturity):
+							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
+					# enclos 'Energy'
+					elif enclos_type == data.EnclosType.Energy:
+						if all(state == Stats.Full for state in (energy_state, amour_state, maturity_state, endurance_state)):
+							dragodinde_moved = self.move_dragodinde_to_cowshed(dragodinde_image)
+						elif energy_state == Stats.Full:
+							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
+					# enclos 'Maturity'
+					elif enclos_type == data.EnclosType.Maturity:
+						if serenity_state == Serenity.Medium and maturity_state == Stats.Full:
+							dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image)
+					# Nothing to do
+					if not dragodinde_moved:
+						self.debug('Nothing to do')
+					else:
+						moved_dragodinde_number += 1
+						continue
+				else:
+					continue
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return 0
+			# check next dragodinde
+			self.debug('Check next dragodinde')
+			self.press_key(data.KeyboardShortcuts['Down'])
+			# break if there is no more dragodinde
+			if not self.monitor_game_screen(tolerance=0.01, screen=dragodinde_image, location=dragodinde_location, await_after_timeout=False):
+				if not self.suspend:
+					self.debug('No more dragodinde')
+					break
+				else:
+					return
+
+		# print managed dragodindes number when break from loop
+		free_places = 10 - (dragodinde_number - moved_dragodinde_number)
+		self.debug('Managed dragodindes: %s, Moved dragodindes: %s, Free places: %s' % (dragodinde_number, moved_dragodinde_number, free_places))
+
+		# return enclos free places number
+		return free_places
+
+	def inventory_is_empty(self):
+		location = self.get_location('Inventory First Place')
+		screen = tools.screen_game(location)
+		percentage = tools.get_color_percentage(screen, data.Colors['Inventory Empty'])
+		is_empty = percentage >= 99
+		self.debug('Inventory is empty: {}, percentage: {}%'.format(is_empty, percentage))
+		return is_empty
+
+	def manage_inventory(self, enclos_type, enclos_free_places):
+		# select dragodinde from inventory
+		self.debug('Select dragodinde from inventory')
+		screen = tools.screen_game(self.game_location)
+		self.click(data.Locations['Select From Inventory'])
+		# wait for dragodinde card to show
+		self.debug('Waiting for dragodinde card to show')
+		self.monitor_game_screen(tolerance=0.5, screen=screen)
+		# manage dragodinde(s)
+		checked_dragodinde_images = []
+		dragodinde_number = 0
+		moved_dragodinde_number = 0
+		dragodinde_location = self.get_location('Dragodinde Card')
+		while moved_dragodinde_number < enclos_free_places:
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# break if inventory empty
+			if self.inventory_is_empty():
+				break
+			# take dragodinde image
+			already_checked = False
+			dragodinde_name = self.get_dragodinde_name()
+			dragodinde_image = self.take_dragodinde_image(dragodinde_name)
+			# verify if dragodinde is already checked
+			for image in checked_dragodinde_images:
+				if imgcompare.is_equal(dragodinde_image, image):
+					already_checked = True
+			self.debug('Dragodinde already checked: %s' % already_checked)
+			if not already_checked:
+				# check dragodinde
+				checked_dragodinde_images.append(dragodinde_image)
+				# increase dragodindes number
+				dragodinde_number += 1
+				# get dragodinde stats
+				self.debug("Get dragodinde '%s' stats" % dragodinde_name)
+				stats = self.get_dragodinde_stats(dragodinde_image)
+				if stats:
+					Stats = data.DragodindeStats
+					Serenity = data.DragodindeSenerity
+					# move dragodinde
+					dragodinde_moved = False
+					energy, amour, maturity, endurance, serenity = stats
+					energy_percent, energy_state = energy
+					amour_percent, amour_state = amour
+					maturity_percent, maturity_state = maturity
+					endurance_percent, endurance_state = endurance
+					serenity_percent, serenity_state = serenity
+					# get dragodinde needs
+					need_energy = energy_state in (Stats.Empty, Stats.InProgress)
+					need_amour = amour_state in (Stats.Empty, Stats.InProgress)
+					need_maturity = maturity_state in (Stats.Empty, Stats.InProgress)
+					need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
+					self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance))
+					# enclos 'Amour'
+					if enclos_type == data.EnclosType.Amour:
+						if need_amour and serenity_state == Serenity.Positive:
+							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
+					# enclos 'Endurance'
+					elif enclos_type == data.EnclosType.Endurance:
+						if need_endurance and serenity_state == Serenity.Negative:
+							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
+					# enclos 'NegativeSerenity'
+					elif enclos_type == data.EnclosType.NegativeSerenity:
+						if ((need_maturity or (need_endurance and not need_amour)) and serenity_state == Serenity.Positive)  or (need_endurance and serenity_state == Serenity.Medium and maturity_state == Stats.Full):
+							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
+					# enclos 'PositiveSerenity'
+					elif enclos_type == data.EnclosType.PositiveSerenity:
+						if ((need_maturity or (need_amour and not need_endurance)) and serenity_state == Serenity.Negative) or (need_amour and serenity_state == Serenity.Medium and maturity_state == Stats.Full):
+							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
+					# enclos 'Energy'
+					elif enclos_type == data.EnclosType.Energy:
+						if need_energy and all(state == Stats.Full for state in (amour_state, maturity_state, endurance_state)):
+							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
+					# enclos 'Maturity'
+					elif enclos_type == data.EnclosType.Maturity:
+						if need_maturity and serenity_state == Serenity.Medium:
+							dragodinde_moved = self.move_dragodinde_to_enclos(enclos_type, dragodinde_image)
+					# Nothing to do
+					if not dragodinde_moved:
+						self.debug('Nothing to do')
+					else:
+						moved_dragodinde_number += 1
+						continue
+				else:
+					continue
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# check next dragodinde
+			self.debug('Check next dragodinde')
+			self.press_key(data.KeyboardShortcuts['Down'])
+			# break if there is no more dragodinde
+			if not self.monitor_game_screen(tolerance=0.01, screen=dragodinde_image, location=dragodinde_location, await_after_timeout=False):
+				if not self.suspend:
+					self.debug('No more dragodinde')
+					break
+				else:
+					return
+
+		# print managed dragodindes number when break from loop
+		self.debug('Managed dragodindes: %s, Moved dragodindes: %s' % (dragodinde_number, moved_dragodinde_number))
+
+	def check_enclos(self, enclos_name):
 		# get enclos coordinates
-		enclos = parser.parse_data(data.Enclos, enclos)
+		enclos = parser.parse_data(data.Enclos, enclos_name)
 		if enclos:
+			self.debug('Check enclos %s (%s)' % (enclos_name, enclos['type']))
 			# click on enclos
 			self.click(enclos)
 			# wait for enclos to show
 			self.debug('Waiting for enclos to show')
 			if self.monitor_game_screen(tolerance=2.5):
-				# close it
+				# check enclos
+				enclos_free_places = 0
+				if not self.enclos_is_empty():
+					enclos_free_places = self.manage_enclos(enclos['type'])
+				else:
+					enclos_free_places = 10
+				# check for pause or suspend
+				self.pause_event.wait()
+				if self.suspend: return
+				# check inventory
+				if enclos_free_places > 0 and not self.inventory_is_empty():
+					self.manage_inventory(enclos['type'], enclos_free_places)
+				# check for pause or suspend
+				self.pause_event.wait()
+				if self.suspend: return
+				# close enclos
 				self.debug('Closing enclos')
+				screen = tools.screen_game(self.game_location)
 				self.press_key(data.KeyboardShortcuts['Esc'])
 				# wait for enclos to close
 				self.debug('Waiting for enclos to close')
-				self.sleep(3)
+				self.monitor_game_screen(tolerance=2.5, screen=screen)
 
 	def update_game_location(self, game_location):
+		print('update game location: {0}'.format(game_location))
 		self.game_location = game_location
 
 	def slow_down(self):
-		time.sleep(0.5) # reduce thread speed
+		time.sleep(0.1) # reduce thread speed
 
 	def log(self, text, type=LogType.Normal, slow_down=True):
 		GObject.idle_add(self.parent._log, text, type)
@@ -299,14 +651,34 @@ class BotThread(TimerThread):
 		self.pause()
 		GObject.idle_add(self.parent.set_buttons_to_paused)
 
+	def monitor_internet_state(self, timeout=30):
+		elapsed_time = 0
+		while elapsed_time < timeout:
+			# get internet state
+			state = tools.internet_on()
+			if state:
+				return
+			else:
+				# print state
+				self.debug(tools.print_internet_state(state))
+				# wait 1 second, before recheck
+				time.sleep(1)
+				elapsed_time += 1
+		# if timeout reached
+		if elapsed_time == timeout:
+			self.await()
+			self.log('Unable to connect to the internet', LogType.Error)
+
 	def sleep(self, timeout=1):
 		elapsed_time = 0
 		while elapsed_time < timeout:
-			# sleep
-			time.sleep(1)
 			# check for pause or suspend
 			self.pause_event.wait()
-			if self.suspend: break
+			if self.suspend: return
+			# sleep
+			time.sleep(1)
+			# check internet state before continue
+			self.monitor_internet_state()
 			elapsed_time += 1
 
 	def pause(self):
