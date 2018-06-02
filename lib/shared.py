@@ -13,8 +13,8 @@ class LogType:
 
 class DebugLevel:
 	'''
-	High: The highest level (for debug text with too much details)
-	Normal: Medium level (for normal debug text)
-	Low: The lowest level (for text without real interest)
+	High: The highest level (for text with too much details)
+	Normal: Medium level (for text to show when the debug level is normal or high)
+	Low: The lowest level (for text to always show when debug is enabled)
 	'''
 	High, Normal, Low = range(3)

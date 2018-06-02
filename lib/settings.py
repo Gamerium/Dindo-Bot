@@ -9,7 +9,7 @@ def load_defaults():
 	settings = {
 		'Debug': {
 			'Enabled': True,
-			'Level':   DebugLevel.Normal
+			'Level':   DebugLevel.Low
 		},
 		'SaveDragodindesImages': False,
 		'KeepGameOpen':          False

@@ -32,6 +32,7 @@ Locations = {
 # DragodindeSenerity
 class DragodindeSenerity:
 	Negative, Medium, Positive = ('Negative', 'Medium', 'Positive')
+	MaxMedium = 57.55
 
 # DragodindeEnergy
 class DragodindeEnergy:
@@ -100,8 +101,8 @@ Zaap = {
 		'Brakmar':   {'x': 305, 'y': 106, 'width': 566, 'height': 456}
 	},
 	'To': {
-		'Bonta':     {'x': 178, 'y': 214, 'width': 566, 'height': 456, 'scroll': -2},
-		'Brakmar':   {'x': 184, 'y': 234, 'width': 566, 'height': 456, 'scroll': -2}
+		'Bonta':     {'x': 177, 'y': 274, 'width': 566, 'height': 456, 'scroll': -1},
+		'Brakmar':   {'x': 182, 'y': 295, 'width': 566, 'height': 456, 'scroll': -1}
 	}
 }
 

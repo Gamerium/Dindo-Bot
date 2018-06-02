@@ -81,7 +81,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			self._pop(self.debug_buf)
 			position = self.debug_buf.get_end_iter()
 			self.debug_buf.insert(position, '[' + tools.get_time() + '] ' + text + '\n')
-		logger.debug(text)
+			logger.debug(text)
 
 	def on_settings_button_clicked(self, button):
 		self.popover.show_all()
@@ -242,15 +242,15 @@ class BotWindow(Gtk.ApplicationWindow):
 			game_window_box.add(self.plug_button)
 		## Bot Path
 		bot_page.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
-		filechooserbutton = Gtk.FileChooserButton(title='Choose bot path')
-		filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
+		self.bot_path_filechooserbutton = Gtk.FileChooserButton(title='Choose bot path')
+		self.bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
 		pathfilter = Gtk.FileFilter()
 		pathfilter.set_name('Bot Path (*.path)')
 		pathfilter.add_pattern('*.path')
-		filechooserbutton.add_filter(pathfilter)
-		filechooserbutton.set_margin_left(10)
-		filechooserbutton.connect('file-set', self.on_bot_path_changed)
-		bot_page.add(filechooserbutton)
+		self.bot_path_filechooserbutton.add_filter(pathfilter)
+		self.bot_path_filechooserbutton.set_margin_left(10)
+		self.bot_path_filechooserbutton.connect('file-set', self.on_bot_path_changed)
+		bot_page.add(self.bot_path_filechooserbutton)
 		## Start From Step
 		bot_page.add(Gtk.Label('<b>Start From Step</b>', xalign=0, use_markup=True))
 		adjustment = Gtk.Adjustment(value=1, lower=1, upper=10000, step_increment=1, page_increment=5, page_size=0)
@@ -421,15 +421,25 @@ class BotWindow(Gtk.ApplicationWindow):
 				self.unplug_button.set_sensitive(False)
 				self.settings_button.set_sensitive(False)
 				self.step_spin_button.set_sensitive(False)
+				self.bot_path_filechooserbutton.set_sensitive(False)
 			else:
 				self.bot_thread.resume()
 			# enable/disable buttons
+			self.start_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif')))
 			self.start_button.set_sensitive(False)
 			self.pause_button.set_sensitive(True)
 			self.stop_button.set_sensitive(True)
 
+	def _disconnected(self, state=None):
+		self._log(tools.print_internet_state(state), LogType.Error)
+		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_NETWORK))
+
+	def _connected(self):
+		self.start_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif')))
+
 	def set_buttons_to_paused(self):
 		self.start_button.set_tooltip_text('Resume')
+		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY))
 		self.start_button.set_sensitive(True)
 		self.pause_button.set_sensitive(False)
 
@@ -439,12 +449,14 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def reset_buttons(self):
 		self.start_button.set_tooltip_text('Start')
+		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY))
 		self.start_button.set_sensitive(True)
 		self.stop_button.set_sensitive(False)
 		self.pause_button.set_sensitive(False)
 		self.unplug_button.set_sensitive(True)
 		self.settings_button.set_sensitive(True)
 		self.step_spin_button.set_sensitive(True)
+		self.bot_path_filechooserbutton.set_sensitive(True)
 
 	def on_stop_button_clicked(self, button):
 		self.bot_thread.stop()
@@ -521,9 +533,6 @@ class BotWindow(Gtk.ApplicationWindow):
 			# set keyboard focus
 			self.game_area.set_can_focus(True)
 			self.game_area.child_focus(Gtk.DirectionType.TAB_BACKWARD)
-			# report it to bot thread
-			if self.bot_thread and self.bot_thread.isAlive():
-				self.bot_thread.game_has_focus = True
 
 	def on_plug_added(self, widget):
 		self._debug('Game window plugged', DebugLevel.High)
@@ -559,7 +568,7 @@ class BotWindow(Gtk.ApplicationWindow):
 				self.game_area.show_all()
 				self.vtable.attach(self.game_area, 0, 1, 0, 3)
 			# plug game window
-			self._debug('Plug game window (id: %s)' % window_xid)
+			self._debug('Plug game window (id: %s)' % window_xid, DebugLevel.Low)
 			self.game_area.add_id(window_xid)
 			#self.game_window.reparent(self.game_area.get_window(), 0, 0)
 			#self.game_window.show() # force show (when minimized)
@@ -582,7 +591,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def unplug_game_window(self):
 		if self.game_window and not self.game_window.is_destroyed():
-			self._debug('Keep game window open', DebugLevel.High)
+			self._debug('Keep game window open')
 			root = Gdk.get_default_root_window()
 			self.game_window.reparent(root, 0, 0)
 
