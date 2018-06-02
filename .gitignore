@@ -1,6 +1,6 @@
 # Custom
 *.*~
-logs/*.log
+logs/*
 icons/more/*
 dragodindes/*
 accounts.json
