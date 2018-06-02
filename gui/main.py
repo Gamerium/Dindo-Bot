@@ -212,7 +212,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		bot_page.set_border_width(10)
 		bot_notebook.append_page(bot_page, Gtk.Label('Bot'))
 		## Game Window
-		bot_page.add(self.create_bold_label('Game Window'))
+		bot_page.add(Gtk.Label('<b>Game Window</b>', xalign=0, use_markup=True))
 		game_window_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		bot_page.add(game_window_box)
 		# ComboBox
@@ -241,7 +241,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.plug_button.connect('clicked', self.on_plug_button_clicked)
 			game_window_box.add(self.plug_button)
 		## Bot Path
-		bot_page.add(self.create_bold_label('Bot Path'))
+		bot_page.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
 		filechooserbutton = Gtk.FileChooserButton(title='Choose bot path')
 		filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
 		pathfilter = Gtk.FileFilter()
@@ -252,14 +252,15 @@ class BotWindow(Gtk.ApplicationWindow):
 		filechooserbutton.connect('file-set', self.on_bot_path_changed)
 		bot_page.add(filechooserbutton)
 		## Start From Step
-		bot_page.add(self.create_bold_label('Start From Step'))
+		bot_page.add(Gtk.Label('<b>Start From Step</b>', xalign=0, use_markup=True))
 		adjustment = Gtk.Adjustment(value=1, lower=1, upper=10000, step_increment=1, page_increment=5, page_size=0)
 		self.step_spin_button = Gtk.SpinButton(adjustment=adjustment)
 		self.step_spin_button.set_margin_left(10)
 		bot_page.add(self.step_spin_button)
 		## Start
-		self.start_button = Gtk.Button(' Start ')
-		self.start_button.set_image(self.add_image_margin(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY)))
+		self.start_button = Gtk.Button()
+		self.start_button.set_tooltip_text('Start')
+		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY))
 		self.start_button.connect('clicked', self.on_start_button_clicked)
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		container_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
@@ -285,7 +286,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		path_page.set_border_width(10)
 		bot_notebook.append_page(path_page, Gtk.Label('Path'))
 		## Movement
-		path_page.add(self.create_bold_label('Movement'))
+		path_page.add(Gtk.Label('<b>Movement</b>', xalign=0, use_markup=True))
 		# Up
 		up_button = Gtk.Button()
 		up_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_UP))
@@ -315,7 +316,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox.pack_start(down_button, True, False, 0)
 		path_page.add(hbox)
 		## Action
-		path_page.add(self.create_bold_label('Action'))
+		path_page.add(Gtk.Label('<b>Action</b>', xalign=0, use_markup=True))
 		## Enclos
 		self.enclos_radio = Gtk.RadioButton('Enclos')
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -333,7 +334,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# From
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
-		hbox.add(self.create_bold_label('From'))
+		hbox.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
 		self.zaap_from_combo = CustomComboBox(data=data.Zaap['From'], sort=True)
 		self.zaap_from_combo.set_margin_left(12)
 		self.zaap_from_combo.connect('changed', lambda combo: self.zaap_radio.set_active(True))
@@ -342,7 +343,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# To
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
-		hbox.add(self.create_bold_label('To'))
+		hbox.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
 		self.zaap_to_combo = CustomComboBox(data=data.Zaap['To'], sort=True)
 		self.zaap_to_combo.set_margin_left(30)
 		self.zaap_to_combo.connect('changed', lambda combo: self.zaap_radio.set_active(True))
@@ -355,7 +356,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# From
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
-		hbox.add(self.create_bold_label('From'))
+		hbox.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
 		self.zaapi_from_combo = CustomComboBox(data=data.Zaapi['From'], sort=True)
 		self.zaapi_from_combo.set_margin_left(12)
 		self.zaapi_from_combo.connect('changed', lambda combo: self.zaapi_radio.set_active(True))
@@ -364,7 +365,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# To
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.set_margin_left(40)
-		hbox.add(self.create_bold_label('To'))
+		hbox.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
 		self.zaapi_to_combo = CustomComboBox(data=data.Zaapi['To'], sort=True)
 		self.zaapi_to_combo.set_margin_left(30)
 		self.zaapi_to_combo.connect('changed', lambda combo: self.zaapi_radio.set_active(True))
@@ -411,7 +412,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			MessageDialog(self, 'Please select a bot path')
 		else:
 			# start bot thread or resume it
-			if self.start_button.get_label() == ' Start ':
+			if not self.bot_thread or not self.bot_thread.isAlive():
 				game_location = tools.get_widget_location(self.game_area)
 				save_dragodindes_images = self.save_dragodindes_images_check.get_active()
 				start_from_step = self.step_spin_button.get_value_as_int()
@@ -423,14 +424,12 @@ class BotWindow(Gtk.ApplicationWindow):
 			else:
 				self.bot_thread.resume()
 			# enable/disable buttons
-			self.start_button.set_image(self.add_image_margin(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif'))))
 			self.start_button.set_sensitive(False)
 			self.pause_button.set_sensitive(True)
 			self.stop_button.set_sensitive(True)
 
 	def set_buttons_to_paused(self):
-		self.start_button.set_label(' Resume ')
-		self.start_button.set_image(self.add_image_margin(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY)))
+		self.start_button.set_tooltip_text('Resume')
 		self.start_button.set_sensitive(True)
 		self.pause_button.set_sensitive(False)
 
@@ -439,11 +438,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.set_buttons_to_paused()
 
 	def reset_buttons(self):
-		self.start_button.set_label(' Start ')
-		self.start_button.set_image(self.add_image_margin(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY)))
+		self.start_button.set_tooltip_text('Start')
+		self.start_button.set_sensitive(True)
 		self.stop_button.set_sensitive(False)
 		self.pause_button.set_sensitive(False)
-		self.start_button.set_sensitive(True)
 		self.unplug_button.set_sensitive(True)
 		self.settings_button.set_sensitive(True)
 		self.step_spin_button.set_sensitive(True)
@@ -507,17 +505,6 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_bot_path_changed(self, filechooserbutton):
 		self.bot_path = filechooserbutton.get_filename()
-
-	def add_image_margin(self, image, margin=5):
-		image.set_margin_left(margin)
-
-		return image
-
-	def create_bold_label(self, text):
-		label = Gtk.Label(xalign=0)
-		label.set_markup('<b>' + text + '</b>')
-
-		return label
 
 	def populate_game_window_combo(self):
 		self.game_window_combo_ignore_change = True

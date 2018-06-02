@@ -21,7 +21,7 @@ class DevToolsWidget(Gtk.Table):
 		#self.parent.connect('button-press-event', self.on_click)
 		## Pixel
 		left_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		left_box.add(parent.create_bold_label('Pixel'))
+		left_box.add(Gtk.Label('<b>Pixel</b>', xalign=0, use_markup=True))
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 		left_box.pack_start(hbox, True, True, 0)
 		self.attach(left_box, 0, 2, 0, 1)
@@ -69,7 +69,7 @@ class DevToolsWidget(Gtk.Table):
 		right_box.pack_start(vbox, True, True, 0)
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 		vbox.add(hbox)
-		hbox.add(parent.create_bold_label('Key Press'))
+		hbox.add(Gtk.Label('<b>Key Press</b>', xalign=0, use_markup=True))
 		# Label
 		self.keys_label = Gtk.Label()
 		hbox.add(self.keys_label)
@@ -87,7 +87,7 @@ class DevToolsWidget(Gtk.Table):
 		self.simulate_key_press_button.connect('clicked', self.on_simulate_key_press_button_clicked)
 		hbox.add(self.simulate_key_press_button)
 		## Scroll
-		vbox.add(parent.create_bold_label('Scroll'))
+		vbox.add(Gtk.Label('<b>Scroll</b>', xalign=0, use_markup=True))
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 		vbox.add(hbox)
 		# Direction
