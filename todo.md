@@ -12,5 +12,4 @@
 
 ### To Fix
 
-* Game focus (on keypress)
 * Windows compatibility

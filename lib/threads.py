@@ -183,10 +183,6 @@ class BotThread(TimerThread):
 			self.wait_for_map_change()
 
 	def press_key(self, key):
-		# focus game
-		GObject.idle_add(self.parent.focus_game)
-		# wait for focus
-		self.sleep(1)
 		# press key
 		self.debug('Press key: ' + key, DebugLevel.High)
 		tools.press_key(key)

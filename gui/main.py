@@ -41,6 +41,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.set_icon_from_file(tools.get_resource_path('../icons/drago.png'))
 		self.set_size_request(900, 700)
 		self.set_resizable(False)
+		self.connect('key-press-event', self.focus_game)
 		self.connect('destroy', Gtk.main_quit)
 		self.show_all()
 		self.unplug_button.hide()
@@ -527,11 +528,10 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.game_window_combo.append_text(window_name)
 		self.game_window_combo_ignore_change = False
 
-	def focus_game(self):
+	def focus_game(self, widget, event):
 		if self.game_area:
 			self._debug('Focus game', DebugLevel.High)
 			# set keyboard focus
-			self.game_area.set_can_focus(True)
 			self.game_area.child_focus(Gtk.DirectionType.TAB_BACKWARD)
 
 	def on_plug_added(self, widget):
@@ -563,6 +563,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			# create socket if not exist
 			if not self.game_area:
 				self.game_area = Gtk.Socket()
+				#self.game_area.set_can_focus(True)
 				self.game_area.connect('plug-added', self.on_plug_added)
 				self.game_area.connect('plug-removed', self.on_plug_removed)
 				self.game_area.show_all()
@@ -572,7 +573,6 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.game_area.add_id(window_xid)
 			#self.game_window.reparent(self.game_area.get_window(), 0, 0)
 			#self.game_window.show() # force show (when minimized)
-			self.focus_game()
 			# enable/disable widgets
 			self.refresh_button.hide()
 			if '--enable-dev-env' in self.args:
