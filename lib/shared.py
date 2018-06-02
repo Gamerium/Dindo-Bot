@@ -10,3 +10,11 @@ __authors__       = ['AXeL']
 
 class LogType:
 	Normal, Info, Success, Error = range(4)
+
+class DebugLevel:
+	'''
+	High: The highest level (for debug text with too much details)
+	Normal: Medium level (for normal debug text)
+	Low: The lowest level (for text without real interest)
+	'''
+	High, Normal, Low = range(3)

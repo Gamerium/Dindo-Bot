@@ -4,6 +4,7 @@ logs/*.log
 icons/more/*
 dragodindes/*
 accounts.json
+settings.json
 
 # Python cache
 __pycache__/

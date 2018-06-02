@@ -1,0 +1,1183 @@
+[00:45:31] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[00:45:31] Bot window loaded
+[00:45:32] DEBUG::Internet is on
+[00:46:02] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[00:46:02] Bot window loaded
+[00:46:02] DEBUG::Internet is on
+[00:46:23] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[00:46:23] Bot window loaded
+[00:46:23] DEBUG::Internet is on
+[00:46:31] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[00:46:31] Bot window loaded
+[00:46:31] DEBUG::Internet is on
+[00:51:42] DEBUG::Populate game window combobox, 1 window found
+--------------------------------------------------
+[00:51:42] Bot window loaded
+[00:51:42] DEBUG::Internet is on
+[00:51:44] DEBUG::Plug game window (id: 77594627)
+[00:51:44] DEBUG::Game window plugged
+[00:51:44] DEBUG::Focus game
+[00:51:58] DEBUG::Bot thread started
+[00:51:58] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[00:51:59] DEBUG::Instruction: Zaap(from=Havenbag,to=Brakmar)
+[00:51:59] DEBUG::Parse result: {'to': 'Brakmar', 'from': 'Havenbag', 'name': 'Zaap'}
+[00:52:00] DEBUG::Trying to get game focus
+[00:52:00] DEBUG::Focus game
+[00:52:02] DEBUG::Press key: h
+[00:52:03] DEBUG::Waiting for game screen to change
+[00:52:04] DEBUG::Game screen has changed: False, diff: 0.83%, tolerance: 2.5, timeout: 30
+[00:52:06] DEBUG::Game screen has changed: True, diff: 12.47%, tolerance: 2.5, timeout: 30
+[00:52:06] DEBUG::Waiting for game screen to load
+[00:52:10] DEBUG::Click on x: 700, y: 308, double: False
+[00:52:10] DEBUG::Waiting for zaap list to show
+[00:52:14] DEBUG::Scroll to: -2
+[00:52:33] DEBUG::Bot thread stopped
+[00:52:43] DEBUG::Keep game window open
+[00:53:21] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[00:53:21] Bot window loaded
+[00:53:22] DEBUG::Internet is on
+[00:53:30] DEBUG::Plug game window (id: 77594627)
+[00:53:30] DEBUG::Game window plugged
+[00:53:30] DEBUG::Focus game
+[00:53:41] DEBUG::Bot thread started
+[00:53:42] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[00:53:42] DEBUG::Instruction: Zaap(from=Havenbag,to=Brakmar)
+[00:53:43] DEBUG::Parse result: {'to': 'Brakmar', 'from': 'Havenbag', 'name': 'Zaap'}
+[00:53:43] DEBUG::Trying to get game focus
+[00:53:44] DEBUG::Focus game
+[00:53:46] DEBUG::Press key: h
+[00:53:46] DEBUG::Waiting for game screen to change
+[00:53:48] DEBUG::Game screen has changed: True, diff: 12.15%, tolerance: 2.5, timeout: 30
+[00:53:48] DEBUG::Waiting for game screen to load
+[00:53:52] DEBUG::Click on x: 701, y: 308, double: False
+[00:53:53] DEBUG::Waiting for zaap list to show
+[00:53:56] DEBUG::Scroll to: -2
+[00:53:59] DEBUG::Click on x: 768, y: 379, double: True
+[00:53:59] DEBUG::Waiting for game screen to load
+[00:54:03] DEBUG::Instruction: Zaapi(from=Zaap Brakmar,to=Animal SH)
+[00:54:03] DEBUG::Parse result: {'to': 'Animal SH', 'from': 'Zaap Brakmar', 'name': 'Zaapi'}
+[00:54:04] DEBUG::Click on x: 987, y: 304, double: False
+[00:54:05] DEBUG::Waiting for zaapi list to show
+[00:54:06] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:08] DEBUG::Game screen has changed: False, diff: 0.18%, tolerance: 2.5, timeout: 30
+[00:54:09] DEBUG::Game screen has changed: False, diff: 0.08%, tolerance: 2.5, timeout: 30
+[00:54:11] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:12] DEBUG::Game screen has changed: False, diff: 0.22%, tolerance: 2.5, timeout: 30
+[00:54:14] DEBUG::Game screen has changed: False, diff: 0.07%, tolerance: 2.5, timeout: 30
+[00:54:15] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:17] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 30
+[00:54:18] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:20] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:21] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:23] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:24] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:26] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:27] DEBUG::Game screen has changed: False, diff: 0.14%, tolerance: 2.5, timeout: 30
+[00:54:29] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 30
+[00:54:31] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:32] DEBUG::Game screen has changed: False, diff: 0.1%, tolerance: 2.5, timeout: 30
+[00:54:34] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:35] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:37] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:38] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:40] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:41] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:43] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:44] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:46] DEBUG::Game screen has changed: False, diff: 0.01%, tolerance: 2.5, timeout: 30
+[00:54:47] DEBUG::Game screen has changed: False, diff: 0.02%, tolerance: 2.5, timeout: 30
+[00:54:49] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 30
+[00:54:50] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[00:54:51] DEBUG::Bot thread paused
+[00:54:51] ERROR::Game screen don't change
+[00:54:52] DEBUG::Internet is on
+[00:54:52] DEBUG::Click on x: 841, y: 213, double: False
+[01:01:26] DEBUG::Bot thread resumed
+[01:01:26] DEBUG::Click on x: 826, y: 315, double: True
+[01:01:27] DEBUG::Waiting for game screen to load
+[01:01:30] DEBUG::Instruction: Enclos([-32,37])
+[01:01:31] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,37]'}
+[01:01:31] DEBUG::Instruction: Move(DOWN)
+[01:01:32] DEBUG::Parse result: {'name': 'Move', 'value': 'DOWN'}
+[01:01:32] DEBUG::Click on x: 841, y: 549, double: False
+[01:01:33] DEBUG::Waiting for map to change
+[01:01:34] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[01:01:36] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[01:01:38] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[01:01:39] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[01:01:41] DEBUG::Game screen has changed: False, diff: 0.09%, tolerance: 2.5, timeout: 30
+[01:01:42] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[01:01:44] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[01:01:45] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[01:01:47] DEBUG::Game screen has changed: False, diff: 0.21%, tolerance: 2.5, timeout: 30
+[01:01:48] DEBUG::Game screen has changed: False, diff: 0.2%, tolerance: 2.5, timeout: 30
+[01:01:50] DEBUG::Game screen has changed: False, diff: 0.18%, tolerance: 2.5, timeout: 30
+[01:01:51] DEBUG::Game screen has changed: False, diff: 0.25%, tolerance: 2.5, timeout: 30
+[01:01:53] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 30
+[01:01:54] DEBUG::Game screen has changed: True, diff: 9.06%, tolerance: 2.5, timeout: 30
+[01:01:55] DEBUG::Waiting for map to load
+[01:01:58] DEBUG::Instruction: Enclos([-32,38])
+[01:01:59] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,38]'}
+[01:01:59] DEBUG::Instruction: Move(RIGHT)
+[01:02:00] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[01:02:00] DEBUG::Click on x: 1139, y: 369, double: False
+[01:02:01] DEBUG::Waiting for map to change
+[01:02:03] DEBUG::Game screen has changed: False, diff: 0.15%, tolerance: 2.5, timeout: 30
+[01:02:04] DEBUG::Game screen has changed: True, diff: 15.53%, tolerance: 2.5, timeout: 30
+[01:02:05] DEBUG::Waiting for map to load
+[01:02:08] DEBUG::Instruction: Enclos([-31,38])
+[01:02:09] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,38]'}
+[01:02:09] DEBUG::Instruction: Move(RIGHT)
+[01:02:10] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[01:02:10] DEBUG::Click on x: 1139, y: 369, double: False
+[01:02:11] DEBUG::Waiting for map to change
+[01:02:12] DEBUG::Game screen has changed: False, diff: 0.12%, tolerance: 2.5, timeout: 30
+[01:02:14] DEBUG::Game screen has changed: False, diff: 0.19%, tolerance: 2.5, timeout: 30
+[01:02:15] DEBUG::Game screen has changed: True, diff: 9.04%, tolerance: 2.5, timeout: 30
+[01:02:16] DEBUG::Waiting for map to load
+[01:02:19] DEBUG::Instruction: Enclos([-30,38])
+[01:02:20] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,38]'}
+[01:02:20] DEBUG::Instruction: Move(UP)
+[01:02:21] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[01:02:21] DEBUG::Click on x: 844, y: 138, double: False
+[01:02:22] DEBUG::Waiting for map to change
+[01:02:24] DEBUG::Game screen has changed: False, diff: 0.13%, tolerance: 2.5, timeout: 30
+[01:02:25] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 30
+[01:02:27] DEBUG::Game screen has changed: True, diff: 9.66%, tolerance: 2.5, timeout: 30
+[01:02:27] DEBUG::Waiting for map to load
+[01:02:31] DEBUG::Instruction: Enclos([-30,37])
+[01:02:31] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,37]'}
+[01:02:32] DEBUG::Instruction: Move(LEFT)
+[01:02:32] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[01:02:33] DEBUG::Click on x: 583, y: 368, double: False
+[01:02:33] DEBUG::Waiting for map to change
+[01:02:35] DEBUG::Game screen has changed: False, diff: 0.18%, tolerance: 2.5, timeout: 30
+[01:02:36] DEBUG::Game screen has changed: True, diff: 8.88%, tolerance: 2.5, timeout: 30
+[01:02:37] DEBUG::Waiting for map to load
+[01:02:40] DEBUG::Instruction: Enclos([-31,37])
+[01:02:41] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,37]'}
+[01:02:41] DEBUG::Instruction: Zaap(from=Havenbag,to=Bonta)
+[01:02:42] DEBUG::Parse result: {'to': 'Bonta', 'from': 'Havenbag', 'name': 'Zaap'}
+[01:02:42] DEBUG::Click on x: 701, y: 308, double: False
+[01:02:43] DEBUG::Waiting for zaap list to show
+[01:02:47] DEBUG::Scroll to: -2
+[01:02:49] DEBUG::Click on x: 765, y: 358, double: True
+[01:02:50] DEBUG::Waiting for game screen to load
+[01:02:53] DEBUG::Bot thread paused
+[01:06:45] DEBUG::Keep game window open
+[01:10:48] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[01:10:48] Bot window loaded
+[01:10:48] DEBUG::Internet is on
+[01:11:05] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[01:11:06] Bot window loaded
+[01:11:06] DEBUG::Internet is on
+[01:11:10] DEBUG::Plug game window (id: 77594627)
+[01:11:10] DEBUG::Game window plugged
+[01:11:10] DEBUG::Focus game
+[01:11:19] DEBUG::Keep game window open
+[01:11:25] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[01:11:26] Bot window loaded
+[01:11:26] DEBUG::Internet is on
+[01:11:27] DEBUG::Plug game window (id: 77594627)
+[01:11:27] DEBUG::Game window plugged
+[01:11:27] DEBUG::Focus game
+[01:11:30] DEBUG::Keep game window open
+[01:11:39] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[01:11:39] Bot window loaded
+[01:11:39] DEBUG::Internet is on
+[01:11:43] DEBUG::Plug game window (id: 77594627)
+[01:11:43] DEBUG::Game window plugged
+[01:11:43] DEBUG::Focus game
+[01:12:41] DEBUG::Bot thread started
+[01:12:41] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[01:12:42] DEBUG::Instruction: Zaap(from=Havenbag,to=Brakmar)
+[01:12:42] DEBUG::Parse result: {'to': 'Brakmar', 'from': 'Havenbag', 'name': 'Zaap'}
+[01:12:43] DEBUG::Trying to get game focus
+[01:12:43] DEBUG::Focus game
+[01:12:45] DEBUG::Press key: h
+[01:12:46] DEBUG::Waiting for game screen to change
+[01:12:47] DEBUG::Game screen has changed: True, diff: 12.91%, tolerance: 2.5, timeout: 30
+[01:12:48] DEBUG::Waiting for game screen to load
+[01:12:51] DEBUG::Click on x: 711, y: 315, double: False
+[01:12:52] DEBUG::Waiting for zaap list to show
+[01:12:56] DEBUG::Scroll to: -2
+[01:12:58] DEBUG::Click on x: 778, y: 383, double: True
+[01:12:59] DEBUG::Waiting for game screen to load
+[01:13:02] DEBUG::Instruction: Zaapi(from=Zaap Brakmar,to=Animal SH)
+[01:13:03] DEBUG::Parse result: {'to': 'Animal SH', 'from': 'Zaap Brakmar', 'name': 'Zaapi'}
+[01:13:03] DEBUG::Click on x: 997, y: 311, double: False
+[01:13:04] DEBUG::Waiting for zaapi list to show
+[01:13:06] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[01:13:07] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[01:13:09] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 30
+[01:13:10] DEBUG::Game screen has changed: False, diff: 0.4%, tolerance: 2.5, timeout: 30
+[01:13:12] DEBUG::Game screen has changed: True, diff: 6.35%, tolerance: 2.5, timeout: 30
+[01:13:12] DEBUG::Click on x: 851, y: 224, double: False
+[01:13:15] DEBUG::Click on x: 836, y: 321, double: True
+[01:13:16] DEBUG::Waiting for game screen to load
+[01:13:19] DEBUG::Instruction: Enclos([-32,37])
+[01:13:20] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,37]'}
+[01:13:20] DEBUG::Instruction: Move(DOWN)
+[01:13:21] DEBUG::Parse result: {'name': 'Move', 'value': 'DOWN'}
+[01:13:21] DEBUG::Click on x: 851, y: 545, double: False
+[01:13:22] DEBUG::Waiting for map to change
+[01:13:23] DEBUG::Game screen has changed: False, diff: 0.08%, tolerance: 2.5, timeout: 30
+[01:13:25] DEBUG::Game screen has changed: False, diff: 0.02%, tolerance: 2.5, timeout: 30
+[01:13:26] DEBUG::Game screen has changed: False, diff: 0.48%, tolerance: 2.5, timeout: 30
+[01:13:28] DEBUG::Game screen has changed: True, diff: 9.77%, tolerance: 2.5, timeout: 30
+[01:13:28] DEBUG::Waiting for map to load
+[01:13:32] DEBUG::Instruction: Enclos([-32,38])
+[01:13:32] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,38]'}
+[01:13:33] DEBUG::Instruction: Move(RIGHT)
+[01:13:33] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[01:13:34] DEBUG::Click on x: 1149, y: 373, double: False
+[01:13:35] DEBUG::Waiting for map to change
+[01:13:36] DEBUG::Game screen has changed: False, diff: 0.16%, tolerance: 2.5, timeout: 30
+[01:13:38] DEBUG::Game screen has changed: False, diff: 0.09%, tolerance: 2.5, timeout: 30
+[01:13:39] DEBUG::Game screen has changed: True, diff: 10.46%, tolerance: 2.5, timeout: 30
+[01:13:40] DEBUG::Waiting for map to load
+[01:13:43] DEBUG::Instruction: Enclos([-31,38])
+[01:13:44] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,38]'}
+[01:13:44] DEBUG::Instruction: Move(RIGHT)
+[01:13:45] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[01:13:45] DEBUG::Click on x: 1149, y: 373, double: False
+[01:13:46] DEBUG::Waiting for map to change
+[01:13:48] DEBUG::Game screen has changed: False, diff: 0.16%, tolerance: 2.5, timeout: 30
+[01:13:49] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 30
+[01:13:51] DEBUG::Game screen has changed: True, diff: 9.42%, tolerance: 2.5, timeout: 30
+[01:13:51] DEBUG::Waiting for map to load
+[01:13:55] DEBUG::Instruction: Enclos([-30,38])
+[01:13:55] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,38]'}
+[01:13:56] DEBUG::Instruction: Move(UP)
+[01:13:56] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[01:13:57] DEBUG::Click on x: 854, y: 152, double: False
+[01:13:57] DEBUG::Waiting for map to change
+[01:13:59] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 30
+[01:14:00] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[01:14:02] DEBUG::Game screen has changed: True, diff: 10.02%, tolerance: 2.5, timeout: 30
+[01:14:02] DEBUG::Waiting for map to load
+[01:14:06] DEBUG::Instruction: Enclos([-30,37])
+[01:14:06] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,37]'}
+[01:14:07] DEBUG::Instruction: Move(LEFT)
+[01:14:07] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[01:14:08] DEBUG::Click on x: 593, y: 372, double: False
+[01:14:09] DEBUG::Waiting for map to change
+[01:14:10] DEBUG::Game screen has changed: False, diff: 0.15%, tolerance: 2.5, timeout: 30
+[01:14:12] DEBUG::Game screen has changed: True, diff: 9.31%, tolerance: 2.5, timeout: 30
+[01:14:12] DEBUG::Waiting for map to load
+[01:14:16] DEBUG::Instruction: Enclos([-31,37])
+[01:14:16] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,37]'}
+[01:14:17] DEBUG::Instruction: Zaap(from=Havenbag,to=Bonta)
+[01:14:17] DEBUG::Parse result: {'to': 'Bonta', 'from': 'Havenbag', 'name': 'Zaap'}
+[01:14:18] DEBUG::Trying to get game focus
+[01:14:18] DEBUG::Focus game
+[01:14:20] DEBUG::Press key: h
+[01:14:21] DEBUG::Waiting for game screen to change
+[01:14:22] DEBUG::Game screen has changed: True, diff: 12.91%, tolerance: 2.5, timeout: 30
+[01:14:23] DEBUG::Waiting for game screen to load
+[01:14:26] DEBUG::Click on x: 711, y: 315, double: False
+[01:14:27] DEBUG::Waiting for zaap list to show
+[01:14:31] DEBUG::Scroll to: -2
+[01:14:33] DEBUG::Click on x: 775, y: 362, double: True
+[01:14:34] DEBUG::Waiting for game screen to load
+[01:14:37] DEBUG::Instruction: Zaapi(from=Zaap Bonta,to=Animal SH)
+[01:14:38] DEBUG::Parse result: {'to': 'Animal SH', 'from': 'Zaap Bonta', 'name': 'Zaapi'}
+[01:14:38] DEBUG::Click on x: 672, y: 216, double: False
+[01:14:39] DEBUG::Waiting for zaapi list to show
+[01:14:41] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[01:14:41] DEBUG::Bot thread paused
+[01:15:06] DEBUG::Bot thread resumed
+[01:15:06] DEBUG::Game screen has changed: True, diff: 38.99%, tolerance: 2.5, timeout: 30
+[01:15:06] DEBUG::Click on x: 851, y: 224, double: False
+[01:15:09] DEBUG::Click on x: 836, y: 321, double: True
+[01:15:10] DEBUG::Waiting for game screen to load
+[01:15:10] DEBUG::Bot thread paused
+[01:15:27] DEBUG::Bot thread resumed
+[01:15:29] DEBUG::Instruction: Move(LEFT)
+[01:15:29] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[01:15:30] DEBUG::Click on x: 593, y: 372, double: False
+[01:15:30] DEBUG::Waiting for map to change
+[01:15:32] DEBUG::Game screen has changed: False, diff: 0.46%, tolerance: 2.5, timeout: 30
+[01:15:33] DEBUG::Game screen has changed: True, diff: 18.68%, tolerance: 2.5, timeout: 30
+[01:15:34] DEBUG::Waiting for map to load
+[01:15:37] DEBUG::Instruction: Enclos([-37,-56])
+[01:15:38] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-37,-56]'}
+[01:15:38] DEBUG::Instruction: Move(LEFT)
+[01:15:39] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[01:15:39] DEBUG::Click on x: 593, y: 372, double: False
+[01:15:40] DEBUG::Waiting for map to change
+[01:15:42] DEBUG::Game screen has changed: False, diff: 0.35%, tolerance: 2.5, timeout: 30
+[01:15:43] DEBUG::Game screen has changed: False, diff: 0.34%, tolerance: 2.5, timeout: 30
+[01:15:45] DEBUG::Game screen has changed: False, diff: 0.37%, tolerance: 2.5, timeout: 30
+[01:15:46] DEBUG::Game screen has changed: True, diff: 20.69%, tolerance: 2.5, timeout: 30
+[01:15:47] DEBUG::Waiting for map to load
+[01:15:50] DEBUG::Instruction: Enclos([-38,-56])
+[01:15:51] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-38,-56]'}
+[01:15:51] DEBUG::Instruction: Move(UP)
+[01:15:52] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[01:15:52] DEBUG::Click on x: 854, y: 152, double: False
+[01:15:53] DEBUG::Waiting for map to change
+[01:15:54] DEBUG::Game screen has changed: False, diff: 0.07%, tolerance: 2.5, timeout: 30
+[01:15:56] DEBUG::Game screen has changed: False, diff: 0.07%, tolerance: 2.5, timeout: 30
+[01:15:58] DEBUG::Game screen has changed: True, diff: 19.95%, tolerance: 2.5, timeout: 30
+[01:15:58] DEBUG::Waiting for map to load
+[01:16:02] DEBUG::Instruction: Enclos([-38,-57])
+[01:16:02] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-38,-57]'}
+[01:16:03] DEBUG::Instruction: Move(RIGHT)
+[01:16:03] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[01:16:04] DEBUG::Click on x: 1149, y: 373, double: False
+[01:16:04] DEBUG::Waiting for map to change
+[01:16:06] DEBUG::Game screen has changed: False, diff: 0.3%, tolerance: 2.5, timeout: 30
+[01:16:07] DEBUG::Game screen has changed: True, diff: 40.79%, tolerance: 2.5, timeout: 30
+[01:16:08] DEBUG::Waiting for map to load
+[01:16:11] DEBUG::Instruction: Enclos([-37,-57])
+[01:16:12] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-37,-57]'}
+[01:16:12] DEBUG::Instruction: Move(UP)
+[01:16:13] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[01:16:13] DEBUG::Click on x: 854, y: 152, double: False
+[01:16:14] DEBUG::Waiting for map to change
+[01:16:16] DEBUG::Game screen has changed: False, diff: 0.35%, tolerance: 2.5, timeout: 30
+[01:16:17] DEBUG::Game screen has changed: False, diff: 0.24%, tolerance: 2.5, timeout: 30
+[01:16:19] DEBUG::Game screen has changed: True, diff: 20.27%, tolerance: 2.5, timeout: 30
+[01:16:19] DEBUG::Waiting for map to load
+[01:16:23] DEBUG::Instruction: Enclos([-37,-58])
+[01:16:23] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-37,-58]'}
+[01:16:24] DEBUG::Instruction: Move(DOWN)
+[01:16:24] DEBUG::Parse result: {'name': 'Move', 'value': 'DOWN'}
+[01:16:25] DEBUG::Click on x: 851, y: 545, double: False
+[01:16:25] DEBUG::Waiting for map to change
+[01:16:27] DEBUG::Game screen has changed: True, diff: 19.92%, tolerance: 2.5, timeout: 30
+[01:16:27] DEBUG::Waiting for map to load
+[01:16:31] DEBUG::Instruction: Move(RIGHT)
+[01:16:31] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[01:16:32] DEBUG::Click on x: 1149, y: 373, double: False
+[01:16:33] DEBUG::Waiting for map to change
+[01:16:34] DEBUG::Game screen has changed: False, diff: 0.38%, tolerance: 2.5, timeout: 30
+[01:16:36] DEBUG::Game screen has changed: False, diff: 0.35%, tolerance: 2.5, timeout: 30
+[01:16:37] DEBUG::Game screen has changed: True, diff: 21.34%, tolerance: 2.5, timeout: 30
+[01:16:38] DEBUG::Waiting for map to load
+[01:16:41] DEBUG::Instruction: Enclos([-36,-57])
+[01:16:42] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-36,-57]'}
+[01:16:42] Bot path completed
+[01:16:42] DEBUG::Bot thread ended, elapsed time: 00:03:20
+[01:47:38] DEBUG::Click on x: 724, y: 236
+[01:47:49] DEBUG::Click on x: 710, y: 158
+[01:47:54] DEBUG::Click on x: 710, y: 158
+[01:48:01] DEBUG::Click on x: 760, y: 160
+[01:48:07] DEBUG::Click on x: 753, y: 237
+[01:48:08] DEBUG::Click on x: 753, y: 237
+[01:48:09] DEBUG::Click on x: 753, y: 237
+[01:48:12] DEBUG::Click on x: 760, y: 160
+[01:48:28] DEBUG::Click on x: 753, y: 237
+[01:48:54] DEBUG::Click on x: 778, y: 379
+[01:49:05] DEBUG::Scroll: -2
+[01:49:19] DEBUG::Focus game
+[01:49:19] DEBUG::Press key: i
+[01:49:22] DEBUG::Focus game
+[01:49:22] DEBUG::Press key: i
+[01:49:23] DEBUG::Focus game
+[01:49:23] DEBUG::Press key: i
+[01:49:25] DEBUG::Focus game
+[01:49:25] DEBUG::Press key: i
+[01:49:30] DEBUG::Focus game
+[01:49:30] DEBUG::Press key: i
+[01:54:06] DEBUG::Click on x: 1022, y: 210
+[01:54:53] DEBUG::Click on x: 742, y: 193
+[01:54:56] DEBUG::Click on x: 742, y: 193
+[01:56:33] DEBUG::Click on x: 1023, y: 309
+[01:57:14] DEBUG::Scroll: -2
+[01:57:19] DEBUG::Scroll: -1
+[01:57:41] DEBUG::Click on x: 930, y: 223
+[01:58:01] DEBUG::Click on x: 849, y: 223
+[01:58:29] DEBUG::Click on x: 775, y: 223
+[01:59:04] DEBUG::Click on x: 771, y: 301
+[01:59:26] DEBUG::Click on x: 793, y: 321
+[02:05:23] DEBUG::Populate game window combobox, 1 window found
+--------------------------------------------------
+[02:05:23] Bot window loaded
+[02:05:24] DEBUG::Internet is on
+[02:06:16] DEBUG::Populate game window combobox, 1 window found
+[02:06:17] DEBUG::Plug game window (id: 67108867)
+[02:06:17] DEBUG::Game window plugged
+[02:06:17] DEBUG::Focus game
+[02:06:27] DEBUG::Scroll: -1
+[02:06:32] DEBUG::Scroll: -2
+[02:06:37] DEBUG::Click on x: 754, y: 445
+[02:06:38] DEBUG::Click on x: 754, y: 445
+[02:07:31] DEBUG::Click on x: 883, y: 253
+[02:07:39] DEBUG::Click on x: 883, y: 253
+[02:08:29] DEBUG::Focus game
+[02:08:29] DEBUG::Press key: h
+[02:08:40] DEBUG::Click on x: 688, y: 309
+[02:09:09] DEBUG::Scroll: -2
+[02:09:17] DEBUG::Click on x: 762, y: 381
+[02:09:46] DEBUG::Focus game
+[02:09:46] DEBUG::Press key: h
+[02:10:03] DEBUG::Click on x: 812, y: 349
+[02:10:32] DEBUG::Click on x: 812, y: 349
+[02:10:38] DEBUG::Click on x: 683, y: 444
+[02:11:03] DEBUG::Click on x: 1028, y: 312
+[02:12:58] DEBUG::Click on x: 933, y: 273
+[02:13:08] DEBUG::Click on x: 931, y: 276
+[02:13:13] DEBUG::Click on x: 933, y: 273
+[02:13:18] DEBUG::Click on x: 931, y: 276
+[02:13:50] DEBUG::Click on x: 972, y: 236
+[02:14:15] DEBUG::Click on x: 777, y: 272
+[02:14:56] DEBUG::Click on x: 735, y: 249
+[02:15:26] DEBUG::Click on x: 718, y: 240
+[02:15:48] DEBUG::Focus game
+[02:15:48] DEBUG::Press key: h
+[02:15:56] DEBUG::Scroll: -2
+[02:16:03] DEBUG::Click on x: 756, y: 361
+[02:16:34] DEBUG::Click on x: 826, y: 287
+[02:17:01] DEBUG::Click on x: 636, y: 214
+[02:17:33] DEBUG::Click on x: 1028, y: 389
+[02:17:56] DEBUG::Click on x: 756, y: 195
+[02:18:30] DEBUG::Click on x: 932, y: 291
+[02:19:01] DEBUG::Click on x: 953, y: 265
+[02:19:27] DEBUG::Click on x: 757, y: 302
+[02:20:04] DEBUG::Click on x: 1011, y: 334
+[02:20:26] DEBUG::Click on x: 933, y: 394
+[02:20:59] DEBUG::Click on x: 752, y: 380
+[02:25:59] DEBUG::Keep game window open
+[02:26:34] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[02:26:34] Bot window loaded
+[02:26:34] DEBUG::Internet is on
+[02:26:36] DEBUG::Plug game window (id: 67108867)
+[02:26:36] DEBUG::Game window plugged
+[02:26:36] DEBUG::Focus game
+[02:26:42] DEBUG::Bot thread started
+[02:26:43] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[02:26:43] DEBUG::Instruction: Zaap(from=Havenbag,to=Brakmar)
+[02:26:44] DEBUG::Parse result: {'to': 'Brakmar', 'from': 'Havenbag', 'name': 'Zaap'}
+[02:26:44] DEBUG::Trying to get game focus
+[02:26:45] DEBUG::Focus game
+[02:26:47] DEBUG::Press key: h
+[02:26:47] DEBUG::Waiting for game screen to change
+[02:26:49] DEBUG::Game screen has changed: True, diff: 12.75%, tolerance: 2.5, timeout: 30
+[02:26:49] DEBUG::Waiting for game screen to load
+[02:26:53] DEBUG::Click on x: 688, y: 309, double: False
+[02:26:53] DEBUG::Waiting for zaap list to show
+[02:26:55] DEBUG::Game screen has changed: True, diff: 6.86%, tolerance: 2.5, timeout: 30
+[02:26:55] DEBUG::Scroll to: -2
+[02:26:58] DEBUG::Click on x: 762, y: 381, double: True
+[02:26:59] DEBUG::Waiting for game screen to load
+[02:27:02] DEBUG::Instruction: Zaapi(from=Zaap Brakmar,to=Animal SH)
+[02:27:03] DEBUG::Parse result: {'to': 'Animal SH', 'from': 'Zaap Brakmar', 'name': 'Zaapi'}
+[02:27:03] DEBUG::Click on x: 1013, y: 308, double: False
+[02:27:04] DEBUG::Waiting for zaapi list to show
+[02:27:06] DEBUG::Game screen has changed: True, diff: 6.33%, tolerance: 2.5, timeout: 30
+[02:27:06] DEBUG::Click on x: 839, y: 222, double: False
+[02:27:09] DEBUG::Click on x: 783, y: 320, double: True
+[02:27:09] DEBUG::Waiting for game screen to load
+[02:27:13] DEBUG::Instruction: Enclos([-32,37])
+[02:27:13] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,37]'}
+[02:27:32] DEBUG::Bot thread paused
+[02:27:57] DEBUG::Keep game window open
+[02:28:02] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[02:28:02] Bot window loaded
+[02:28:02] DEBUG::Internet is on
+[02:28:10] DEBUG::Plug game window (id: 67108867)
+[02:28:10] DEBUG::Game window plugged
+[02:28:10] DEBUG::Focus game
+[02:28:18] DEBUG::Bot thread started
+[02:28:18] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[02:28:19] DEBUG::Instruction: Zaap(from=Havenbag,to=Brakmar)
+[02:28:19] DEBUG::Parse result: {'to': 'Brakmar', 'from': 'Havenbag', 'name': 'Zaap'}
+[02:28:20] DEBUG::Trying to get game focus
+[02:28:20] DEBUG::Focus game
+[02:28:22] DEBUG::Press key: h
+[02:28:23] DEBUG::Waiting for game screen to change
+[02:28:24] DEBUG::Game screen has changed: False, diff: 0.75%, tolerance: 2.5, timeout: 30
+[02:28:26] DEBUG::Game screen has changed: True, diff: 12.21%, tolerance: 2.5, timeout: 30
+[02:28:26] DEBUG::Waiting for game screen to load
+[02:28:30] DEBUG::Bot thread paused
+[02:28:59] DEBUG::Bot thread resumed
+[02:28:59] DEBUG::Click on x: 688, y: 309, double: False
+[02:28:59] DEBUG::Waiting for zaap list to show
+[02:29:01] DEBUG::Game screen has changed: True, diff: 6.98%, tolerance: 2.5, timeout: 30
+[02:29:01] DEBUG::Scroll to: -2
+[02:29:04] DEBUG::Click on x: 762, y: 381, double: True
+[02:29:05] DEBUG::Waiting for game screen to load
+[02:29:08] DEBUG::Instruction: Zaapi(from=Zaap Brakmar,to=Animal SH)
+[02:29:09] DEBUG::Parse result: {'to': 'Animal SH', 'from': 'Zaap Brakmar', 'name': 'Zaapi'}
+[02:29:09] DEBUG::Click on x: 1013, y: 308, double: False
+[02:29:10] DEBUG::Waiting for zaapi list to show
+[02:29:11] DEBUG::Game screen has changed: False, diff: 0.19%, tolerance: 2.5, timeout: 30
+[02:29:13] DEBUG::Game screen has changed: True, diff: 6.29%, tolerance: 2.5, timeout: 30
+[02:29:14] DEBUG::Click on x: 839, y: 222, double: False
+[02:29:16] DEBUG::Click on x: 783, y: 320, double: True
+[02:29:17] DEBUG::Waiting for game screen to load
+[02:29:20] DEBUG::Instruction: Enclos([-32,37])
+[02:29:21] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,37]'}
+[02:29:21] DEBUG::Click on x: 812, y: 349, double: False
+[02:29:22] DEBUG::Waiting for enclos to show
+[02:29:24] DEBUG::Game screen has changed: False, diff: 0.2%, tolerance: 2.5, timeout: 30
+[02:29:25] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 30
+[02:29:27] DEBUG::Game screen has changed: True, diff: 6.91%, tolerance: 2.5, timeout: 30
+[02:29:27] DEBUG::Trying to get game focus
+[02:29:28] DEBUG::Focus game
+[02:29:30] DEBUG::Press key: esc
+[02:29:30] DEBUG::Waiting for enclos to close
+[02:29:34] DEBUG::Instruction: Move(DOWN)
+[02:29:34] DEBUG::Parse result: {'name': 'Move', 'value': 'DOWN'}
+[02:29:35] DEBUG::Click on x: 841, y: 544, double: False
+[02:29:36] DEBUG::Waiting for map to change
+[02:29:37] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 30
+[02:29:39] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[02:29:40] DEBUG::Game screen has changed: True, diff: 10.32%, tolerance: 2.5, timeout: 30
+[02:29:41] DEBUG::Waiting for map to load
+[02:29:44] DEBUG::Instruction: Enclos([-32,38])
+[02:29:45] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,38]'}
+[02:29:45] DEBUG::Click on x: 931, y: 276, double: False
+[02:29:46] DEBUG::Waiting for enclos to show
+[02:29:47] DEBUG::Game screen has changed: False, diff: 0.14%, tolerance: 2.5, timeout: 30
+[02:29:49] DEBUG::Game screen has changed: False, diff: 0.08%, tolerance: 2.5, timeout: 30
+[02:29:50] DEBUG::Game screen has changed: True, diff: 6.92%, tolerance: 2.5, timeout: 30
+[02:29:51] DEBUG::Trying to get game focus
+[02:29:51] DEBUG::Focus game
+[02:29:53] DEBUG::Press key: esc
+[02:29:54] DEBUG::Waiting for enclos to close
+[02:29:58] DEBUG::Instruction: Move(RIGHT)
+[02:29:58] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[02:29:59] DEBUG::Click on x: 1139, y: 372, double: False
+[02:29:59] DEBUG::Waiting for map to change
+[02:30:01] DEBUG::Game screen has changed: False, diff: 0.06%, tolerance: 2.5, timeout: 30
+[02:30:02] DEBUG::Game screen has changed: True, diff: 10.34%, tolerance: 2.5, timeout: 30
+[02:30:03] DEBUG::Waiting for map to load
+[02:30:06] DEBUG::Instruction: Enclos([-31,38])
+[02:30:07] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,38]'}
+[02:30:07] DEBUG::Click on x: 972, y: 236, double: False
+[02:30:08] DEBUG::Waiting for enclos to show
+[02:30:10] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 30
+[02:30:11] DEBUG::Game screen has changed: False, diff: 0.18%, tolerance: 2.5, timeout: 30
+[02:30:13] DEBUG::Game screen has changed: False, diff: 0.38%, tolerance: 2.5, timeout: 30
+[02:30:14] DEBUG::Game screen has changed: False, diff: 0.45%, tolerance: 2.5, timeout: 30
+[02:30:16] DEBUG::Game screen has changed: True, diff: 6.38%, tolerance: 2.5, timeout: 30
+[02:30:16] DEBUG::Trying to get game focus
+[02:30:17] DEBUG::Focus game
+[02:30:19] DEBUG::Press key: esc
+[02:30:19] DEBUG::Waiting for enclos to close
+[02:30:23] DEBUG::Instruction: Move(RIGHT)
+[02:30:23] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[02:30:24] DEBUG::Click on x: 1139, y: 372, double: False
+[02:30:24] DEBUG::Waiting for map to change
+[02:30:26] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 30
+[02:30:28] DEBUG::Game screen has changed: True, diff: 9.85%, tolerance: 2.5, timeout: 30
+[02:30:28] DEBUG::Waiting for map to load
+[02:30:32] DEBUG::Instruction: Enclos([-30,38])
+[02:30:32] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,38]'}
+[02:30:33] DEBUG::Click on x: 777, y: 272, double: False
+[02:30:33] DEBUG::Waiting for enclos to show
+[02:30:35] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 30
+[02:30:36] DEBUG::Game screen has changed: False, diff: 0.14%, tolerance: 2.5, timeout: 30
+[02:30:38] DEBUG::Game screen has changed: True, diff: 6.48%, tolerance: 2.5, timeout: 30
+[02:30:38] DEBUG::Trying to get game focus
+[02:30:39] DEBUG::Focus game
+[02:30:41] DEBUG::Press key: esc
+[02:30:41] DEBUG::Waiting for enclos to close
+[02:30:45] DEBUG::Instruction: Move(UP)
+[02:30:45] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[02:30:46] DEBUG::Click on x: 844, y: 151, double: False
+[02:30:47] DEBUG::Waiting for map to change
+[02:30:48] DEBUG::Game screen has changed: True, diff: 17.67%, tolerance: 2.5, timeout: 30
+[02:30:49] DEBUG::Waiting for map to load
+[02:30:52] DEBUG::Instruction: Enclos([-30,37])
+[02:30:53] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,37]'}
+[02:30:53] DEBUG::Click on x: 735, y: 249, double: False
+[02:30:54] DEBUG::Waiting for enclos to show
+[02:30:55] DEBUG::Game screen has changed: False, diff: 0.16%, tolerance: 2.5, timeout: 30
+[02:30:57] DEBUG::Game screen has changed: False, diff: 0.12%, tolerance: 2.5, timeout: 30
+[02:30:59] DEBUG::Game screen has changed: False, diff: 0.06%, tolerance: 2.5, timeout: 30
+[02:31:00] DEBUG::Game screen has changed: True, diff: 6.81%, tolerance: 2.5, timeout: 30
+[02:31:01] DEBUG::Trying to get game focus
+[02:31:01] DEBUG::Focus game
+[02:31:03] DEBUG::Press key: esc
+[02:31:04] DEBUG::Waiting for enclos to close
+[02:31:07] DEBUG::Instruction: Move(LEFT)
+[02:31:08] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[02:31:08] DEBUG::Click on x: 583, y: 371, double: False
+[02:31:09] DEBUG::Waiting for map to change
+[02:31:10] DEBUG::Game screen has changed: True, diff: 17.9%, tolerance: 2.5, timeout: 30
+[02:31:11] DEBUG::Waiting for map to load
+[02:31:14] DEBUG::Instruction: Enclos([-31,37])
+[02:31:15] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,37]'}
+[02:31:15] DEBUG::Click on x: 718, y: 240, double: False
+[02:31:16] DEBUG::Waiting for enclos to show
+[02:31:18] DEBUG::Game screen has changed: False, diff: 0.05%, tolerance: 2.5, timeout: 30
+[02:31:19] DEBUG::Game screen has changed: False, diff: 0.07%, tolerance: 2.5, timeout: 30
+[02:31:21] DEBUG::Game screen has changed: False, diff: 0.13%, tolerance: 2.5, timeout: 30
+[02:31:22] DEBUG::Game screen has changed: False, diff: 0.02%, tolerance: 2.5, timeout: 30
+[02:31:24] DEBUG::Game screen has changed: True, diff: 6.62%, tolerance: 2.5, timeout: 30
+[02:31:24] DEBUG::Trying to get game focus
+[02:31:25] DEBUG::Focus game
+[02:31:27] DEBUG::Press key: esc
+[02:31:27] DEBUG::Waiting for enclos to close
+[02:31:31] DEBUG::Instruction: Zaap(from=Havenbag,to=Bonta)
+[02:31:31] DEBUG::Parse result: {'to': 'Bonta', 'from': 'Havenbag', 'name': 'Zaap'}
+[02:31:32] DEBUG::Trying to get game focus
+[02:31:32] DEBUG::Focus game
+[02:31:34] DEBUG::Press key: h
+[02:31:35] DEBUG::Waiting for game screen to change
+[02:31:36] DEBUG::Game screen has changed: False, diff: 0.74%, tolerance: 2.5, timeout: 30
+[02:31:38] DEBUG::Game screen has changed: True, diff: 12.21%, tolerance: 2.5, timeout: 30
+[02:31:39] DEBUG::Waiting for game screen to load
+[02:31:42] DEBUG::Click on x: 688, y: 309, double: False
+[02:31:43] DEBUG::Waiting for zaap list to show
+[02:31:44] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:31:46] DEBUG::Game screen has changed: False, diff: 0.12%, tolerance: 2.5, timeout: 30
+[02:31:47] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:31:49] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:31:50] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:31:52] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:31:53] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:31:55] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:31:56] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:31:58] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:31:59] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:01] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:03] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:04] DEBUG::Game screen has changed: False, diff: 0.14%, tolerance: 2.5, timeout: 30
+[02:32:06] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:07] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:09] DEBUG::Game screen has changed: False, diff: 0.18%, tolerance: 2.5, timeout: 30
+[02:32:10] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:12] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:13] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:15] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:16] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:18] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:19] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:21] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:22] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:24] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:25] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:27] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:28] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:32:29] DEBUG::Bot thread paused
+[02:32:29] ERROR::Game screen don't change
+[02:32:30] DEBUG::Internet is on
+[02:32:33] DEBUG::Bot thread resumed
+[02:32:33] DEBUG::Scroll to: -2
+[02:32:35] DEBUG::Click on x: 756, y: 361, double: True
+[02:32:36] DEBUG::Waiting for game screen to load
+[02:32:40] DEBUG::Instruction: Zaapi(from=Zaap Bonta,to=Animal SH)
+[02:32:40] DEBUG::Parse result: {'to': 'Animal SH', 'from': 'Zaap Bonta', 'name': 'Zaapi'}
+[02:32:41] DEBUG::Click on x: 636, y: 214, double: False
+[02:32:41] DEBUG::Waiting for zaapi list to show
+[02:32:43] DEBUG::Game screen has changed: False, diff: 0.34%, tolerance: 2.5, timeout: 30
+[02:32:44] DEBUG::Game screen has changed: True, diff: 14.5%, tolerance: 2.5, timeout: 30
+[02:32:45] DEBUG::Click on x: 839, y: 222, double: False
+[02:32:48] DEBUG::Click on x: 783, y: 320, double: True
+[02:32:48] DEBUG::Waiting for game screen to load
+[02:32:52] DEBUG::Instruction: Move(LEFT)
+[02:32:52] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[02:32:53] DEBUG::Click on x: 583, y: 371, double: False
+[02:32:53] DEBUG::Waiting for map to change
+[02:32:55] DEBUG::Game screen has changed: False, diff: 0.29%, tolerance: 2.5, timeout: 30
+[02:32:57] DEBUG::Game screen has changed: True, diff: 18.7%, tolerance: 2.5, timeout: 30
+[02:32:57] DEBUG::Waiting for map to load
+[02:33:01] DEBUG::Instruction: Enclos([-37,-56])
+[02:33:01] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-37,-56]'}
+[02:33:02] DEBUG::Click on x: 932, y: 291, double: False
+[02:33:02] DEBUG::Waiting for enclos to show
+[02:33:04] DEBUG::Game screen has changed: False, diff: 0.31%, tolerance: 2.5, timeout: 30
+[02:33:05] DEBUG::Game screen has changed: False, diff: 0.02%, tolerance: 2.5, timeout: 30
+[02:33:07] DEBUG::Game screen has changed: True, diff: 16.62%, tolerance: 2.5, timeout: 30
+[02:33:07] DEBUG::Trying to get game focus
+[02:33:08] DEBUG::Focus game
+[02:33:10] DEBUG::Press key: esc
+[02:33:10] DEBUG::Waiting for enclos to close
+[02:33:14] DEBUG::Instruction: Move(LEFT)
+[02:33:14] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[02:33:15] DEBUG::Click on x: 583, y: 371, double: False
+[02:33:16] DEBUG::Waiting for map to change
+[02:33:17] DEBUG::Game screen has changed: False, diff: 0.18%, tolerance: 2.5, timeout: 30
+[02:33:19] DEBUG::Game screen has changed: False, diff: 0.08%, tolerance: 2.5, timeout: 30
+[02:33:20] DEBUG::Game screen has changed: True, diff: 20.23%, tolerance: 2.5, timeout: 30
+[02:33:21] DEBUG::Waiting for map to load
+[02:33:24] DEBUG::Instruction: Enclos([-38,-56])
+[02:33:25] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-38,-56]'}
+[02:33:25] DEBUG::Click on x: 953, y: 265, double: False
+[02:33:26] DEBUG::Waiting for enclos to show
+[02:33:28] DEBUG::Game screen has changed: False, diff: 0.42%, tolerance: 2.5, timeout: 30
+[02:33:29] DEBUG::Game screen has changed: False, diff: 0.49%, tolerance: 2.5, timeout: 30
+[02:33:31] DEBUG::Game screen has changed: True, diff: 16.55%, tolerance: 2.5, timeout: 30
+[02:33:31] DEBUG::Trying to get game focus
+[02:33:32] DEBUG::Focus game
+[02:33:34] DEBUG::Press key: esc
+[02:33:34] DEBUG::Waiting for enclos to close
+[02:33:38] DEBUG::Instruction: Move(UP)
+[02:33:38] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[02:33:39] DEBUG::Click on x: 844, y: 151, double: False
+[02:33:39] DEBUG::Waiting for map to change
+[02:33:41] DEBUG::Game screen has changed: False, diff: 0.32%, tolerance: 2.5, timeout: 30
+[02:33:42] DEBUG::Game screen has changed: True, diff: 19.89%, tolerance: 2.5, timeout: 30
+[02:33:43] DEBUG::Waiting for map to load
+[02:33:46] DEBUG::Instruction: Enclos([-38,-57])
+[02:33:47] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-38,-57]'}
+[02:33:47] DEBUG::Click on x: 757, y: 302, double: False
+[02:33:48] DEBUG::Waiting for enclos to show
+[02:33:50] DEBUG::Game screen has changed: False, diff: 0.35%, tolerance: 2.5, timeout: 30
+[02:33:51] DEBUG::Game screen has changed: False, diff: 0.3%, tolerance: 2.5, timeout: 30
+[02:33:53] DEBUG::Game screen has changed: False, diff: 0.45%, tolerance: 2.5, timeout: 30
+[02:33:54] DEBUG::Game screen has changed: True, diff: 13.9%, tolerance: 2.5, timeout: 30
+[02:33:55] DEBUG::Trying to get game focus
+[02:33:55] DEBUG::Focus game
+[02:33:57] DEBUG::Press key: esc
+[02:33:58] DEBUG::Waiting for enclos to close
+[02:34:01] DEBUG::Instruction: Move(RIGHT)
+[02:34:02] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[02:34:02] DEBUG::Click on x: 1139, y: 372, double: False
+[02:34:03] DEBUG::Waiting for map to change
+[02:34:05] DEBUG::Game screen has changed: False, diff: 0.32%, tolerance: 2.5, timeout: 30
+[02:34:06] DEBUG::Game screen has changed: False, diff: 0.16%, tolerance: 2.5, timeout: 30
+[02:34:08] DEBUG::Game screen has changed: True, diff: 20.25%, tolerance: 2.5, timeout: 30
+[02:34:08] DEBUG::Waiting for map to load
+[02:34:12] DEBUG::Instruction: Enclos([-37,-57])
+[02:34:12] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-37,-57]'}
+[02:34:13] DEBUG::Click on x: 1011, y: 334, double: False
+[02:34:13] DEBUG::Waiting for enclos to show
+[02:34:15] DEBUG::Game screen has changed: False, diff: 0.22%, tolerance: 2.5, timeout: 30
+[02:34:17] DEBUG::Game screen has changed: False, diff: 0.29%, tolerance: 2.5, timeout: 30
+[02:34:18] DEBUG::Game screen has changed: False, diff: 0.35%, tolerance: 2.5, timeout: 30
+[02:34:20] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[02:34:21] DEBUG::Game screen has changed: True, diff: 17.23%, tolerance: 2.5, timeout: 30
+[02:34:22] DEBUG::Trying to get game focus
+[02:34:22] DEBUG::Focus game
+[02:34:24] DEBUG::Press key: esc
+[02:34:25] DEBUG::Waiting for enclos to close
+[02:34:28] DEBUG::Instruction: Move(UP)
+[02:34:29] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[02:34:29] DEBUG::Click on x: 844, y: 151, double: False
+[02:34:30] DEBUG::Waiting for map to change
+[02:34:31] DEBUG::Game screen has changed: False, diff: 0.3%, tolerance: 2.5, timeout: 30
+[02:34:33] DEBUG::Game screen has changed: True, diff: 46.55%, tolerance: 2.5, timeout: 30
+[02:34:34] DEBUG::Waiting for map to load
+[02:34:37] DEBUG::Instruction: Enclos([-37,-58])
+[02:34:38] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-37,-58]'}
+[02:34:38] DEBUG::Click on x: 933, y: 394, double: False
+[02:34:39] DEBUG::Waiting for enclos to show
+[02:34:40] DEBUG::Game screen has changed: False, diff: 0.42%, tolerance: 2.5, timeout: 30
+[02:34:42] DEBUG::Game screen has changed: False, diff: 0.56%, tolerance: 2.5, timeout: 30
+[02:34:43] DEBUG::Game screen has changed: True, diff: 15.85%, tolerance: 2.5, timeout: 30
+[02:34:44] DEBUG::Trying to get game focus
+[02:34:44] DEBUG::Focus game
+[02:34:46] DEBUG::Press key: esc
+[02:34:47] DEBUG::Waiting for enclos to close
+[02:34:50] DEBUG::Instruction: Move(DOWN)
+[02:34:51] DEBUG::Parse result: {'name': 'Move', 'value': 'DOWN'}
+[02:34:51] DEBUG::Click on x: 841, y: 544, double: False
+[02:34:52] DEBUG::Waiting for map to change
+[02:34:54] DEBUG::Game screen has changed: False, diff: 0.29%, tolerance: 2.5, timeout: 30
+[02:34:55] DEBUG::Game screen has changed: True, diff: 19.8%, tolerance: 2.5, timeout: 30
+[02:34:56] DEBUG::Waiting for map to load
+[02:34:59] DEBUG::Instruction: Move(RIGHT)
+[02:35:00] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[02:35:00] DEBUG::Click on x: 1139, y: 372, double: False
+[02:35:01] DEBUG::Waiting for map to change
+[02:35:02] DEBUG::Game screen has changed: False, diff: 0.34%, tolerance: 2.5, timeout: 30
+[02:35:04] DEBUG::Game screen has changed: True, diff: 21.22%, tolerance: 2.5, timeout: 30
+[02:35:04] DEBUG::Waiting for map to load
+[02:35:08] DEBUG::Instruction: Enclos([-36,-57])
+[02:35:08] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-36,-57]'}
+[02:35:09] DEBUG::Click on x: 752, y: 380, double: False
+[02:35:10] DEBUG::Waiting for enclos to show
+[02:35:11] DEBUG::Game screen has changed: False, diff: 0.37%, tolerance: 2.5, timeout: 30
+[02:35:13] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[02:35:14] DEBUG::Game screen has changed: True, diff: 18.35%, tolerance: 2.5, timeout: 30
+[02:35:15] DEBUG::Trying to get game focus
+[02:35:15] DEBUG::Focus game
+[02:35:17] DEBUG::Press key: esc
+[02:35:18] DEBUG::Waiting for enclos to close
+[02:35:21] Bot path completed
+[02:35:21] DEBUG::Bot thread ended, elapsed time: 00:06:30
+[02:35:34] DEBUG::Game window unplugged
+[02:35:34] DEBUG::Populate game window combobox, 0 window found
+[02:40:12] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[02:40:13] Bot window loaded
+[02:40:13] DEBUG::Internet is on
+[11:14:04] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[11:14:04] Bot window loaded
+[11:14:04] DEBUG::Internet is on
+[12:34:19] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[12:34:19] Bot window loaded
+[12:34:19] DEBUG::Internet is on
+[12:35:05] DEBUG::Populate game window combobox, 1 window found
+[12:35:08] DEBUG::Plug game window (id: 79691779)
+[12:35:08] DEBUG::Game window plugged
+[12:35:08] DEBUG::Focus game
+[12:35:15] DEBUG::Bot thread started
+[12:35:16] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[12:35:16] DEBUG::Instruction: Zaap(from=Havenbag,to=Brakmar)
+[12:35:17] DEBUG::Parse result: {'to': 'Brakmar', 'from': 'Havenbag', 'name': 'Zaap'}
+[12:35:17] DEBUG::Trying to get game focus
+[12:35:18] DEBUG::Focus game
+[12:35:19] DEBUG::Press key: h
+[12:35:19] DEBUG::Waiting for map to change
+[12:35:21] DEBUG::Game screen has changed: True, diff: 12.9%, tolerance: 2.5, timeout: 30
+[12:35:22] DEBUG::Waiting for map to load
+[12:35:26] DEBUG::Click on x: 688, y: 309, double: False
+[12:35:27] DEBUG::Waiting for zaap list to show
+[12:35:29] DEBUG::Game screen has changed: True, diff: 6.99%, tolerance: 2.5, timeout: 10
+[12:35:29] DEBUG::Scroll to: -2
+[12:35:33] DEBUG::Click on x: 762, y: 381, double: True
+[12:35:33] DEBUG::Waiting for map to change
+[12:35:35] DEBUG::Game screen has changed: True, diff: 18.72%, tolerance: 2.5, timeout: 30
+[12:35:36] DEBUG::Waiting for map to load
+[12:35:40] DEBUG::Instruction: Zaapi(from=Zaap Brakmar,to=Animal SH)
+[12:35:40] DEBUG::Parse result: {'to': 'Animal SH', 'from': 'Zaap Brakmar', 'name': 'Zaapi'}
+[12:35:41] DEBUG::Click on x: 1013, y: 308, double: False
+[12:35:42] DEBUG::Waiting for zaapi list to show
+[12:35:43] DEBUG::Game screen has changed: False, diff: 0.28%, tolerance: 2.5, timeout: 10
+[12:35:45] DEBUG::Game screen has changed: True, diff: 6.43%, tolerance: 2.5, timeout: 10
+[12:35:46] DEBUG::Click on x: 839, y: 222, double: False
+[12:35:49] DEBUG::Click on x: 783, y: 320, double: True
+[12:35:50] DEBUG::Waiting for map to change
+[12:35:51] DEBUG::Game screen has changed: True, diff: 10.69%, tolerance: 2.5, timeout: 30
+[12:35:52] DEBUG::Waiting for map to load
+[12:35:56] DEBUG::Instruction: Enclos([-32,37])
+[12:35:57] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,37]'}
+[12:35:57] DEBUG::Click on x: 812, y: 349, double: False
+[12:35:58] DEBUG::Waiting for enclos to show
+[12:36:00] DEBUG::Game screen has changed: False, diff: 0.14%, tolerance: 2.5, timeout: 10
+[12:36:02] DEBUG::Game screen has changed: False, diff: 0.07%, tolerance: 2.5, timeout: 10
+[12:36:03] DEBUG::Game screen has changed: True, diff: 6.38%, tolerance: 2.5, timeout: 10
+[12:36:04] DEBUG::Closing enclos
+[12:36:04] DEBUG::Trying to get game focus
+[12:36:05] DEBUG::Focus game
+[12:36:06] DEBUG::Press key: esc
+[12:36:07] DEBUG::Waiting for enclos to close
+[12:36:11] DEBUG::Instruction: Move(DOWN)
+[12:36:11] DEBUG::Parse result: {'name': 'Move', 'value': 'DOWN'}
+[12:36:12] DEBUG::Click on x: 841, y: 544, double: False
+[12:36:13] DEBUG::Waiting for map to change
+[12:36:15] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 30
+[12:36:16] DEBUG::Game screen has changed: True, diff: 9.32%, tolerance: 2.5, timeout: 30
+[12:36:17] DEBUG::Waiting for map to load
+[12:36:21] DEBUG::Instruction: Enclos([-32,38])
+[12:36:22] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,38]'}
+[12:36:22] DEBUG::Click on x: 931, y: 276, double: False
+[12:36:23] DEBUG::Waiting for enclos to show
+[12:36:25] DEBUG::Game screen has changed: False, diff: 0.14%, tolerance: 2.5, timeout: 10
+[12:36:27] DEBUG::Game screen has changed: True, diff: 6.8%, tolerance: 2.5, timeout: 10
+[12:36:27] DEBUG::Closing enclos
+[12:36:28] DEBUG::Trying to get game focus
+[12:36:28] DEBUG::Focus game
+[12:36:29] DEBUG::Press key: esc
+[12:36:30] DEBUG::Waiting for enclos to close
+[12:36:34] DEBUG::Instruction: Move(RIGHT)
+[12:36:35] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[12:36:35] DEBUG::Click on x: 1139, y: 372, double: False
+[12:36:36] DEBUG::Waiting for map to change
+[12:36:38] DEBUG::Game screen has changed: False, diff: 0.09%, tolerance: 2.5, timeout: 30
+[12:36:39] DEBUG::Game screen has changed: True, diff: 10.1%, tolerance: 2.5, timeout: 30
+[12:36:40] DEBUG::Waiting for map to load
+[12:36:44] DEBUG::Instruction: Enclos([-31,38])
+[12:36:45] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,38]'}
+[12:36:45] DEBUG::Click on x: 972, y: 236, double: False
+[12:36:46] DEBUG::Waiting for enclos to show
+[12:36:48] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 10
+[12:36:50] DEBUG::Game screen has changed: False, diff: 0.09%, tolerance: 2.5, timeout: 10
+[12:36:51] DEBUG::Game screen has changed: False, diff: 0.02%, tolerance: 2.5, timeout: 10
+[12:36:53] DEBUG::Game screen has changed: False, diff: 0.37%, tolerance: 2.5, timeout: 10
+[12:36:55] DEBUG::Game screen has changed: True, diff: 6.37%, tolerance: 2.5, timeout: 10
+[12:36:55] DEBUG::Closing enclos
+[12:36:56] DEBUG::Trying to get game focus
+[12:36:56] DEBUG::Focus game
+[12:36:58] DEBUG::Press key: esc
+[12:36:58] DEBUG::Waiting for enclos to close
+[12:37:02] DEBUG::Instruction: Move(RIGHT)
+[12:37:03] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[12:37:03] DEBUG::Click on x: 1139, y: 372, double: False
+[12:37:04] DEBUG::Waiting for map to change
+[12:37:06] DEBUG::Game screen has changed: False, diff: 0.06%, tolerance: 2.5, timeout: 30
+[12:37:08] DEBUG::Game screen has changed: True, diff: 9.48%, tolerance: 2.5, timeout: 30
+[12:37:08] DEBUG::Waiting for map to load
+[12:37:13] DEBUG::Instruction: Enclos([-30,38])
+[12:37:13] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,38]'}
+[12:37:14] DEBUG::Click on x: 777, y: 272, double: False
+[12:37:14] DEBUG::Waiting for enclos to show
+[12:37:16] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 10
+[12:37:18] DEBUG::Game screen has changed: True, diff: 5.68%, tolerance: 2.5, timeout: 10
+[12:37:18] DEBUG::Closing enclos
+[12:37:19] DEBUG::Trying to get game focus
+[12:37:19] DEBUG::Focus game
+[12:37:21] DEBUG::Press key: esc
+[12:37:21] DEBUG::Waiting for enclos to close
+[12:37:26] DEBUG::Instruction: Move(UP)
+[12:37:26] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[12:37:27] DEBUG::Click on x: 844, y: 151, double: False
+[12:37:27] DEBUG::Waiting for map to change
+[12:37:29] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[12:37:31] DEBUG::Game screen has changed: True, diff: 9.82%, tolerance: 2.5, timeout: 30
+[12:37:31] DEBUG::Waiting for map to load
+[12:37:36] DEBUG::Instruction: Enclos([-30,37])
+[12:37:36] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,37]'}
+[12:37:37] DEBUG::Click on x: 735, y: 249, double: False
+[12:37:37] DEBUG::Waiting for enclos to show
+[12:37:39] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 10
+[12:37:41] DEBUG::Game screen has changed: False, diff: 0.16%, tolerance: 2.5, timeout: 10
+[12:37:43] DEBUG::Game screen has changed: False, diff: 0.02%, tolerance: 2.5, timeout: 10
+[12:37:44] DEBUG::Game screen has changed: True, diff: 7.07%, tolerance: 2.5, timeout: 10
+[12:37:45] DEBUG::Closing enclos
+[12:37:45] DEBUG::Trying to get game focus
+[12:37:46] DEBUG::Focus game
+[12:37:47] DEBUG::Press key: esc
+[12:37:48] DEBUG::Waiting for enclos to close
+[12:37:52] DEBUG::Instruction: Move(LEFT)
+[12:37:53] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[12:37:53] DEBUG::Click on x: 583, y: 371, double: False
+[12:37:54] DEBUG::Waiting for map to change
+[12:37:56] DEBUG::Game screen has changed: True, diff: 9.39%, tolerance: 2.5, timeout: 30
+[12:37:56] DEBUG::Waiting for map to load
+[12:38:00] DEBUG::Instruction: Enclos([-31,37])
+[12:38:01] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,37]'}
+[12:38:01] DEBUG::Click on x: 718, y: 240, double: False
+[12:38:02] DEBUG::Waiting for enclos to show
+[12:38:04] DEBUG::Game screen has changed: False, diff: 0.07%, tolerance: 2.5, timeout: 10
+[12:38:06] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 10
+[12:38:07] DEBUG::Game screen has changed: False, diff: 0.14%, tolerance: 2.5, timeout: 10
+[12:38:09] DEBUG::Game screen has changed: True, diff: 6.59%, tolerance: 2.5, timeout: 10
+[12:38:10] DEBUG::Closing enclos
+[12:38:10] DEBUG::Trying to get game focus
+[12:38:11] DEBUG::Focus game
+[12:38:12] DEBUG::Press key: esc
+[12:38:13] DEBUG::Waiting for enclos to close
+[12:38:17] DEBUG::Instruction: Zaap(from=Havenbag,to=Bonta)
+[12:38:17] DEBUG::Parse result: {'to': 'Bonta', 'from': 'Havenbag', 'name': 'Zaap'}
+[12:38:18] DEBUG::Trying to get game focus
+[12:38:18] DEBUG::Focus game
+[12:38:20] DEBUG::Press key: h
+[12:38:20] DEBUG::Waiting for map to change
+[12:38:22] DEBUG::Game screen has changed: True, diff: 12.9%, tolerance: 2.5, timeout: 30
+[12:38:22] DEBUG::Waiting for map to load
+[12:38:27] DEBUG::Click on x: 688, y: 309, double: False
+[12:38:27] DEBUG::Waiting for zaap list to show
+[12:38:29] DEBUG::Game screen has changed: True, diff: 6.91%, tolerance: 2.5, timeout: 10
+[12:38:30] DEBUG::Scroll to: -2
+[12:38:33] DEBUG::Click on x: 756, y: 361, double: True
+[12:38:34] DEBUG::Waiting for map to change
+[12:38:35] DEBUG::Game screen has changed: True, diff: 39.51%, tolerance: 2.5, timeout: 30
+[12:38:36] DEBUG::Waiting for map to load
+[12:38:40] DEBUG::Instruction: Zaapi(from=Zaap Bonta,to=Animal SH)
+[12:38:41] DEBUG::Parse result: {'to': 'Animal SH', 'from': 'Zaap Bonta', 'name': 'Zaapi'}
+[12:38:41] DEBUG::Click on x: 636, y: 214, double: False
+[12:38:42] DEBUG::Waiting for zaapi list to show
+[12:38:44] DEBUG::Game screen has changed: False, diff: 1.07%, tolerance: 2.5, timeout: 10
+[12:38:45] DEBUG::Game screen has changed: False, diff: 0.8%, tolerance: 2.5, timeout: 10
+[12:38:47] DEBUG::Game screen has changed: False, diff: 0.92%, tolerance: 2.5, timeout: 10
+[12:38:49] DEBUG::Game screen has changed: True, diff: 14.06%, tolerance: 2.5, timeout: 10
+[12:38:49] DEBUG::Click on x: 839, y: 222, double: False
+[12:38:53] DEBUG::Click on x: 783, y: 320, double: True
+[12:38:53] DEBUG::Waiting for map to change
+[12:38:55] DEBUG::Game screen has changed: True, diff: 25.24%, tolerance: 2.5, timeout: 30
+[12:38:56] DEBUG::Waiting for map to load
+[12:39:00] DEBUG::Instruction: Move(LEFT)
+[12:39:00] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[12:39:01] DEBUG::Click on x: 583, y: 371, double: False
+[12:39:02] DEBUG::Waiting for map to change
+[12:39:03] DEBUG::Game screen has changed: False, diff: 0.36%, tolerance: 2.5, timeout: 30
+[12:39:05] DEBUG::Game screen has changed: True, diff: 19.39%, tolerance: 2.5, timeout: 30
+[12:39:06] DEBUG::Waiting for map to load
+[12:39:10] DEBUG::Instruction: Enclos([-37,-56])
+[12:39:11] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-37,-56]'}
+[12:39:11] DEBUG::Click on x: 932, y: 291, double: False
+[12:39:12] DEBUG::Waiting for enclos to show
+[12:39:14] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 10
+[12:39:15] DEBUG::Game screen has changed: True, diff: 16.7%, tolerance: 2.5, timeout: 10
+[12:39:16] DEBUG::Closing enclos
+[12:39:16] DEBUG::Trying to get game focus
+[12:39:17] DEBUG::Focus game
+[12:39:18] DEBUG::Press key: esc
+[12:39:19] DEBUG::Waiting for enclos to close
+[12:39:23] DEBUG::Instruction: Move(LEFT)
+[12:39:23] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[12:39:24] DEBUG::Click on x: 583, y: 371, double: False
+[12:39:25] DEBUG::Waiting for map to change
+[12:39:27] DEBUG::Game screen has changed: False, diff: 0.02%, tolerance: 2.5, timeout: 30
+[12:39:28] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[12:39:30] DEBUG::Game screen has changed: True, diff: 20.51%, tolerance: 2.5, timeout: 30
+[12:39:31] DEBUG::Waiting for map to load
+[12:39:35] DEBUG::Instruction: Enclos([-38,-56])
+[12:39:35] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-38,-56]'}
+[12:39:36] DEBUG::Click on x: 953, y: 265, double: False
+[12:39:37] DEBUG::Waiting for enclos to show
+[12:39:39] DEBUG::Game screen has changed: False, diff: 0.06%, tolerance: 2.5, timeout: 10
+[12:39:41] DEBUG::Game screen has changed: True, diff: 17.12%, tolerance: 2.5, timeout: 10
+[12:39:41] DEBUG::Closing enclos
+[12:39:42] DEBUG::Trying to get game focus
+[12:39:42] DEBUG::Focus game
+[12:39:43] DEBUG::Press key: esc
+[12:39:44] DEBUG::Waiting for enclos to close
+[12:39:48] DEBUG::Instruction: Move(UP)
+[12:39:49] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[12:39:49] DEBUG::Click on x: 844, y: 151, double: False
+[12:39:50] DEBUG::Waiting for map to change
+[12:39:52] DEBUG::Game screen has changed: False, diff: 0.07%, tolerance: 2.5, timeout: 30
+[12:39:54] DEBUG::Game screen has changed: True, diff: 19.96%, tolerance: 2.5, timeout: 30
+[12:39:54] DEBUG::Waiting for map to load
+[12:39:58] DEBUG::Instruction: Enclos([-38,-57])
+[12:39:59] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-38,-57]'}
+[12:39:59] DEBUG::Click on x: 757, y: 302, double: False
+[12:40:00] DEBUG::Waiting for enclos to show
+[12:40:02] DEBUG::Game screen has changed: False, diff: 0.44%, tolerance: 2.5, timeout: 10
+[12:40:04] DEBUG::Game screen has changed: False, diff: 0.47%, tolerance: 2.5, timeout: 10
+[12:40:05] DEBUG::Game screen has changed: False, diff: 0.55%, tolerance: 2.5, timeout: 10
+[12:40:07] DEBUG::Game screen has changed: True, diff: 14.53%, tolerance: 2.5, timeout: 10
+[12:40:08] DEBUG::Closing enclos
+[12:40:08] DEBUG::Trying to get game focus
+[12:40:09] DEBUG::Focus game
+[12:40:10] DEBUG::Press key: esc
+[12:40:11] DEBUG::Waiting for enclos to close
+[12:40:15] DEBUG::Instruction: Move(RIGHT)
+[12:40:15] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[12:40:16] DEBUG::Click on x: 1139, y: 372, double: False
+[12:40:17] DEBUG::Waiting for map to change
+[12:40:18] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[12:40:20] DEBUG::Game screen has changed: False, diff: 0.2%, tolerance: 2.5, timeout: 30
+[12:40:22] DEBUG::Game screen has changed: True, diff: 20.5%, tolerance: 2.5, timeout: 30
+[12:40:22] DEBUG::Waiting for map to load
+[12:40:27] DEBUG::Instruction: Enclos([-37,-57])
+[12:40:27] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-37,-57]'}
+[12:40:28] DEBUG::Click on x: 1011, y: 334, double: False
+[12:40:28] DEBUG::Waiting for enclos to show
+[12:40:30] DEBUG::Game screen has changed: False, diff: 0.23%, tolerance: 2.5, timeout: 10
+[12:40:32] DEBUG::Game screen has changed: False, diff: 0.41%, tolerance: 2.5, timeout: 10
+[12:40:34] DEBUG::Game screen has changed: False, diff: 0.31%, tolerance: 2.5, timeout: 10
+[12:40:36] DEBUG::Game screen has changed: True, diff: 17.08%, tolerance: 2.5, timeout: 10
+[12:40:36] DEBUG::Closing enclos
+[12:40:37] DEBUG::Trying to get game focus
+[12:40:37] DEBUG::Focus game
+[12:40:38] DEBUG::Press key: esc
+[12:40:39] DEBUG::Waiting for enclos to close
+[12:40:43] DEBUG::Instruction: Move(UP)
+[12:40:44] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[12:40:44] DEBUG::Click on x: 844, y: 151, double: False
+[12:40:45] DEBUG::Waiting for map to change
+[12:40:47] DEBUG::Game screen has changed: False, diff: 0.04%, tolerance: 2.5, timeout: 30
+[12:40:49] DEBUG::Game screen has changed: True, diff: 19.99%, tolerance: 2.5, timeout: 30
+[12:40:49] DEBUG::Waiting for map to load
+[12:40:54] DEBUG::Instruction: Enclos([-37,-58])
+[12:40:54] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-37,-58]'}
+[12:40:55] DEBUG::Click on x: 933, y: 394, double: False
+[12:40:56] DEBUG::Waiting for enclos to show
+[12:40:57] DEBUG::Game screen has changed: False, diff: 0.05%, tolerance: 2.5, timeout: 10
+[12:40:59] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 10
+[12:41:01] DEBUG::Game screen has changed: True, diff: 15.53%, tolerance: 2.5, timeout: 10
+[12:41:02] DEBUG::Closing enclos
+[12:41:02] DEBUG::Trying to get game focus
+[12:41:03] DEBUG::Focus game
+[12:41:04] DEBUG::Press key: esc
+[12:41:04] DEBUG::Waiting for enclos to close
+[12:41:09] DEBUG::Instruction: Move(DOWN)
+[12:41:09] DEBUG::Parse result: {'name': 'Move', 'value': 'DOWN'}
+[12:41:10] DEBUG::Click on x: 841, y: 544, double: False
+[12:41:10] DEBUG::Waiting for map to change
+[12:41:12] DEBUG::Game screen has changed: False, diff: 0.06%, tolerance: 2.5, timeout: 30
+[12:41:14] DEBUG::Game screen has changed: True, diff: 19.88%, tolerance: 2.5, timeout: 30
+[12:41:14] DEBUG::Waiting for map to load
+[12:41:19] DEBUG::Instruction: Move(RIGHT)
+[12:41:19] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[12:41:20] DEBUG::Click on x: 1139, y: 372, double: False
+[12:41:20] DEBUG::Waiting for map to change
+[12:41:22] DEBUG::Game screen has changed: False, diff: 0.35%, tolerance: 2.5, timeout: 30
+[12:41:24] DEBUG::Game screen has changed: True, diff: 46.34%, tolerance: 2.5, timeout: 30
+[12:41:24] DEBUG::Waiting for map to load
+[12:41:29] DEBUG::Instruction: Enclos([-36,-57])
+[12:41:29] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-36,-57]'}
+[12:41:30] DEBUG::Click on x: 752, y: 380, double: False
+[12:41:30] DEBUG::Waiting for enclos to show
+[12:41:32] DEBUG::Game screen has changed: False, diff: 0.26%, tolerance: 2.5, timeout: 10
+[12:41:34] DEBUG::Game screen has changed: True, diff: 18.17%, tolerance: 2.5, timeout: 10
+[12:41:34] DEBUG::Closing enclos
+[12:41:35] DEBUG::Trying to get game focus
+[12:41:35] DEBUG::Focus game
+[12:41:37] DEBUG::Press key: esc
+[12:41:37] DEBUG::Waiting for enclos to close
+[12:41:42] Bot path completed
+[12:41:42] DEBUG::Bot thread ended, elapsed time: 00:06:26
+[12:42:44] DEBUG::Bot thread started
+[12:42:45] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[12:42:45] DEBUG::Instruction: Zaap(from=Havenbag,to=Brakmar)
+[12:42:46] DEBUG::Parse result: {'to': 'Brakmar', 'from': 'Havenbag', 'name': 'Zaap'}
+[12:42:46] DEBUG::Trying to get game focus
+[12:42:47] DEBUG::Focus game
+[12:42:48] DEBUG::Press key: h
+[12:42:49] DEBUG::Waiting for map to change
+[12:42:51] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 30
+[12:42:52] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 30
+[12:42:54] DEBUG::Game screen has changed: False, diff: 0.12%, tolerance: 2.5, timeout: 30
+[12:42:56] DEBUG::Internet is off
+[12:42:57] DEBUG::Internet is off
+[12:42:59] DEBUG::Internet is off
+[12:43:00] DEBUG::Internet is off
+[12:43:02] DEBUG::Internet is off
+[12:43:03] DEBUG::Internet is off
+[12:43:05] DEBUG::Internet is off
+[12:43:06] DEBUG::Internet is off
+[12:43:08] DEBUG::Internet is off
+[12:43:09] DEBUG::Internet is off
+[12:43:11] DEBUG::Internet is off
+[12:43:12] DEBUG::Internet is off
+[12:43:14] DEBUG::Internet is off
+[12:43:15] DEBUG::Internet is off
+[12:43:17] DEBUG::Internet is off
+[12:43:18] DEBUG::Internet is off
+[12:43:20] DEBUG::Internet is off
+[12:43:21] DEBUG::Internet is off
+[12:43:23] DEBUG::Internet is off
+[12:43:24] DEBUG::Internet is off
+[12:43:26] DEBUG::Internet is off
+[12:43:27] DEBUG::Internet is off
+[12:43:29] DEBUG::Internet is off
+[12:43:30] DEBUG::Internet is off
+[12:43:32] DEBUG::Internet is off
+[12:43:33] DEBUG::Internet is off
+[12:43:35] DEBUG::Internet is off
+[12:43:36] DEBUG::Internet is off
+[12:43:38] DEBUG::Internet is off
+[12:43:39] DEBUG::Internet is off
+[12:43:41] DEBUG::Bot thread paused
+[12:44:33] DEBUG::Bot thread resumed
+[12:44:33] DEBUG::Game screen has changed: False, diff: 1.15%, tolerance: 2.5, timeout: 30
+[12:44:39] DEBUG::Game screen has changed: False, diff: 0.35%, tolerance: 2.5, timeout: 30
+[12:44:41] DEBUG::Game screen has changed: False, diff: 0.26%, tolerance: 2.5, timeout: 30
+[12:44:42] DEBUG::Game screen has changed: False, diff: 0.51%, tolerance: 2.5, timeout: 30
+[12:44:44] DEBUG::Game screen has changed: True, diff: 2.82%, tolerance: 2.5, timeout: 30
+[12:44:45] DEBUG::Waiting for map to load
+[12:44:46] DEBUG::Focus game
+[12:44:46] DEBUG::Press key: h
+[12:44:49] DEBUG::Click on x: 688, y: 309, double: False
+[12:44:50] DEBUG::Waiting for zaap list to show
+[12:44:51] DEBUG::Game screen has changed: True, diff: 6.98%, tolerance: 2.5, timeout: 10
+[12:44:52] DEBUG::Scroll to: -2
+[12:44:54] DEBUG::Bot thread paused
+[12:45:04] DEBUG::Bot thread ended, elapsed time: 00:01:17
+[12:45:04] DEBUG::Bot thread stopped
+[12:46:34] DEBUG::Focus game
+[12:46:34] DEBUG::Press key: h
+[12:46:57] DEBUG::Game window unplugged
+[12:46:57] DEBUG::Populate game window combobox, 0 window found
+[12:52:48] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[12:52:48] Bot window loaded
+[12:52:48] DEBUG::Internet is on
+[13:03:36] DEBUG::Populate game window combobox, 0 window found
+--------------------------------------------------
+[13:03:36] Bot window loaded
+[13:03:36] DEBUG::Internet is on

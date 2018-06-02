@@ -165,11 +165,13 @@ def save_text_to_file(text, filename, mode='w'):
 
 # Return file content
 def read_file(filename):
-	file = open(filename, 'r')
-	content = file.read()
-	file.close()
-
-	return content
+	if os.path.isfile(filename):
+		file = open(filename, 'r')
+		content = file.read()
+		file.close()
+		return content
+	else:
+		return None
 
 # Return platform name
 def get_platform():
@@ -227,7 +229,7 @@ def adjust_click_position(click_x, click_y, window_width, window_height, dest_x,
 def perform_click(x, y, double=False):
 	old_position = pyautogui.position()
 	if double:
-		pyautogui.doubleClick(x=x, y=y)
+		pyautogui.doubleClick(x=x, y=y, interval=0.1)
 	else:
 		pyautogui.click(x=x, y=y)
 	pyautogui.moveTo(old_position)

@@ -6,7 +6,7 @@ import time
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import GObject
-from .shared import LogType
+from .shared import LogType, DebugLevel
 from . import tools
 from . import parser
 from . import data
@@ -48,10 +48,12 @@ class TimerThread(threading.Thread):
 
 class BotThread(TimerThread):
 
-	def __init__(self, parent, game_location):
+	def __init__(self, parent, game_location, start_from_step, save_dragodindes_images):
 		TimerThread.__init__(self)
 		self.parent = parent
 		self.game_location = game_location
+		self.start_from_step = start_from_step
+		self.save_dragodindes_images = save_dragodindes_images
 		self.game_has_focus = False
 		self.pause_event = threading.Event()
 		self.pause_event.set()
@@ -59,7 +61,7 @@ class BotThread(TimerThread):
 
 	def run(self):
 		self.start_timer()
-		self.debug('Bot thread started')
+		self.debug('Bot thread started', level=DebugLevel.Low)
 
 		# get instructions & interpret them
 		self.debug('Bot path: %s' % self.parent.bot_path)
@@ -80,6 +82,11 @@ class BotThread(TimerThread):
 	def interpret(self, instructions):
 		# split instructions
 		lines = instructions.splitlines()
+		# ignore instructions before start step
+		if self.start_from_step > 1 and self.start_from_step <= len(lines):
+			self.debug('Start from step: %s' % self.start_from_step, level=DebugLevel.High)
+			step = self.start_from_step - 1
+			lines = lines[step:]
 
 		for line in lines:
 			# check for pause or suspend
@@ -89,7 +96,7 @@ class BotThread(TimerThread):
 			# parse instruction
 			self.debug('Instruction: ' + line)
 			instruction = parser.parse_instruction(line)
-			#self.debug('Parse result: ' + str(instruction))
+			self.debug('Parse result: ' + str(instruction), level=DebugLevel.High)
 
 			# begin interpretation
 			if instruction['name'] == 'Move':
@@ -116,7 +123,7 @@ class BotThread(TimerThread):
 		else:
 			x, y = (coord['x'], coord['y'])
 		# click
-		self.debug('Click on x: %s, y: %s, double: %s' % (x, y, double))
+		self.debug('Click on x: %s, y: %s, double: %s' % (x, y, double), level=DebugLevel.High)
 		tools.perform_click(x, y, double)
 
 	def double_click(self, coord):
@@ -142,11 +149,11 @@ class BotThread(TimerThread):
 				# take a new screen & compare it with the previous one
 				new_screen = tools.screen_game(location)
 				if new_screen.size != prev_screen.size:
-					self.debug('Screen size has changed, retry')
+					self.debug('Screen size has changed, retry', level=DebugLevel.High)
 				else:
 					diff_percent = round(imgcompare.image_diff_percent(prev_screen, new_screen), 2)
 					has_changed = diff_percent > tolerance
-					self.debug('Game screen has changed: {}, diff: {}%, tolerance: {}, timeout: {}'.format(has_changed, diff_percent, tolerance, timeout))
+					self.debug('Game screen has changed: {}, diff: {}%, tolerance: {}, timeout: {}'.format(has_changed, diff_percent, tolerance, timeout), level=DebugLevel.High)
 					if has_changed:
 						return True
 				prev_screen = new_screen
@@ -187,24 +194,25 @@ class BotThread(TimerThread):
 			if self.suspend: return
 			elapsed_time += 1
 		# press key
-		self.debug('Press key: ' + key)
+		self.debug('Press key: ' + key, level=DebugLevel.High)
 		tools.press_key(key)
 		# set game focus to false
 		self.game_has_focus = False
 
 	def scroll(self, value):
-		self.debug('Scroll to: %s' % value)
+		self.debug('Scroll to: %s' % value, level=DebugLevel.High)
 		# save mouse position
 		mouse_position = pyautogui.position()
 		if self.game_location:
 			# get game center
 			x, y = pyautogui.center(self.game_location)
+			self.sleep(1)
 		else:
 			x, y = (None, None)
 		# scroll
 		tools.scroll_to(value, x, y)
 		# wait for scroll to end
-		self.sleep(2)
+		self.sleep(1)
 		# get back mouse to initial position
 		pyautogui.moveTo(mouse_position)
 
@@ -319,15 +327,18 @@ class BotThread(TimerThread):
 			return None
 
 	def take_dragodinde_image(self, name, location=None):
-		# create directory(s) to store dragodindes images
-		#directory = tools.get_resource_path('../dragodindes') + '/' + tools.get_date()
-		#tools.create_directory(directory)
 		# get location
 		if not location:
 			location = self.get_location('Dragodinde Card')
 		# take dragodinde image
 		if location:
-			save_to = None #directory + '/' + name
+			if self.save_dragodindes_images:
+				# create directory(s) to store dragodindes images
+				directory = tools.get_resource_path('../dragodindes') + '/' + tools.get_date()
+				tools.create_directory(directory)
+				save_to = directory + '/' + name
+			else:
+				save_to = None
 			return tools.screen_game(location, save_to)
 		else:
 			return None
@@ -371,7 +382,8 @@ class BotThread(TimerThread):
 		screen = tools.screen_game(location)
 		percentage = tools.get_color_percentage(screen, data.Colors['Enclos Empty'])
 		is_empty = percentage >= 99
-		self.debug('Enclos is empty: {}, percentage: {}%'.format(is_empty, percentage))
+		debug_level = DebugLevel.Normal if is_empty else DebugLevel.High
+		self.debug('Enclos is empty: {}, percentage: {}%'.format(is_empty, percentage), level=debug_level)
 		return is_empty
 
 	def get_dragodinde_name(self):
@@ -420,7 +432,7 @@ class BotThread(TimerThread):
 				need_amour = amour_state in (Stats.Empty, Stats.InProgress)
 				need_maturity = maturity_state in (Stats.Empty, Stats.InProgress)
 				need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
-				self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance))
+				self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance), level=DebugLevel.High)
 				# enclos 'Amour'
 				if enclos_type == data.EnclosType.Amour:
 					if amour_state == Stats.Full:
@@ -484,7 +496,8 @@ class BotThread(TimerThread):
 		screen = tools.screen_game(location)
 		percentage = tools.get_color_percentage(screen, data.Colors['Inventory Empty'])
 		is_empty = percentage >= 99
-		self.debug('Inventory is empty: {}, percentage: {}%'.format(is_empty, percentage))
+		debug_level = DebugLevel.Normal if is_empty else DebugLevel.High
+		self.debug('Inventory is empty: {}, percentage: {}%'.format(is_empty, percentage), level=debug_level)
 		return is_empty
 
 	def manage_inventory(self, enclos_type, enclos_free_places):
@@ -530,7 +543,7 @@ class BotThread(TimerThread):
 				need_amour = amour_state in (Stats.Empty, Stats.InProgress)
 				need_maturity = maturity_state in (Stats.Empty, Stats.InProgress)
 				need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
-				self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance))
+				self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance), level=DebugLevel.High)
 				# enclos 'Amour'
 				if enclos_type == data.EnclosType.Amour:
 					if need_amour and serenity_state == Serenity.Positive:
@@ -613,20 +626,16 @@ class BotThread(TimerThread):
 				self.debug('Waiting for enclos to close')
 				self.monitor_game_screen(tolerance=2.5, screen=screen)
 
-	def update_game_location(self, game_location):
-		print('update game location: {0}'.format(game_location))
-		self.game_location = game_location
-
 	def slow_down(self):
-		time.sleep(0.2) # reduce thread speed
+		time.sleep(0.25) # reduce thread speed
 
 	def log(self, text, type=LogType.Normal, slow_down=True):
 		GObject.idle_add(self.parent._log, text, type)
 		if slow_down:
 			self.slow_down()
 
-	def debug(self, text, slow_down=True):
-		GObject.idle_add(self.parent._debug, text)
+	def debug(self, text, slow_down=True, level=DebugLevel.Normal):
+		GObject.idle_add(self.parent._debug, text, level)
 		if slow_down:
 			self.slow_down()
 
@@ -649,7 +658,7 @@ class BotThread(TimerThread):
 				return
 			else:
 				# print state
-				self.debug(tools.print_internet_state(state))
+				self.debug(tools.print_internet_state(state), level=DebugLevel.High)
 				# wait 1 second, before recheck
 				time.sleep(1)
 				elapsed_time += 1
@@ -673,16 +682,16 @@ class BotThread(TimerThread):
 	def pause(self):
 		self.pause_timer()
 		self.pause_event.clear()
-		self.debug('Bot thread paused', False)
+		self.debug('Bot thread paused', False, level=DebugLevel.Low)
 
 	def resume(self):
 		self.resume_timer()
 		self.pause_event.set()
-		self.debug('Bot thread resumed')
+		self.debug('Bot thread resumed', level=DebugLevel.Low)
 
 	def stop(self):
 		self.stop_timer()
 		self.suspend = True
 		self.pause_event.set() # ensure that thread is resumed (if ever paused)
 		self.join() # wait for thread to exit
-		self.debug('Bot thread stopped', False)
+		self.debug('Bot thread stopped', False, level=DebugLevel.Low)

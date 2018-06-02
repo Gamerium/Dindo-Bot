@@ -1,0 +1,1623 @@
+--------------------------------------------------
+[00:11:23] DEBUG::Populate game window combobox, 0 window found
+[00:11:23] Bot window loaded
+[00:11:23] DEBUG::Internet is on
+--------------------------------------------------
+[00:12:11] DEBUG::Populate game window combobox, 0 window found
+[00:12:11] Bot window loaded
+[00:12:11] DEBUG::Internet is on
+--------------------------------------------------
+[00:17:15] DEBUG::Populate game window combobox, 0 window found
+[00:17:15] Bot window loaded
+[00:17:15] DEBUG::Internet is on
+--------------------------------------------------
+[00:17:27] DEBUG::Populate game window combobox, 0 window found
+[00:17:27] Bot window loaded
+[00:17:30] DEBUG::Internet is off
+--------------------------------------------------
+[00:17:47] DEBUG::Populate game window combobox, 0 window found
+[00:17:47] Bot window loaded
+[00:17:50] DEBUG::Internet is off
+[00:20:12] DEBUG::Scroll: -1
+[00:20:19] DEBUG::Scroll: -1
+[00:20:21] DEBUG::Scroll: -1
+[00:20:29] DEBUG::Scroll: -1
+[00:20:32] DEBUG::Scroll: -1
+--------------------------------------------------
+[00:42:23] DEBUG::Populate game window combobox, 0 window found
+[00:42:23] Bot window loaded
+[00:42:23] DEBUG::Internet is on
+--------------------------------------------------
+[00:47:01] DEBUG::Populate game window combobox, 0 window found
+[00:47:01] Bot window loaded
+[00:47:01] DEBUG::Internet is on
+--------------------------------------------------
+[00:47:42] DEBUG::Populate game window combobox, 0 window found
+[00:47:42] Bot window loaded
+[00:47:42] DEBUG::Internet is on
+--------------------------------------------------
+--------------------------------------------------
+[00:51:10] DEBUG::Populate game window combobox, 0 window found
+[00:51:10] Bot window loaded
+[00:51:10] DEBUG::Internet is on
+--------------------------------------------------
+[00:52:09] DEBUG::Populate game window combobox, 0 window found
+[00:52:09] Bot window loaded
+[00:52:09] DEBUG::Internet is on
+--------------------------------------------------
+[00:52:27] DEBUG::Populate game window combobox, 0 window found
+[00:52:27] Bot window loaded
+[00:52:27] DEBUG::Internet is on
+--------------------------------------------------
+[00:53:05] DEBUG::Populate game window combobox, 0 window found
+[00:53:05] Bot window loaded
+[00:53:05] DEBUG::Internet is on
+--------------------------------------------------
+[00:54:56] DEBUG::Populate game window combobox, 0 window found
+[00:54:56] Bot window loaded
+[00:54:56] DEBUG::Internet is on
+--------------------------------------------------
+[00:55:03] DEBUG::Populate game window combobox, 0 window found
+[00:55:03] Bot window loaded
+[00:55:03] DEBUG::Internet is on
+--------------------------------------------------
+[00:55:25] DEBUG::Populate game window combobox, 0 window found
+[00:55:25] Bot window loaded
+[00:55:25] DEBUG::Internet is on
+--------------------------------------------------
+[00:57:37] DEBUG::Populate game window combobox, 0 window found
+[00:57:37] Bot window loaded
+[00:57:38] DEBUG::Internet is on
+[00:58:50] DEBUG::Populate game window combobox, 1 window found
+[00:58:51] DEBUG::Plug game window (id: 75497475)
+[00:58:51] DEBUG::Game window plugged
+[00:58:51] DEBUG::Focus game
+[00:59:01] DEBUG::Bot thread started
+[00:59:01] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[00:59:02] DEBUG::Instruction: Zaap(from=Havenbag,to=Brakmar)
+[00:59:02] DEBUG::Parse result: {'to': 'Brakmar', 'from': 'Havenbag', 'name': 'Zaap'}
+[00:59:02] DEBUG::Focus game
+[00:59:03] DEBUG::Press key: h
+[00:59:03] DEBUG::Waiting for map to change
+[00:59:05] DEBUG::Game screen has changed: False, diff: 0.88%, tolerance: 2.5, timeout: 30
+[00:59:06] DEBUG::Game screen has changed: True, diff: 12.63%, tolerance: 2.5, timeout: 30
+[00:59:06] DEBUG::Waiting for map to load
+[00:59:10] DEBUG::Click on x: 688, y: 309, double: False
+[00:59:10] DEBUG::Waiting for zaap list to show
+[00:59:12] DEBUG::Game screen has changed: True, diff: 7.01%, tolerance: 2.5, timeout: 10
+[00:59:12] DEBUG::Scroll to: -2
+[00:59:14] DEBUG::Click on x: 762, y: 381, double: True
+[00:59:15] DEBUG::Waiting for map to change
+[00:59:16] DEBUG::Game screen has changed: True, diff: 18.14%, tolerance: 2.5, timeout: 30
+[00:59:16] DEBUG::Waiting for map to load
+[00:59:20] DEBUG::Instruction: Zaapi(from=Zaap Brakmar,to=Animal SH)
+[00:59:20] DEBUG::Parse result: {'to': 'Animal SH', 'from': 'Zaap Brakmar', 'name': 'Zaapi'}
+[00:59:20] DEBUG::Click on x: 1013, y: 308, double: False
+[00:59:21] DEBUG::Waiting for zaapi list to show
+[00:59:22] DEBUG::Game screen has changed: False, diff: 0.17%, tolerance: 2.5, timeout: 10
+[00:59:23] DEBUG::Game screen has changed: True, diff: 6.26%, tolerance: 2.5, timeout: 10
+[00:59:23] DEBUG::Click on x: 839, y: 222, double: False
+[00:59:26] DEBUG::Click on x: 781, y: 322, double: True
+[00:59:27] DEBUG::Waiting for map to change
+[00:59:28] DEBUG::Game screen has changed: True, diff: 10.41%, tolerance: 2.5, timeout: 30
+[00:59:28] DEBUG::Waiting for map to load
+[00:59:32] DEBUG::Instruction: Enclos([-32,37])
+[00:59:32] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,37]'}
+[00:59:32] DEBUG::Check enclos [-32,37] (Energy)
+[00:59:32] DEBUG::Click on x: 812, y: 349, double: False
+[00:59:33] DEBUG::Waiting for enclos to show
+[00:59:34] DEBUG::Game screen has changed: False, diff: 0.22%, tolerance: 2.5, timeout: 10
+[00:59:35] DEBUG::Game screen has changed: False, diff: 0.28%, tolerance: 2.5, timeout: 10
+[00:59:37] DEBUG::Game screen has changed: False, diff: 0.13%, tolerance: 2.5, timeout: 10
+[00:59:38] DEBUG::Game screen has changed: True, diff: 6.98%, tolerance: 2.5, timeout: 10
+[00:59:38] DEBUG::Enclos is empty: False, percentage: 73.05%
+[00:59:38] DEBUG::Select dragodinde from enclos
+[00:59:38] DEBUG::Click on x: 683, y: 444, double: False
+[00:59:39] DEBUG::Waiting for dragodinde card to show
+[00:59:40] DEBUG::Game screen has changed: True, diff: 4.57%, tolerance: 2.5, timeout: 10
+[00:59:40] DEBUG::Enclos is empty: False, percentage: 0.0%
+[00:59:41] DEBUG::Get dragodinde 'dd_1527901181' stats
+[00:59:41] DEBUG::Energy: 36.23% (In Progress), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 0.94% (Negative)
+[00:59:41] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[00:59:41] DEBUG::Nothing to do
+[00:59:41] DEBUG::Check next dragodinde
+[00:59:42] DEBUG::Focus game
+[00:59:43] DEBUG::Press key: down
+[00:59:44] DEBUG::Game screen has changed: True, diff: 0.67%, tolerance: 0.0, timeout: 10
+[00:59:44] DEBUG::Enclos is empty: False, percentage: 70.06%
+[00:59:45] DEBUG::Get dragodinde 'dd_1527901185' stats
+[00:59:45] DEBUG::Energy: 36.23% (In Progress), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 12.26% (Negative)
+[00:59:45] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[00:59:45] DEBUG::Nothing to do
+[00:59:45] DEBUG::Check next dragodinde
+[00:59:46] DEBUG::Focus game
+[00:59:47] DEBUG::Press key: down
+[00:59:48] DEBUG::Game screen has changed: True, diff: 0.66%, tolerance: 0.0, timeout: 10
+[00:59:48] DEBUG::Enclos is empty: False, percentage: 70.06%
+[00:59:48] DEBUG::Get dragodinde 'dd_1527901188' stats
+[00:59:49] DEBUG::Energy: 36.23% (In Progress), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 1.89% (Negative)
+[00:59:49] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[00:59:49] DEBUG::Nothing to do
+[00:59:49] DEBUG::Check next dragodinde
+[00:59:49] DEBUG::Focus game
+[00:59:51] DEBUG::Press key: down
+[00:59:52] DEBUG::Game screen has changed: True, diff: 0.98%, tolerance: 0.0, timeout: 10
+[00:59:52] DEBUG::Enclos is empty: False, percentage: 70.06%
+[00:59:52] DEBUG::Get dragodinde 'dd_1527901192' stats
+[00:59:53] DEBUG::Energy: 36.23% (In Progress), Amour: 73.91% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 0.0% (Negative)
+[00:59:53] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[00:59:53] DEBUG::Nothing to do
+[00:59:53] DEBUG::Check next dragodinde
+[00:59:53] DEBUG::Focus game
+[00:59:54] DEBUG::Press key: down
+[00:59:56] DEBUG::Game screen has changed: True, diff: 0.32%, tolerance: 0.0, timeout: 10
+[00:59:56] DEBUG::Enclos is empty: False, percentage: 70.06%
+[00:59:56] DEBUG::Get dragodinde 'dd_1527901196' stats
+[00:59:56] DEBUG::Energy: 36.23% (In Progress), Amour: 73.91% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 1.89% (Negative)
+[00:59:57] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[00:59:57] DEBUG::Nothing to do
+[00:59:57] DEBUG::Check next dragodinde
+[00:59:57] DEBUG::Focus game
+[00:59:58] DEBUG::Press key: down
+[01:00:00] DEBUG::Game screen has changed: True, diff: 0.49%, tolerance: 0.0, timeout: 10
+[01:00:00] DEBUG::Enclos is empty: False, percentage: 1.2%
+[01:00:00] DEBUG::Get dragodinde 'dd_1527901200' stats
+[01:00:00] DEBUG::Energy: 36.23% (In Progress), Amour: 73.91% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 0.0% (Negative)
+[01:00:01] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:00:01] DEBUG::Nothing to do
+[01:00:01] DEBUG::Check next dragodinde
+[01:00:01] DEBUG::Focus game
+[01:00:02] DEBUG::Press key: down
+[01:00:04] DEBUG::Game screen has changed: True, diff: 1.1%, tolerance: 0.0, timeout: 10
+[01:00:04] DEBUG::Enclos is empty: False, percentage: 58.68%
+[01:00:04] DEBUG::Get dragodinde 'dd_1527901204' stats
+[01:00:04] DEBUG::Energy: 36.23% (In Progress), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 95.28% (Positive)
+[01:00:04] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:00:05] DEBUG::Nothing to do
+[01:00:05] DEBUG::Check next dragodinde
+[01:00:05] DEBUG::Focus game
+[01:00:06] DEBUG::Press key: down
+[01:00:07] DEBUG::Game screen has changed: True, diff: 0.06%, tolerance: 0.0, timeout: 10
+[01:00:08] DEBUG::Enclos is empty: False, percentage: 58.68%
+[01:00:08] DEBUG::Get dragodinde 'dd_1527901208' stats
+[01:00:08] DEBUG::Energy: 36.23% (In Progress), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 94.34% (Positive)
+[01:00:08] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:00:09] DEBUG::Nothing to do
+[01:00:09] DEBUG::Check next dragodinde
+[01:00:09] DEBUG::Focus game
+[01:00:10] DEBUG::Press key: down
+[01:00:11] DEBUG::Game screen has changed: True, diff: 1.41%, tolerance: 0.0, timeout: 10
+[01:00:12] DEBUG::Enclos is empty: False, percentage: 58.68%
+[01:00:12] DEBUG::Get dragodinde 'dd_1527901212' stats
+[01:00:12] DEBUG::Energy: 36.23% (In Progress), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 1.89% (Negative)
+[01:00:12] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:00:12] DEBUG::Nothing to do
+[01:00:13] DEBUG::Check next dragodinde
+[01:00:13] DEBUG::Focus game
+[01:00:14] DEBUG::Press key: down
+[01:00:15] DEBUG::Game screen has changed: True, diff: 1.06%, tolerance: 0.0, timeout: 10
+[01:00:16] DEBUG::Enclos is empty: False, percentage: 58.68%
+[01:00:16] DEBUG::Get dragodinde 'dd_1527901216' stats
+[01:00:16] DEBUG::Energy: 36.23% (In Progress), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 20.75% (Negative)
+[01:00:16] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:00:16] DEBUG::Nothing to do
+[01:00:17] DEBUG::Managed dragodindes: 10, Moved dragodindes: 0, Free places: 0
+[01:00:17] DEBUG::Closing enclos
+[01:00:17] DEBUG::Focus game
+[01:00:18] DEBUG::Press key: esc
+[01:00:18] DEBUG::Waiting for enclos to close
+[01:00:20] DEBUG::Game screen has changed: True, diff: 11.24%, tolerance: 2.5, timeout: 10
+[01:00:20] DEBUG::Instruction: Move(DOWN)
+[01:00:20] DEBUG::Parse result: {'name': 'Move', 'value': 'DOWN'}
+[01:00:20] DEBUG::Click on x: 841, y: 544, double: False
+[01:00:21] DEBUG::Waiting for map to change
+[01:00:22] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[01:00:23] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 30
+[01:00:25] DEBUG::Game screen has changed: True, diff: 9.45%, tolerance: 2.5, timeout: 30
+[01:00:25] DEBUG::Waiting for map to load
+[01:00:28] DEBUG::Instruction: Enclos([-32,38])
+[01:00:29] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-32,38]'}
+[01:00:29] DEBUG::Check enclos [-32,38] (NegativeSerenity)
+[01:00:29] DEBUG::Click on x: 931, y: 276, double: False
+[01:00:29] DEBUG::Waiting for enclos to show
+[01:00:31] DEBUG::Game screen has changed: False, diff: 0.12%, tolerance: 2.5, timeout: 10
+[01:00:32] DEBUG::Game screen has changed: False, diff: 0.09%, tolerance: 2.5, timeout: 10
+[01:00:33] DEBUG::Game screen has changed: True, diff: 7.0%, tolerance: 2.5, timeout: 10
+[01:00:34] DEBUG::Enclos is empty: False, percentage: 70.06%
+[01:00:34] DEBUG::Select dragodinde from enclos
+[01:00:34] DEBUG::Click on x: 683, y: 444, double: False
+[01:00:34] DEBUG::Waiting for dragodinde card to show
+[01:00:36] DEBUG::Game screen has changed: True, diff: 4.12%, tolerance: 2.5, timeout: 10
+[01:00:36] DEBUG::Enclos is empty: False, percentage: 0.0%
+[01:00:36] DEBUG::Get dragodinde 'dd_1527901236' stats
+[01:00:36] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 66.04% (Positive)
+[01:00:36] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:00:37] DEBUG::Nothing to do
+[01:00:37] DEBUG::Check next dragodinde
+[01:00:37] DEBUG::Focus game
+[01:00:38] DEBUG::Press key: down
+[01:00:40] DEBUG::Game screen has changed: True, diff: 0.23%, tolerance: 0.0, timeout: 10
+[01:00:40] DEBUG::Enclos is empty: False, percentage: 70.06%
+[01:00:40] DEBUG::Get dragodinde 'dd_1527901240' stats
+[01:00:40] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 66.04% (Positive)
+[01:00:40] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:00:41] DEBUG::Nothing to do
+[01:00:41] DEBUG::Check next dragodinde
+[01:00:41] DEBUG::Focus game
+[01:00:42] DEBUG::Press key: down
+[01:00:43] DEBUG::Game screen has changed: True, diff: 1.55%, tolerance: 0.0, timeout: 10
+[01:00:44] DEBUG::Enclos is empty: False, percentage: 70.06%
+[01:00:44] DEBUG::Get dragodinde 'dd_1527901244' stats
+[01:00:44] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 0.0% (Empty), Serenity: 52.83% (Medium)
+[01:00:44] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: True
+[01:00:44] DEBUG::Moving dragodinde to inventory
+[01:00:45] DEBUG::Focus game
+[01:00:46] DEBUG::Press key: '
+[01:00:47] DEBUG::Game screen has changed: True, diff: 17.89%, tolerance: 0.0, timeout: 10
+[01:00:47] DEBUG::Enclos is empty: False, percentage: 70.06%
+[01:00:48] DEBUG::Get dragodinde 'dd_1527901248' stats
+[01:00:48] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 66.04% (Positive)
+[01:00:48] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:00:48] DEBUG::Nothing to do
+[01:00:48] DEBUG::Check next dragodinde
+[01:00:49] DEBUG::Focus game
+[01:00:50] DEBUG::Press key: down
+[01:00:51] DEBUG::Game screen has changed: True, diff: 0.73%, tolerance: 0.0, timeout: 10
+[01:00:51] DEBUG::Enclos is empty: False, percentage: 70.06%
+[01:00:51] DEBUG::Get dragodinde 'dd_1527901251' stats
+[01:00:52] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 71.7% (Positive)
+[01:00:52] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:00:52] DEBUG::Nothing to do
+[01:00:52] DEBUG::Check next dragodinde
+[01:00:52] DEBUG::Focus game
+[01:00:54] DEBUG::Press key: down
+[01:00:55] DEBUG::Game screen has changed: True, diff: 1.99%, tolerance: 0.0, timeout: 10
+[01:00:55] DEBUG::Enclos is empty: False, percentage: 70.06%
+[01:00:55] DEBUG::Get dragodinde 'dd_1527901255' stats
+[01:00:56] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 94.2% (Full), Serenity: 55.66% (Medium)
+[01:00:56] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: False
+[01:00:56] DEBUG::Moving dragodinde to inventory
+[01:00:56] DEBUG::Focus game
+[01:00:57] DEBUG::Press key: '
+[01:00:59] DEBUG::Game screen has changed: True, diff: 1.71%, tolerance: 0.0, timeout: 10
+[01:00:59] DEBUG::Enclos is empty: False, percentage: 70.06%
+[01:00:59] DEBUG::Get dragodinde 'dd_1527901259' stats
+[01:00:59] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 71.7% (Positive)
+[01:01:00] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:01:00] DEBUG::Nothing to do
+[01:01:00] DEBUG::Check next dragodinde
+[01:01:00] DEBUG::Focus game
+[01:01:01] DEBUG::Press key: down
+[01:01:03] DEBUG::Game screen has changed: True, diff: 1.23%, tolerance: 0.0, timeout: 10
+[01:01:03] DEBUG::Enclos is empty: False, percentage: 61.68%
+[01:01:03] DEBUG::Get dragodinde 'dd_1527901263' stats
+[01:01:03] DEBUG::Energy: 0.0% (Empty), Amour: 92.75% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 80.19% (Positive)
+[01:01:03] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:01:04] DEBUG::Nothing to do
+[01:01:04] DEBUG::Check next dragodinde
+[01:01:04] DEBUG::Focus game
+[01:01:05] DEBUG::Press key: down
+[01:01:07] DEBUG::Game screen has changed: True, diff: 0.82%, tolerance: 0.0, timeout: 10
+[01:01:07] DEBUG::Enclos is empty: False, percentage: 61.68%
+[01:01:07] DEBUG::Get dragodinde 'dd_1527901267' stats
+[01:01:07] DEBUG::Energy: 0.0% (Empty), Amour: 92.75% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 69.81% (Positive)
+[01:01:07] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:01:08] DEBUG::Nothing to do
+[01:01:08] DEBUG::Check next dragodinde
+[01:01:08] DEBUG::Focus game
+[01:01:09] DEBUG::Press key: down
+[01:01:10] DEBUG::Game screen has changed: True, diff: 1.39%, tolerance: 0.0, timeout: 10
+[01:01:11] DEBUG::Enclos is empty: False, percentage: 61.68%
+[01:01:11] DEBUG::Get dragodinde 'dd_1527901271' stats
+[01:01:11] DEBUG::Energy: 0.0% (Empty), Amour: 92.75% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 81.13% (Positive)
+[01:01:11] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:01:11] DEBUG::Nothing to do
+[01:01:12] DEBUG::Managed dragodindes: 10, Moved dragodindes: 2, Free places: 2
+[01:01:12] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:12] DEBUG::Select dragodinde from inventory
+[01:01:12] DEBUG::Click on x: 1028, y: 312, double: False
+[01:01:13] DEBUG::Waiting for dragodinde card to show
+[01:01:14] DEBUG::Game screen has changed: True, diff: 0.88%, tolerance: 0.1, timeout: 10
+[01:01:14] DEBUG::Inventory is empty: False, percentage: 4.17%
+[01:01:14] DEBUG::Get dragodinde 'dd_1527901274' stats
+[01:01:15] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 94.2% (Full), Serenity: 55.66% (Medium)
+[01:01:15] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: False
+[01:01:15] DEBUG::Nothing to do
+[01:01:15] DEBUG::Check next dragodinde
+[01:01:15] DEBUG::Focus game
+[01:01:17] DEBUG::Press key: down
+[01:01:18] DEBUG::Game screen has changed: True, diff: 0.75%, tolerance: 0.0, timeout: 10
+[01:01:18] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:18] DEBUG::Get dragodinde 'dd_1527901278' stats
+[01:01:19] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 0.0% (Empty), Serenity: 52.83% (Medium)
+[01:01:19] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: True
+[01:01:19] DEBUG::Nothing to do
+[01:01:19] DEBUG::Check next dragodinde
+[01:01:19] DEBUG::Focus game
+[01:01:20] DEBUG::Press key: down
+[01:01:22] DEBUG::Game screen has changed: True, diff: 2.59%, tolerance: 0.0, timeout: 10
+[01:01:22] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:22] DEBUG::Get dragodinde 'dd_1527901282' stats
+[01:01:22] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 21.7% (Negative)
+[01:01:23] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:01:23] DEBUG::Nothing to do
+[01:01:23] DEBUG::Check next dragodinde
+[01:01:23] DEBUG::Focus game
+[01:01:24] DEBUG::Press key: down
+[01:01:26] DEBUG::Game screen has changed: True, diff: 0.42%, tolerance: 0.0, timeout: 10
+[01:01:26] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:26] DEBUG::Get dragodinde 'dd_1527901286' stats
+[01:01:26] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 6.6% (Negative)
+[01:01:26] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:01:27] DEBUG::Nothing to do
+[01:01:27] DEBUG::Check next dragodinde
+[01:01:27] DEBUG::Focus game
+[01:01:28] DEBUG::Press key: down
+[01:01:30] DEBUG::Game screen has changed: True, diff: 0.24%, tolerance: 0.0, timeout: 10
+[01:01:30] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:30] DEBUG::Get dragodinde 'dd_1527901290' stats
+[01:01:30] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 10.38% (Negative)
+[01:01:30] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:01:31] DEBUG::Nothing to do
+[01:01:31] DEBUG::Check next dragodinde
+[01:01:31] DEBUG::Focus game
+[01:01:32] DEBUG::Press key: down
+[01:01:33] DEBUG::Game screen has changed: True, diff: 0.21%, tolerance: 0.0, timeout: 10
+[01:01:34] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:34] DEBUG::Get dragodinde 'dd_1527901294' stats
+[01:01:34] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 15.09% (Negative)
+[01:01:34] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:01:34] DEBUG::Nothing to do
+[01:01:35] DEBUG::Check next dragodinde
+[01:01:35] DEBUG::Focus game
+[01:01:36] DEBUG::Press key: down
+[01:01:37] DEBUG::Game screen has changed: True, diff: 0.85%, tolerance: 0.0, timeout: 10
+[01:01:38] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:38] DEBUG::Get dragodinde 'dd_1527901298' stats
+[01:01:38] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 0.0% (Negative)
+[01:01:38] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:01:38] DEBUG::Nothing to do
+[01:01:39] DEBUG::Check next dragodinde
+[01:01:39] DEBUG::Focus game
+[01:01:40] DEBUG::Press key: down
+[01:01:41] DEBUG::Game screen has changed: True, diff: 2.47%, tolerance: 0.0, timeout: 10
+[01:01:41] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:42] DEBUG::Get dragodinde 'dd_1527901302' stats
+[01:01:42] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 94.2% (Full), Serenity: 78.3% (Positive)
+[01:01:42] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: False
+[01:01:42] DEBUG::Moving dragodinde to 'NegativeSerenity' enclos
+[01:01:42] DEBUG::Focus game
+[01:01:44] DEBUG::Press key: 2
+[01:01:45] DEBUG::Game screen has changed: True, diff: 1.86%, tolerance: 0.0, timeout: 10
+[01:01:45] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:45] DEBUG::Get dragodinde 'dd_1527901305' stats
+[01:01:46] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 0.0% (Empty), Serenity: 14.15% (Negative)
+[01:01:46] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:01:46] DEBUG::Nothing to do
+[01:01:46] DEBUG::Check next dragodinde
+[01:01:46] DEBUG::Focus game
+[01:01:47] DEBUG::Press key: down
+[01:01:49] DEBUG::Game screen has changed: True, diff: 2.51%, tolerance: 0.0, timeout: 10
+[01:01:49] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:49] DEBUG::Get dragodinde 'dd_1527901309' stats
+[01:01:49] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 79.25% (Positive)
+[01:01:50] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:01:50] DEBUG::Nothing to do
+[01:01:50] DEBUG::Check next dragodinde
+[01:01:50] DEBUG::Focus game
+[01:01:51] DEBUG::Press key: down
+[01:01:53] DEBUG::Game screen has changed: True, diff: 1.14%, tolerance: 0.0, timeout: 10
+[01:01:53] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:53] DEBUG::Get dragodinde 'dd_1527901313' stats
+[01:01:53] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 97.17% (Positive)
+[01:01:54] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:01:54] DEBUG::Nothing to do
+[01:01:54] DEBUG::Check next dragodinde
+[01:01:54] DEBUG::Focus game
+[01:01:55] DEBUG::Press key: down
+[01:01:57] DEBUG::Game screen has changed: True, diff: 0.42%, tolerance: 0.0, timeout: 10
+[01:01:57] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:01:57] DEBUG::Get dragodinde 'dd_1527901317' stats
+[01:01:57] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 96.23% (Positive)
+[01:01:57] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:01:58] DEBUG::Nothing to do
+[01:01:58] DEBUG::Check next dragodinde
+[01:01:58] DEBUG::Focus game
+[01:01:59] DEBUG::Press key: down
+[01:02:01] DEBUG::Game screen has changed: True, diff: 0.1%, tolerance: 0.0, timeout: 10
+[01:02:01] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:02:01] DEBUG::Get dragodinde 'dd_1527901321' stats
+[01:02:01] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 96.23% (Positive)
+[01:02:01] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:02:02] DEBUG::Nothing to do
+[01:02:02] DEBUG::Check next dragodinde
+[01:02:02] DEBUG::Focus game
+[01:02:03] DEBUG::Press key: down
+[01:02:04] DEBUG::Game screen has changed: True, diff: 1.32%, tolerance: 0.0, timeout: 10
+[01:02:05] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:02:05] DEBUG::Get dragodinde 'dd_1527901325' stats
+[01:02:05] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 80.19% (Positive)
+[01:02:05] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:02:05] DEBUG::Nothing to do
+[01:02:06] DEBUG::Check next dragodinde
+[01:02:06] DEBUG::Focus game
+[01:02:07] DEBUG::Press key: down
+[01:02:08] DEBUG::Game screen has changed: True, diff: 0.32%, tolerance: 0.0, timeout: 10
+[01:02:09] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:02:09] DEBUG::Get dragodinde 'dd_1527901329' stats
+[01:02:09] DEBUG::Energy: 0.0% (Empty), Amour: 85.51% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 66.98% (Positive)
+[01:02:09] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:02:09] DEBUG::Nothing to do
+[01:02:10] DEBUG::Check next dragodinde
+[01:02:10] DEBUG::Focus game
+[01:02:11] DEBUG::Press key: down
+[01:02:12] DEBUG::Game screen has changed: True, diff: 0.93%, tolerance: 0.0, timeout: 10
+[01:02:13] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:13] DEBUG::Get dragodinde 'dd_1527901333' stats
+[01:02:13] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 68.87% (Positive)
+[01:02:13] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:02:13] DEBUG::Nothing to do
+[01:02:14] DEBUG::Check next dragodinde
+[01:02:14] DEBUG::Focus game
+[01:02:15] DEBUG::Press key: down
+[01:02:16] DEBUG::Game screen has changed: True, diff: 0.78%, tolerance: 0.0, timeout: 10
+[01:02:16] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:17] DEBUG::Get dragodinde 'dd_1527901337' stats
+[01:02:17] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 68.87% (Positive)
+[01:02:17] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:02:17] DEBUG::Nothing to do
+[01:02:17] DEBUG::Check next dragodinde
+[01:02:18] DEBUG::Focus game
+[01:02:19] DEBUG::Press key: down
+[01:02:20] DEBUG::Game screen has changed: True, diff: 1.45%, tolerance: 0.0, timeout: 10
+[01:02:20] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:21] DEBUG::Get dragodinde 'dd_1527901341' stats
+[01:02:21] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 96.23% (Positive)
+[01:02:21] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:02:21] DEBUG::Nothing to do
+[01:02:21] DEBUG::Check next dragodinde
+[01:02:22] DEBUG::Focus game
+[01:02:23] DEBUG::Press key: down
+[01:02:24] DEBUG::Game screen has changed: True, diff: 1.41%, tolerance: 0.0, timeout: 10
+[01:02:24] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:24] DEBUG::Get dragodinde 'dd_1527901344' stats
+[01:02:25] DEBUG::Energy: 0.0% (Empty), Amour: 86.96% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 97.17% (Positive)
+[01:02:25] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:02:25] DEBUG::Nothing to do
+[01:02:25] DEBUG::Check next dragodinde
+[01:02:25] DEBUG::Focus game
+[01:02:27] DEBUG::Press key: down
+[01:02:28] DEBUG::Game screen has changed: True, diff: 2.08%, tolerance: 0.0, timeout: 10
+[01:02:28] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:28] DEBUG::Get dragodinde 'dd_1527901348' stats
+[01:02:29] DEBUG::Energy: 98.55% (Full), Amour: 84.06% (Full), Maturity: 97.1% (Full), Endurance: 76.81% (Full), Serenity: 63.21% (Positive)
+[01:02:29] DEBUG::Need Energy: False, Amour: False, Maturity: False, Endurance: False
+[01:02:29] DEBUG::Nothing to do
+[01:02:29] DEBUG::Check next dragodinde
+[01:02:29] DEBUG::Focus game
+[01:02:30] DEBUG::Press key: down
+[01:02:32] DEBUG::Game screen has changed: True, diff: 0.11%, tolerance: 0.0, timeout: 10
+[01:02:32] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:32] DEBUG::Get dragodinde 'dd_1527901352' stats
+[01:02:32] DEBUG::Energy: 98.55% (Full), Amour: 73.91% (Full), Maturity: 97.1% (Full), Endurance: 72.46% (Full), Serenity: 62.26% (Positive)
+[01:02:33] DEBUG::Need Energy: False, Amour: False, Maturity: False, Endurance: False
+[01:02:33] DEBUG::Nothing to do
+[01:02:33] DEBUG::Check next dragodinde
+[01:02:33] DEBUG::Focus game
+[01:02:34] DEBUG::Press key: down
+[01:02:36] DEBUG::Game screen has changed: True, diff: 1.6%, tolerance: 0.0, timeout: 10
+[01:02:36] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:36] DEBUG::Get dragodinde 'dd_1527901356' stats
+[01:02:36] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 94.2% (Full), Serenity: 35.85% (Negative)
+[01:02:36] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: False
+[01:02:37] DEBUG::Nothing to do
+[01:02:37] DEBUG::Check next dragodinde
+[01:02:37] DEBUG::Focus game
+[01:02:38] DEBUG::Press key: down
+[01:02:40] DEBUG::Game screen has changed: True, diff: 1.99%, tolerance: 0.0, timeout: 10
+[01:02:40] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:40] DEBUG::Get dragodinde 'dd_1527901360' stats
+[01:02:40] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 66.98% (Positive)
+[01:02:40] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:02:41] DEBUG::Nothing to do
+[01:02:41] DEBUG::Check next dragodinde
+[01:02:41] DEBUG::Focus game
+[01:02:42] DEBUG::Press key: down
+[01:02:43] DEBUG::Game screen has changed: True, diff: 0.42%, tolerance: 0.0, timeout: 10
+[01:02:44] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:44] DEBUG::Get dragodinde 'dd_1527901364' stats
+[01:02:44] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 58.49% (Positive)
+[01:02:44] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:02:44] DEBUG::Nothing to do
+[01:02:45] DEBUG::Check next dragodinde
+[01:02:45] DEBUG::Focus game
+[01:02:46] DEBUG::Press key: down
+[01:02:47] DEBUG::Game screen has changed: True, diff: 1.02%, tolerance: 0.0, timeout: 10
+[01:02:48] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:48] DEBUG::Get dragodinde 'dd_1527901368' stats
+[01:02:48] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 97.17% (Positive)
+[01:02:48] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:02:48] DEBUG::Nothing to do
+[01:02:49] DEBUG::Check next dragodinde
+[01:02:49] DEBUG::Focus game
+[01:02:50] DEBUG::Press key: down
+[01:02:51] DEBUG::Game screen has changed: True, diff: 0.85%, tolerance: 0.0, timeout: 10
+[01:02:51] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:52] DEBUG::Get dragodinde 'dd_1527901372' stats
+[01:02:52] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 84.91% (Positive)
+[01:02:52] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:02:52] DEBUG::Nothing to do
+[01:02:52] DEBUG::Check next dragodinde
+[01:02:53] DEBUG::Focus game
+[01:02:54] DEBUG::Press key: down
+[01:02:55] DEBUG::Game screen has changed: True, diff: 0.25%, tolerance: 0.0, timeout: 10
+[01:02:55] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:56] DEBUG::Get dragodinde 'dd_1527901375' stats
+[01:02:56] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 97.17% (Positive)
+[01:02:56] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:02:56] DEBUG::Nothing to do
+[01:02:56] DEBUG::Check next dragodinde
+[01:02:57] DEBUG::Focus game
+[01:02:58] DEBUG::Press key: down
+[01:02:59] DEBUG::Game screen has changed: True, diff: 1.92%, tolerance: 0.0, timeout: 10
+[01:02:59] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:02:59] DEBUG::Get dragodinde 'dd_1527901379' stats
+[01:03:00] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 0.0% (Negative)
+[01:03:00] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:03:00] DEBUG::Nothing to do
+[01:03:00] DEBUG::Check next dragodinde
+[01:03:00] DEBUG::Focus game
+[01:03:02] DEBUG::Press key: down
+[01:03:03] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:03:04] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:03:06] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:03:07] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:03:08] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:03:10] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:03:11] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:03:12] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:03:13] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+--------------------------------------------------
+[01:05:22] DEBUG::Populate game window combobox, 0 window found
+[01:05:22] Bot window loaded
+[01:05:23] DEBUG::Internet is on
+[01:05:51] DEBUG::Plug game window (id: 75497475)
+[01:05:51] DEBUG::Game window plugged
+[01:05:51] DEBUG::Focus game
+[01:07:39] DEBUG::Keep game window open
+--------------------------------------------------
+[01:10:43] DEBUG::Populate game window combobox, 0 window found
+[01:10:43] Bot window loaded
+[01:10:43] DEBUG::Internet is on
+--------------------------------------------------
+[01:11:07] DEBUG::Populate game window combobox, 0 window found
+[01:11:07] Bot window loaded
+[01:11:07] DEBUG::Internet is on
+--------------------------------------------------
+[01:11:40] DEBUG::Populate game window combobox, 0 window found
+[01:11:40] Bot window loaded
+[01:11:40] DEBUG::Internet is on
+--------------------------------------------------
+[01:13:46] DEBUG::Populate game window combobox, 0 window found
+[01:13:46] Bot window loaded
+[01:13:46] DEBUG::Internet is on
+--------------------------------------------------
+[01:14:10] DEBUG::Populate game window combobox, 0 window found
+[01:14:10] Bot window loaded
+[01:14:10] DEBUG::Internet is on
+--------------------------------------------------
+[01:27:31] DEBUG::Populate game window combobox, 0 window found
+[01:27:31] Bot window loaded
+[01:27:31] DEBUG::Internet is on
+[01:28:02] DEBUG::Plug game window (id: 75497475)
+[01:28:02] DEBUG::Game window plugged
+[01:28:02] DEBUG::Focus game
+[01:28:13] DEBUG::Bot thread started
+[01:28:14] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[01:28:14] DEBUG::Instruction: Enclos([-31,38])
+[01:28:14] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,38]'}
+[01:28:14] DEBUG::Check enclos [-31,38] (Endurance)
+[01:28:14] DEBUG::Click on x: 972, y: 236, double: False
+[01:28:15] DEBUG::Waiting for enclos to show
+[01:28:16] DEBUG::Game screen has changed: False, diff: 0.05%, tolerance: 2.5, timeout: 10
+[01:28:17] DEBUG::Game screen has changed: False, diff: 0.02%, tolerance: 2.5, timeout: 10
+[01:28:19] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 10
+[01:28:19] DEBUG::Bot thread paused
+[01:29:24] DEBUG::Keep game window open
+--------------------------------------------------
+[01:32:26] DEBUG::Populate game window combobox, 0 window found
+[01:32:27] Bot window loaded
+[01:32:27] DEBUG::Internet is on
+[01:32:47] DEBUG::Plug game window (id: 75497475)
+[01:32:47] DEBUG::Game window plugged
+[01:32:47] DEBUG::Focus game
+[01:32:52] DEBUG::Bot thread started
+[01:32:52] DEBUG::Bot path: /home/dev/Python/Dindo-bot/paths/enclos_bonta_brak.path
+[01:32:52] DEBUG::Start from step: 6
+[01:32:52] DEBUG::Instruction: Move(RIGHT)
+[01:32:53] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[01:32:53] DEBUG::Click on x: 1139, y: 372, double: False
+[01:32:53] DEBUG::Waiting for map to change
+[01:32:54] DEBUG::Game screen has changed: False, diff: 0.01%, tolerance: 2.5, timeout: 30
+[01:32:56] DEBUG::Game screen has changed: True, diff: 10.23%, tolerance: 2.5, timeout: 30
+[01:32:56] DEBUG::Waiting for map to load
+[01:32:59] DEBUG::Instruction: Enclos([-31,38])
+[01:33:00] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,38]'}
+[01:33:00] DEBUG::Check enclos [-31,38] (Endurance)
+[01:33:00] DEBUG::Click on x: 972, y: 236, double: False
+[01:33:00] DEBUG::Waiting for enclos to show
+[01:33:02] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 10
+[01:33:03] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 10
+[01:33:04] DEBUG::Game screen has changed: False, diff: 0.18%, tolerance: 2.5, timeout: 10
+[01:33:06] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 10
+[01:33:07] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 10
+[01:33:08] DEBUG::Game screen has changed: True, diff: 6.4%, tolerance: 2.5, timeout: 10
+[01:33:08] DEBUG::Enclos is empty: False, percentage: 58.08%
+[01:33:09] DEBUG::Select dragodinde from enclos
+[01:33:09] DEBUG::Click on x: 683, y: 444, double: False
+[01:33:09] DEBUG::Waiting for dragodinde card to show
+[01:33:11] DEBUG::Game screen has changed: True, diff: 4.51%, tolerance: 2.5, timeout: 10
+[01:33:11] DEBUG::Enclos is empty: False, percentage: 0.0%
+[01:33:11] DEBUG::Get dragodinde 'dd_1527903191' stats
+[01:33:11] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 27.54% (In Progress), Serenity: 0.0% (Negative)
+[01:33:11] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:33:12] DEBUG::Nothing to do
+[01:33:12] DEBUG::Check next dragodinde
+[01:33:12] DEBUG::Focus game
+[01:33:13] DEBUG::Press key: down
+[01:33:15] DEBUG::Game screen has changed: True, diff: 0.46%, tolerance: 0.0, timeout: 10
+[01:33:15] DEBUG::Enclos is empty: False, percentage: 58.08%
+[01:33:15] DEBUG::Get dragodinde 'dd_1527903195' stats
+[01:33:15] DEBUG::Energy: 0.0% (Empty), Amour: 79.71% (Full), Maturity: 97.1% (Full), Endurance: 27.54% (In Progress), Serenity: 36.79% (Negative)
+[01:33:15] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:33:16] DEBUG::Nothing to do
+[01:33:16] DEBUG::Check next dragodinde
+[01:33:16] DEBUG::Focus game
+[01:33:17] DEBUG::Press key: down
+[01:33:18] DEBUG::Game screen has changed: True, diff: 1.33%, tolerance: 0.0, timeout: 10
+[01:33:19] DEBUG::Enclos is empty: False, percentage: 58.08%
+[01:33:19] DEBUG::Get dragodinde 'dd_1527903199' stats
+[01:33:19] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 36.23% (In Progress), Serenity: 0.94% (Negative)
+[01:33:19] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:33:20] DEBUG::Nothing to do
+[01:33:20] DEBUG::Check next dragodinde
+[01:33:20] DEBUG::Focus game
+[01:33:21] DEBUG::Press key: down
+[01:33:22] DEBUG::Game screen has changed: True, diff: 1.94%, tolerance: 0.0, timeout: 10
+[01:33:23] DEBUG::Enclos is empty: False, percentage: 58.08%
+[01:33:23] DEBUG::Get dragodinde 'dd_1527903203' stats
+[01:33:23] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 86.96% (Full), Serenity: 1.89% (Negative)
+[01:33:23] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:33:23] DEBUG::Moving dragodinde to inventory
+[01:33:24] DEBUG::Focus game
+[01:33:25] DEBUG::Press key: '
+[01:33:26] DEBUG::Game screen has changed: True, diff: 0.46%, tolerance: 0.0, timeout: 10
+[01:33:26] DEBUG::Enclos is empty: False, percentage: 58.08%
+[01:33:26] DEBUG::Get dragodinde 'dd_1527903206' stats
+[01:33:27] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 79.71% (Full), Serenity: 2.83% (Negative)
+[01:33:27] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:33:27] DEBUG::Moving dragodinde to inventory
+[01:33:27] DEBUG::Focus game
+[01:33:28] DEBUG::Press key: '
+[01:33:30] DEBUG::Game screen has changed: True, diff: 1.44%, tolerance: 0.0, timeout: 10
+[01:33:30] DEBUG::Enclos is empty: False, percentage: 58.08%
+[01:33:30] DEBUG::Get dragodinde 'dd_1527903210' stats
+[01:33:30] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 27.54% (In Progress), Serenity: 33.02% (Negative)
+[01:33:31] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:33:31] DEBUG::Nothing to do
+[01:33:31] DEBUG::Check next dragodinde
+[01:33:31] DEBUG::Focus game
+[01:33:32] DEBUG::Press key: down
+[01:33:34] DEBUG::Game screen has changed: True, diff: 1.23%, tolerance: 0.0, timeout: 10
+[01:33:34] DEBUG::Enclos is empty: False, percentage: 58.08%
+[01:33:34] DEBUG::Get dragodinde 'dd_1527903214' stats
+[01:33:34] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 79.71% (Full), Serenity: 0.94% (Negative)
+[01:33:34] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:33:35] DEBUG::Moving dragodinde to inventory
+[01:33:35] DEBUG::Focus game
+[01:33:36] DEBUG::Press key: '
+[01:33:37] DEBUG::Game screen has changed: True, diff: 0.65%, tolerance: 0.0, timeout: 10
+[01:33:37] DEBUG::Enclos is empty: False, percentage: 58.08%
+[01:33:38] DEBUG::Get dragodinde 'dd_1527903218' stats
+[01:33:38] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 81.16% (Full), Serenity: 0.94% (Negative)
+[01:33:38] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:33:38] DEBUG::Moving dragodinde to inventory
+[01:33:38] DEBUG::Focus game
+[01:33:40] DEBUG::Press key: '
+[01:33:41] DEBUG::Game screen has changed: True, diff: 0.54%, tolerance: 0.0, timeout: 10
+[01:33:41] DEBUG::Enclos is empty: False, percentage: 59.88%
+[01:33:41] DEBUG::Get dragodinde 'dd_1527903221' stats
+[01:33:42] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 78.26% (Full), Serenity: 2.83% (Negative)
+[01:33:42] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:33:42] DEBUG::Moving dragodinde to inventory
+[01:33:42] DEBUG::Focus game
+[01:33:43] DEBUG::Press key: '
+[01:33:45] DEBUG::Game screen has changed: True, diff: 1.63%, tolerance: 0.0, timeout: 10
+[01:33:45] DEBUG::Enclos is empty: False, percentage: 59.88%
+[01:33:45] DEBUG::Get dragodinde 'dd_1527903225' stats
+[01:33:45] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 27.54% (In Progress), Serenity: 33.02% (Negative)
+[01:33:45] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:33:46] DEBUG::Nothing to do
+[01:33:46] DEBUG::Managed dragodindes: 10, Moved dragodindes: 5, Free places: 5
+[01:33:46] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:33:46] DEBUG::Select dragodinde from inventory
+[01:33:47] DEBUG::Click on x: 1028, y: 312, double: False
+[01:33:47] DEBUG::Waiting for dragodinde card to show
+[01:33:48] DEBUG::Game screen has changed: True, diff: 0.6%, tolerance: 0.1, timeout: 10
+[01:33:48] DEBUG::Inventory is empty: False, percentage: 4.17%
+[01:33:49] DEBUG::Get dragodinde 'dd_1527903229' stats
+[01:33:49] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 78.26% (Full), Serenity: 2.83% (Negative)
+[01:33:49] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:33:49] DEBUG::Nothing to do
+[01:33:49] DEBUG::Check next dragodinde
+[01:33:50] DEBUG::Focus game
+[01:33:51] DEBUG::Press key: down
+[01:33:52] DEBUG::Game screen has changed: True, diff: 0.54%, tolerance: 0.0, timeout: 10
+[01:33:52] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:33:53] DEBUG::Get dragodinde 'dd_1527903233' stats
+[01:33:53] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 81.16% (Full), Serenity: 0.94% (Negative)
+[01:33:53] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:33:53] DEBUG::Nothing to do
+[01:33:53] DEBUG::Check next dragodinde
+[01:33:54] DEBUG::Focus game
+[01:33:55] DEBUG::Press key: down
+[01:33:56] DEBUG::Game screen has changed: True, diff: 0.65%, tolerance: 0.0, timeout: 10
+[01:33:56] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:33:57] DEBUG::Get dragodinde 'dd_1527903237' stats
+[01:33:57] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 79.71% (Full), Serenity: 0.94% (Negative)
+[01:33:57] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:33:57] DEBUG::Nothing to do
+[01:33:57] DEBUG::Check next dragodinde
+[01:33:58] DEBUG::Focus game
+[01:33:59] DEBUG::Press key: down
+[01:34:00] DEBUG::Game screen has changed: True, diff: 0.86%, tolerance: 0.0, timeout: 10
+[01:34:00] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:00] DEBUG::Get dragodinde 'dd_1527903240' stats
+[01:34:01] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 79.71% (Full), Serenity: 2.83% (Negative)
+[01:34:01] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:01] DEBUG::Nothing to do
+[01:34:01] DEBUG::Check next dragodinde
+[01:34:01] DEBUG::Focus game
+[01:34:03] DEBUG::Press key: down
+[01:34:04] DEBUG::Game screen has changed: True, diff: 0.46%, tolerance: 0.0, timeout: 10
+[01:34:04] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:04] DEBUG::Get dragodinde 'dd_1527903244' stats
+[01:34:05] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 86.96% (Full), Serenity: 1.89% (Negative)
+[01:34:05] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:05] DEBUG::Nothing to do
+[01:34:05] DEBUG::Check next dragodinde
+[01:34:05] DEBUG::Focus game
+[01:34:06] DEBUG::Press key: down
+[01:34:08] DEBUG::Game screen has changed: True, diff: 1.84%, tolerance: 0.0, timeout: 10
+[01:34:08] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:08] DEBUG::Get dragodinde 'dd_1527903248' stats
+[01:34:08] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 94.2% (Full), Serenity: 55.66% (Medium)
+[01:34:09] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: False
+[01:34:09] DEBUG::Nothing to do
+[01:34:09] DEBUG::Check next dragodinde
+[01:34:09] DEBUG::Focus game
+[01:34:10] DEBUG::Press key: down
+[01:34:12] DEBUG::Game screen has changed: True, diff: 0.75%, tolerance: 0.0, timeout: 10
+[01:34:12] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:12] DEBUG::Get dragodinde 'dd_1527903252' stats
+[01:34:12] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 0.0% (Empty), Serenity: 52.83% (Medium)
+[01:34:13] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: True
+[01:34:13] DEBUG::Nothing to do
+[01:34:13] DEBUG::Check next dragodinde
+[01:34:13] DEBUG::Focus game
+[01:34:14] DEBUG::Press key: down
+[01:34:16] DEBUG::Game screen has changed: True, diff: 2.6%, tolerance: 0.0, timeout: 10
+[01:34:16] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:16] DEBUG::Get dragodinde 'dd_1527903256' stats
+[01:34:16] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 21.7% (Negative)
+[01:34:16] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:17] DEBUG::Nothing to do
+[01:34:17] DEBUG::Check next dragodinde
+[01:34:17] DEBUG::Focus game
+[01:34:18] DEBUG::Press key: down
+[01:34:20] DEBUG::Game screen has changed: True, diff: 0.42%, tolerance: 0.0, timeout: 10
+[01:34:20] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:20] DEBUG::Get dragodinde 'dd_1527903260' stats
+[01:34:20] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 6.6% (Negative)
+[01:34:20] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:21] DEBUG::Nothing to do
+[01:34:21] DEBUG::Check next dragodinde
+[01:34:21] DEBUG::Focus game
+[01:34:22] DEBUG::Press key: down
+[01:34:23] DEBUG::Game screen has changed: True, diff: 0.24%, tolerance: 0.0, timeout: 10
+[01:34:24] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:24] DEBUG::Get dragodinde 'dd_1527903264' stats
+[01:34:24] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 10.38% (Negative)
+[01:34:24] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:24] DEBUG::Nothing to do
+[01:34:25] DEBUG::Check next dragodinde
+[01:34:25] DEBUG::Focus game
+[01:34:26] DEBUG::Press key: down
+[01:34:27] DEBUG::Game screen has changed: True, diff: 0.21%, tolerance: 0.0, timeout: 10
+[01:34:28] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:28] DEBUG::Get dragodinde 'dd_1527903268' stats
+[01:34:28] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 15.09% (Negative)
+[01:34:28] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:28] DEBUG::Nothing to do
+[01:34:29] DEBUG::Check next dragodinde
+[01:34:29] DEBUG::Focus game
+[01:34:30] DEBUG::Press key: down
+[01:34:31] DEBUG::Game screen has changed: True, diff: 0.85%, tolerance: 0.0, timeout: 10
+[01:34:31] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:32] DEBUG::Get dragodinde 'dd_1527903272' stats
+[01:34:32] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 0.0% (Negative)
+[01:34:32] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:32] DEBUG::Nothing to do
+[01:34:32] DEBUG::Check next dragodinde
+[01:34:33] DEBUG::Focus game
+[01:34:34] DEBUG::Press key: down
+[01:34:35] DEBUG::Game screen has changed: True, diff: 2.03%, tolerance: 0.0, timeout: 10
+[01:34:35] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:36] DEBUG::Get dragodinde 'dd_1527903275' stats
+[01:34:36] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 0.0% (Empty), Serenity: 14.15% (Negative)
+[01:34:36] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:34:36] DEBUG::Moving dragodinde to 'Endurance' enclos
+[01:34:36] DEBUG::Focus game
+[01:34:37] DEBUG::Press key: 2
+[01:34:39] DEBUG::Game screen has changed: True, diff: 2.52%, tolerance: 0.0, timeout: 10
+[01:34:39] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:39] DEBUG::Get dragodinde 'dd_1527903279' stats
+[01:34:39] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 79.25% (Positive)
+[01:34:40] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:40] DEBUG::Nothing to do
+[01:34:40] DEBUG::Check next dragodinde
+[01:34:40] DEBUG::Focus game
+[01:34:41] DEBUG::Press key: down
+[01:34:43] DEBUG::Game screen has changed: True, diff: 1.14%, tolerance: 0.0, timeout: 10
+[01:34:43] DEBUG::Inventory is empty: False, percentage: 60.12%
+[01:34:43] DEBUG::Get dragodinde 'dd_1527903283' stats
+[01:34:43] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 97.17% (Positive)
+[01:34:43] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:44] DEBUG::Nothing to do
+[01:34:44] DEBUG::Check next dragodinde
+[01:34:44] DEBUG::Focus game
+[01:34:45] DEBUG::Press key: down
+[01:34:47] DEBUG::Game screen has changed: True, diff: 0.43%, tolerance: 0.0, timeout: 10
+[01:34:47] DEBUG::Inventory is empty: False, percentage: 4.17%
+[01:34:47] DEBUG::Get dragodinde 'dd_1527903287' stats
+[01:34:47] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 96.23% (Positive)
+[01:34:47] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:48] DEBUG::Nothing to do
+[01:34:48] DEBUG::Check next dragodinde
+[01:34:48] DEBUG::Focus game
+[01:34:49] DEBUG::Press key: down
+[01:34:50] DEBUG::Game screen has changed: True, diff: 0.11%, tolerance: 0.0, timeout: 10
+[01:34:51] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:34:51] DEBUG::Get dragodinde 'dd_1527903291' stats
+[01:34:51] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 96.23% (Positive)
+[01:34:51] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:51] DEBUG::Nothing to do
+[01:34:52] DEBUG::Check next dragodinde
+[01:34:52] DEBUG::Focus game
+[01:34:53] DEBUG::Press key: down
+[01:34:54] DEBUG::Game screen has changed: True, diff: 1.33%, tolerance: 0.0, timeout: 10
+[01:34:55] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:34:55] DEBUG::Get dragodinde 'dd_1527903295' stats
+[01:34:55] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 80.19% (Positive)
+[01:34:55] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:55] DEBUG::Nothing to do
+[01:34:56] DEBUG::Check next dragodinde
+[01:34:56] DEBUG::Focus game
+[01:34:57] DEBUG::Press key: down
+[01:34:58] DEBUG::Game screen has changed: True, diff: 0.33%, tolerance: 0.0, timeout: 10
+[01:34:58] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:34:59] DEBUG::Get dragodinde 'dd_1527903299' stats
+[01:34:59] DEBUG::Energy: 0.0% (Empty), Amour: 85.51% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 66.98% (Positive)
+[01:34:59] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:34:59] DEBUG::Nothing to do
+[01:34:59] DEBUG::Check next dragodinde
+[01:35:00] DEBUG::Focus game
+[01:35:01] DEBUG::Press key: down
+[01:35:02] DEBUG::Game screen has changed: True, diff: 0.94%, tolerance: 0.0, timeout: 10
+[01:35:02] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:03] DEBUG::Get dragodinde 'dd_1527903303' stats
+[01:35:03] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 68.87% (Positive)
+[01:35:03] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:35:03] DEBUG::Nothing to do
+[01:35:03] DEBUG::Check next dragodinde
+[01:35:04] DEBUG::Focus game
+[01:35:05] DEBUG::Press key: down
+[01:35:06] DEBUG::Game screen has changed: True, diff: 0.78%, tolerance: 0.0, timeout: 10
+[01:35:06] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:06] DEBUG::Get dragodinde 'dd_1527903306' stats
+[01:35:07] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 68.87% (Positive)
+[01:35:07] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:35:07] DEBUG::Nothing to do
+[01:35:07] DEBUG::Check next dragodinde
+[01:35:07] DEBUG::Focus game
+[01:35:08] DEBUG::Press key: down
+[01:35:10] DEBUG::Game screen has changed: True, diff: 1.45%, tolerance: 0.0, timeout: 10
+[01:35:10] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:10] DEBUG::Get dragodinde 'dd_1527903310' stats
+[01:35:10] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 96.23% (Positive)
+[01:35:11] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:35:11] DEBUG::Nothing to do
+[01:35:11] DEBUG::Check next dragodinde
+[01:35:11] DEBUG::Focus game
+[01:35:12] DEBUG::Press key: down
+[01:35:14] DEBUG::Game screen has changed: True, diff: 1.39%, tolerance: 0.0, timeout: 10
+[01:35:14] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:14] DEBUG::Get dragodinde 'dd_1527903314' stats
+[01:35:14] DEBUG::Energy: 0.0% (Empty), Amour: 86.96% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 97.17% (Positive)
+[01:35:15] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:35:15] DEBUG::Nothing to do
+[01:35:15] DEBUG::Check next dragodinde
+[01:35:15] DEBUG::Focus game
+[01:35:16] DEBUG::Press key: down
+[01:35:18] DEBUG::Game screen has changed: True, diff: 2.07%, tolerance: 0.0, timeout: 10
+[01:35:18] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:18] DEBUG::Get dragodinde 'dd_1527903318' stats
+[01:35:18] DEBUG::Energy: 98.55% (Full), Amour: 84.06% (Full), Maturity: 97.1% (Full), Endurance: 76.81% (Full), Serenity: 63.21% (Positive)
+[01:35:18] DEBUG::Need Energy: False, Amour: False, Maturity: False, Endurance: False
+[01:35:19] DEBUG::Nothing to do
+[01:35:19] DEBUG::Check next dragodinde
+[01:35:19] DEBUG::Focus game
+[01:35:20] DEBUG::Press key: down
+[01:35:22] DEBUG::Game screen has changed: True, diff: 0.11%, tolerance: 0.0, timeout: 10
+[01:35:22] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:22] DEBUG::Get dragodinde 'dd_1527903322' stats
+[01:35:22] DEBUG::Energy: 98.55% (Full), Amour: 73.91% (Full), Maturity: 97.1% (Full), Endurance: 72.46% (Full), Serenity: 62.26% (Positive)
+[01:35:22] DEBUG::Need Energy: False, Amour: False, Maturity: False, Endurance: False
+[01:35:23] DEBUG::Nothing to do
+[01:35:23] DEBUG::Check next dragodinde
+[01:35:23] DEBUG::Focus game
+[01:35:24] DEBUG::Press key: down
+[01:35:25] DEBUG::Game screen has changed: True, diff: 1.6%, tolerance: 0.0, timeout: 10
+[01:35:26] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:26] DEBUG::Get dragodinde 'dd_1527903326' stats
+[01:35:26] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 94.2% (Full), Serenity: 35.85% (Negative)
+[01:35:26] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: False
+[01:35:26] DEBUG::Nothing to do
+[01:35:27] DEBUG::Check next dragodinde
+[01:35:27] DEBUG::Focus game
+[01:35:28] DEBUG::Press key: down
+[01:35:29] DEBUG::Game screen has changed: True, diff: 1.99%, tolerance: 0.0, timeout: 10
+[01:35:30] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:30] DEBUG::Get dragodinde 'dd_1527903330' stats
+[01:35:30] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 66.98% (Positive)
+[01:35:30] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:35:30] DEBUG::Nothing to do
+[01:35:31] DEBUG::Check next dragodinde
+[01:35:31] DEBUG::Focus game
+[01:35:32] DEBUG::Press key: down
+[01:35:33] DEBUG::Game screen has changed: True, diff: 0.42%, tolerance: 0.0, timeout: 10
+[01:35:33] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:34] DEBUG::Get dragodinde 'dd_1527903334' stats
+[01:35:34] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 58.49% (Positive)
+[01:35:34] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:35:34] DEBUG::Nothing to do
+[01:35:34] DEBUG::Check next dragodinde
+[01:35:35] DEBUG::Focus game
+[01:35:36] DEBUG::Press key: down
+[01:35:37] DEBUG::Game screen has changed: True, diff: 1.02%, tolerance: 0.0, timeout: 10
+[01:35:37] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:35:37] DEBUG::Get dragodinde 'dd_1527903337' stats
+[01:35:38] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 97.17% (Positive)
+[01:35:38] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:35:38] DEBUG::Nothing to do
+[01:35:38] DEBUG::Check next dragodinde
+[01:35:38] DEBUG::Focus game
+[01:35:40] DEBUG::Press key: down
+[01:35:41] DEBUG::Game screen has changed: True, diff: 0.85%, tolerance: 0.0, timeout: 10
+[01:35:41] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:35:41] DEBUG::Get dragodinde 'dd_1527903341' stats
+[01:35:42] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 84.91% (Positive)
+[01:35:42] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:35:42] DEBUG::Nothing to do
+[01:35:42] DEBUG::Check next dragodinde
+[01:35:42] DEBUG::Focus game
+[01:35:43] DEBUG::Press key: down
+[01:35:45] DEBUG::Game screen has changed: True, diff: 0.24%, tolerance: 0.0, timeout: 10
+[01:35:45] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:35:45] DEBUG::Get dragodinde 'dd_1527903345' stats
+[01:35:45] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 97.17% (Positive)
+[01:35:46] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:35:46] DEBUG::Nothing to do
+[01:35:46] DEBUG::Check next dragodinde
+[01:35:46] DEBUG::Focus game
+[01:35:47] DEBUG::Press key: down
+[01:35:49] DEBUG::Game screen has changed: True, diff: 1.92%, tolerance: 0.0, timeout: 10
+[01:35:49] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:35:49] DEBUG::Get dragodinde 'dd_1527903349' stats
+[01:35:49] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 0.0% (Negative)
+[01:35:49] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:35:50] DEBUG::Nothing to do
+[01:35:50] DEBUG::Check next dragodinde
+[01:35:50] DEBUG::Focus game
+[01:35:51] DEBUG::Press key: down
+[01:35:53] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:35:54] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:35:55] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:35:56] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:35:58] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:35:59] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:36:00] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:36:02] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:36:03] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:36:04] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 0.0, timeout: 10
+[01:36:04] DEBUG::No more dragodinde
+[01:36:05] DEBUG::Managed dragodindes: 32, Moved dragodindes: 1
+[01:36:05] DEBUG::Closing enclos
+[01:36:05] DEBUG::Focus game
+[01:36:06] DEBUG::Press key: esc
+[01:36:07] DEBUG::Waiting for enclos to close
+[01:36:08] DEBUG::Game screen has changed: True, diff: 10.86%, tolerance: 2.5, timeout: 10
+[01:36:08] DEBUG::Instruction: Move(RIGHT)
+[01:36:08] DEBUG::Parse result: {'name': 'Move', 'value': 'RIGHT'}
+[01:36:08] DEBUG::Click on x: 1139, y: 372, double: False
+[01:36:09] DEBUG::Waiting for map to change
+[01:36:10] DEBUG::Game screen has changed: False, diff: 0.07%, tolerance: 2.5, timeout: 30
+[01:36:11] DEBUG::Game screen has changed: True, diff: 9.35%, tolerance: 2.5, timeout: 30
+[01:36:12] DEBUG::Waiting for map to load
+[01:36:15] DEBUG::Instruction: Enclos([-30,38])
+[01:36:15] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,38]'}
+[01:36:16] DEBUG::Check enclos [-30,38] (PositiveSerenity)
+[01:36:16] DEBUG::Click on x: 777, y: 272, double: False
+[01:36:16] DEBUG::Waiting for enclos to show
+[01:36:17] DEBUG::Game screen has changed: False, diff: 0.16%, tolerance: 2.5, timeout: 10
+[01:36:19] DEBUG::Game screen has changed: False, diff: 0.1%, tolerance: 2.5, timeout: 10
+[01:36:20] DEBUG::Game screen has changed: True, diff: 6.36%, tolerance: 2.5, timeout: 10
+[01:36:20] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:36:20] DEBUG::Select dragodinde from enclos
+[01:36:21] DEBUG::Click on x: 683, y: 444, double: False
+[01:36:21] DEBUG::Waiting for dragodinde card to show
+[01:36:22] DEBUG::Game screen has changed: True, diff: 4.65%, tolerance: 2.5, timeout: 10
+[01:36:23] DEBUG::Enclos is empty: False, percentage: 0.0%
+[01:36:23] DEBUG::Get dragodinde 'dd_1527903383' stats
+[01:36:23] DEBUG::Energy: 0.0% (Empty), Amour: 0.0% (Empty), Maturity: 97.1% (Full), Endurance: 0.0% (Empty), Serenity: 39.62% (Medium)
+[01:36:23] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:36:23] DEBUG::Nothing to do
+[01:36:24] DEBUG::Check next dragodinde
+[01:36:24] DEBUG::Focus game
+[01:36:25] DEBUG::Press key: down
+[01:36:26] DEBUG::Game screen has changed: True, diff: 0.45%, tolerance: 0.0, timeout: 10
+[01:36:27] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:36:27] DEBUG::Get dragodinde 'dd_1527903387' stats
+[01:36:27] DEBUG::Energy: 0.0% (Empty), Amour: 0.0% (Empty), Maturity: 97.1% (Full), Endurance: 0.0% (Empty), Serenity: 36.79% (Negative)
+[01:36:27] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:36:27] DEBUG::Nothing to do
+[01:36:28] DEBUG::Check next dragodinde
+[01:36:28] DEBUG::Focus game
+[01:36:29] DEBUG::Press key: down
+[01:36:30] DEBUG::Game screen has changed: True, diff: 0.02%, tolerance: 0.0, timeout: 10
+[01:36:30] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:36:31] DEBUG::Get dragodinde 'dd_1527903391' stats
+[01:36:31] DEBUG::Energy: 0.0% (Empty), Amour: 0.0% (Empty), Maturity: 97.1% (Full), Endurance: 0.0% (Empty), Serenity: 36.79% (Negative)
+[01:36:31] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:36:31] DEBUG::Nothing to do
+[01:36:31] DEBUG::Check next dragodinde
+[01:36:32] DEBUG::Focus game
+[01:36:33] DEBUG::Press key: down
+[01:36:34] DEBUG::Game screen has changed: True, diff: 0.8%, tolerance: 0.0, timeout: 10
+[01:36:34] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:36:35] DEBUG::Get dragodinde 'dd_1527903395' stats
+[01:36:35] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 91.3% (Full), Serenity: 27.36% (Negative)
+[01:36:35] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: False
+[01:36:35] DEBUG::Nothing to do
+[01:36:35] DEBUG::Check next dragodinde
+[01:36:36] DEBUG::Focus game
+[01:36:37] DEBUG::Press key: down
+[01:36:38] DEBUG::Game screen has changed: True, diff: 0.12%, tolerance: 0.0, timeout: 10
+[01:36:38] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:36:38] DEBUG::Get dragodinde 'dd_1527903398' stats
+[01:36:39] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 91.3% (Full), Serenity: 35.85% (Negative)
+[01:36:39] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: False
+[01:36:39] DEBUG::Nothing to do
+[01:36:39] DEBUG::Check next dragodinde
+[01:36:39] DEBUG::Focus game
+[01:36:41] DEBUG::Press key: down
+[01:36:42] DEBUG::Game screen has changed: True, diff: 0.7%, tolerance: 0.0, timeout: 10
+[01:36:42] DEBUG::Enclos is empty: False, percentage: 1.2%
+[01:36:42] DEBUG::Get dragodinde 'dd_1527903402' stats
+[01:36:43] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 91.3% (Full), Serenity: 10.38% (Negative)
+[01:36:43] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: False
+[01:36:43] DEBUG::Nothing to do
+[01:36:43] DEBUG::Check next dragodinde
+[01:36:43] DEBUG::Focus game
+[01:36:44] DEBUG::Press key: down
+[01:36:46] DEBUG::Game screen has changed: True, diff: 0.68%, tolerance: 0.0, timeout: 10
+[01:36:46] DEBUG::Enclos is empty: False, percentage: 59.28%
+[01:36:46] DEBUG::Get dragodinde 'dd_1527903406' stats
+[01:36:46] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 91.3% (Full), Serenity: 32.08% (Negative)
+[01:36:47] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: False
+[01:36:47] DEBUG::Nothing to do
+[01:36:47] DEBUG::Check next dragodinde
+[01:36:47] DEBUG::Focus game
+[01:36:48] DEBUG::Press key: down
+[01:36:50] DEBUG::Game screen has changed: True, diff: 0.76%, tolerance: 0.0, timeout: 10
+[01:36:50] DEBUG::Enclos is empty: False, percentage: 59.28%
+[01:36:50] DEBUG::Get dragodinde 'dd_1527903410' stats
+[01:36:50] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 91.3% (Full), Serenity: 10.38% (Negative)
+[01:36:51] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: False
+[01:36:51] DEBUG::Nothing to do
+[01:36:51] DEBUG::Check next dragodinde
+[01:36:51] DEBUG::Focus game
+[01:36:52] DEBUG::Press key: down
+[01:36:54] DEBUG::Game screen has changed: True, diff: 1.6%, tolerance: 0.0, timeout: 10
+[01:36:54] DEBUG::Enclos is empty: False, percentage: 59.28%
+[01:36:54] DEBUG::Get dragodinde 'dd_1527903414' stats
+[01:36:54] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 38.68% (Medium)
+[01:36:54] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: False
+[01:36:55] DEBUG::Nothing to do
+[01:36:55] DEBUG::Check next dragodinde
+[01:36:55] DEBUG::Focus game
+[01:36:56] DEBUG::Press key: down
+[01:36:58] DEBUG::Game screen has changed: True, diff: 1.36%, tolerance: 0.0, timeout: 10
+[01:36:58] DEBUG::Enclos is empty: False, percentage: 59.28%
+[01:36:58] DEBUG::Get dragodinde 'dd_1527903418' stats
+[01:36:58] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 91.3% (Full), Serenity: 9.43% (Negative)
+[01:36:58] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: False
+[01:36:59] DEBUG::Nothing to do
+[01:36:59] DEBUG::Managed dragodindes: 10, Moved dragodindes: 0, Free places: 0
+[01:36:59] DEBUG::Closing enclos
+[01:36:59] DEBUG::Focus game
+[01:37:00] DEBUG::Press key: esc
+[01:37:01] DEBUG::Waiting for enclos to close
+[01:37:02] DEBUG::Game screen has changed: True, diff: 11.11%, tolerance: 2.5, timeout: 10
+[01:37:02] DEBUG::Instruction: Move(UP)
+[01:37:02] DEBUG::Parse result: {'name': 'Move', 'value': 'UP'}
+[01:37:02] DEBUG::Click on x: 844, y: 151, double: False
+[01:37:03] DEBUG::Waiting for map to change
+[01:37:04] DEBUG::Game screen has changed: False, diff: 0.1%, tolerance: 2.5, timeout: 30
+[01:37:05] DEBUG::Game screen has changed: True, diff: 9.7%, tolerance: 2.5, timeout: 30
+[01:37:06] DEBUG::Waiting for map to load
+[01:37:09] DEBUG::Instruction: Enclos([-30,37])
+[01:37:09] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-30,37]'}
+[01:37:10] DEBUG::Check enclos [-30,37] (Amour)
+[01:37:10] DEBUG::Click on x: 735, y: 249, double: False
+[01:37:10] DEBUG::Waiting for enclos to show
+[01:37:11] DEBUG::Game screen has changed: False, diff: 0.19%, tolerance: 2.5, timeout: 10
+[01:37:13] DEBUG::Game screen has changed: False, diff: 0.14%, tolerance: 2.5, timeout: 10
+[01:37:14] DEBUG::Game screen has changed: False, diff: 0.07%, tolerance: 2.5, timeout: 10
+[01:37:15] DEBUG::Game screen has changed: False, diff: 0.03%, tolerance: 2.5, timeout: 10
+[01:37:17] DEBUG::Game screen has changed: True, diff: 6.87%, tolerance: 2.5, timeout: 10
+[01:37:17] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:37:17] DEBUG::Select dragodinde from enclos
+[01:37:17] DEBUG::Click on x: 683, y: 444, double: False
+[01:37:18] DEBUG::Waiting for dragodinde card to show
+[01:37:19] DEBUG::Game screen has changed: True, diff: 4.36%, tolerance: 2.5, timeout: 10
+[01:37:19] DEBUG::Enclos is empty: False, percentage: 0.0%
+[01:37:19] DEBUG::Get dragodinde 'dd_1527903439' stats
+[01:37:20] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 0.0% (Empty), Serenity: 65.09% (Positive)
+[01:37:20] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:37:20] DEBUG::Nothing to do
+[01:37:20] DEBUG::Check next dragodinde
+[01:37:20] DEBUG::Focus game
+[01:37:22] DEBUG::Press key: down
+[01:37:23] DEBUG::Game screen has changed: True, diff: 0.66%, tolerance: 0.0, timeout: 10
+[01:37:23] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:37:23] DEBUG::Get dragodinde 'dd_1527903443' stats
+[01:37:24] DEBUG::Energy: 0.0% (Empty), Amour: 82.61% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 94.34% (Positive)
+[01:37:24] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:37:24] DEBUG::Moving dragodinde to inventory
+[01:37:24] DEBUG::Focus game
+[01:37:25] DEBUG::Press key: '
+[01:37:27] DEBUG::Game screen has changed: True, diff: 0.59%, tolerance: 0.0, timeout: 10
+[01:37:27] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:37:27] DEBUG::Get dragodinde 'dd_1527903447' stats
+[01:37:27] DEBUG::Energy: 0.0% (Empty), Amour: 81.16% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 90.57% (Positive)
+[01:37:27] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:37:28] DEBUG::Moving dragodinde to inventory
+[01:37:28] DEBUG::Focus game
+[01:37:29] DEBUG::Press key: '
+[01:37:30] DEBUG::Game screen has changed: True, diff: 0.1%, tolerance: 0.0, timeout: 10
+[01:37:30] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:37:31] DEBUG::Get dragodinde 'dd_1527903451' stats
+[01:37:31] DEBUG::Energy: 0.0% (Empty), Amour: 82.61% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 95.28% (Positive)
+[01:37:31] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:37:31] DEBUG::Moving dragodinde to inventory
+[01:37:31] DEBUG::Focus game
+[01:37:33] DEBUG::Press key: '
+[01:37:34] DEBUG::Game screen has changed: True, diff: 1.27%, tolerance: 0.0, timeout: 10
+[01:37:34] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:37:34] DEBUG::Get dragodinde 'dd_1527903454' stats
+[01:37:35] DEBUG::Energy: 0.0% (Empty), Amour: 53.62% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 57.55% (Positive)
+[01:37:35] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:37:35] DEBUG::Nothing to do
+[01:37:35] DEBUG::Check next dragodinde
+[01:37:35] DEBUG::Focus game
+[01:37:36] DEBUG::Press key: down
+[01:37:38] DEBUG::Game screen has changed: True, diff: 0.3%, tolerance: 0.0, timeout: 10
+[01:37:38] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:37:38] DEBUG::Get dragodinde 'dd_1527903458' stats
+[01:37:38] DEBUG::Energy: 0.0% (Empty), Amour: 53.62% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 76.42% (Positive)
+[01:37:39] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:37:39] DEBUG::Nothing to do
+[01:37:39] DEBUG::Check next dragodinde
+[01:37:39] DEBUG::Focus game
+[01:37:40] DEBUG::Press key: down
+[01:37:42] DEBUG::Game screen has changed: True, diff: 0.32%, tolerance: 0.0, timeout: 10
+[01:37:42] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:37:42] DEBUG::Get dragodinde 'dd_1527903462' stats
+[01:37:42] DEBUG::Energy: 0.0% (Empty), Amour: 53.62% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 58.49% (Positive)
+[01:37:43] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:37:43] DEBUG::Nothing to do
+[01:37:43] DEBUG::Check next dragodinde
+[01:37:43] DEBUG::Focus game
+[01:37:44] DEBUG::Press key: down
+[01:37:46] DEBUG::Game screen has changed: True, diff: 0.37%, tolerance: 0.0, timeout: 10
+[01:37:46] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:37:46] DEBUG::Get dragodinde 'dd_1527903466' stats
+[01:37:46] DEBUG::Energy: 0.0% (Empty), Amour: 53.62% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 84.91% (Positive)
+[01:37:47] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:37:47] DEBUG::Nothing to do
+[01:37:47] DEBUG::Check next dragodinde
+[01:37:47] DEBUG::Focus game
+[01:37:48] DEBUG::Press key: down
+[01:37:50] DEBUG::Game screen has changed: True, diff: 0.55%, tolerance: 0.0, timeout: 10
+[01:37:50] DEBUG::Enclos is empty: False, percentage: 71.86%
+[01:37:50] DEBUG::Get dragodinde 'dd_1527903470' stats
+[01:37:50] DEBUG::Energy: 0.0% (Empty), Amour: 53.62% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 60.38% (Positive)
+[01:37:50] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:37:51] DEBUG::Nothing to do
+[01:37:51] DEBUG::Check next dragodinde
+[01:37:51] DEBUG::Focus game
+[01:37:52] DEBUG::Press key: down
+[01:37:54] DEBUG::Game screen has changed: True, diff: 0.94%, tolerance: 0.0, timeout: 10
+[01:37:54] DEBUG::Enclos is empty: False, percentage: 71.86%
+[01:37:54] DEBUG::Get dragodinde 'dd_1527903474' stats
+[01:37:54] DEBUG::Energy: 0.0% (Empty), Amour: 47.83% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 65.09% (Positive)
+[01:37:54] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:37:55] DEBUG::Nothing to do
+[01:37:55] DEBUG::Managed dragodindes: 10, Moved dragodindes: 3, Free places: 3
+[01:37:55] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:37:55] DEBUG::Select dragodinde from inventory
+[01:37:55] DEBUG::Click on x: 1028, y: 312, double: False
+[01:37:56] DEBUG::Waiting for dragodinde card to show
+[01:37:57] DEBUG::Game screen has changed: True, diff: 0.54%, tolerance: 0.1, timeout: 10
+[01:37:57] DEBUG::Inventory is empty: False, percentage: 4.17%
+[01:37:58] DEBUG::Get dragodinde 'dd_1527903478' stats
+[01:37:58] DEBUG::Energy: 0.0% (Empty), Amour: 82.61% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 95.28% (Positive)
+[01:37:58] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:37:58] DEBUG::Nothing to do
+[01:37:58] DEBUG::Check next dragodinde
+[01:37:59] DEBUG::Focus game
+[01:38:00] DEBUG::Press key: down
+[01:38:01] DEBUG::Game screen has changed: True, diff: 0.1%, tolerance: 0.0, timeout: 10
+[01:38:01] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:01] DEBUG::Get dragodinde 'dd_1527903481' stats
+[01:38:02] DEBUG::Energy: 0.0% (Empty), Amour: 81.16% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 90.57% (Positive)
+[01:38:02] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:38:02] DEBUG::Nothing to do
+[01:38:02] DEBUG::Check next dragodinde
+[01:38:02] DEBUG::Focus game
+[01:38:04] DEBUG::Press key: down
+[01:38:05] DEBUG::Game screen has changed: True, diff: 0.59%, tolerance: 0.0, timeout: 10
+[01:38:05] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:05] DEBUG::Get dragodinde 'dd_1527903485' stats
+[01:38:06] DEBUG::Energy: 0.0% (Empty), Amour: 82.61% (Full), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 94.34% (Positive)
+[01:38:06] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: True
+[01:38:06] DEBUG::Nothing to do
+[01:38:06] DEBUG::Check next dragodinde
+[01:38:06] DEBUG::Focus game
+[01:38:07] DEBUG::Press key: down
+[01:38:09] DEBUG::Game screen has changed: True, diff: 2.15%, tolerance: 0.0, timeout: 10
+[01:38:09] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:09] DEBUG::Get dragodinde 'dd_1527903489' stats
+[01:38:09] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 78.26% (Full), Serenity: 2.83% (Negative)
+[01:38:10] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:10] DEBUG::Nothing to do
+[01:38:10] DEBUG::Check next dragodinde
+[01:38:10] DEBUG::Focus game
+[01:38:11] DEBUG::Press key: down
+[01:38:13] DEBUG::Game screen has changed: True, diff: 0.54%, tolerance: 0.0, timeout: 10
+[01:38:13] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:13] DEBUG::Get dragodinde 'dd_1527903493' stats
+[01:38:13] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 81.16% (Full), Serenity: 0.94% (Negative)
+[01:38:13] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:14] DEBUG::Nothing to do
+[01:38:14] DEBUG::Check next dragodinde
+[01:38:14] DEBUG::Focus game
+[01:38:15] DEBUG::Press key: down
+[01:38:17] DEBUG::Game screen has changed: True, diff: 0.65%, tolerance: 0.0, timeout: 10
+[01:38:17] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:17] DEBUG::Get dragodinde 'dd_1527903497' stats
+[01:38:17] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 79.71% (Full), Serenity: 0.94% (Negative)
+[01:38:17] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:18] DEBUG::Nothing to do
+[01:38:18] DEBUG::Check next dragodinde
+[01:38:18] DEBUG::Focus game
+[01:38:19] DEBUG::Press key: down
+[01:38:20] DEBUG::Game screen has changed: True, diff: 0.86%, tolerance: 0.0, timeout: 10
+[01:38:21] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:21] DEBUG::Get dragodinde 'dd_1527903501' stats
+[01:38:21] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 79.71% (Full), Serenity: 2.83% (Negative)
+[01:38:21] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:21] DEBUG::Nothing to do
+[01:38:22] DEBUG::Check next dragodinde
+[01:38:22] DEBUG::Focus game
+[01:38:23] DEBUG::Press key: down
+[01:38:24] DEBUG::Game screen has changed: True, diff: 0.46%, tolerance: 0.0, timeout: 10
+[01:38:25] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:25] DEBUG::Get dragodinde 'dd_1527903505' stats
+[01:38:25] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 86.96% (Full), Serenity: 1.89% (Negative)
+[01:38:25] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:25] DEBUG::Nothing to do
+[01:38:26] DEBUG::Check next dragodinde
+[01:38:26] DEBUG::Focus game
+[01:38:27] DEBUG::Press key: down
+[01:38:28] DEBUG::Game screen has changed: True, diff: 1.85%, tolerance: 0.0, timeout: 10
+[01:38:28] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:29] DEBUG::Get dragodinde 'dd_1527903509' stats
+[01:38:29] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 94.2% (Full), Serenity: 55.66% (Medium)
+[01:38:29] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: False
+[01:38:29] DEBUG::Nothing to do
+[01:38:29] DEBUG::Check next dragodinde
+[01:38:30] DEBUG::Focus game
+[01:38:31] DEBUG::Press key: down
+[01:38:32] DEBUG::Game screen has changed: True, diff: 0.75%, tolerance: 0.0, timeout: 10
+[01:38:32] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:33] DEBUG::Get dragodinde 'dd_1527903513' stats
+[01:38:33] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 0.0% (Empty), Serenity: 52.83% (Medium)
+[01:38:33] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: True
+[01:38:33] DEBUG::Nothing to do
+[01:38:33] DEBUG::Check next dragodinde
+[01:38:34] DEBUG::Focus game
+[01:38:35] DEBUG::Press key: down
+[01:38:36] DEBUG::Game screen has changed: True, diff: 2.59%, tolerance: 0.0, timeout: 10
+[01:38:36] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:37] DEBUG::Get dragodinde 'dd_1527903517' stats
+[01:38:37] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 21.7% (Negative)
+[01:38:37] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:37] DEBUG::Nothing to do
+[01:38:37] DEBUG::Check next dragodinde
+[01:38:38] DEBUG::Focus game
+[01:38:39] DEBUG::Press key: down
+[01:38:40] DEBUG::Game screen has changed: True, diff: 0.42%, tolerance: 0.0, timeout: 10
+[01:38:40] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:40] DEBUG::Get dragodinde 'dd_1527903520' stats
+[01:38:41] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 6.6% (Negative)
+[01:38:41] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:41] DEBUG::Nothing to do
+[01:38:41] DEBUG::Check next dragodinde
+[01:38:41] DEBUG::Focus game
+[01:38:43] DEBUG::Press key: down
+[01:38:44] DEBUG::Game screen has changed: True, diff: 0.24%, tolerance: 0.0, timeout: 10
+[01:38:44] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:44] DEBUG::Get dragodinde 'dd_1527903524' stats
+[01:38:45] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 10.38% (Negative)
+[01:38:45] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:45] DEBUG::Nothing to do
+[01:38:45] DEBUG::Check next dragodinde
+[01:38:45] DEBUG::Focus game
+[01:38:46] DEBUG::Press key: down
+[01:38:48] DEBUG::Game screen has changed: True, diff: 0.21%, tolerance: 0.0, timeout: 10
+[01:38:48] DEBUG::Inventory is empty: False, percentage: 51.79%
+[01:38:48] DEBUG::Get dragodinde 'dd_1527903528' stats
+[01:38:48] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 89.86% (Full), Serenity: 15.09% (Negative)
+[01:38:49] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:49] DEBUG::Nothing to do
+[01:38:49] DEBUG::Check next dragodinde
+[01:38:49] DEBUG::Focus game
+[01:38:50] DEBUG::Press key: down
+[01:38:52] DEBUG::Game screen has changed: True, diff: 0.85%, tolerance: 0.0, timeout: 10
+[01:38:52] DEBUG::Inventory is empty: False, percentage: 4.17%
+[01:38:52] DEBUG::Get dragodinde 'dd_1527903532' stats
+[01:38:52] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 0.0% (Negative)
+[01:38:53] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:53] DEBUG::Nothing to do
+[01:38:53] DEBUG::Check next dragodinde
+[01:38:53] DEBUG::Focus game
+[01:38:54] DEBUG::Press key: down
+[01:38:56] DEBUG::Game screen has changed: True, diff: 1.44%, tolerance: 0.0, timeout: 10
+[01:38:56] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:38:56] DEBUG::Get dragodinde 'dd_1527903536' stats
+[01:38:56] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 79.25% (Positive)
+[01:38:56] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:38:57] DEBUG::Nothing to do
+[01:38:57] DEBUG::Check next dragodinde
+[01:38:57] DEBUG::Focus game
+[01:38:58] DEBUG::Press key: down
+[01:38:59] DEBUG::Game screen has changed: True, diff: 1.14%, tolerance: 0.0, timeout: 10
+[01:39:00] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:00] DEBUG::Get dragodinde 'dd_1527903540' stats
+[01:39:00] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 97.17% (Positive)
+[01:39:00] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:39:00] DEBUG::Nothing to do
+[01:39:01] DEBUG::Check next dragodinde
+[01:39:01] DEBUG::Focus game
+[01:39:02] DEBUG::Press key: down
+[01:39:03] DEBUG::Game screen has changed: True, diff: 0.43%, tolerance: 0.0, timeout: 10
+[01:39:04] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:04] DEBUG::Get dragodinde 'dd_1527903544' stats
+[01:39:04] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 96.23% (Positive)
+[01:39:04] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:39:04] DEBUG::Nothing to do
+[01:39:05] DEBUG::Check next dragodinde
+[01:39:05] DEBUG::Focus game
+[01:39:06] DEBUG::Press key: down
+[01:39:07] DEBUG::Game screen has changed: True, diff: 0.1%, tolerance: 0.0, timeout: 10
+[01:39:07] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:08] DEBUG::Get dragodinde 'dd_1527903548' stats
+[01:39:08] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 96.23% (Positive)
+[01:39:08] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:39:08] DEBUG::Nothing to do
+[01:39:08] DEBUG::Check next dragodinde
+[01:39:09] DEBUG::Focus game
+[01:39:10] DEBUG::Press key: down
+[01:39:11] DEBUG::Game screen has changed: True, diff: 1.33%, tolerance: 0.0, timeout: 10
+[01:39:11] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:12] DEBUG::Get dragodinde 'dd_1527903552' stats
+[01:39:12] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 80.19% (Positive)
+[01:39:12] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:39:12] DEBUG::Nothing to do
+[01:39:12] DEBUG::Check next dragodinde
+[01:39:13] DEBUG::Focus game
+[01:39:14] DEBUG::Press key: down
+[01:39:15] DEBUG::Game screen has changed: True, diff: 0.32%, tolerance: 0.0, timeout: 10
+[01:39:15] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:16] DEBUG::Get dragodinde 'dd_1527903556' stats
+[01:39:16] DEBUG::Energy: 0.0% (Empty), Amour: 85.51% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 66.98% (Positive)
+[01:39:16] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:39:16] DEBUG::Nothing to do
+[01:39:16] DEBUG::Check next dragodinde
+[01:39:17] DEBUG::Focus game
+[01:39:18] DEBUG::Press key: down
+[01:39:19] DEBUG::Game screen has changed: True, diff: 0.94%, tolerance: 0.0, timeout: 10
+[01:39:19] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:19] DEBUG::Get dragodinde 'dd_1527903559' stats
+[01:39:20] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 68.87% (Positive)
+[01:39:20] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:39:20] DEBUG::Nothing to do
+[01:39:20] DEBUG::Check next dragodinde
+[01:39:20] DEBUG::Focus game
+[01:39:22] DEBUG::Press key: down
+[01:39:23] DEBUG::Game screen has changed: True, diff: 0.78%, tolerance: 0.0, timeout: 10
+[01:39:23] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:23] DEBUG::Get dragodinde 'dd_1527903563' stats
+[01:39:24] DEBUG::Energy: 0.0% (Empty), Amour: 91.3% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 68.87% (Positive)
+[01:39:24] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:39:24] DEBUG::Nothing to do
+[01:39:24] DEBUG::Check next dragodinde
+[01:39:24] DEBUG::Focus game
+[01:39:26] DEBUG::Press key: down
+[01:39:27] DEBUG::Game screen has changed: True, diff: 1.45%, tolerance: 0.0, timeout: 10
+[01:39:27] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:27] DEBUG::Get dragodinde 'dd_1527903567' stats
+[01:39:28] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 96.23% (Positive)
+[01:39:28] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:39:28] DEBUG::Nothing to do
+[01:39:28] DEBUG::Check next dragodinde
+[01:39:28] DEBUG::Focus game
+[01:39:29] DEBUG::Press key: down
+[01:39:31] DEBUG::Game screen has changed: True, diff: 1.39%, tolerance: 0.0, timeout: 10
+[01:39:31] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:31] DEBUG::Get dragodinde 'dd_1527903571' stats
+[01:39:31] DEBUG::Energy: 0.0% (Empty), Amour: 86.96% (Full), Maturity: 97.1% (Full), Endurance: 94.2% (Full), Serenity: 97.17% (Positive)
+[01:39:32] DEBUG::Need Energy: True, Amour: False, Maturity: False, Endurance: False
+[01:39:32] DEBUG::Nothing to do
+[01:39:32] DEBUG::Check next dragodinde
+[01:39:32] DEBUG::Focus game
+[01:39:33] DEBUG::Press key: down
+[01:39:35] DEBUG::Game screen has changed: True, diff: 2.07%, tolerance: 0.0, timeout: 10
+[01:39:35] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:35] DEBUG::Get dragodinde 'dd_1527903575' stats
+[01:39:35] DEBUG::Energy: 98.55% (Full), Amour: 84.06% (Full), Maturity: 97.1% (Full), Endurance: 76.81% (Full), Serenity: 63.21% (Positive)
+[01:39:35] DEBUG::Need Energy: False, Amour: False, Maturity: False, Endurance: False
+[01:39:36] DEBUG::Nothing to do
+[01:39:36] DEBUG::Check next dragodinde
+[01:39:36] DEBUG::Focus game
+[01:39:37] DEBUG::Press key: down
+[01:39:39] DEBUG::Game screen has changed: True, diff: 0.11%, tolerance: 0.0, timeout: 10
+[01:39:39] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:39] DEBUG::Get dragodinde 'dd_1527903579' stats
+[01:39:39] DEBUG::Energy: 98.55% (Full), Amour: 73.91% (Full), Maturity: 97.1% (Full), Endurance: 72.46% (Full), Serenity: 62.26% (Positive)
+[01:39:39] DEBUG::Need Energy: False, Amour: False, Maturity: False, Endurance: False
+[01:39:40] DEBUG::Nothing to do
+[01:39:40] DEBUG::Check next dragodinde
+[01:39:40] DEBUG::Focus game
+[01:39:41] DEBUG::Press key: down
+[01:39:43] DEBUG::Game screen has changed: True, diff: 1.6%, tolerance: 0.0, timeout: 10
+[01:39:43] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:43] DEBUG::Get dragodinde 'dd_1527903583' stats
+[01:39:43] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 0.0% (Empty), Endurance: 94.2% (Full), Serenity: 35.85% (Negative)
+[01:39:43] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: False
+[01:39:44] DEBUG::Nothing to do
+[01:39:44] DEBUG::Check next dragodinde
+[01:39:44] DEBUG::Focus game
+[01:39:45] DEBUG::Press key: down
+[01:39:46] DEBUG::Game screen has changed: True, diff: 2.0%, tolerance: 0.0, timeout: 10
+[01:39:47] DEBUG::Inventory is empty: False, percentage: 38.1%
+[01:39:47] DEBUG::Get dragodinde 'dd_1527903587' stats
+[01:39:47] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 66.98% (Positive)
+[01:39:47] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:39:47] DEBUG::Moving dragodinde to 'Amour' enclos
+[01:39:48] DEBUG::Focus game
+[01:39:49] DEBUG::Press key: 2
+[01:39:50] DEBUG::Game screen has changed: True, diff: 0.42%, tolerance: 0.0, timeout: 10
+[01:39:50] DEBUG::Inventory is empty: False, percentage: 30.95%
+[01:39:51] DEBUG::Get dragodinde 'dd_1527903591' stats
+[01:39:51] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 58.49% (Positive)
+[01:39:51] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:39:51] DEBUG::Moving dragodinde to 'Amour' enclos
+[01:39:51] DEBUG::Focus game
+[01:39:52] DEBUG::Press key: 2
+[01:39:54] DEBUG::Game screen has changed: True, diff: 1.02%, tolerance: 0.0, timeout: 10
+[01:39:54] DEBUG::Inventory is empty: False, percentage: 52.38%
+[01:39:54] DEBUG::Get dragodinde 'dd_1527903594' stats
+[01:39:54] DEBUG::Energy: 0.0% (Empty), Amour: 21.74% (In Progress), Maturity: 97.1% (Full), Endurance: 21.74% (In Progress), Serenity: 97.17% (Positive)
+[01:39:55] DEBUG::Need Energy: True, Amour: True, Maturity: False, Endurance: True
+[01:39:55] DEBUG::Moving dragodinde to 'Amour' enclos
+[01:39:55] DEBUG::Focus game
+[01:39:56] DEBUG::Press key: 2
+[01:39:58] DEBUG::Game screen has changed: True, diff: 0.86%, tolerance: 0.0, timeout: 10
+[01:39:58] DEBUG::Managed dragodindes: 31, Moved dragodindes: 3
+[01:39:58] DEBUG::Closing enclos
+[01:39:58] DEBUG::Focus game
+[01:39:59] DEBUG::Press key: esc
+[01:40:00] DEBUG::Waiting for enclos to close
+[01:40:01] DEBUG::Game screen has changed: True, diff: 11.25%, tolerance: 2.5, timeout: 10
+[01:40:01] DEBUG::Instruction: Move(LEFT)
+[01:40:01] DEBUG::Parse result: {'name': 'Move', 'value': 'LEFT'}
+[01:40:01] DEBUG::Click on x: 583, y: 371, double: False
+[01:40:02] DEBUG::Waiting for map to change
+[01:40:03] DEBUG::Game screen has changed: False, diff: 0.09%, tolerance: 2.5, timeout: 30
+[01:40:04] DEBUG::Game screen has changed: True, diff: 9.71%, tolerance: 2.5, timeout: 30
+[01:40:05] DEBUG::Waiting for map to load
+[01:40:08] DEBUG::Instruction: Enclos([-31,37])
+[01:40:08] DEBUG::Parse result: {'name': 'Enclos', 'value': '[-31,37]'}
+[01:40:09] DEBUG::Check enclos [-31,37] (Maturity)
+[01:40:09] DEBUG::Click on x: 718, y: 240, double: False
+[01:40:09] DEBUG::Waiting for enclos to show
+[01:40:11] DEBUG::Game screen has changed: False, diff: 0.08%, tolerance: 2.5, timeout: 10
+[01:40:12] DEBUG::Game screen has changed: False, diff: 0.05%, tolerance: 2.5, timeout: 10
+[01:40:13] DEBUG::Game screen has changed: False, diff: 0.11%, tolerance: 2.5, timeout: 10
+[01:40:14] DEBUG::Game screen has changed: False, diff: 0.1%, tolerance: 2.5, timeout: 10
+[01:40:16] DEBUG::Game screen has changed: False, diff: 0.0%, tolerance: 2.5, timeout: 10
+[01:40:17] DEBUG::Game screen has changed: True, diff: 6.65%, tolerance: 2.5, timeout: 10
+[01:40:17] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:40:17] DEBUG::Select dragodinde from enclos
+[01:40:18] DEBUG::Click on x: 683, y: 444, double: False
+[01:40:18] DEBUG::Waiting for dragodinde card to show
+[01:40:19] DEBUG::Game screen has changed: True, diff: 4.3%, tolerance: 2.5, timeout: 10
+[01:40:20] DEBUG::Enclos is empty: False, percentage: 0.0%
+[01:40:20] DEBUG::Get dragodinde 'dd_1527903620' stats
+[01:40:20] DEBUG::Energy: 0.0% (Empty), Amour: 0.0% (Empty), Maturity: 82.61% (In Progress), Endurance: 0.0% (Empty), Serenity: 44.34% (Medium)
+[01:40:20] DEBUG::Need Energy: True, Amour: True, Maturity: True, Endurance: True
+[01:40:20] DEBUG::Nothing to do
+[01:40:21] DEBUG::Check next dragodinde
+[01:40:21] DEBUG::Focus game
+[01:40:22] DEBUG::Press key: down
+[01:40:23] DEBUG::Game screen has changed: True, diff: 0.13%, tolerance: 0.0, timeout: 10
+[01:40:24] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:40:24] DEBUG::Get dragodinde 'dd_1527903624' stats
+[01:40:24] DEBUG::Energy: 0.0% (Empty), Amour: 0.0% (Empty), Maturity: 82.61% (In Progress), Endurance: 0.0% (Empty), Serenity: 51.89% (Medium)
+[01:40:24] DEBUG::Need Energy: True, Amour: True, Maturity: True, Endurance: True
+[01:40:24] DEBUG::Nothing to do
+[01:40:25] DEBUG::Check next dragodinde
+[01:40:25] DEBUG::Focus game
+[01:40:26] DEBUG::Press key: down
+[01:40:27] DEBUG::Game screen has changed: True, diff: 1.53%, tolerance: 0.0, timeout: 10
+[01:40:27] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:40:28] DEBUG::Get dragodinde 'dd_1527903628' stats
+[01:40:28] DEBUG::Energy: 0.0% (Empty), Amour: 95.65% (Full), Maturity: 24.64% (In Progress), Endurance: 94.2% (Full), Serenity: 57.55% (Medium)
+[01:40:28] DEBUG::Need Energy: True, Amour: False, Maturity: True, Endurance: False
+[01:40:28] DEBUG::Nothing to do
+[01:40:28] DEBUG::Check next dragodinde
+[01:40:29] DEBUG::Focus game
+[01:40:30] DEBUG::Press key: down
+[01:40:31] DEBUG::Game screen has changed: True, diff: 1.02%, tolerance: 0.0, timeout: 10
+[01:40:31] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:40:32] DEBUG::Get dragodinde 'dd_1527903632' stats
+[01:40:32] DEBUG::Energy: 0.0% (Empty), Amour: 0.0% (Empty), Maturity: 82.61% (In Progress), Endurance: 0.0% (Empty), Serenity: 53.77% (Medium)
+[01:40:32] DEBUG::Need Energy: True, Amour: True, Maturity: True, Endurance: True
+[01:40:32] DEBUG::Nothing to do
+[01:40:32] DEBUG::Check next dragodinde
+[01:40:33] DEBUG::Focus game
+[01:40:34] DEBUG::Press key: down
+[01:40:35] DEBUG::Game screen has changed: True, diff: 0.57%, tolerance: 0.0, timeout: 10
+[01:40:35] DEBUG::Enclos is empty: False, percentage: 69.46%
+[01:40:35] DEBUG::Get dragodinde 'dd_1527903635' stats
+[01:40:36] DEBUG::Energy: 0.0% (Empty), Amour: 0.0% (Empty), Maturity: 8.7% (In Progress), Endurance: 0.0% (Empty), Serenity: 57.55% (Medium)
+[01:40:36] DEBUG::Need Energy: True, Amour: True, Maturity: True, Endurance: True
+[01:40:36] DEBUG::Nothing to do
+[01:40:36] DEBUG::Check next dragodinde
+[01:40:36] DEBUG::Focus game
+[01:40:37] DEBUG::Press key: down
+[01:40:39] DEBUG::Game screen has changed: True, diff: 1.71%, tolerance: 0.0, timeout: 10
+[01:40:39] DEBUG::Enclos is empty: False, percentage: 59.88%
