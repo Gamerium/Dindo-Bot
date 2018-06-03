@@ -78,7 +78,7 @@ def internet_on(host='8.8.8.8', port=53, timeout=3):
 
 # Return internet state as a string
 def print_internet_state(state=None):
-	if not state:
+	if state == None:
 		state = internet_on()
 	return 'Internet is ' + ('on' if state else 'off')
 
