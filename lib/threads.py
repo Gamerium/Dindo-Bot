@@ -131,9 +131,9 @@ class BotThread(TimerThread):
 	def monitor_game_screen(self, timeout=10, tolerance=0.0, screen=None, location=None, await_after_timeout=True):
 		if self.game_location or location:
 			# screen game
-			if not location:
+			if location is None:
 				location = self.game_location
-			if not screen:
+			if screen is None:
 				prev_screen = tools.screen_game(location)
 			else:
 				prev_screen = screen
@@ -316,7 +316,7 @@ class BotThread(TimerThread):
 
 	def take_dragodinde_image(self, name, location=None):
 		# get location
-		if not location:
+		if location is None:
 			location = self.get_location('Dragodinde Card')
 		# take dragodinde image
 		if location:
@@ -343,9 +343,9 @@ class BotThread(TimerThread):
 			return None
 
 	def move_dragodinde(self, action, dragodinde_image=None, dragodinde_location=None):
-		if not dragodinde_location:
+		if dragodinde_location is None:
 			dragodinde_location = self.get_location('Dragodinde Card')
-		if not dragodinde_image:
+		if dragodinde_image is None:
 			dragodinde_image = tools.screen_game(dragodinde_location)
 		self.press_key(data.KeyboardShortcuts[action])
 		self.monitor_game_screen(screen=dragodinde_image, location=dragodinde_location)
