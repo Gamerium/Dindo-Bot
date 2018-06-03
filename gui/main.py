@@ -41,12 +41,24 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.set_icon_from_file(tools.get_resource_path('../icons/drago.png'))
 		self.set_size_request(900, 700)
 		self.set_resizable(False)
-		self.connect('key-press-event', self.focus_game)
+		self.connect('key-press-event', self.on_key_press)
+		self.connect('configure-event', self.on_resize_or_move)
+		self.connect('window-state-event', self.on_minimize)
 		self.connect('destroy', Gtk.main_quit)
 		self.show_all()
 		self.unplug_button.hide()
 		if not self.settings['Debug']['Enabled']:
 			self.debug_page.hide()
+
+	def on_key_press(self, widget, event):
+		self.focus_game()
+
+	def on_minimize(self, widget, event):
+		if event.window.get_state() == Gdk.WindowState.ICONIFIED:
+			self.pause_bot()
+
+	def on_resize_or_move(self, widget, event):
+		self.pause_bot()
 
 	def pop(self, text_buffer, max=100):
 		start_iter = text_buffer.get_start_iter()
@@ -412,9 +424,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		elif not self.bot_path:
 			MessageDialog(self, 'Please select a bot path')
 		else:
+			# get game location
+			game_location = tools.get_widget_location(self.game_area)
 			# start bot thread or resume it
 			if not self.bot_thread or not self.bot_thread.isAlive():
-				game_location = tools.get_widget_location(self.game_area)
 				save_dragodindes_images = self.save_dragodindes_images_check.get_active()
 				start_from_step = self.step_spin_button.get_value_as_int()
 				self.bot_thread = BotThread(self, game_location, start_from_step, save_dragodindes_images)
@@ -424,7 +437,7 @@ class BotWindow(Gtk.ApplicationWindow):
 				self.step_spin_button.set_sensitive(False)
 				self.bot_path_filechooserbutton.set_sensitive(False)
 			else:
-				self.bot_thread.resume()
+				self.bot_thread.resume(game_location)
 			# enable/disable buttons
 			self.start_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif')))
 			self.start_button.set_sensitive(False)
@@ -444,9 +457,13 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.start_button.set_sensitive(True)
 		self.pause_button.set_sensitive(False)
 
+	def pause_bot(self):
+		if self.bot_thread and self.bot_thread.isAlive() and self.bot_thread.pause_event.isSet():
+			self.bot_thread.pause()
+			self.set_buttons_to_paused()
+
 	def on_pause_button_clicked(self, button):
-		self.bot_thread.pause()
-		self.set_buttons_to_paused()
+		self.pause_bot()
 
 	def reset_buttons(self):
 		self.start_button.set_tooltip_text('Start')
@@ -528,7 +545,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.game_window_combo.append_text(window_name)
 		self.game_window_combo_ignore_change = False
 
-	def focus_game(self, widget, event):
+	def focus_game(self):
 		if self.game_area:
 			self.debug('Focus game', DebugLevel.High)
 			# set keyboard focus

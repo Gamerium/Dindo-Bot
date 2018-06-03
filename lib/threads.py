@@ -676,7 +676,8 @@ class BotThread(TimerThread):
 		self.pause_event.clear()
 		self.debug('Bot thread paused', DebugLevel.Low)
 
-	def resume(self):
+	def resume(self, game_location):
+		self.game_location = game_location
 		self.resume_timer()
 		self.pause_event.set()
 		self.debug('Bot thread resumed', DebugLevel.Low)
