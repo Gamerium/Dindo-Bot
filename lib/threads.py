@@ -618,11 +618,11 @@ class BotThread(TimerThread):
 		time.sleep(0.1) # reduce thread speed
 
 	def log(self, text, type=LogType.Normal):
-		GObject.idle_add(self.parent._log, text, type)
+		GObject.idle_add(self.parent.log, text, type)
 		self.slow_down()
 
 	def debug(self, text, level=DebugLevel.Normal):
-		GObject.idle_add(self.parent._debug, text, level)
+		GObject.idle_add(self.parent.debug, text, level)
 		self.slow_down()
 
 	def reset(self):

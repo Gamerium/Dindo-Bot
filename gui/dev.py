@@ -117,7 +117,7 @@ class DevToolsWidget(Gtk.Table):
 		else:
 			x, y = (None, None)
 		# scroll
-		self.parent._debug('Scroll: %s' % clicks)
+		self.parent.debug('Scroll: %s' % clicks)
 		tools.scroll_to(clicks, x, y)
 
 	def on_keys_combo_changed(self, combo):
@@ -179,13 +179,13 @@ class DevToolsWidget(Gtk.Table):
 			click_x = x
 			click_y = y
 		# perform click
-		self.parent._debug('Click on x: %s, y: %s' % (click_x, click_y))
+		self.parent.debug('Click on x: %s, y: %s' % (click_x, click_y))
 		tools.perform_click(click_x, click_y)
 
 	def on_simulate_key_press_button_clicked(self, button):
 		selected = self.keys_combo.get_active_text()
 		key = data.KeyboardShortcuts[selected]
-		self.parent._debug('Press key: %s' % key)
+		self.parent.debug('Press key: %s' % key)
 		tools.press_key(key)
 
 	def on_click(self, widget, event):

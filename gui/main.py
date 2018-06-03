@@ -48,7 +48,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		if not self.settings['Debug']['Enabled']:
 			self.debug_page.hide()
 
-	def _pop(self, text_buffer, max=100):
+	def pop(self, text_buffer, max=100):
 		start_iter = text_buffer.get_start_iter()
 		end_iter = text_buffer.get_end_iter()
 		lines = text_buffer.get_text(start_iter, end_iter, True).splitlines()
@@ -56,9 +56,9 @@ class BotWindow(Gtk.ApplicationWindow):
 			new_text = '\n'.join(lines[1:]) + '\n' # [1:] to remove the first line
 			text_buffer.set_text(new_text)
 
-	def _log(self, text, type=LogType.Normal):
+	def log(self, text, type=LogType.Normal):
 		# pop first line if we reached the max number of lines
-		self._pop(self.log_buf)
+		self.pop(self.log_buf)
 		# append to text view
 		position = self.log_buf.get_end_iter()
 		new_text = '[' + tools.get_time() + '] ' + text + '\n'
@@ -76,10 +76,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		else:
 			logger.new_entry(text)
 
-	def _debug(self, text, level=DebugLevel.Normal):
+	def debug(self, text, level=DebugLevel.Normal):
 		# append to text view
 		if self.settings['Debug']['Enabled'] and level >= self.settings['Debug']['Level']:
-			self._pop(self.debug_buf)
+			self.pop(self.debug_buf)
 			position = self.debug_buf.get_end_iter()
 			self.debug_buf.insert(position, '[' + tools.get_time() + '] ' + text + '\n')
 			logger.debug(text)
@@ -96,7 +96,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			screenshot_name = 'screenshot_' + tools.get_date_time()
 			screenshot_path = tools.get_resource_path('../' + screenshot_name)
 			tools.take_window_screenshot(self.game_window, screenshot_path)
-			self._log("Screenshot saved to '%s'" % screenshot_path, LogType.Info)
+			self.log("Screenshot saved to '%s'" % screenshot_path, LogType.Info)
 
 	def on_debug_check_clicked(self, check):
 		value = check.get_active()
@@ -435,7 +435,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		if state:
 			self.start_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif')))
 		else:
-			self._log(tools.print_internet_state(state), LogType.Error)
+			self.log(tools.print_internet_state(state), LogType.Error)
 			self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_NETWORK))
 
 	def set_buttons_to_paused(self):
@@ -523,22 +523,22 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.game_window_combo_ignore_change = True
 		self.game_window_combo.remove_all()
 		self.game_windowList = tools.get_game_window_list()
-		self._debug('Populate game window combobox, %s window found' % len(self.game_windowList), DebugLevel.High)
+		self.debug('Populate game window combobox, %s window found' % len(self.game_windowList), DebugLevel.High)
 		for window_name in self.game_windowList:
 			self.game_window_combo.append_text(window_name)
 		self.game_window_combo_ignore_change = False
 
 	def focus_game(self, widget, event):
 		if self.game_area:
-			self._debug('Focus game', DebugLevel.High)
+			self.debug('Focus game', DebugLevel.High)
 			# set keyboard focus
 			self.game_area.child_focus(Gtk.DirectionType.TAB_BACKWARD)
 
 	def on_plug_added(self, widget):
-		self._debug('Game window plugged')
+		self.debug('Game window plugged')
 
 	def on_plug_removed(self, widget):
-		self._debug('Game window unplugged')
+		self.debug('Game window unplugged')
 		# enable/disable widgets
 		self.unplug_button.hide()
 		self.refresh_button.show()
@@ -569,7 +569,7 @@ class BotWindow(Gtk.ApplicationWindow):
 				self.game_area.show_all()
 				self.vtable.attach(self.game_area, 0, 1, 0, 3)
 			# plug game window
-			self._debug('Plug game window (id: %s)' % window_xid, DebugLevel.Low)
+			self.debug('Plug game window (id: %s)' % window_xid, DebugLevel.Low)
 			self.game_area.add_id(window_xid)
 			#self.game_window.reparent(self.game_area.get_window(), 0, 0)
 			#self.game_window.show() # force show (when minimized)
@@ -591,14 +591,14 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def unplug_game_window(self):
 		if self.game_window and not self.game_window.is_destroyed():
-			self._debug('Keep game window open')
+			self.debug('Keep game window open')
 			root = Gdk.get_default_root_window()
 			self.game_window.reparent(root, 0, 0)
 
 		self.game_window = None
 
 	def on_unplug_button_clicked(self, button):
-		self._debug('Unplug game window')
+		self.debug('Unplug game window')
 		if self.keep_game_on_unplug_check.get_active():
 			self.unplug_game_window()
 		else:

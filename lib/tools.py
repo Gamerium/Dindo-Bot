@@ -115,13 +115,14 @@ def screen_game(region, save_to=None):
 	if sys.platform.startswith('linux'):
 		dsp = display.Display()
 		root = dsp.screen().root
-		raw = root.get_image(region[0], region[1], region[2], region[3], X.ZPixmap, 0xffffffff)
+		x, y, width, height = region
+		raw = root.get_image(x, y, width, height, X.ZPixmap, 0xffffffff)
 		if hasattr(Image, 'frombytes'):
 			# for Pillow
-			screenshot = Image.frombytes('RGB', (region[2], region[3]), raw.data, 'raw', 'BGRX')
+			screenshot = Image.frombytes('RGB', (width, height), raw.data, 'raw', 'BGRX')
 		else:
 			# for PIL
-			screenshot = Image.fromstring('RGB', (region[2], region[3]), raw.data, 'raw', 'BGRX')
+			screenshot = Image.fromstring('RGB', (width, height), raw.data, 'raw', 'BGRX')
 		if save_to is not None:
 			screenshot.save(save_to + '.png')
 		return screenshot
