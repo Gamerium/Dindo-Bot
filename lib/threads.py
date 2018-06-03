@@ -51,6 +51,7 @@ class BotThread(TimerThread):
 	def __init__(self, parent, game_location, start_from_step, save_dragodindes_images):
 		TimerThread.__init__(self)
 		self.parent = parent
+		self.settings = parent.settings
 		self.game_location = game_location
 		self.start_from_step = start_from_step
 		self.save_dragodindes_images = save_dragodindes_images
@@ -622,8 +623,9 @@ class BotThread(TimerThread):
 		self.slow_down()
 
 	def debug(self, text, level=DebugLevel.Normal):
-		GObject.idle_add(self.parent._debug, text, level)
-		self.slow_down()
+		if self.settings['Debug']['Enabled']:
+			GObject.idle_add(self.parent._debug, text, level)
+			self.slow_down()
 
 	def reset(self):
 		GObject.idle_add(self.parent.reset_buttons)
