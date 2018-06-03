@@ -8,6 +8,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Wnck', '3.0')
 from gi.repository import Gtk, Gdk, GdkX11, Wnck
 from datetime import datetime
+from Xlib import display, X
 from PIL import Image
 from . import parser
 import pyautogui
@@ -112,12 +113,17 @@ def pixbuf2image(pix):
 def screen_game(region, save_to=None):
 	# Linux X11
 	if sys.platform.startswith('linux'):
-		window = Gdk.get_default_root_window()
-		x, y, width, height = region
-		pb = Gdk.pixbuf_get_from_window(window, x, y, width, height)
-		if save_to:
-			pb.savev(save_to + '.png', 'png', (), ())
-		screenshot = pixbuf2image(pb)
+		dsp = display.Display()
+		root = dsp.screen().root
+		raw = root.get_image(region[0], region[1], region[2], region[3], X.ZPixmap, 0xffffffff)
+		if hasattr(Image, 'frombytes'):
+			# for Pillow
+			screenshot = Image.frombytes('RGB', (region[2], region[3]), raw.data, 'raw', 'BGRX')
+		else:
+			# for PIL
+			screenshot = Image.fromstring('RGB', (region[2], region[3]), raw.data, 'raw', 'BGRX')
+		if save_to is not None:
+			screenshot.save(save_to + '.png')
 		return screenshot
 	# Others
 	else:

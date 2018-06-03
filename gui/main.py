@@ -431,12 +431,12 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.pause_button.set_sensitive(True)
 			self.stop_button.set_sensitive(True)
 
-	def _disconnected(self, state=None):
-		self._log(tools.print_internet_state(state), LogType.Error)
-		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_NETWORK))
-
-	def _connected(self):
-		self.start_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif')))
+	def set_internet_state(self, state):
+		if state:
+			self.start_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif')))
+		else:
+			self._log(tools.print_internet_state(state), LogType.Error)
+			self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_NETWORK))
 
 	def set_buttons_to_paused(self):
 		self.start_button.set_tooltip_text('Resume')
@@ -535,10 +535,10 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.game_area.child_focus(Gtk.DirectionType.TAB_BACKWARD)
 
 	def on_plug_added(self, widget):
-		self._debug('Game window plugged', DebugLevel.High)
+		self._debug('Game window plugged')
 
 	def on_plug_removed(self, widget):
-		self._debug('Game window unplugged', DebugLevel.High)
+		self._debug('Game window unplugged')
 		# enable/disable widgets
 		self.unplug_button.hide()
 		self.refresh_button.show()

@@ -51,7 +51,6 @@ class BotThread(TimerThread):
 	def __init__(self, parent, game_location, start_from_step, save_dragodindes_images):
 		TimerThread.__init__(self)
 		self.parent = parent
-		self.settings = parent.settings
 		self.game_location = game_location
 		self.start_from_step = start_from_step
 		self.save_dragodindes_images = save_dragodindes_images
@@ -623,9 +622,8 @@ class BotThread(TimerThread):
 		self.slow_down()
 
 	def debug(self, text, level=DebugLevel.Normal):
-		if self.settings['Debug']['Enabled']:
-			GObject.idle_add(self.parent._debug, text, level)
-			self.slow_down()
+		GObject.idle_add(self.parent._debug, text, level)
+		self.slow_down()
 
 	def reset(self):
 		GObject.idle_add(self.parent.reset_buttons)
@@ -645,13 +643,13 @@ class BotThread(TimerThread):
 			state = tools.internet_on()
 			if state:
 				if reported:
-					GObject.idle_add(self.parent._connected)
+					GObject.idle_add(self.parent.set_internet_state, state)
 				return
 			else:
 				# print state
 				self.debug(tools.print_internet_state(state), DebugLevel.High)
 				if not reported:
-					GObject.idle_add(self.parent._disconnected, state)
+					GObject.idle_add(self.parent.set_internet_state, state)
 					reported = True
 				# wait 1 second, before recheck
 				time.sleep(1)

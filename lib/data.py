@@ -87,7 +87,7 @@ Enclos = {
 	# Brakmar
 	'[-30,37]':  {'x': 157, 'y': 102, 'width': 566, 'height': 456, 'type': EnclosType.Amour},
 	'[-31,38]':  {'x': 394, 'y': 89, 'width': 566, 'height': 456, 'type': EnclosType.Endurance},
-	'[-32,38]':  {'x': 353, 'y': 129, 'width': 566, 'height': 456, 'type': EnclosType.NegativeSerenity},
+	'[-32,38]':  {'x': 356, 'y': 127, 'width': 566, 'height': 456, 'type': EnclosType.NegativeSerenity},
 	'[-30,38]':  {'x': 199, 'y': 125, 'width': 566, 'height': 456, 'type': EnclosType.PositiveSerenity},
 	'[-32,37]':  {'x': 234, 'y': 202, 'width': 566, 'height': 456, 'type': EnclosType.Energy},
 	'[-31,37]':  {'x': 140, 'y': 93, 'width': 566, 'height': 456, 'type': EnclosType.Maturity}

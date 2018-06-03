@@ -2,7 +2,7 @@
 # Copyright (c) 2018 - 2019 AXeL
 
 import json
-from .tools import read_file, save_text_to_file
+from .tools import read_file, save_text_to_file, get_resource_path
 from .shared import DebugLevel
 
 def load_defaults():
@@ -17,7 +17,7 @@ def load_defaults():
 	return settings
 
 def load():
-	text = read_file('settings.json')
+	text = read_file(get_resource_path('../settings.json'))
 	if text:
 		settings = json.loads(text)
 	else:
@@ -26,7 +26,7 @@ def load():
 
 def save(settings):
 	text = json.dumps(settings)
-	save_text_to_file(text, 'settings.json')
+	save_text_to_file(text, get_resource_path('../settings.json'))
 
 def update_and_save(settings, key, value, subkey=None):
 	if subkey:

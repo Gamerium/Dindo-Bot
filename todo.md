@@ -4,7 +4,7 @@
 * Add an XP system for dd
 * Display global dd stats in log text view or in a widget
 * Add option to repeat path
-* Manage etable also, instead of enclos & inventory only
+* Manage cowshed also, instead of enclos & inventory only
 * Account management (Connect, Play, Disconnect, Reconnect)
 * Job management also, even if the bot is for rearing..
 * Use AI for rearing stuff
