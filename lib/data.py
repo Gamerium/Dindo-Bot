@@ -49,6 +49,7 @@ Colors = {
 	#'Experience':      (108, 240, 229),
 	#'Tiredness':       (252, 200, 0),
 	'Enclos Empty':    (56, 56, 49),
+	'Row Selected':    (72, 72, 66),
 	'Inventory Empty': (53, 53, 45)
 }
 

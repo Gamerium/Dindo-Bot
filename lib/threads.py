@@ -368,10 +368,11 @@ class BotThread(TimerThread):
 	def enclos_is_empty(self):
 		location = self.get_location('Enclos First Place')
 		screen = tools.screen_game(location)
-		percentage = tools.get_color_percentage(screen, data.Colors['Enclos Empty'])
-		is_empty = percentage >= 99
+		empty_percentage = tools.get_color_percentage(screen, data.Colors['Enclos Empty'])
+		selected_percentage = tools.get_color_percentage(screen, data.Colors['Row Selected'])
+		is_empty = empty_percentage >= 99 or selected_percentage >= 99
 		debug_level = DebugLevel.Normal if is_empty else DebugLevel.High
-		self.debug('Enclos is empty: {}, percentage: {}%'.format(is_empty, percentage), debug_level)
+		self.debug('Enclos is empty: {}, empty percentage: {}%, selected percentage: {}%'.format(is_empty, empty_percentage, selected_percentage), debug_level)
 		return is_empty
 
 	def get_dragodinde_name(self):
