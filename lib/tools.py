@@ -14,6 +14,7 @@ from . import parser
 import pyautogui
 import time
 import socket
+import webbrowser
 
 # Return active game window(s) list
 def get_game_window_list():
@@ -283,3 +284,16 @@ def get_color_percentage(image, expected_color, tolerance=10):
 	percentage = ((expected_color_count / height) / float(width)) * 100
 
 	return round(percentage, 2)
+
+# Open given file in text editor
+def open_file_in_editor(filename):
+	# Linux
+	if sys.platform.startswith('linux'):
+		editor = os.getenv('EDITOR')
+		if editor:
+			os.system('%s %s' % (editor, filename))
+		else:
+			webbrowser.open(filename)
+	# Others
+	else:
+		os.system(filename)

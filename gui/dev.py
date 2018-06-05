@@ -185,6 +185,7 @@ class DevToolsWidget(Gtk.Table):
 	def on_simulate_key_press_button_clicked(self, button):
 		selected = self.keys_combo.get_active_text()
 		key = data.KeyboardShortcuts[selected]
+		self.parent.focus_game()
 		self.parent.debug('Press key: %s' % key)
 		tools.press_key(key)
 

@@ -51,7 +51,8 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.debug_page.hide()
 
 	def on_key_press(self, widget, event):
-		self.focus_game()
+		if self.bot_thread and self.bot_thread.isAlive():
+			self.focus_game()
 
 	def on_minimize(self, widget, event):
 		if event.window.get_state() == Gdk.WindowState.ICONIFIED:
@@ -165,6 +166,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.take_screenshot_button.set_sensitive(False)
 		self.take_screenshot_button.connect('clicked', self.on_take_screenshot_button_clicked)
 		box.add(self.take_screenshot_button)
+		# Open log file button
+		open_log_button = Gtk.ModelButton(' Open log file')
+		open_log_button.set_alignment(0.05, 0.5)
+		open_log_button.set_image(Gtk.Image(stock=Gtk.STOCK_FILE))
+		open_log_button.connect('clicked', lambda button: tools.open_file_in_editor(logger.get_filename()))
+		box.add(open_log_button)
 		# About button
 		about_button = Gtk.ModelButton(' About')
 		about_button.set_alignment(0.04, 0.5)

@@ -591,6 +591,8 @@ class BotThread(TimerThread):
 			# wait for enclos to show
 			self.debug('Waiting for enclos to show')
 			if self.monitor_game_screen(tolerance=2.5):
+				# wait for enclos to load
+				self.sleep(1)
 				# check enclos
 				enclos_free_places = 0
 				if not self.enclos_is_empty():
