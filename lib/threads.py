@@ -589,33 +589,36 @@ class BotThread(TimerThread):
 			self.debug('Check enclos %s (%s)' % (enclos_name, enclos['type']))
 			# click on enclos
 			self.click(enclos)
-			# wait for enclos to show
-			self.debug('Waiting for enclos to show')
+			# wait for enclos to appear
+			self.debug('Waiting for enclos to appear')
 			if self.monitor_game_screen(tolerance=2.5):
 				# wait for enclos to load
 				self.sleep(1)
-				# check enclos
-				enclos_free_places = 0
-				if not self.enclos_is_empty():
-					enclos_free_places = self.manage_enclos(enclos['type'])
-				else:
-					enclos_free_places = 10
-				# check for pause or suspend
-				self.pause_event.wait()
-				if self.suspend: return
-				# check inventory
-				if enclos_free_places > 0 and not self.inventory_is_empty():
-					self.manage_inventory(enclos['type'], enclos_free_places)
-				# check for pause or suspend
-				self.pause_event.wait()
-				if self.suspend: return
-				# close enclos
-				self.debug('Closing enclos')
-				screen = tools.screen_game(self.game_location)
-				self.press_key(data.KeyboardShortcuts['Esc'])
-				# wait for enclos to close
-				self.debug('Waiting for enclos to close')
-				self.monitor_game_screen(tolerance=2.5, screen=screen)
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# check enclos
+			enclos_free_places = 0
+			if not self.enclos_is_empty():
+				enclos_free_places = self.manage_enclos(enclos['type'])
+			else:
+				enclos_free_places = 10
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# check inventory
+			if enclos_free_places > 0 and not self.inventory_is_empty():
+				self.manage_inventory(enclos['type'], enclos_free_places)
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# close enclos
+			self.debug('Closing enclos')
+			screen = tools.screen_game(self.game_location)
+			self.press_key(data.KeyboardShortcuts['Esc'])
+			# wait for enclos to close
+			self.debug('Waiting for enclos to close')
+			self.monitor_game_screen(tolerance=2.5, screen=screen)
 
 	def slow_down(self):
 		time.sleep(0.1) # reduce thread speed
