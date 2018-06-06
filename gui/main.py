@@ -273,8 +273,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		bot_page.add(self.bot_path_filechooserbutton)
 		## Start From Step
 		bot_page.add(Gtk.Label('<b>Start From Step</b>', xalign=0, use_markup=True))
-		adjustment = Gtk.Adjustment(value=1, lower=1, upper=10000, step_increment=1, page_increment=5, page_size=0)
-		self.step_spin_button = Gtk.SpinButton(adjustment=adjustment)
+		self.step_spin_button = Gtk.SpinButton(adjustment=Gtk.Adjustment(value=1, lower=1, upper=10000, step_increment=1, page_increment=5, page_size=0))
 		self.step_spin_button.set_margin_left(10)
 		bot_page.add(self.step_spin_button)
 		## Repeat Path
@@ -287,8 +286,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.repeat_switch.connect('notify::active', lambda switch, pspec: self.repeat_spin_button.set_sensitive(switch.get_active()))
 		hbox.pack_end(self.repeat_switch, False, False, 0)
 		# Spin button
-		adjustment = Gtk.Adjustment(value=2, lower=2, upper=1000, step_increment=1, page_increment=5, page_size=0)
-		self.repeat_spin_button = Gtk.SpinButton(adjustment=adjustment)
+		self.repeat_spin_button = Gtk.SpinButton(adjustment=Gtk.Adjustment(value=2, lower=2, upper=1000, step_increment=1, page_increment=5, page_size=0))
 		self.repeat_spin_button.set_sensitive(False)
 		hbox.add(self.repeat_spin_button)
 		hbox.add(Gtk.Label('times'))
@@ -452,10 +450,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			if not self.bot_thread or not self.bot_thread.isAlive():
 				save_dragodindes_images = self.save_dragodindes_images_check.get_active()
 				start_from_step = self.step_spin_button.get_value_as_int()
-				if self.repeat_switch.get_active():
-					repeat_path = self.repeat_spin_button.get_value_as_int()
-				else:
-					repeat_path = 1
+				repeat_path = self.repeat_spin_button.get_value_as_int() if self.repeat_switch.get_active() else 1
 				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path, save_dragodindes_images)
 				self.bot_thread.start()
 				self.unplug_button.set_sensitive(False)
