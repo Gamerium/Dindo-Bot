@@ -48,11 +48,12 @@ class TimerThread(threading.Thread):
 
 class BotThread(TimerThread):
 
-	def __init__(self, parent, game_location, start_from_step, save_dragodindes_images):
+	def __init__(self, parent, game_location, start_from_step, repeat_path, save_dragodindes_images):
 		TimerThread.__init__(self)
 		self.parent = parent
 		self.game_location = game_location
 		self.start_from_step = start_from_step
+		self.repeat_path = repeat_path
 		self.save_dragodindes_images = save_dragodindes_images
 		self.pause_event = threading.Event()
 		self.pause_event.set()
@@ -63,10 +64,17 @@ class BotThread(TimerThread):
 		self.debug('Bot thread started', DebugLevel.Low)
 
 		# get instructions & interpret them
-		self.debug('Bot path: %s' % self.parent.bot_path)
+		self.debug('Bot path: %s, repeat: %s' % (self.parent.bot_path, self.repeat_path))
 		if self.parent.bot_path:
 			instructions = tools.read_file(self.parent.bot_path)
-			self.interpret(instructions)
+			repeat_count = 0
+			while repeat_count < self.repeat_path:
+				# check for pause or suspend
+				self.pause_event.wait()
+				if self.suspend: break
+				# start interpretation
+				self.interpret(instructions)
+				repeat_count += 1
 
 			# tell user that we have complete the path
 			if not self.suspend:
@@ -589,8 +597,8 @@ class BotThread(TimerThread):
 			self.debug('Check enclos %s (%s)' % (enclos_name, enclos['type']))
 			# click on enclos
 			self.click(enclos)
-			# wait for enclos to appear
-			self.debug('Waiting for enclos to appear')
+			# wait for enclos to open
+			self.debug('Waiting for enclos to open')
 			if self.monitor_game_screen(tolerance=2.5):
 				# wait for enclos to load
 				self.sleep(1)
