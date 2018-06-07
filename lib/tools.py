@@ -31,7 +31,11 @@ def get_game_window_list():
 			instance_name = window.get_class_instance_name()
 			#print('[' + instance_name + '] ' + window_name)
 			if instance_name == 'Dofus':
-				game_window_list[window_name] = window.get_xid()
+				if window_name in game_window_list:
+					name = '%s (%s)' % (window_name, len(game_window_list)+1)
+				else:
+					name = window_name
+				game_window_list[name] = window.get_xid()
 	# Win32
 	elif sys.platform == 'win32':
 		windows = pyautogui.getWindows()
