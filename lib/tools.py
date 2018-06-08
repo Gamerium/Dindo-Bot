@@ -20,44 +20,27 @@ import webbrowser
 def get_game_window_list():
 	game_window_list = {}
 
-	# Linux X11
-	if sys.platform.startswith('linux'):
-		screen = Wnck.Screen.get_default()
-		screen.force_update() # recommended per Wnck documentation
-		window_list = screen.get_windows()
+	screen = Wnck.Screen.get_default()
+	screen.force_update() # recommended per Wnck documentation
+	window_list = screen.get_windows()
 
-		for window in window_list:
-			window_name = window.get_name()
-			instance_name = window.get_class_instance_name()
-			#print('[' + instance_name + '] ' + window_name)
-			if instance_name == 'Dofus':
-				if window_name in game_window_list:
-					name = '%s (%s)' % (window_name, len(game_window_list)+1)
-				else:
-					name = window_name
-				game_window_list[name] = window.get_xid()
-	# Win32
-	elif sys.platform == 'win32':
-		windows = pyautogui.getWindows()
-		for window_name in windows:
-			if 'Dofus' in window_name: # TODO: check process/instance name instead of window name
-				game_window_list[window_name] = windows[window_name]
+	for window in window_list:
+		window_name = window.get_name()
+		instance_name = window.get_class_instance_name()
+		#print('[' + instance_name + '] ' + window_name)
+		if instance_name == 'Dofus':
+			if window_name in game_window_list:
+				name = '%s (%s)' % (window_name, len(game_window_list)+1)
+			else:
+				name = window_name
+			game_window_list[name] = window.get_xid()
 
 	return game_window_list
 
 # Return game window
 def get_game_window(window_xid):
-	game_window = None
-
-	# Linux X11
-	if sys.platform.startswith('linux'):
-		gdk_display = GdkX11.X11Display.get_default()
-		game_window = GdkX11.X11Window.foreign_new_for_display(gdk_display, window_xid)
-	# Win32
-	elif sys.platform == 'win32':
-		hwnd = window_xid
-		game_window = pyautogui.Window(hwnd)
-
+	gdk_display = GdkX11.X11Display.get_default()
+	game_window = GdkX11.X11Window.foreign_new_for_display(gdk_display, window_xid)
 	return game_window
 
 # Return absolute path to resource
@@ -90,17 +73,9 @@ def print_internet_state(state=None):
 
 # Take a screenshot of given window
 def take_window_screenshot(window, save_to='screenshot'):
-	# Linux X11
-	if sys.platform.startswith('linux'):
-		size = window.get_geometry()
-		pb = Gdk.pixbuf_get_from_window(window, 0, 0, size.width, size.height)
-		pb.savev(save_to + '.png', 'png', (), ())
-	# Others
-	else:
-		x, y = window.get_position()
-		region = window.get_geometry() # or window.get_allocation() ?
-		screenshot = pyautogui.screenshot(region=(x, y, region.width, region.height))
-		screenshot.save(save_to + '.png')
+	size = window.get_geometry()
+	pb = Gdk.pixbuf_get_from_window(window, 0, 0, size.width, size.height)
+	pb.savev(save_to + '.png', 'png', (), ())
 
 # Convert Gdk.Pixbuf to Pillow image
 def pixbuf2image(pix):
@@ -116,25 +91,19 @@ def pixbuf2image(pix):
 
 # Return a screenshot of the game
 def screen_game(region, save_to=None):
-	# Linux X11
-	if sys.platform.startswith('linux'):
-		dsp = display.Display()
-		root = dsp.screen().root
-		x, y, width, height = region
-		raw = root.get_image(x, y, width, height, X.ZPixmap, 0xffffffff)
-		if hasattr(Image, 'frombytes'):
-			# for Pillow
-			screenshot = Image.frombytes('RGB', (width, height), raw.data, 'raw', 'BGRX')
-		else:
-			# for PIL
-			screenshot = Image.fromstring('RGB', (width, height), raw.data, 'raw', 'BGRX')
-		if save_to is not None:
-			screenshot.save(save_to + '.png')
-		return screenshot
-	# Others
+	dsp = display.Display()
+	root = dsp.screen().root
+	x, y, width, height = region
+	raw = root.get_image(x, y, width, height, X.ZPixmap, 0xffffffff)
+	if hasattr(Image, 'frombytes'):
+		# for Pillow
+		screenshot = Image.frombytes('RGB', (width, height), raw.data, 'raw', 'BGRX')
 	else:
-		screenshot = pyautogui.screenshot(region=region)
-		return screenshot
+		# for PIL
+		screenshot = Image.fromstring('RGB', (width, height), raw.data, 'raw', 'BGRX')
+	if save_to is not None:
+		screenshot.save(save_to + '.png')
+	return screenshot
 
 # Convert bytes to integer
 def bytes_to_int(bytes):
@@ -142,15 +111,10 @@ def bytes_to_int(bytes):
 
 # Return pixel color of given x, y coordinates
 def get_pixel_color(x, y):
-	# Linux X11
-	if sys.platform.startswith('linux'):
-		window = Gdk.get_default_root_window()
-		pb = Gdk.pixbuf_get_from_window(window, x, y, 1, 1)
-		barray = pb.get_pixels()
-		return '(%s, %s, %s)' % (bytes_to_int(barray[0]), bytes_to_int(barray[1]), bytes_to_int(barray[2]))
-	# Others
-	else:
-		return pyautogui.pixel(x, y)
+	window = Gdk.get_default_root_window()
+	pb = Gdk.pixbuf_get_from_window(window, x, y, 1, 1)
+	barray = pb.get_pixels()
+	return '(%s, %s, %s)' % (bytes_to_int(barray[0]), bytes_to_int(barray[1]), bytes_to_int(barray[2]))
 
 # Return date as a string in the given format
 def get_date(format='%d-%m-%y'):
@@ -188,6 +152,13 @@ def read_file(filename):
 # Return platform name
 def get_platform():
 	return sys.platform
+
+# Checks platform name
+def platform_is(platform_name, use_startswith=False):
+	if use_startswith:
+		return sys.platform.startswith(platform_name)
+	else:
+		return sys.platform == platform_name
 
 # Return command line arguments
 def get_cmd_args():
@@ -291,13 +262,8 @@ def get_color_percentage(image, expected_color, tolerance=10):
 
 # Open given file in text editor
 def open_file_in_editor(filename):
-	# Linux
-	if sys.platform.startswith('linux'):
-		editor = os.getenv('EDITOR')
-		if editor:
-			os.system('%s %s' % (editor, filename))
-		else:
-			webbrowser.open(filename)
-	# Others
+	editor = os.getenv('EDITOR')
+	if editor:
+		os.system('%s %s' % (editor, filename))
 	else:
-		os.system(filename)
+		webbrowser.open(filename)
