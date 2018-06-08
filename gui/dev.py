@@ -8,7 +8,6 @@ from lib import tools
 from lib import data
 from .custom import CustomComboBox, CustomSpinButton
 from .dialog import TextDialog
-import pyautogui
 
 class DevToolsWidget(Gtk.Table):
 
@@ -113,7 +112,7 @@ class DevToolsWidget(Gtk.Table):
 			# get game area location
 			game_location = tools.get_widget_location(self.parent.game_area)
 			# get the center of the game location
-			x, y = pyautogui.center(game_location)
+			x, y = tools.coordinates_center(game_location)
 		else:
 			x, y = (None, None)
 		# scroll
@@ -129,10 +128,10 @@ class DevToolsWidget(Gtk.Table):
 	def on_select_button_clicked(self, button):
 		button.set_sensitive(False)
 		# wait for click
-		pyautogui.waitForMouseEvent('left_down')
+		tools.wait_for_mouse_event('left_down')
 		# get mouse position & screen size
-		x, y = pyautogui.position()
-		width, height = pyautogui.size()
+		x, y = tools.get_mouse_position()
+		width, height = tools.get_screen_size()
 		# get pixel color
 		color = tools.get_pixel_color(x, y)
 		if self.parent.game_area:

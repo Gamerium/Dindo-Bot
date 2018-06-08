@@ -11,7 +11,6 @@ from . import tools
 from . import parser
 from . import data
 from . import imgcompare
-import pyautogui
 
 '''
 	TimerThread is a quick implementation of thread class with a timer (not really powerful, but it do the job)
@@ -198,10 +197,10 @@ class BotThread(TimerThread):
 	def scroll(self, value):
 		self.debug('Scroll to: %s' % value, DebugLevel.High)
 		# save mouse position
-		mouse_position = pyautogui.position()
+		mouse_position = tools.get_mouse_position()
 		if self.game_location:
 			# get game center
-			x, y = pyautogui.center(self.game_location)
+			x, y = tools.coordinates_center(self.game_location)
 			self.sleep(1)
 		else:
 			x, y = (None, None)
@@ -210,7 +209,7 @@ class BotThread(TimerThread):
 		# wait for scroll to end
 		self.sleep(1)
 		# get back mouse to initial position
-		pyautogui.moveTo(mouse_position)
+		tools.move_mouse_to(mouse_position)
 
 	def use_zaap(self, zaap_from, zaap_to):
 		# get coordinates

@@ -267,3 +267,58 @@ def open_file_in_editor(filename):
 		os.system('%s %s' % (editor, filename))
 	else:
 		webbrowser.open(filename)
+
+# Get mouse event
+def get_mouse_event():
+	MOUSE_EVENT = {1: 'left', 2: 'middle', 3: 'right'}
+	_display = display.Display()
+	screen = _display.screen()
+	window = screen.root
+	window.grab_pointer(1, X.PointerMotionMask|X.ButtonReleaseMask|X.ButtonPressMask, X.GrabModeAsync, X.GrabModeAsync, X.NONE, X.NONE, X.CurrentTime)
+	event = _display.next_event()
+	_display.ungrab_pointer(X.CurrentTime)
+
+	if event.type == X.ButtonPress:
+		event = MOUSE_EVENT[event.detail] + '_down'
+
+	elif event.type == X.ButtonRelease:
+		event = MOUSE_EVENT[event.detail] + '_up'
+
+	else:
+		event = 'moving'
+
+	return event
+
+# Wait for mouse event
+def wait_for_mouse_event(event):
+	assert event in ['left_down', 'right_down', 'middle_down', 'left_up', 'middle_up', 'right_up', 'moving'], "Event can only be 'left_down', 'right_down', 'middle_down', 'left_up', 'middle_up', 'right_up', 'moving'"
+
+	while(True):
+		mouse_event = get_mouse_event()
+		_event = mouse_event.split('_')
+
+		if len(_event) == 2:
+			x, y = pyautogui.position()
+			if _event[1] == 'down':
+				pyautogui.mouseDown(x, y, _event[0])
+			else:
+				pyautogui.mouseUp(x, y, _event[0])
+
+		if mouse_event == event:
+			return True
+
+# Return given coordinates center
+def coordinates_center(coords):
+	return (coords[0] + int(coords[2] / 2), coords[1] + int(coords[3] / 2))
+
+# Return mouse position
+def get_mouse_position():
+	return pyautogui.position()
+
+# Return screen size
+def get_screen_size():
+	return pyautogui.size()
+
+# Move mouse to position
+def move_mouse_to(position):
+	pyautogui.moveTo(position)

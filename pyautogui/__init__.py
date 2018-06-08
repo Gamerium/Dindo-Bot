@@ -113,7 +113,6 @@ elif sys.platform == 'win32':
     from ._window_win import Window, getWindows, getWindow
 else:
     from . import _pyautogui_x11 as platformModule
-    from ._window_x11 import Window, getWindows, getWindow
 
 
 # TODO: Having module-wide user-writable global variables is bad. It makes
@@ -508,7 +507,6 @@ def tripleClick(x=None, y=None, interval=0.0, button='left', duration=0.0, tween
         platformModule._multiClick(x, y, button, 3)
     else:
         click(x, y, 2, interval, button, _pause=False)
-
     _autoPause(pause, _pause)
 
 
@@ -732,7 +730,7 @@ def dragRel(xOffset=0, yOffset=0, duration=0.0, tween=linear, button='left', pau
         default.
       mouseDownUp (True, False): When true, the mouseUp/Down actions are not perfomed.
         Which allows dragging over multiple (small) actions. 'True' by default.
-
+        
     Returns:
       None
     """
@@ -856,20 +854,6 @@ def _mouseMoveDrag(moveOrDrag, x, y, xOffset, yOffset, duration, tween=linear, b
             raise NotImplementedError('Unknown value of moveOrDrag: {0}'.format(moveOrDrag))
 
     _failSafeCheck()
-
-
-    
-def getMouseEvent():
-    if sys.platform.startswith('java') or sys.platform == 'darwin' or sys.platform == 'win32':
-        raise NotImplementedError('PyAutoGUI catch mouse events only for UNIX that supports X11.')
-    
-    return platformModule._getMouseEvent()
-
-def waitForMouseEvent(e):
-    if sys.platform.startswith('java') or sys.platform == 'darwin' or sys.platform == 'win32':
-        raise NotImplementedError('PyAutoGUI catch mouse events only supported for X11.')
-    
-    return platformModule._waitForMouseEvent(e)
 
 
 # Keyboard Functions
