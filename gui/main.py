@@ -277,15 +277,17 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.step_spin_button.set_margin_left(10)
 		bot_page.add(self.step_spin_button)
 		## Repeat Path
-		bot_page.add(Gtk.Label('<b>Repeat Path</b>', xalign=0, use_markup=True))
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-		hbox.set_margin_left(10)
+		hbox.add(Gtk.Label('<b>Repeat Path</b>', xalign=0, use_markup=True))
 		bot_page.add(hbox)
 		# Switch
 		self.repeat_switch = Gtk.Switch()
 		self.repeat_switch.connect('notify::active', lambda switch, pspec: self.repeat_spin_button.set_sensitive(switch.get_active()))
 		hbox.pack_end(self.repeat_switch, False, False, 0)
 		# Spin button
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hbox.set_margin_left(10)
+		bot_page.add(hbox)
 		self.repeat_spin_button = Gtk.SpinButton(adjustment=Gtk.Adjustment(value=2, lower=2, upper=1000, step_increment=1, page_increment=5, page_size=0))
 		self.repeat_spin_button.set_sensitive(False)
 		hbox.add(self.repeat_spin_button)
@@ -414,7 +416,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox.pack_start(container_hbox, True, False, 0)
 		container_hbox.add(add_action_button)
 		## Save
-		save_menu_button = Gtk.MenuButton('   Save  |')
+		save_menu_button = Gtk.MenuButton('  Save')
 		save_menu_button.set_image(Gtk.Arrow(Gtk.ArrowType.DOWN, Gtk.ShadowType.NONE))
 		save_menu_button.set_image_position(Gtk.PositionType.RIGHT)
 		menu = Gtk.Menu()
