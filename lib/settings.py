@@ -29,7 +29,7 @@ def save(settings):
 	save_text_to_file(text, get_resource_path('../settings.json'))
 
 def update_and_save(settings, key, value, subkey=None):
-	if subkey:
+	if subkey is not None:
 		settings[key][subkey] = value
 	else:
 		settings[key] = value
