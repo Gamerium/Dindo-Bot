@@ -259,10 +259,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 		hbox.set_margin_left(10)
 		bot_page.add(hbox)
+		hbox.add(Gtk.Label('Number of times'))
 		self.repeat_spin_button = Gtk.SpinButton(adjustment=Gtk.Adjustment(value=2, lower=2, upper=1000, step_increment=1, page_increment=5, page_size=0))
 		self.repeat_spin_button.set_sensitive(False)
-		hbox.add(self.repeat_spin_button)
-		hbox.add(Gtk.Label('times'))
+		hbox.pack_end(self.repeat_spin_button, False, False, 0)
 		## Start
 		self.start_button = Gtk.Button()
 		self.start_button.set_tooltip_text('Start')

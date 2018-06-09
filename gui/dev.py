@@ -99,7 +99,7 @@ class DevToolsWidget(Gtk.Table):
 		# Simulate
 		simulate_scroll_button = Gtk.Button()
 		simulate_scroll_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.SB_V_DOUBLE_ARROW).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
-		simulate_scroll_button.set_tooltip_text('Simulate Scroll')
+		simulate_scroll_button.set_tooltip_text('Simulate')
 		simulate_scroll_button.connect('clicked', self.on_simulate_scroll_button_clicked)
 		hbox.add(simulate_scroll_button)
 
