@@ -568,7 +568,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.game_window = None
 		# keep or destroy socket
 		if self.settings['KeepGameOpen'] and not game_window_destroyed:
-				return True
+			return True
 		else:
 			self.game_area = None
 
