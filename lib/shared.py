@@ -2,10 +2,10 @@
 # Copyright (c) 2018 - 2019 AXeL
 
 __program_name__  = 'Dindo Bot'
-__program_desc__  = 'Rearing bot for Dofus game'
+__program_desc__  = 'Farming bot for Dofus game'
 __website__       = 'https://github.com/AXeL-dev'
 __website_label__ = 'AXeL-dev'
-__version__       = '1.0.16'
+__version__       = '1.0.17'
 __authors__       = ['AXeL']
 
 class LogType:

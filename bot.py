@@ -2,7 +2,7 @@
 # Copyright (c) 2018 - 2019 AXeL
 
 '''
-	Rearing bot for Dofus game
+	Farming bot for Dofus game
 '''
 
 from gui.main import BotWindow
