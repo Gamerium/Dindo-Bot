@@ -202,10 +202,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		bot_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		bot_page.set_border_width(10)
 		bot_notebook.append_page(bot_page, Gtk.Label('Bot'))
+		self.bot_widgets = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		bot_page.add(self.bot_widgets)
 		## Game Window
-		bot_page.add(Gtk.Label('<b>Game Window</b>', xalign=0, use_markup=True))
+		self.bot_widgets.add(Gtk.Label('<b>Game Window</b>', xalign=0, use_markup=True))
 		game_window_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		bot_page.add(game_window_box)
+		self.bot_widgets.add(game_window_box)
 		# ComboBox
 		self.game_window_combo = Gtk.ComboBoxText()
 		self.game_window_combo.set_margin_left(10)
@@ -232,25 +234,25 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.plug_button.connect('clicked', self.on_plug_button_clicked)
 			game_window_box.add(self.plug_button)
 		## Bot Path
-		bot_page.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
-		self.bot_path_filechooserbutton = Gtk.FileChooserButton(title='Choose bot path')
-		self.bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
+		self.bot_widgets.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
+		bot_path_filechooserbutton = Gtk.FileChooserButton(title='Choose bot path')
+		bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
 		pathfilter = Gtk.FileFilter()
 		pathfilter.set_name('Bot Path (*.path)')
 		pathfilter.add_pattern('*.path')
-		self.bot_path_filechooserbutton.add_filter(pathfilter)
-		self.bot_path_filechooserbutton.set_margin_left(10)
-		self.bot_path_filechooserbutton.connect('file-set', self.on_bot_path_changed)
-		bot_page.add(self.bot_path_filechooserbutton)
+		bot_path_filechooserbutton.add_filter(pathfilter)
+		bot_path_filechooserbutton.set_margin_left(10)
+		bot_path_filechooserbutton.connect('file-set', self.on_bot_path_changed)
+		self.bot_widgets.add(bot_path_filechooserbutton)
 		## Start From Step
-		bot_page.add(Gtk.Label('<b>Start From Step</b>', xalign=0, use_markup=True))
+		self.bot_widgets.add(Gtk.Label('<b>Start From Step</b>', xalign=0, use_markup=True))
 		self.step_spin_button = Gtk.SpinButton(adjustment=Gtk.Adjustment(value=1, lower=1, upper=10000, step_increment=1, page_increment=5, page_size=0))
 		self.step_spin_button.set_margin_left(10)
-		bot_page.add(self.step_spin_button)
+		self.bot_widgets.add(self.step_spin_button)
 		## Repeat Path
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 		hbox.add(Gtk.Label('<b>Repeat Path</b>', xalign=0, use_markup=True))
-		bot_page.add(hbox)
+		self.bot_widgets.add(hbox)
 		# Switch
 		self.repeat_switch = Gtk.Switch()
 		self.repeat_switch.connect('notify::active', lambda switch, pspec: self.repeat_spin_button.set_sensitive(switch.get_active()))
@@ -258,7 +260,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Spin button
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 		hbox.set_margin_left(10)
-		bot_page.add(hbox)
+		self.bot_widgets.add(hbox)
 		hbox.add(Gtk.Label('Number of times'))
 		self.repeat_spin_button = Gtk.SpinButton(adjustment=Gtk.Adjustment(value=2, lower=2, upper=1000, step_increment=1, page_increment=5, page_size=0))
 		self.repeat_spin_button.set_sensitive(False)
@@ -425,12 +427,8 @@ class BotWindow(Gtk.ApplicationWindow):
 				repeat_path = self.repeat_spin_button.get_value_as_int() if self.repeat_switch.get_active() else 1
 				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path, self.settings['SaveDragodindesImages'])
 				self.bot_thread.start()
-				self.unplug_button.set_sensitive(False)
 				self.settings_button.set_sensitive(False)
-				self.step_spin_button.set_sensitive(False)
-				self.bot_path_filechooserbutton.set_sensitive(False)
-				self.repeat_switch.set_sensitive(False)
-				self.repeat_spin_button.set_sensitive(False)
+				self.bot_widgets.set_sensitive(False)
 			else:
 				self.bot_thread.resume(game_location)
 			# enable/disable buttons
@@ -466,13 +464,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.start_button.set_sensitive(True)
 		self.stop_button.set_sensitive(False)
 		self.pause_button.set_sensitive(False)
-		self.unplug_button.set_sensitive(True)
 		self.settings_button.set_sensitive(True)
-		self.step_spin_button.set_sensitive(True)
-		self.bot_path_filechooserbutton.set_sensitive(True)
-		self.repeat_switch.set_sensitive(True)
-		if self.repeat_switch.get_active():
-			self.repeat_spin_button.set_sensitive(True)
+		self.bot_widgets.set_sensitive(True)
 
 	def on_stop_button_clicked(self, button):
 		self.bot_thread.stop()
