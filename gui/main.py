@@ -473,8 +473,20 @@ class BotWindow(Gtk.ApplicationWindow):
 		widget.pack_end(hbox, False, False, 0)
 		## Separator
 		path_page.add(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL, margin=5))
+		## Listbox
+		frame = Gtk.Frame()
+		scrolled_window = Gtk.ScrolledWindow()
+		self.path_listbox = CustomListBox()
+		scrolled_window.add(self.path_listbox)
+		frame.add(scrolled_window)
+		path_page.pack_start(frame, True, True, 0)
+		## Load
+		button_box = Gtk.ButtonBox(orientation=Gtk.Orientation.HORIZONTAL, spacing=5, layout_style=Gtk.ButtonBoxStyle.CENTER)
+		load_path = Gtk.Button('Load')
+		load_path.connect('clicked', self.on_load_path_clicked)
+		button_box.add(load_path)
 		## Save
-		save_menu_button = Gtk.MenuButton('  Save')
+		save_menu_button = Gtk.MenuButton('Save')
 		save_menu_button.set_image(Gtk.Arrow(Gtk.ArrowType.DOWN, Gtk.ShadowType.NONE))
 		save_menu_button.set_image_position(Gtk.PositionType.RIGHT)
 		menu = Gtk.Menu()
@@ -487,17 +499,29 @@ class BotWindow(Gtk.ApplicationWindow):
 		menu.append(clear_path)
 		menu.show_all()
 		save_menu_button.set_popup(menu)
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(save_menu_button, True, False, 0)
-		path_page.add(hbox)
-		## Listbox
-		frame = Gtk.Frame()
-		frame.set_margin_top(5)
-		scrolled_window = Gtk.ScrolledWindow()
-		self.path_listbox = CustomListBox()
-		scrolled_window.add(self.path_listbox)
-		frame.add(scrolled_window)
-		path_page.pack_end(frame, True, True, 0)
+		button_box.add(save_menu_button)
+		path_page.pack_end(button_box, False, False, 0)
+
+	def on_load_path_clicked(self, button):
+		filechooserdialog = Gtk.FileChooserDialog(title='Load Path', transient_for=self, action=Gtk.FileChooserAction.OPEN)
+		filechooserdialog.set_current_folder(tools.get_resource_path('../paths'))
+		pathfilter = Gtk.FileFilter()
+		pathfilter.set_name('Bot Path (*.path)')
+		pathfilter.add_pattern('*.path')
+		filechooserdialog.add_filter(pathfilter)
+		filechooserdialog.add_button('_Cancel', Gtk.ResponseType.CANCEL)
+		filechooserdialog.add_button('_Open', Gtk.ResponseType.OK)
+		filechooserdialog.set_default_response(Gtk.ResponseType.OK)
+		response = filechooserdialog.run()
+
+		if response == Gtk.ResponseType.OK:
+			# read file
+			path = tools.read_file(filechooserdialog.get_filename())
+			# append to path listbox
+			for line in path.splitlines():
+				self.path_listbox.append_text(line)
+
+		filechooserdialog.destroy()
 
 	def on_keyboard_add_button_clicked(self, button):
 		if self.press_key_radio.get_active():

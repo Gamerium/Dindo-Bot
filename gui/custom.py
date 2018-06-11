@@ -32,7 +32,7 @@ class CustomListBox(Gtk.ListBox):
 	def append_text(self, text):
 		# add new row with text & delete button
 		row = Gtk.ListBoxRow()
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 		row.add(hbox)
 		label = Gtk.Label(text, xalign=0)
 		label.set_margin_left(5)
