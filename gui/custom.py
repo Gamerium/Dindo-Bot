@@ -3,7 +3,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio, Pango
 
 class CustomComboBox(Gtk.ComboBoxText):
 
@@ -14,45 +14,150 @@ class CustomComboBox(Gtk.ComboBoxText):
 		for text in data:
 			self.append_text(text)
 
-class CustomListBox(Gtk.ListBox):
+class CustomListBox(Gtk.Frame):
 
 	perform_scroll = False
+	callback = None
 
 	def __init__(self):
-		Gtk.ListBox.__init__(self)
-		self.set_selection_mode(Gtk.SelectionMode.NONE)
-		self.connect('size-allocate', self.on_size_allocate)
+		Gtk.Frame.__init__(self)
+		## ListBox
+		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+		self.add(vbox)
+		self.listbox = Gtk.ListBox()
+		self.listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
+		self.listbox.connect('size-allocate', self.on_size_allocate)
+		self.listbox.connect('row-activated', self.on_row_activated)
+		scrolled_window = Gtk.ScrolledWindow()
+		scrolled_window.add(self.listbox)
+		vbox.pack_start(scrolled_window, True, True, 0)
+		## ActionBar
+		actionbar = Gtk.ActionBar()
+		vbox.pack_end(actionbar, False, False, 0)
+		box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		Gtk.StyleContext.add_class(box.get_style_context(), 'linked')
+		actionbar.pack_start(box)
+		# Move up
+		self.move_up_button = Gtk.Button()
+		self.move_up_button.set_tooltip_text('Move up')
+		self.move_up_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-up-symbolic')))
+		self.move_up_button.connect('clicked', self.on_move_up_button_clicked)
+		box.add(self.move_up_button)
+		# Move down
+		self.move_down_button = Gtk.Button()
+		self.move_down_button.set_tooltip_text('Move down')
+		self.move_down_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-down-symbolic')))
+		self.move_down_button.connect('clicked', self.on_move_down_button_clicked)
+		box.add(self.move_down_button)
+		# Delete
+		self.delete_button = Gtk.Button()
+		self.delete_button.set_tooltip_text('Delete')
+		self.delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
+		self.delete_button.connect('clicked', self.on_delete_button_clicked)
+		box.add(self.delete_button)
+		# Clear all
+		self.clear_all_button = Gtk.Button()
+		self.clear_all_button.set_tooltip_text('Clear all')
+		self.clear_all_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='edit-clear-all-symbolic')))
+		self.clear_all_button.connect('clicked', self.on_clear_all_button_clicked)
+		box.add(self.clear_all_button)
+		# Initialise buttons status
+		self.reset_buttons()
+		# Buttons box
+		self.buttons_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		Gtk.StyleContext.add_class(self.buttons_box.get_style_context(), 'linked')
+		actionbar.pack_end(self.buttons_box)
 
-	def on_size_allocate(self, widget, event):
+	def on_update(self, callback):
+		self.callback = callback
+
+	def on_row_activated(self, listbox, row):
+		rows_count = len(self.get_rows())
+		index = row.get_index()
+		# Move up
+		enable_move_up = True if index > 0 else False
+		self.move_up_button.set_sensitive(enable_move_up)
+		# Move down
+		enable_move_down = True if index < rows_count - 1 else False
+		self.move_down_button.set_sensitive(enable_move_down)
+		# Delete
+		self.delete_button.set_sensitive(True)
+		# Clear all
+		self.clear_all_button.set_sensitive(True)
+
+	def on_size_allocate(self, listbox, event):
 		if self.perform_scroll:
-			adj = widget.get_adjustment()
+			adj = listbox.get_adjustment()
 			adj.set_value(adj.get_upper() - adj.get_page_size())
 			self.perform_scroll = False
 
+	def add_button(self, button):
+		self.buttons_box.add(button)
+
 	def append_text(self, text):
-		# add new row with text & delete button
+		# add new row
 		row = Gtk.ListBoxRow()
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-		row.add(hbox)
-		label = Gtk.Label(text, xalign=0)
-		label.set_margin_left(5)
-		delete_button = Gtk.ModelButton()
-		delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
-		delete_button.set_tooltip_text('Delete')
-		delete_button.connect('clicked', self.on_delete_button_clicked)
-		hbox.pack_start(label, True, True, 0)
-		hbox.pack_start(delete_button, False, True, 0)
-		self.add(row)
-		self.show_all()
+		label = Gtk.Label(text, xalign=0, margin=5)
+		row.add(label)
+		self.listbox.add(row)
+		self.listbox.show_all()
 		self.perform_scroll = True
+		self.select_row(row)
+		if self.callback is not None:
+			self.callback()
+
+	def select_row(self, row):
+		self.listbox.select_row(row)
+		self.on_row_activated(self.listbox, row)
+
+	def get_rows(self):
+		return self.listbox.get_children()
 
 	def get_row_text(self, row):
-		label = row.get_children()[0].get_children()[0]
+		label = row.get_children()[0]
 		return label.get_text()
 
+	def reset_buttons(self):
+		self.move_up_button.set_sensitive(False)
+		self.move_down_button.set_sensitive(False)
+		self.delete_button.set_sensitive(False)
+		if not self.get_rows():
+			self.clear_all_button.set_sensitive(False)
+
+	def remove_row(self, row):
+		self.listbox.remove(row)
+		self.reset_buttons()
+		if self.callback is not None:
+			self.callback()
+
 	def on_delete_button_clicked(self, button):
-		row = button.get_parent().get_parent()
-		self.remove(row)
+		row = self.listbox.get_selected_row()
+		self.remove_row(row)
+
+	def move_row(self, row, new_index):
+		self.listbox.select_row(None) # remove selection
+		self.listbox.remove(row)
+		self.listbox.insert(row, new_index)
+		self.select_row(row)
+
+	def on_move_up_button_clicked(self, button):
+		row = self.listbox.get_selected_row()
+		if row:
+			index = row.get_index()
+			self.move_row(row, index - 1)
+
+	def on_move_down_button_clicked(self, button):
+		row = self.listbox.get_selected_row()
+		if row:
+			index = row.get_index()
+			self.move_row(row, index + 1)
+
+	def on_clear_all_button_clicked(self, button):
+		for row in self.get_rows():
+			self.listbox.remove(row)
+		self.reset_buttons()
+		if self.callback is not None:
+			self.callback()
 
 class CustomScaleButton(Gtk.Button):
 
@@ -113,7 +218,7 @@ class ImageLabel(Gtk.Box):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
 		self.set_border_width(padding)
 		self.add(image)
-		self.label = Gtk.Label(text)
+		self.label = Gtk.Label(text, ellipsize=Pango.EllipsizeMode.END)
 		self.add(self.label)
 
 	def get_text(self):
@@ -129,14 +234,14 @@ class StackListBox(Gtk.Box):
 		scrolled_window = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER)
 		self.listbox = Gtk.ListBox()
 		self.listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
-		self.listbox.connect('row-activated', self.on_listbox_row_activated)
+		self.listbox.connect('row-activated', self.on_row_activated)
 		scrolled_window.add(self.listbox)
 		frame.add(scrolled_window)
 		self.pack_start(frame, True, True, 0)
 		self.stack = Gtk.Stack()
 		self.pack_end(self.stack, False, False, 0)
 
-	def on_listbox_row_activated(self, listbox, row):
+	def on_row_activated(self, listbox, row):
 		name = row.get_children()[0].get_text()
 		self.stack.set_visible_child_name(name)
 
@@ -146,3 +251,19 @@ class StackListBox(Gtk.Box):
 			self.listbox.select_row(self.listbox.get_row_at_index(self.count))
 		self.stack.add_named(widget, label.get_text())
 		self.count += 1
+
+class CenteredButtonBox(Gtk.Box):
+
+	def __init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=5):
+		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
+		self.buttons_container = Gtk.Box(self, orientation=orientation, spacing=spacing)
+		self.pack_start(self.buttons_container, True, False, 0)
+		self.orientation = orientation
+
+	def add(self, button):
+		if self.orientation == Gtk.Orientation.VERTICAL:
+			hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+			hbox.pack_start(button, True, False, 0)
+			self.buttons_container.add(hbox)
+		else:
+			self.buttons_container.add(button)

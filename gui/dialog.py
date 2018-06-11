@@ -76,25 +76,27 @@ class PreferencesDialog(Gtk.Dialog):
 	def __init__(self, transient_for, title='Preferences'):
 		Gtk.Dialog.__init__(self, transient_for=transient_for, title=title)
 		self.parent = transient_for
+		self.set_border_width(10)
 		self.set_resizable(False)
 		self.connect('response', lambda dialog, response: self.destroy())
 		# Header Bar
 		hb = Gtk.HeaderBar(title=title)
 		hb.set_show_close_button(True)
 		self.set_titlebar(hb)
-		# Grid, Stack & Stack switcher
-		grid = Gtk.Grid()
-		grid.set_border_width(10)
+		# Stack & Stack switcher
+		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		content_area = self.get_content_area()
-		content_area.add(grid)
+		content_area.add(vbox)
 		stack = Gtk.Stack()
-		grid.attach(stack, 0, 1, 1, 1)
-		stackswitcher = Gtk.StackSwitcher()
-		stackswitcher.set_stack(stack)
-		grid.attach(stackswitcher, 0, 0, 1, 1)
+		stack.set_margin_top(5)
+		#stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+		#stack.set_transition_duration(1000)
+		stack_switcher = Gtk.StackSwitcher()
+		stack_switcher.set_stack(stack)
+		vbox.pack_start(stack_switcher, True, True, 0)
+		vbox.pack_start(stack, True, True, 0)
 		### General
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		box.set_margin_top(10)
 		stack.add_titled(box, 'general', 'General')
 		## Debug
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
@@ -126,7 +128,6 @@ class PreferencesDialog(Gtk.Dialog):
 		box.add(keep_game_on_unplug_check)
 		### Farming
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		box.set_margin_top(10)
 		stack.add_titled(box, 'farming', 'Farming')
 		# Save dragodindes images
 		save_dragodindes_images_check = Gtk.CheckButton('Save dragodindes image')

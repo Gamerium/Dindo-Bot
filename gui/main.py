@@ -231,7 +231,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Plug
 		if '--enable-dev-env' in self.args:
 			self.plug_button = Gtk.Button()
-			self.plug_button.set_image(Gtk.Image(stock=Gtk.STOCK_JUMP_TO))
+			self.plug_button.set_image(Gtk.Image(stock=Gtk.STOCK_FIND))
 			self.plug_button.set_tooltip_text('Plug')
 			self.plug_button.connect('clicked', self.on_plug_button_clicked)
 			game_window_box.add(self.plug_button)
@@ -268,63 +268,57 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.repeat_spin_button.set_sensitive(False)
 		hbox.pack_end(self.repeat_spin_button, False, False, 0)
 		## Start
+		button_box = CenteredButtonBox()
+		bot_page.pack_end(button_box, False, False, 0)
 		self.start_button = Gtk.Button()
 		self.start_button.set_tooltip_text('Start')
 		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY))
 		self.start_button.connect('clicked', self.on_start_button_clicked)
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		container_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.pack_start(container_hbox, True, False, 0)
-		container_hbox.add(self.start_button)
-		bot_page.pack_end(hbox, False, False, 0)
+		button_box.add(self.start_button)
 		## Pause
 		self.pause_button = Gtk.Button()
 		self.pause_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PAUSE))
 		self.pause_button.set_tooltip_text('Pause')
 		self.pause_button.set_sensitive(False)
 		self.pause_button.connect('clicked', self.on_pause_button_clicked)
-		container_hbox.add(self.pause_button)
+		button_box.add(self.pause_button)
 		## Stop
 		self.stop_button = Gtk.Button()
 		self.stop_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_STOP))
 		self.stop_button.set_tooltip_text('Stop')
 		self.stop_button.set_sensitive(False)
 		self.stop_button.connect('clicked', self.on_stop_button_clicked)
-		container_hbox.add(self.stop_button)
+		button_box.add(self.stop_button)
 		### Path Tab
 		path_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		path_page.set_border_width(10)
 		bot_notebook.append_page(path_page, Gtk.Label('Path'))
 		## Movement
 		path_page.add(Gtk.Label('<b>Movement</b>', xalign=0, use_markup=True))
+		button_box = CenteredButtonBox(orientation=Gtk.Orientation.VERTICAL)
+		path_page.add(button_box)
 		# Up
 		up_button = Gtk.Button()
 		up_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_UP))
 		up_button.connect('clicked', lambda button: self.path_listbox.append_text('Move(UP)'))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(up_button, True, False, 0)
-		path_page.add(hbox)
+		button_box.add(up_button)
 		# Left
 		left_button = Gtk.Button()
 		left_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_BACK))
 		left_button.connect('clicked', lambda button: self.path_listbox.append_text('Move(LEFT)'))
-		left_right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=40)
-		left_right_box.add(left_button)
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(left_right_box, True, False, 0)
-		path_page.add(hbox)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=40)
+		hbox.add(left_button)
+		button_box.add(hbox)
 		# Right
 		right_button = Gtk.Button()
 		right_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_FORWARD))
 		right_button.connect('clicked', lambda buton: self.path_listbox.append_text('Move(RIGHT)'))
-		left_right_box.add(right_button)
+		hbox.add(right_button)
 		# Down
 		down_button = Gtk.Button()
 		down_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_DOWN))
 		down_button.connect('clicked', lambda button: self.path_listbox.append_text('Move(DOWN)'))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(down_button, True, False, 0)
-		path_page.add(hbox)
+		button_box.add(down_button)
 		## Action
 		path_page.add(Gtk.Label('<b>Action</b>', xalign=0, use_markup=True))
 		stack_listbox = StackListBox()
@@ -343,9 +337,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Enclos(%s)' % self.enclos_combo.get_active_text()))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(add_button, True, False, 0)
-		widget.pack_end(hbox, False, False, 0)
+		button_box = CenteredButtonBox()
+		button_box.add(add_button)
+		widget.pack_end(button_box, False, False, 0)
 		## Zaap
 		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/zaap.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -365,9 +359,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Zaap(from=%s,to=%s)' % (self.zaap_from_combo.get_active_text(), self.zaap_to_combo.get_active_text())))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(add_button, True, False, 0)
-		widget.pack_end(hbox, False, False, 0)
+		button_box = CenteredButtonBox()
+		button_box.add(add_button)
+		widget.pack_end(button_box, False, False, 0)
 		## Zaapi
 		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/destination.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -387,9 +381,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Zaapi(from=%s,to=%s)' % (self.zaapi_from_combo.get_active_text(), self.zaapi_to_combo.get_active_text())))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(add_button, True, False, 0)
-		widget.pack_end(hbox, False, False, 0)
+		button_box = CenteredButtonBox()
+		button_box.add(add_button)
+		widget.pack_end(button_box, False, False, 0)
 		## Click
 		pixbuf = Gdk.Cursor(Gdk.CursorType.ARROW).get_image().scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -409,12 +403,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Location
 		widget.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
 		pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(16, 16, GdkPixbuf.InterpType.BILINEAR)
-		self.select_button = Gtk.Button()
-		self.select_button.add(ImageLabel(Gtk.Image(pixbuf=pixbuf), 'Select', 3))
+		self.select_button = Gtk.Button('Select')
+		self.select_button.set_image(Gtk.Image(pixbuf=pixbuf))
 		self.select_button.connect('clicked', self.on_select_button_clicked)
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(self.select_button, True, False, 0)
-		widget.add(hbox)
+		button_box = Gtk.ButtonBox(orientation=Gtk.Orientation.HORIZONTAL, layout_style=Gtk.ButtonBoxStyle.CENTER)
+		button_box.add(self.select_button)
+		widget.add(button_box)
 		## Wait
 		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/hourglass.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -432,11 +426,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Wait(%d)' % self.duration_spin_button.get_value_as_int()))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(add_button, True, False, 0)
-		widget.pack_end(hbox, False, False, 0)
+		button_box = CenteredButtonBox()
+		button_box.add(add_button)
+		widget.pack_end(button_box, False, False, 0)
 		## Keyboard
-		image = Gtk.Image(icon_name='input-keyboard', pixel_size=20)
+		image = Gtk.Image(icon_name='input-keyboard', margin=2, pixel_size=20)
 		label = ImageLabel(image, 'Keyboard')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack_listbox.append(label, widget)
@@ -460,7 +454,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.type_text_radio = Gtk.RadioButton(group=self.press_key_radio)
 		self.type_text_radio.add(Gtk.Label('<b>Type text</b>', xalign=0, use_markup=True))
 		widget.add(self.type_text_radio)
-		self.type_text_entry = Gtk.Entry(placeholder_text='login')
+		self.type_text_entry = Gtk.Entry(placeholder_text='text')
 		self.type_text_entry.set_margin_left(10)
 		self.type_text_entry.set_width_chars(10)
 		self.type_text_entry.connect('focus-in-event', lambda entry, event: self.type_text_radio.set_active(True))
@@ -468,41 +462,36 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', self.on_keyboard_add_button_clicked)
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(add_button, True, False, 0)
-		widget.pack_end(hbox, False, False, 0)
+		button_box = CenteredButtonBox()
+		button_box.add(add_button)
+		widget.pack_end(button_box, False, False, 0)
 		## Separator
 		path_page.add(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL, margin=5))
 		## Listbox
-		frame = Gtk.Frame()
-		scrolled_window = Gtk.ScrolledWindow()
 		self.path_listbox = CustomListBox()
-		scrolled_window.add(self.path_listbox)
-		frame.add(scrolled_window)
-		path_page.pack_start(frame, True, True, 0)
-		## Load
-		button_box = Gtk.ButtonBox(orientation=Gtk.Orientation.HORIZONTAL, spacing=5, layout_style=Gtk.ButtonBoxStyle.CENTER)
-		load_path = Gtk.Button('Load')
-		load_path.connect('clicked', self.on_load_path_clicked)
-		button_box.add(load_path)
-		## Save
-		save_menu_button = Gtk.MenuButton('Save')
-		save_menu_button.set_image(Gtk.Arrow(Gtk.ArrowType.DOWN, Gtk.ShadowType.NONE))
-		save_menu_button.set_image_position(Gtk.PositionType.RIGHT)
-		menu = Gtk.Menu()
-		menu.connect('show', self.on_save_menu_show)
-		self.save_path = Gtk.MenuItem('Save')
-		self.save_path.connect('activate', self.on_save_path_activated)
-		menu.append(self.save_path)
-		clear_path = Gtk.MenuItem('Clear All')
-		clear_path.connect('activate', self.on_clear_path_activated)
-		menu.append(clear_path)
-		menu.show_all()
-		save_menu_button.set_popup(menu)
-		button_box.add(save_menu_button)
-		path_page.pack_end(button_box, False, False, 0)
+		path_page.pack_end(self.path_listbox, True, True, 0)
+		# Load
+		load_path_button = Gtk.Button()
+		load_path_button.set_tooltip_text('Load')
+		load_path_button.set_image(Gtk.Image(stock=Gtk.STOCK_OPEN))
+		load_path_button.connect('clicked', self.on_load_path_button_clicked)
+		self.path_listbox.add_button(load_path_button)
+		# Save
+		self.save_path_button = Gtk.Button()
+		self.save_path_button.set_tooltip_text('Save')
+		self.save_path_button.set_sensitive(False)
+		self.save_path_button.set_image(Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
+		self.save_path_button.connect('clicked', self.on_save_path_button_clicked)
+		self.path_listbox.add_button(self.save_path_button)
+		self.path_listbox.on_update(self.on_path_listbox_update)
 
-	def on_load_path_clicked(self, button):
+	def on_path_listbox_update(self):
+		if self.path_listbox.get_rows():
+			self.save_path_button.set_sensitive(True)
+		else:
+			self.save_path_button.set_sensitive(False)
+
+	def on_load_path_button_clicked(self, button):
 		filechooserdialog = Gtk.FileChooserDialog(title='Load Path', transient_for=self, action=Gtk.FileChooserAction.OPEN)
 		filechooserdialog.set_current_folder(tools.get_resource_path('../paths'))
 		pathfilter = Gtk.FileFilter()
@@ -625,13 +614,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.bot_thread.stop()
 		self.reset_buttons()
 
-	def on_save_menu_show(self, menu):
-		if self.path_listbox.get_children():
-			self.save_path.set_sensitive(True)
-		else:
-			self.save_path.set_sensitive(False)
-
-	def on_save_path_activated(self, item):
+	def on_save_path_button_clicked(self, button):
 		filechooserdialog = Gtk.FileChooserDialog(title='Save as', transient_for=self, action=Gtk.FileChooserAction.SAVE)
 		filechooserdialog.set_current_folder(tools.get_resource_path('../paths'))
 		filechooserdialog.set_current_name('path_' + tools.get_date_time() + '.path')
@@ -647,16 +630,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		if response == Gtk.ResponseType.OK:
 			# get all rows text
 			text = ''
-			for row in self.path_listbox.get_children():
+			for row in self.path_listbox.get_rows():
 				text += self.path_listbox.get_row_text(row) + '\n'
 			# save it to file
 			tools.save_text_to_file(text, filechooserdialog.get_filename())
 
 		filechooserdialog.destroy()
-
-	def on_clear_path_activated(self, item):
-		for row in self.path_listbox.get_children():
-			self.path_listbox.remove(row)
 
 	def on_bot_path_changed(self, filechooserbutton):
 		self.bot_path = filechooserbutton.get_filename()
