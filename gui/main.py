@@ -3,16 +3,18 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk, GObject
+from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 from lib import tools
 from lib import logger
 from lib import data
+from lib import parser
 from lib import settings
 from lib.threads import BotThread
 from lib.shared import LogType, DebugLevel, __program_name__
 from .dev import DevToolsWidget
 from .custom import *
 from .dialog import *
+from threading import Thread
 
 class BotWindow(Gtk.ApplicationWindow):
 
@@ -246,11 +248,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.bot_widgets.add(bot_path_filechooserbutton)
 		## Start From Step
 		self.bot_widgets.add(Gtk.Label('<b>Start From Step</b>', xalign=0, use_markup=True))
-		self.step_spin_button = Gtk.SpinButton(adjustment=Gtk.Adjustment(value=1, lower=1, upper=10000, step_increment=1, page_increment=5, page_size=0))
+		self.step_spin_button = SpinButton(min=1, max=10000)
 		self.step_spin_button.set_margin_left(10)
 		self.bot_widgets.add(self.step_spin_button)
 		## Repeat Path
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.add(Gtk.Label('<b>Repeat Path</b>', xalign=0, use_markup=True))
 		self.bot_widgets.add(hbox)
 		# Switch
@@ -258,11 +260,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.repeat_switch.connect('notify::active', lambda switch, pspec: self.repeat_spin_button.set_sensitive(switch.get_active()))
 		hbox.pack_end(self.repeat_switch, False, False, 0)
 		# Spin button
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
 		self.bot_widgets.add(hbox)
 		hbox.add(Gtk.Label('Number of times'))
-		self.repeat_spin_button = Gtk.SpinButton(adjustment=Gtk.Adjustment(value=2, lower=2, upper=1000, step_increment=1, page_increment=5, page_size=0))
+		self.repeat_spin_button = SpinButton(min=2, max=1000)
 		self.repeat_spin_button.set_sensitive(False)
 		hbox.pack_end(self.repeat_spin_button, False, False, 0)
 		## Start
@@ -271,7 +273,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY))
 		self.start_button.connect('clicked', self.on_start_button_clicked)
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		container_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		container_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.pack_start(container_hbox, True, False, 0)
 		container_hbox.add(self.start_button)
 		bot_page.pack_end(hbox, False, False, 0)
@@ -298,14 +300,14 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Up
 		up_button = Gtk.Button()
 		up_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_UP))
-		up_button.connect('clicked', self.on_up_button_clicked)
+		up_button.connect('clicked', lambda button: self.path_listbox.append_text('Move(UP)'))
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.pack_start(up_button, True, False, 0)
 		path_page.add(hbox)
 		# Left
 		left_button = Gtk.Button()
 		left_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_BACK))
-		left_button.connect('clicked', self.on_left_button_clicked)
+		left_button.connect('clicked', lambda button: self.path_listbox.append_text('Move(LEFT)'))
 		left_right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=40)
 		left_right_box.add(left_button)
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -314,80 +316,163 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Right
 		right_button = Gtk.Button()
 		right_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_FORWARD))
-		right_button.connect('clicked', self.on_right_button_clicked)
+		right_button.connect('clicked', lambda buton: self.path_listbox.append_text('Move(RIGHT)'))
 		left_right_box.add(right_button)
 		# Down
 		down_button = Gtk.Button()
 		down_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_DOWN))
-		down_button.connect('clicked', self.on_down_button_clicked)
+		down_button.connect('clicked', lambda button: self.path_listbox.append_text('Move(DOWN)'))
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		hbox.pack_start(down_button, True, False, 0)
 		path_page.add(hbox)
 		## Action
 		path_page.add(Gtk.Label('<b>Action</b>', xalign=0, use_markup=True))
+		stack_listbox = StackListBox()
+		path_page.add(stack_listbox)
 		## Enclos
-		self.enclos_radio = Gtk.RadioButton('Enclos')
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.set_margin_left(5)
-		hbox.add(self.enclos_radio)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/enclos.png'), 24, 24)
+		image = Gtk.Image(pixbuf=pixbuf)
+		label = ImageLabel(image, 'Enclos')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
+		# Location
+		widget.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
 		self.enclos_combo = CustomComboBox(data=data.Enclos, sort=True)
-		self.enclos_combo.set_margin_left(14)
-		self.enclos_combo.connect('changed', lambda combo: self.enclos_radio.set_active(True))
-		hbox.pack_start(self.enclos_combo, True, True, 0)
-		path_page.add(hbox)
+		self.enclos_combo.set_margin_left(10)
+		widget.add(self.enclos_combo)
+		# Add
+		add_button = Gtk.Button('Add')
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Enclos(%s)' % self.enclos_combo.get_active_text()))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.pack_start(add_button, True, False, 0)
+		widget.pack_end(hbox, False, False, 0)
 		## Zaap
-		self.zaap_radio = Gtk.RadioButton('Zaap', group=self.enclos_radio)
-		self.zaap_radio.set_margin_left(5)
-		path_page.add(self.zaap_radio)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/zaap.png'), 24, 24)
+		image = Gtk.Image(pixbuf=pixbuf)
+		label = ImageLabel(image, 'Zaap')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
 		# From
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.set_margin_left(40)
-		hbox.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
+		widget.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
 		self.zaap_from_combo = CustomComboBox(data=data.Zaap['From'], sort=True)
-		self.zaap_from_combo.set_margin_left(12)
-		self.zaap_from_combo.connect('changed', lambda combo: self.zaap_radio.set_active(True))
-		hbox.pack_start(self.zaap_from_combo, True, True, 0)
-		path_page.add(hbox)
+		self.zaap_from_combo.set_margin_left(10)
+		widget.add(self.zaap_from_combo)
 		# To
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.set_margin_left(40)
-		hbox.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
+		widget.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
 		self.zaap_to_combo = CustomComboBox(data=data.Zaap['To'], sort=True)
-		self.zaap_to_combo.set_margin_left(30)
-		self.zaap_to_combo.connect('changed', lambda combo: self.zaap_radio.set_active(True))
-		hbox.pack_start(self.zaap_to_combo, True, True, 0)
-		path_page.add(hbox)
+		self.zaap_to_combo.set_margin_left(10)
+		widget.add(self.zaap_to_combo)
+		# Add
+		add_button = Gtk.Button('Add')
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Zaap(from=%s,to=%s)' % (self.zaap_from_combo.get_active_text(), self.zaap_to_combo.get_active_text())))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.pack_start(add_button, True, False, 0)
+		widget.pack_end(hbox, False, False, 0)
 		## Zaapi
-		self.zaapi_radio = Gtk.RadioButton('Zaapi', group=self.enclos_radio)
-		self.zaapi_radio.set_margin_left(5)
-		path_page.add(self.zaapi_radio)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/destination.png'), 24, 24)
+		image = Gtk.Image(pixbuf=pixbuf)
+		label = ImageLabel(image, 'Zaapi')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
 		# From
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.set_margin_left(40)
-		hbox.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
+		widget.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
 		self.zaapi_from_combo = CustomComboBox(data=data.Zaapi['From'], sort=True)
-		self.zaapi_from_combo.set_margin_left(12)
-		self.zaapi_from_combo.connect('changed', lambda combo: self.zaapi_radio.set_active(True))
-		hbox.pack_start(self.zaapi_from_combo, True, True, 0)
-		path_page.add(hbox)
+		self.zaapi_from_combo.set_margin_left(10)
+		widget.add(self.zaapi_from_combo)
 		# To
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.set_margin_left(40)
-		hbox.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
+		widget.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
 		self.zaapi_to_combo = CustomComboBox(data=data.Zaapi['To'], sort=True)
-		self.zaapi_to_combo.set_margin_left(30)
-		self.zaapi_to_combo.connect('changed', lambda combo: self.zaapi_radio.set_active(True))
-		hbox.pack_start(self.zaapi_to_combo, True, True, 0)
-		path_page.add(hbox)
+		self.zaapi_to_combo.set_margin_left(10)
+		widget.add(self.zaapi_to_combo)
+		# Add
+		add_button = Gtk.Button('Add')
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Zaapi(from=%s,to=%s)' % (self.zaapi_from_combo.get_active_text(), self.zaapi_to_combo.get_active_text())))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.pack_start(add_button, True, False, 0)
+		widget.pack_end(hbox, False, False, 0)
+		## Click
+		pixbuf = Gdk.Cursor(Gdk.CursorType.ARROW).get_image().scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
+		image = Gtk.Image(pixbuf=pixbuf)
+		label = ImageLabel(image, 'Click')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
+		# Twice
+		widget.add(Gtk.Label('<b>Twice</b>', xalign=0, use_markup=True))
+		self.click_twice_yes_radio = Gtk.RadioButton('Yes')
+		click_twice_no_radio = Gtk.RadioButton('No', group=self.click_twice_yes_radio)
+		click_twice_no_radio.set_active(True)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		hbox.add(self.click_twice_yes_radio)
+		hbox.add(click_twice_no_radio)
+		widget.add(hbox)
+		# Location
+		widget.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
+		pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(16, 16, GdkPixbuf.InterpType.BILINEAR)
+		self.select_button = Gtk.Button()
+		self.select_button.add(ImageLabel(Gtk.Image(pixbuf=pixbuf), 'Select', 3))
+		self.select_button.connect('clicked', self.on_select_button_clicked)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.pack_start(self.select_button, True, False, 0)
+		widget.add(hbox)
+		## Wait
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/hourglass.png'), 24, 24)
+		image = Gtk.Image(pixbuf=pixbuf)
+		label = ImageLabel(image, 'Wait')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
+		# Duration
+		widget.add(Gtk.Label('<b>Duration</b>', xalign=0, use_markup=True))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		self.duration_spin_button = SpinButton(min=1, max=60)
+		hbox.pack_start(self.duration_spin_button, True, True, 0)
+		hbox.add(Gtk.Label('second(s)'))
+		widget.add(hbox)
+		# Add
+		add_button = Gtk.Button('Add')
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Wait(%d)' % self.duration_spin_button.get_value_as_int()))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.pack_start(add_button, True, False, 0)
+		widget.pack_end(hbox, False, False, 0)
+		## Keyboard
+		image = Gtk.Image(icon_name='input-keyboard', pixel_size=20)
+		label = ImageLabel(image, 'Keyboard')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
+		# Press key
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		self.press_key_radio = Gtk.RadioButton()
+		self.press_key_radio.add(Gtk.Label('<b>Press key</b>', xalign=0, use_markup=True))
+		hbox.add(self.press_key_radio)
+		self.key_label = Gtk.Label()
+		hbox.add(self.key_label)
+		widget.add(hbox)
+		self.keys_combo = CustomComboBox(data.KeyboardShortcuts, True)
+		self.keys_combo.set_margin_left(10)
+		self.keys_combo.connect('changed', lambda combo: (
+				self.key_label.set_text('(' + data.KeyboardShortcuts[combo.get_active_text()] + ')'),
+				self.press_key_radio.set_active(True)
+			)
+		)
+		widget.add(self.keys_combo)
+		# Type text
+		self.type_text_radio = Gtk.RadioButton(group=self.press_key_radio)
+		self.type_text_radio.add(Gtk.Label('<b>Type text</b>', xalign=0, use_markup=True))
+		widget.add(self.type_text_radio)
+		self.type_text_entry = Gtk.Entry(placeholder_text='login')
+		self.type_text_entry.set_margin_left(10)
+		self.type_text_entry.set_width_chars(10)
+		self.type_text_entry.connect('focus-in-event', lambda entry, event: self.type_text_radio.set_active(True))
+		widget.add(self.type_text_entry)
+		# Add
+		add_button = Gtk.Button('Add')
+		add_button.connect('clicked', self.on_keyboard_add_button_clicked)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.pack_start(add_button, True, False, 0)
+		widget.pack_end(hbox, False, False, 0)
 		## Separator
 		path_page.add(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL, margin=5))
-		## Add
-		add_action_button = Gtk.Button('Add')
-		add_action_button.connect('clicked', self.on_add_action_button_clicked)
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		container_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-		hbox.pack_start(container_hbox, True, False, 0)
-		container_hbox.add(add_action_button)
 		## Save
 		save_menu_button = Gtk.MenuButton('  Save')
 		save_menu_button.set_image(Gtk.Arrow(Gtk.ArrowType.DOWN, Gtk.ShadowType.NONE))
@@ -402,7 +487,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		menu.append(clear_path)
 		menu.show_all()
 		save_menu_button.set_popup(menu)
-		container_hbox.add(save_menu_button)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.pack_start(save_menu_button, True, False, 0)
 		path_page.add(hbox)
 		## Listbox
 		frame = Gtk.Frame()
@@ -412,6 +498,50 @@ class BotWindow(Gtk.ApplicationWindow):
 		scrolled_window.add(self.path_listbox)
 		frame.add(scrolled_window)
 		path_page.pack_end(frame, True, True, 0)
+
+	def on_keyboard_add_button_clicked(self, button):
+		if self.press_key_radio.get_active():
+			selected = self.keys_combo.get_active_text()
+			self.path_listbox.append_text('PressKey(%s)' % parser.parse_data(data.KeyboardShortcuts, selected))
+		else:
+			self.path_listbox.append_text('TypeText(%s)' % self.type_text_entry.get_text())
+
+	def wait_for_click(self, callback, game_location=None):
+		# wait for click
+		tools.wait_for_mouse_event('left_down')
+		# get mouse position & screen size
+		x, y = tools.get_mouse_position()
+		width, height = tools.get_screen_size()
+		if game_location is not None:
+			# get game area location
+			game_x, game_y, game_width, game_height = game_location
+			#print('x: %d, y: %d, game_x: %d, game_y: %d, game_width: %d, game_height: %d' % (x, y, game_x, game_y, game_width, game_height))
+			# scale to game area
+			if tools.position_is_inside_bounds(x, y, game_x, game_y, game_width, game_height):
+				# position is inside game area, so we fit x & y to it
+				x = x - game_x
+				y = y - game_y
+				width = game_width
+				height = game_height
+		# execute callback
+		GObject.idle_add(callback, (x, y, width, height))
+
+	def add_click(self, location):
+		x, y, width, height = location
+		twice = self.click_twice_yes_radio.get_active()
+		self.path_listbox.append_text('Click(x=%d,y=%d,width=%d,height=%d,twice=%s)' % (x, y, width, height, twice))
+		self.select_button.set_sensitive(True)
+		self.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
+
+	def set_cursor(self, cursor):
+		window = self.get_window() # Gdk.get_default_root_window()
+		window.set_cursor(cursor)
+
+	def on_select_button_clicked(self, button):
+		button.set_sensitive(False)
+		self.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSSHAIR))
+		game_location = tools.get_widget_location(self.game_area)
+		Thread(target=self.wait_for_click, args=(self.add_click, game_location)).start()
 
 	def on_start_button_clicked(self, button):
 		if not self.game_window:
@@ -504,26 +634,6 @@ class BotWindow(Gtk.ApplicationWindow):
 		for row in self.path_listbox.get_children():
 			self.path_listbox.remove(row)
 
-	def on_up_button_clicked(self, button):
-		self.path_listbox.append_text('Move(UP)')
-
-	def on_left_button_clicked(self, button):
-		self.path_listbox.append_text('Move(LEFT)')
-
-	def on_right_button_clicked(self, button):
-		self.path_listbox.append_text('Move(RIGHT)')
-
-	def on_down_button_clicked(self, button):
-		self.path_listbox.append_text('Move(DOWN)')
-
-	def on_add_action_button_clicked(self, button):
-		if self.enclos_radio.get_active():
-			self.path_listbox.append_text('Enclos(%s)' % self.enclos_combo.get_active_text())
-		elif self.zaap_radio.get_active():
-			self.path_listbox.append_text('Zaap(from=%s,to=%s)' % (self.zaap_from_combo.get_active_text(), self.zaap_to_combo.get_active_text()))
-		elif self.zaapi_radio.get_active():
-			self.path_listbox.append_text('Zaapi(from=%s,to=%s)' % (self.zaapi_from_combo.get_active_text(), self.zaapi_to_combo.get_active_text()))
-
 	def on_bot_path_changed(self, filechooserbutton):
 		self.bot_path = filechooserbutton.get_filename()
 
@@ -531,7 +641,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.game_window_combo_ignore_change = True
 		self.game_window_combo.remove_all()
 		self.game_windowList = tools.get_game_window_list()
-		self.debug('Populate game window combobox, %s window found' % len(self.game_windowList), DebugLevel.High)
+		self.debug('Populate game window combobox, %d window found' % len(self.game_windowList), DebugLevel.High)
 		for window_name in self.game_windowList:
 			self.game_window_combo.append_text(window_name)
 		self.game_window_combo_ignore_change = False
@@ -577,7 +687,7 @@ class BotWindow(Gtk.ApplicationWindow):
 				self.game_area.show_all()
 				self.vtable.attach(self.game_area, 0, 1, 0, 3)
 			# plug game window
-			self.debug('Plug game window (id: %s)' % window_xid, DebugLevel.Low)
+			self.debug('Plug game window (id: %d)' % window_xid, DebugLevel.Low)
 			self.game_area.add_id(window_xid)
 			#self.game_window.reparent(self.game_area.get_window(), 0, 0)
 			#self.game_window.show() # force show (when minimized)

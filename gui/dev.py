@@ -8,6 +8,7 @@ from lib import tools
 from lib import data
 from .custom import CustomComboBox, CustomSpinButton
 from .dialog import TextDialog
+from threading import Thread
 
 class DevToolsWidget(Gtk.Table):
 
@@ -45,13 +46,13 @@ class DevToolsWidget(Gtk.Table):
 		frame.add(scrolled_window)
 		hbox.pack_start(frame, True, True, 0)
 		# Select
-		buttons_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+		buttons_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		hbox.add(buttons_box)
-		select_button = Gtk.Button()
-		select_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
-		select_button.set_tooltip_text('Select')
-		select_button.connect('clicked', self.on_select_button_clicked)
-		buttons_box.add(select_button)
+		self.select_button = Gtk.Button()
+		self.select_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
+		self.select_button.set_tooltip_text('Select')
+		self.select_button.connect('clicked', self.on_select_button_clicked)
+		buttons_box.add(self.select_button)
 		# Simulate
 		self.simulate_click_button = Gtk.Button()
 		self.simulate_click_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.HAND1).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
@@ -66,14 +67,14 @@ class DevToolsWidget(Gtk.Table):
 		## Key Press
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		right_box.pack_start(vbox, True, True, 0)
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		vbox.add(hbox)
 		hbox.add(Gtk.Label('<b>Key Press</b>', xalign=0, use_markup=True))
 		# Label
 		self.keys_label = Gtk.Label()
 		hbox.add(self.keys_label)
 		# ComboBox
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		vbox.add(hbox)
 		self.keys_combo = CustomComboBox(data.KeyboardShortcuts, True)
 		self.keys_combo.connect('changed', self.on_keys_combo_changed)
@@ -87,14 +88,14 @@ class DevToolsWidget(Gtk.Table):
 		hbox.add(self.simulate_key_press_button)
 		## Scroll
 		vbox.add(Gtk.Label('<b>Scroll</b>', xalign=0, use_markup=True))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		vbox.add(hbox)
 		# Direction
 		self.scroll_direction_combo = CustomComboBox(['up', 'down'])
 		self.scroll_direction_combo.set_active(1)
 		hbox.pack_start(self.scroll_direction_combo, True, True, 0)
 		# Value
-		self.scroll_spin_button = CustomSpinButton(value=1, min=1, max=10)
+		self.scroll_spin_button = CustomSpinButton(min=1, max=10)
 		hbox.add(self.scroll_spin_button)
 		# Simulate
 		simulate_scroll_button = Gtk.Button()
@@ -116,7 +117,7 @@ class DevToolsWidget(Gtk.Table):
 		else:
 			x, y = (None, None)
 		# scroll
-		self.parent.debug('Scroll: %s' % clicks)
+		self.parent.debug('Scroll: %d' % clicks)
 		tools.scroll_to(clicks, x, y)
 
 	def on_keys_combo_changed(self, combo):
@@ -125,33 +126,25 @@ class DevToolsWidget(Gtk.Table):
 		if not self.simulate_key_press_button.get_sensitive():
 			self.simulate_key_press_button.set_sensitive(True)
 
-	def on_select_button_clicked(self, button):
-		button.set_sensitive(False)
-		# wait for click
-		tools.wait_for_mouse_event('left_down')
-		# get mouse position & screen size
-		x, y = tools.get_mouse_position()
-		width, height = tools.get_screen_size()
+	def add_pixel(self, location):
+		x, y, width, height = location
 		# get pixel color
 		color = tools.get_pixel_color(x, y)
-		if self.parent.game_area:
-			# get game area location
-			game_x, game_y, game_width, game_height = tools.get_widget_location(self.parent.game_area)
-			#print('x: %s, y: %s, game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (x, y, game_x, game_y, game_width, game_height))
-			# scale to game area
-			if tools.position_is_inside_bounds(x, y, game_x, game_y, game_width, game_height):
-				# position is inside game area, so we fit x & y to it
-				x = x - game_x
-				y = y - game_y
-				width = game_width
-				height = game_height
 		# append to treeview
 		self.pixels_list.append([self.mouse_icon, str(x), str(y), str(width), str(height), str(color)])
 		self.perform_scroll = True
-		button.set_sensitive(True)
+		self.select_button.set_sensitive(True)
+		self.parent.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 		# select last row in treeview
 		last_row_index = len(self.pixels_list) - 1
 		self.tree_view_selection.select_path(Gtk.TreePath(last_row_index))
+
+	def on_select_button_clicked(self, button):
+		button.set_sensitive(False)
+		self.parent.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSSHAIR))
+		# wait for click
+		game_location = tools.get_widget_location(self.parent.game_area)
+		Thread(target=self.parent.wait_for_click, args=(self.add_pixel, game_location)).start()
 
 	def get_selected_row(self):
 		model, tree_iter = self.tree_view_selection.get_selected()
@@ -168,17 +161,17 @@ class DevToolsWidget(Gtk.Table):
 	def on_simulate_click_button_clicked(self, button):
 		# get click coordinates
 		x, y, width, height, color = self.get_selected_row()
-		#print('x: %s, y: %s, width: %s, height: %s' % (x, y, width, height))
+		#print('x: %d, y: %d, width: %d, height: %d' % (x, y, width, height))
 		# adjust for game area
 		if self.parent.game_area:
 			game_x, game_y, game_width, game_height = tools.get_widget_location(self.parent.game_area)
-			#print('game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (game_x, game_y, game_width, game_height))
+			#print('game_x: %d, game_y: %d, game_width: %d, game_height: %d' % (game_x, game_y, game_width, game_height))
 			click_x, click_y = tools.adjust_click_position(x, y, width, height, game_x, game_y, game_width, game_height)
 		else:
 			click_x = x
 			click_y = y
 		# perform click
-		self.parent.debug('Click on x: %s, y: %s' % (click_x, click_y))
+		self.parent.debug('Click on x: %d, y: %d' % (click_x, click_y))
 		tools.perform_click(click_x, click_y)
 
 	def on_simulate_key_press_button_clicked(self, button):
@@ -189,13 +182,13 @@ class DevToolsWidget(Gtk.Table):
 		tools.press_key(key)
 
 	def on_click(self, widget, event):
-		print('x: %s, y: %s' % (event.x, event.y))
+		print('x: %d, y: %d' % (event.x, event.y))
 
 	def on_double_click(self, widget, event):
 		if event.type == Gdk.EventType.DOUBLE_BUTTON_PRESS:
 			selected_row = self.get_selected_row()
 			if selected_row:
-				TextDialog(self.parent, "{'x': %s, 'y': %s, 'width': %s, 'height': %s, 'color': %s}" % selected_row)
+				TextDialog(self.parent, "{'x': %d, 'y': %d, 'width': %d, 'height': %d, 'color': %s}" % selected_row)
 
 	def on_selection_changed(self, selection):
 		if not self.simulate_click_button.get_sensitive():

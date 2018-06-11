@@ -52,7 +52,7 @@ class PlugDialog(Gtk.Dialog):
 		self.parent = transient_for
 		self.set_resizable(False)
 		# Window id entry
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_border_width(10)
 		hbox.add(Gtk.Label('Window id'))
 		self.entry = Gtk.Entry()

@@ -63,7 +63,7 @@ class BotThread(TimerThread):
 		self.debug('Bot thread started', DebugLevel.Low)
 
 		# get instructions & interpret them
-		self.debug('Bot path: %s, repeat: %s' % (self.parent.bot_path, self.repeat_path))
+		self.debug('Bot path: %s, repeat: %d' % (self.parent.bot_path, self.repeat_path))
 		if self.parent.bot_path:
 			instructions = tools.read_file(self.parent.bot_path)
 			repeat_count = 0
@@ -90,7 +90,7 @@ class BotThread(TimerThread):
 		lines = instructions.splitlines()
 		# ignore instructions before start step
 		if self.start_from_step > 1 and self.start_from_step <= len(lines):
-			self.debug('Start from step: %s' % self.start_from_step)
+			self.debug('Start from step: %d' % self.start_from_step)
 			step = self.start_from_step - 1
 			lines = lines[step:]
 
@@ -100,7 +100,7 @@ class BotThread(TimerThread):
 			if self.suspend: break
 
 			# parse instruction
-			self.debug('Instruction (%s): %s' % (i, line), DebugLevel.Low)
+			self.debug('Instruction (%d): %s' % (i, line), DebugLevel.Low)
 			instruction = parser.parse_instruction(line)
 			self.debug('Parse result: ' + str(instruction), DebugLevel.High)
 
@@ -117,6 +117,24 @@ class BotThread(TimerThread):
 			elif instruction['name'] == 'Zaapi':
 				self.use_zaapi(instruction['from'], instruction['to'])
 
+			elif instruction['name'] == 'Click':
+				coordinates = (instruction['x'], instruction['y'], instruction['width'], instruction['height'])
+				if instruction['twice'] == 'True':
+					self.double_click(coordinates)
+				else:
+					self.click(coordinates)
+
+			elif instruction['name'] == 'Wait':
+				duration = instruction['value']
+				if duration.isdigit():
+					self.sleep(int(duration))
+
+			elif instruction['name'] == 'PressKey':
+				self.press_key(instruction['value'])
+
+			elif instruction['name'] == 'TypeText':
+				self.type_text(instruction['value'])
+
 			else:
 				self.debug('Unknown instruction')
 
@@ -124,16 +142,52 @@ class BotThread(TimerThread):
 		# adjust coordinates
 		if self.game_location:
 			game_x, game_y, game_width, game_height = self.game_location
-			#print('game_x: %s, game_y: %s, game_width: %s, game_height: %s' % (game_x, game_y, game_width, game_height))
+			#print('game_x: %d, game_y: %d, game_width: %d, game_height: %d' % (game_x, game_y, game_width, game_height))
 			x, y = tools.adjust_click_position(coord['x'], coord['y'], coord['width'], coord['height'], game_x, game_y, game_width, game_height)
 		else:
 			x, y = (coord['x'], coord['y'])
 		# click
-		self.debug('Click on x: %s, y: %s, double: %s' % (x, y, double), DebugLevel.High)
+		self.debug('Click on x: %d, y: %d, double: %s' % (x, y, double), DebugLevel.High)
 		tools.perform_click(x, y, double)
 
 	def double_click(self, coord):
 		self.click(coord, True)
+
+	def move(self, direction):
+		# get coordinates
+		coordinates = parser.parse_data(data.Movements, direction)
+		if coordinates:
+			# click
+			self.click(coordinates)
+			# wait for map to change
+			self.wait_for_map_change()
+
+	def press_key(self, key):
+		# press key
+		self.debug('Press key: ' + key, DebugLevel.High)
+		tools.press_key(key)
+
+	def type_text(self, text):
+		# type text
+		self.debug('Type text: ' + text, DebugLevel.High)
+		tools.type_text(text)
+
+	def scroll(self, value):
+		self.debug('Scroll to: %d' % value, DebugLevel.High)
+		# save mouse position
+		mouse_position = tools.get_mouse_position()
+		if self.game_location:
+			# get game center
+			x, y = tools.coordinates_center(self.game_location)
+			self.sleep(1)
+		else:
+			x, y = (None, None)
+		# scroll
+		tools.scroll_to(value, x, y)
+		# wait for scroll to end
+		self.sleep(1)
+		# get back mouse to initial position
+		tools.move_mouse_to(mouse_position)
 
 	def monitor_game_screen(self, timeout=10, tolerance=0.0, screen=None, location=None, await_after_timeout=True):
 		if self.game_location or location:
@@ -179,37 +233,6 @@ class BotThread(TimerThread):
 			# wait for map to load
 			self.debug('Waiting for map to load')
 			self.sleep(3)
-
-	def move(self, direction):
-		# get coordinates
-		coordinates = parser.parse_data(data.Movements, direction)
-		if coordinates:
-			# click
-			self.click(coordinates)
-			# wait for map to change
-			self.wait_for_map_change()
-
-	def press_key(self, key):
-		# press key
-		self.debug('Press key: ' + key, DebugLevel.High)
-		tools.press_key(key)
-
-	def scroll(self, value):
-		self.debug('Scroll to: %s' % value, DebugLevel.High)
-		# save mouse position
-		mouse_position = tools.get_mouse_position()
-		if self.game_location:
-			# get game center
-			x, y = tools.coordinates_center(self.game_location)
-			self.sleep(1)
-		else:
-			x, y = (None, None)
-		# scroll
-		tools.scroll_to(value, x, y)
-		# wait for scroll to end
-		self.sleep(1)
-		# get back mouse to initial position
-		tools.move_mouse_to(mouse_position)
 
 	def use_zaap(self, zaap_from, zaap_to):
 		# get coordinates
@@ -383,7 +406,7 @@ class BotThread(TimerThread):
 		return is_empty
 
 	def get_dragodinde_name(self):
-		return 'dd_%s' % tools.get_timestamp()
+		return 'dd_%d' % tools.get_timestamp()
 
 	def manage_enclos(self, enclos_type):
 		# select dragodinde from enclos
@@ -482,7 +505,7 @@ class BotThread(TimerThread):
 
 		# print managed dragodindes number when break from loop
 		free_places = 10 - (dragodinde_number - moved_dragodinde_number)
-		self.debug('(Enclos) Managed dragodindes: %s, Moved dragodindes: %s, Free places: %s' % (dragodinde_number, moved_dragodinde_number, free_places), DebugLevel.Low)
+		self.debug('(Enclos) Managed dragodindes: %d, Moved dragodindes: %d, Free places: %d' % (dragodinde_number, moved_dragodinde_number, free_places), DebugLevel.Low)
 
 		# return enclos free places number
 		return free_places
@@ -587,7 +610,7 @@ class BotThread(TimerThread):
 					return
 
 		# print managed dragodindes number when break from loop
-		self.debug('(Inventory) Managed dragodindes: %s, Moved dragodindes: %s' % (dragodinde_number, moved_dragodinde_number), DebugLevel.Low)
+		self.debug('(Inventory) Managed dragodindes: %d, Moved dragodindes: %d' % (dragodinde_number, moved_dragodinde_number), DebugLevel.Low)
 
 	def check_enclos(self, enclos_name):
 		# get enclos coordinates
@@ -672,9 +695,9 @@ class BotThread(TimerThread):
 			self.await()
 			self.log('Unable to connect to the internet', LogType.Error)
 
-	def sleep(self, timeout=1):
+	def sleep(self, duration=1):
 		elapsed_time = 0
-		while elapsed_time < timeout:
+		while elapsed_time < duration:
 			# check for pause or suspend
 			self.pause_event.wait()
 			if self.suspend: return

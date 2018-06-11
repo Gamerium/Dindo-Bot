@@ -30,7 +30,7 @@ def get_game_window_list():
 		#print('[' + instance_name + '] ' + window_name)
 		if instance_name == 'Dofus':
 			if window_name in game_window_list:
-				name = '%s (%s)' % (window_name, len(game_window_list)+1)
+				name = '%s (%d)' % (window_name, len(game_window_list)+1)
 			else:
 				name = window_name
 			game_window_list[name] = window.get_xid()
@@ -114,7 +114,7 @@ def get_pixel_color(x, y):
 	window = Gdk.get_default_root_window()
 	pb = Gdk.pixbuf_get_from_window(window, x, y, 1, 1)
 	barray = pb.get_pixels()
-	return '(%s, %s, %s)' % (bytes_to_int(barray[0]), bytes_to_int(barray[1]), bytes_to_int(barray[2]))
+	return '(%d, %d, %d)' % (bytes_to_int(barray[0]), bytes_to_int(barray[1]), bytes_to_int(barray[2]))
 
 # Return date as a string in the given format
 def get_date(format='%d-%m-%y'):
@@ -166,15 +166,18 @@ def get_cmd_args():
 
 # Return widget location
 def get_widget_location(widget):
-	# get widget allocation (relative to parent)
-	allocation = widget.get_allocation()
-	# get widget position (relative to root window)
-	if type(widget) in (Gtk.DrawingArea, Gtk.EventBox, Gtk.Socket):
-		pos = widget.get_window().get_origin()
-		return (pos.x, pos.y, allocation.width, allocation.height)
+	if widget:
+		# get widget allocation (relative to parent)
+		allocation = widget.get_allocation()
+		# get widget position (relative to root window)
+		if type(widget) in (Gtk.DrawingArea, Gtk.EventBox, Gtk.Socket):
+			pos = widget.get_window().get_origin()
+			return (pos.x, pos.y, allocation.width, allocation.height)
+		else:
+			pos_x, pos_y = widget.get_window().get_root_coords(allocation.x, allocation.y)
+			return (pos_x, pos_y, allocation.width, allocation.height)
 	else:
-		pos_x, pos_y = widget.get_window().get_root_coords(allocation.x, allocation.y)
-		return (pos_x, pos_y, allocation.width, allocation.height)
+		return None
 
 # Check if position is inside given bounds
 def position_is_inside_bounds(pos_x, pos_y, bounds_x, bounds_y, bounds_width, bounds_height):
@@ -198,7 +201,7 @@ def adjust_click_position(click_x, click_y, window_width, window_height, dest_x,
 	if screen_width > window_width and screen_height > window_height:
 		# fit position to destination size
 		new_x, new_y = fit_position_to_destination(click_x, click_y, window_width, window_height, dest_width, dest_height)
-		#print('new_x: %s, new_y: %s, dest_x: %s, dest_y: %s' % (new_x, new_y, dest_x, dest_y))
+		#print('new_x: %d, new_y: %d, dest_x: %d, dest_y: %d' % (new_x, new_y, dest_x, dest_y))
 		# scale to screen
 		x = new_x + dest_x
 		y = new_y + dest_y
@@ -225,6 +228,10 @@ def press_key(key):
 		pyautogui.press(keys[0])
 	elif count == 2:
 		pyautogui.hotkey(keys[0], keys[1])
+
+# Type text
+def type_text(text):
+	pyautogui.typewrite(text, interval=0.25)
 
 # Scroll to value
 def scroll_to(value, x=None, y=None):
