@@ -17,7 +17,8 @@ class CustomComboBox(Gtk.ComboBoxText):
 class CustomListBox(Gtk.Frame):
 
 	perform_scroll = False
-	callback = None
+	add_callback = None
+	delete_callback = None
 
 	def __init__(self):
 		Gtk.Frame.__init__(self)
@@ -66,8 +67,11 @@ class CustomListBox(Gtk.Frame):
 		self.buttons_box = ButtonBox(linked=True)
 		actionbar.pack_end(self.buttons_box)
 
-	def on_update(self, callback):
-		self.callback = callback
+	def on_add(self, callback):
+		self.add_callback = callback
+
+	def on_delete(self, callback):
+		self.delete_callback = callback
 
 	def on_row_activated(self, listbox, row):
 		rows_count = len(self.get_rows())
@@ -101,8 +105,8 @@ class CustomListBox(Gtk.Frame):
 		self.listbox.show_all()
 		self.perform_scroll = True
 		self.select_row(row)
-		if self.callback is not None:
-			self.callback()
+		if self.add_callback is not None:
+			self.add_callback()
 
 	def select_row(self, row):
 		self.listbox.select_row(row)
@@ -110,6 +114,9 @@ class CustomListBox(Gtk.Frame):
 
 	def get_rows(self):
 		return self.listbox.get_children()
+
+	def is_empty(self):
+		return len(self.get_rows()) == 0
 
 	def get_row_text(self, row):
 		label = row.get_children()[0]
@@ -119,14 +126,14 @@ class CustomListBox(Gtk.Frame):
 		self.move_up_button.set_sensitive(False)
 		self.move_down_button.set_sensitive(False)
 		self.delete_button.set_sensitive(False)
-		if not self.get_rows():
+		if self.is_empty():
 			self.clear_all_button.set_sensitive(False)
 
 	def remove_row(self, row):
 		self.listbox.remove(row)
 		self.reset_buttons()
-		if self.callback is not None:
-			self.callback()
+		if self.delete_callback is not None:
+			self.delete_callback()
 
 	def on_delete_button_clicked(self, button):
 		row = self.listbox.get_selected_row()
@@ -154,8 +161,8 @@ class CustomListBox(Gtk.Frame):
 		for row in self.get_rows():
 			self.listbox.remove(row)
 		self.reset_buttons()
-		if self.callback is not None:
-			self.callback()
+		if self.delete_callback is not None:
+			self.delete_callback()
 
 class CustomScaleButton(Gtk.Button):
 

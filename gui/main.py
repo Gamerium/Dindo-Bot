@@ -483,12 +483,15 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.save_path_button.set_image(Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
 		self.save_path_button.connect('clicked', self.on_save_path_button_clicked)
 		self.path_listbox.add_button(self.save_path_button)
-		self.path_listbox.on_update(self.on_path_listbox_update)
+		self.path_listbox.on_add(self.on_path_listbox_add)
+		self.path_listbox.on_delete(self.on_path_listbox_delete)
 
-	def on_path_listbox_update(self):
-		if self.path_listbox.get_rows():
+	def on_path_listbox_add(self):
+		if not self.path_listbox.is_empty():
 			self.save_path_button.set_sensitive(True)
-		else:
+
+	def on_path_listbox_delete(self):
+		if self.path_listbox.is_empty():
 			self.save_path_button.set_sensitive(False)
 
 	def on_load_path_button_clicked(self, button):
