@@ -7,7 +7,8 @@ from gi.repository import Gtk, GdkPixbuf
 from lib import tools
 from lib import shared
 from lib import settings
-from .custom import CustomComboBox
+from .custom import CustomComboBox, MessageBox
+import json
 
 class AboutDialog(Gtk.AboutDialog):
 
@@ -21,7 +22,10 @@ class AboutDialog(Gtk.AboutDialog):
 		self.set_authors(shared.__authors__)
 		logo = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/cover.png'), 64, 64)
 		self.set_logo(logo)
-		self.connect('response', lambda dialog, response: self.destroy())
+		self.connect('response', self.on_response)
+
+	def on_response(self, dialog, response):
+		self.destroy()
 
 class MessageDialog(Gtk.MessageDialog):
 
@@ -45,20 +49,40 @@ class TextDialog(Gtk.MessageDialog):
 		self.run()
 		self.destroy()
 
-class PlugDialog(Gtk.Dialog):
+class CustomDialog(Gtk.Dialog):
+
+	def __init__(self, title, transient_for=None, destroy_on_response=True):
+		Gtk.Dialog.__init__(self, transient_for=transient_for, title=title)
+		self.set_border_width(10)
+		self.set_resizable(False)
+		if destroy_on_response:
+			self.connect('response', self.on_response)
+		# Header Bar
+		hb = Gtk.HeaderBar(title=title)
+		hb.set_show_close_button(True)
+		self.set_titlebar(hb)
+
+	def on_response(self, dialog, response):
+		self.destroy()
+
+class PlugDialog(CustomDialog):
 
 	def __init__(self, transient_for):
-		Gtk.Dialog.__init__(self, transient_for=transient_for, title='Plug Game Window')
+		CustomDialog.__init__(self, transient_for=transient_for, title='Plug Game Window', destroy_on_response=False)
 		self.parent = transient_for
-		self.set_resizable(False)
-		# Window id entry
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.set_border_width(10)
-		hbox.add(Gtk.Label('Window id'))
-		self.entry = Gtk.Entry()
-		hbox.add(self.entry)
+		self.connect('delete-event', lambda dialog, response: self.destroy())
+		# Window ID entry
 		content_area = self.get_content_area()
-		content_area.add(hbox)
+		content_area.set_spacing(5)
+		content_area.add(Gtk.Label('<b>Window ID</b>', xalign=0, use_markup=True))
+		self.entry = Gtk.Entry()
+		self.entry.set_margin_left(10)
+		self.entry.connect('focus-in-event', lambda entry, event: self.error_box.hide())
+		content_area.add(self.entry)
+		# Error box
+		self.error_box = MessageBox(color='red')
+		self.error_box.set_margin_left(10)
+		content_area.add(self.error_box)
 		# Plug button
 		self.action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
 		plug_button = Gtk.Button('Plug')
@@ -68,8 +92,166 @@ class PlugDialog(Gtk.Dialog):
 
 	def on_plug_button_clicked(self, button):
 		window_xid = self.entry.get_text().strip()
-		if window_xid.startswith('0x') or window_xid.isdigit():
-			self.parent.plug_game_window(int(window_xid, 0))
+		if window_xid:
+			if window_xid.startswith('0x') or window_xid.isdigit():
+				self.parent.plug_game_window(int(window_xid, 0))
+				self.destroy()
+			else:
+				self.error_box.print_message('ID should be numeric')
+		else:
+			self.error_box.print_message('Please type an ID')
+
+class LoadMapDialog(CustomDialog):
+
+	filename = 'maps.data'
+
+	def __init__(self, transient_for):
+		CustomDialog.__init__(self, transient_for=transient_for, title='Load Map', destroy_on_response=False)
+		self.parent = transient_for
+		self.data = self.load_data()
+		self.connect('delete-event', lambda dialog, response: self.destroy())
+		# Map
+		content_area = self.get_content_area()
+		content_area.set_spacing(5)
+		content_area.add(Gtk.Label('<b>Map</b>', xalign=0, use_markup=True))
+		self.maps_combo = CustomComboBox(self.data, sort=True)
+		self.maps_combo.set_margin_left(10)
+		self.maps_combo.connect('changed', self.on_maps_combo_changed)
+		content_area.add(self.maps_combo)
+		# Error box
+		self.error_box = MessageBox(color='red')
+		self.error_box.set_margin_left(10)
+		content_area.add(self.error_box)
+		# Warning box
+		self.warning_box = MessageBox(color='blue', enable_buttons=True)
+		self.warning_box.set_margin_left(10)
+		self.warning_box.yes_button.connect('clicked', lambda button: self.delete_data())
+		self.warning_box.no_button.connect('clicked', lambda button: self.reset())
+		content_area.add(self.warning_box)
+		# Load button
+		self.action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
+		load_button = Gtk.Button('Load')
+		load_button.connect('clicked', self.on_load_button_clicked)
+		self.add_action_widget(load_button, Gtk.ResponseType.OK)
+		# Delete button
+		delete_button = Gtk.Button('Delete')
+		delete_button.connect('clicked', self.on_delete_button_clicked)
+		self.add_action_widget(delete_button, Gtk.ResponseType.OK)
+		self.show_all()
+		self.reset()
+
+	def reset(self):
+		self.error_box.hide()
+		self.warning_box.hide()
+		self.action_area.show()
+
+	def load_data(self):
+		maps_data = tools.read_file(tools.get_resource_path('../' + self.filename))
+		if maps_data:
+			return json.loads(maps_data)
+		else:
+			return {}
+
+	def delete_data(self):
+		selected = self.maps_combo.get_active()
+		if selected != -1:
+			# delete
+			map_name = self.maps_combo.get_active_text()
+			del self.data[map_name]
+			self.maps_combo.remove(selected)
+			# save data
+			tools.save_text_to_file(json.dumps(self.data), tools.get_resource_path('../' + self.filename))
+			self.warning_box.hide()
+
+	def on_maps_combo_changed(self, combo):
+		self.reset()
+		if not self.parent.map_data_listbox.is_empty():
+			self.warning_box.print_message('Your current data will be erased !')
+
+	def on_load_button_clicked(self, button):
+		selected = self.maps_combo.get_active_text()
+		if selected:
+			self.parent.map_data_listbox.clear_all()
+			text = json.dumps(self.data[selected])
+			lines = text[1:-1].split('},') # [1:-1] to remove '[]'
+			for line in lines:
+				if not line.endswith('}'):
+					line += '}'
+				self.parent.map_data_listbox.append_text(line.strip())
+			self.destroy()
+		else:
+			self.error_box.print_message('Please select a map')
+
+	def on_delete_button_clicked(self, button):
+		if self.maps_combo.get_active() != -1:
+			self.error_box.hide()
+			self.action_area.hide()
+			self.warning_box.print_message('Confirm delete?', True)
+		else:
+			self.error_box.print_message('Please select a map')
+
+class SaveMapDialog(LoadMapDialog):
+
+	def __init__(self, transient_for):
+		CustomDialog.__init__(self, transient_for=transient_for, title='Save Map', destroy_on_response=False)
+		self.parent = transient_for
+		self.data = self.load_data()
+		self.connect('delete-event', lambda dialog, response: self.destroy())
+		# Map Name
+		content_area = self.get_content_area()
+		content_area.set_spacing(5)
+		content_area.add(Gtk.Label('<b>Map Name</b>', xalign=0, use_markup=True))
+		self.entry = Gtk.Entry()
+		self.entry.set_margin_left(10)
+		self.entry.connect('focus-in-event', lambda entry, event: self.reset())
+		content_area.add(self.entry)
+		# Error box
+		self.error_box = MessageBox(color='red', enable_buttons=True)
+		self.error_box.set_margin_left(10)
+		self.error_box.yes_button.connect('clicked', lambda button: self.save_data(self.get_map_name(), self.data))
+		self.error_box.no_button.connect('clicked', lambda button: self.reset())
+		content_area.add(self.error_box)
+		# Save button
+		self.action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
+		save_button = Gtk.Button('Save')
+		save_button.connect('clicked', self.on_save_button_clicked)
+		self.add_action_widget(save_button, Gtk.ResponseType.OK)
+		self.show_all()
+		self.reset()
+
+	def reset(self):
+		self.error_box.hide()
+		self.action_area.show()
+
+	def get_map_name(self):
+		return self.entry.get_text().strip()
+
+	def save_data(self, name, data):
+		# get map data
+		map_data = []
+		for row in self.parent.map_data_listbox.get_rows():
+			text = self.parent.map_data_listbox.get_row_text(row)
+			#text = text.replace('\'', '"')
+			map_data.append(json.loads(text))
+		data[name] = map_data
+		# save data
+		tools.save_text_to_file(json.dumps(data), tools.get_resource_path('../' + self.filename))
+		# destroy dialog
+		self.destroy()
+
+	def on_save_button_clicked(self, button):
+		# get map name
+		name = self.get_map_name()
+		# check if empty
+		if not name:
+			self.error_box.print_message('Please type a name')
+		else:
+			# check if already exists
+			if name in self.data:
+				self.action_area.hide()
+				self.error_box.print_message('Map name already exists, would you like to override it?', True)
+			else:
+				self.save_data(name, self.data)
 
 class OpenFileDialog(Gtk.FileChooserDialog):
 
@@ -99,18 +281,11 @@ class SaveFileDialog(Gtk.FileChooserDialog):
 		self.add_button('_Save', Gtk.ResponseType.OK)
 		self.set_default_response(Gtk.ResponseType.OK)
 
-class PreferencesDialog(Gtk.Dialog):
+class PreferencesDialog(CustomDialog):
 
 	def __init__(self, transient_for, title='Preferences'):
-		Gtk.Dialog.__init__(self, transient_for=transient_for, title=title)
+		CustomDialog.__init__(self, transient_for=transient_for, title=title)
 		self.parent = transient_for
-		self.set_border_width(10)
-		self.set_resizable(False)
-		self.connect('response', lambda dialog, response: self.destroy())
-		# Header Bar
-		hb = Gtk.HeaderBar(title=title)
-		hb.set_show_close_button(True)
-		self.set_titlebar(hb)
 		# Stack & Stack switcher
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		content_area = self.get_content_area()

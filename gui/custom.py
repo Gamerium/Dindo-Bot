@@ -3,7 +3,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gio, Pango
+from gi.repository import Gtk, Gdk, Gio, Pango
 
 class CustomComboBox(Gtk.ComboBoxText):
 
@@ -20,8 +20,9 @@ class CustomListBox(Gtk.Frame):
 	add_callback = None
 	delete_callback = None
 
-	def __init__(self):
+	def __init__(self, allow_moving=True):
 		Gtk.Frame.__init__(self)
+		self.allow_moving = allow_moving
 		## ListBox
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 		self.add(vbox)
@@ -37,18 +38,19 @@ class CustomListBox(Gtk.Frame):
 		vbox.pack_end(actionbar, False, False, 0)
 		default_buttons_box = ButtonBox(linked=True)
 		actionbar.pack_start(default_buttons_box)
-		# Move up
-		self.move_up_button = Gtk.Button()
-		self.move_up_button.set_tooltip_text('Move up')
-		self.move_up_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-up-symbolic')))
-		self.move_up_button.connect('clicked', self.on_move_up_button_clicked)
-		default_buttons_box.add(self.move_up_button)
-		# Move down
-		self.move_down_button = Gtk.Button()
-		self.move_down_button.set_tooltip_text('Move down')
-		self.move_down_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-down-symbolic')))
-		self.move_down_button.connect('clicked', self.on_move_down_button_clicked)
-		default_buttons_box.add(self.move_down_button)
+		if allow_moving:
+			# Move up
+			self.move_up_button = Gtk.Button()
+			self.move_up_button.set_tooltip_text('Move up')
+			self.move_up_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-up-symbolic')))
+			self.move_up_button.connect('clicked', self.on_move_up_button_clicked)
+			default_buttons_box.add(self.move_up_button)
+			# Move down
+			self.move_down_button = Gtk.Button()
+			self.move_down_button.set_tooltip_text('Move down')
+			self.move_down_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-down-symbolic')))
+			self.move_down_button.connect('clicked', self.on_move_down_button_clicked)
+			default_buttons_box.add(self.move_down_button)
 		# Delete
 		self.delete_button = Gtk.Button()
 		self.delete_button.set_tooltip_text('Delete')
@@ -74,14 +76,15 @@ class CustomListBox(Gtk.Frame):
 		self.delete_callback = callback
 
 	def on_row_activated(self, listbox, row):
-		rows_count = len(self.get_rows())
-		index = row.get_index()
-		# Move up
-		enable_move_up = True if index > 0 else False
-		self.move_up_button.set_sensitive(enable_move_up)
-		# Move down
-		enable_move_down = True if index < rows_count - 1 else False
-		self.move_down_button.set_sensitive(enable_move_down)
+		if self.allow_moving:
+			rows_count = len(self.get_rows())
+			index = row.get_index()
+			# Move up
+			enable_move_up = True if index > 0 else False
+			self.move_up_button.set_sensitive(enable_move_up)
+			# Move down
+			enable_move_down = True if index < rows_count - 1 else False
+			self.move_down_button.set_sensitive(enable_move_down)
 		# Delete
 		self.delete_button.set_sensitive(True)
 		# Clear all
@@ -123,8 +126,9 @@ class CustomListBox(Gtk.Frame):
 		return label.get_text()
 
 	def reset_buttons(self):
-		self.move_up_button.set_sensitive(False)
-		self.move_down_button.set_sensitive(False)
+		if self.allow_moving:
+			self.move_up_button.set_sensitive(False)
+			self.move_down_button.set_sensitive(False)
 		self.delete_button.set_sensitive(False)
 		if self.is_empty():
 			self.clear_all_button.set_sensitive(False)
@@ -157,12 +161,15 @@ class CustomListBox(Gtk.Frame):
 			index = row.get_index()
 			self.move_row(row, index + 1)
 
-	def on_clear_all_button_clicked(self, button):
+	def clear_all(self):
 		for row in self.get_rows():
 			self.listbox.remove(row)
 		self.reset_buttons()
 		if self.delete_callback is not None:
 			self.delete_callback()
+
+	def on_clear_all_button_clicked(self, button):
+		self.clear_all()
 
 class CustomScaleButton(Gtk.Button):
 
@@ -282,3 +289,36 @@ class ButtonBox(Gtk.Box):
 			self.buttons_container.add(hbox)
 		else:
 			self.buttons_container.add(button)
+
+class MessageBox(Gtk.Box):
+
+	def __init__(self, text='', color='black', enable_buttons=False):
+		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		self.enable_buttons = enable_buttons
+		# label
+		self.label = Gtk.Label(text)
+		self.label.modify_fg(Gtk.StateType.NORMAL, Gdk.color_parse(color))
+		self.add(self.label)
+		# question buttons
+		if enable_buttons:
+			self.button_box = ButtonBox(linked=True)
+			self.add(self.button_box)
+			# yes
+			self.yes_button = Gtk.Button()
+			self.yes_button.set_tooltip_text('Yes')
+			self.yes_button.set_image(Gtk.Image(stock=Gtk.STOCK_YES))
+			self.button_box.add(self.yes_button)
+			# no
+			self.no_button = Gtk.Button()
+			self.no_button.set_tooltip_text('No')
+			self.no_button.set_image(Gtk.Image(stock=Gtk.STOCK_NO))
+			self.button_box.add(self.no_button)
+
+	def print_message(self, text, is_question=False):
+		self.label.set_text(text)
+		if self.enable_buttons:
+			if is_question:
+				self.button_box.show()
+			else:
+				self.button_box.hide()
+		self.show()

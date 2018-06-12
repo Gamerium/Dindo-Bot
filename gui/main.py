@@ -402,9 +402,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		widget.add(hbox)
 		# Location
 		widget.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
-		pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(16, 16, GdkPixbuf.InterpType.BILINEAR)
+		cursor_pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(16, 16, GdkPixbuf.InterpType.BILINEAR)
 		self.select_button = Gtk.Button('Select')
-		self.select_button.set_image(Gtk.Image(pixbuf=pixbuf))
+		self.select_button.set_image(Gtk.Image(pixbuf=cursor_pixbuf))
 		self.select_button.connect('clicked', self.on_select_button_clicked)
 		button_box = Gtk.ButtonBox(orientation=Gtk.Orientation.HORIZONTAL, layout_style=Gtk.ButtonBoxStyle.CENTER)
 		button_box.add(self.select_button)
@@ -485,6 +485,77 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.path_listbox.add_button(self.save_path_button)
 		self.path_listbox.on_add(self.on_path_listbox_add)
 		self.path_listbox.on_delete(self.on_path_listbox_delete)
+		### Map Tab
+		map_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		map_page.set_border_width(10)
+		bot_notebook.append_page(map_page, Gtk.Label('Map'))
+		## Stack & Stack switcher
+		stack = Gtk.Stack()
+		stack.set_margin_top(5)
+		stack_switcher = Gtk.StackSwitcher()
+		stack_switcher.set_stack(stack)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.pack_start(stack_switcher, True, False, 0)
+		map_page.add(hbox)
+		map_page.pack_start(stack, True, True, 0)
+		## Data
+		self.map_data_listbox = CustomListBox(allow_moving=False)
+		stack.add_titled(self.map_data_listbox, 'data', 'Data')
+		# Select
+		self.select_resource_button = Gtk.Button()
+		self.select_resource_button.set_tooltip_text('Select resource')
+		self.select_resource_button.set_image(Gtk.Image(pixbuf=cursor_pixbuf))
+		self.select_resource_button.connect('clicked', self.on_select_resource_button_clicked)
+		self.map_data_listbox.add_button(self.select_resource_button)
+		# Load
+		load_map_button = Gtk.Button()
+		load_map_button.set_tooltip_text('Load')
+		load_map_button.set_image(Gtk.Image(stock=Gtk.STOCK_OPEN))
+		load_map_button.connect('clicked', self.on_load_map_button_clicked)
+		self.map_data_listbox.add_button(load_map_button)
+		# Save
+		self.save_map_button = Gtk.Button()
+		self.save_map_button.set_tooltip_text('Save')
+		self.save_map_button.set_sensitive(False)
+		self.save_map_button.set_image(Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
+		self.save_map_button.connect('clicked', self.on_save_map_button_clicked)
+		self.map_data_listbox.add_button(self.save_map_button)
+		self.map_data_listbox.on_add(self.on_map_data_listbox_add)
+		self.map_data_listbox.on_delete(self.on_map_data_listbox_delete)
+		## View
+		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack.add_titled(box, 'view', 'View')
+
+	def on_load_map_button_clicked(self, button):
+		dialog = LoadMapDialog(self)
+		dialog.run()
+
+	def on_save_map_button_clicked(self, button):
+		dialog = SaveMapDialog(self)
+		dialog.run()
+
+	def add_map_data(self, location):
+		x, y, width, height = location
+		# get pixel color
+		color = tools.get_pixel_color(x, y)
+		# append to listbox
+		self.map_data_listbox.append_text('{"x": "%d", "y": "%d", "width": "%d", "height": "%d", "color": "%s"}' % (x, y, width, height, color))
+		self.select_resource_button.set_sensitive(True)
+		self.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
+
+	def on_select_resource_button_clicked(self, button):
+		button.set_sensitive(False)
+		self.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSSHAIR))
+		game_location = tools.get_widget_location(self.game_area)
+		Thread(target=self.wait_for_click, args=(self.add_map_data, game_location)).start()
+
+	def on_map_data_listbox_add(self):
+		if not self.save_map_button.get_sensitive():
+			self.save_map_button.set_sensitive(True)
+
+	def on_map_data_listbox_delete(self):
+		if self.map_data_listbox.is_empty():
+			self.save_map_button.set_sensitive(False)
 
 	def on_path_listbox_add(self):
 		if not self.save_path_button.get_sensitive():
@@ -717,7 +788,6 @@ class BotWindow(Gtk.ApplicationWindow):
 	def on_plug_button_clicked(self, button):
 		dialog = PlugDialog(self)
 		dialog.run()
-		dialog.destroy()
 
 	def on_refresh_button_clicked(self, button):
 		self.populate_game_window_combo()
@@ -725,8 +795,7 @@ class BotWindow(Gtk.ApplicationWindow):
 	# Override the default handler for the delete-event signal
 	def do_delete_event(self, event):
 		# Show our message dialog
-		dialog = Gtk.MessageDialog(transient_for=self, modal=True, buttons=Gtk.ButtonsType.OK_CANCEL, message_type=Gtk.MessageType.QUESTION)
-		dialog.props.text = 'Are you sure you want to quit?'
+		dialog = Gtk.MessageDialog(text='Are you sure you want to quit?', transient_for=self, buttons=Gtk.ButtonsType.OK_CANCEL, message_type=Gtk.MessageType.QUESTION)
 		response = dialog.run()
 		dialog.destroy()
 
