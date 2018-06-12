@@ -487,7 +487,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.path_listbox.on_delete(self.on_path_listbox_delete)
 
 	def on_path_listbox_add(self):
-		if not self.path_listbox.is_empty():
+		if not self.save_path_button.get_sensitive():
 			self.save_path_button.set_sensitive(True)
 
 	def on_path_listbox_delete(self):
