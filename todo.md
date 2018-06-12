@@ -9,3 +9,4 @@
 * Use AI for rearing stuff
 * Zaap positions are not always the same, so use OCR to detect them maybe? instead of change them for each player
 * Add treasure hunts management
+* Allow bot window resizing (socket resizing should keep the same additional size for width and height)
