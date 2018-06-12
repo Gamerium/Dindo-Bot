@@ -34,38 +34,36 @@ class CustomListBox(Gtk.Frame):
 		## ActionBar
 		actionbar = Gtk.ActionBar()
 		vbox.pack_end(actionbar, False, False, 0)
-		box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		Gtk.StyleContext.add_class(box.get_style_context(), 'linked')
-		actionbar.pack_start(box)
+		default_buttons_box = ButtonBox(linked=True)
+		actionbar.pack_start(default_buttons_box)
 		# Move up
 		self.move_up_button = Gtk.Button()
 		self.move_up_button.set_tooltip_text('Move up')
 		self.move_up_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-up-symbolic')))
 		self.move_up_button.connect('clicked', self.on_move_up_button_clicked)
-		box.add(self.move_up_button)
+		default_buttons_box.add(self.move_up_button)
 		# Move down
 		self.move_down_button = Gtk.Button()
 		self.move_down_button.set_tooltip_text('Move down')
 		self.move_down_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-down-symbolic')))
 		self.move_down_button.connect('clicked', self.on_move_down_button_clicked)
-		box.add(self.move_down_button)
+		default_buttons_box.add(self.move_down_button)
 		# Delete
 		self.delete_button = Gtk.Button()
 		self.delete_button.set_tooltip_text('Delete')
 		self.delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
 		self.delete_button.connect('clicked', self.on_delete_button_clicked)
-		box.add(self.delete_button)
+		default_buttons_box.add(self.delete_button)
 		# Clear all
 		self.clear_all_button = Gtk.Button()
 		self.clear_all_button.set_tooltip_text('Clear all')
 		self.clear_all_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='edit-clear-all-symbolic')))
 		self.clear_all_button.connect('clicked', self.on_clear_all_button_clicked)
-		box.add(self.clear_all_button)
-		# Initialise buttons status
+		default_buttons_box.add(self.clear_all_button)
+		# Initialise default buttons status
 		self.reset_buttons()
 		# Buttons box
-		self.buttons_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		Gtk.StyleContext.add_class(self.buttons_box.get_style_context(), 'linked')
+		self.buttons_box = ButtonBox(linked=True)
 		actionbar.pack_end(self.buttons_box)
 
 	def on_update(self, callback):
@@ -252,16 +250,26 @@ class StackListBox(Gtk.Box):
 		self.stack.add_named(widget, label.get_text())
 		self.count += 1
 
-class CenteredButtonBox(Gtk.Box):
+class ButtonBox(Gtk.Box):
 
-	def __init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=5):
+	def __init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=5, centered=False, linked=False):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
-		self.buttons_container = Gtk.Box(self, orientation=orientation, spacing=spacing)
-		self.pack_start(self.buttons_container, True, False, 0)
+		self.buttons_container = Gtk.Box(orientation=orientation)
 		self.orientation = orientation
+		self.linked = linked
+		# set centered
+		if centered:
+			self.pack_start(self.buttons_container, True, False, 0)
+		else:
+			self.pack_start(self.buttons_container, False, False, 0)
+		# set linked
+		if linked:
+			Gtk.StyleContext.add_class(self.buttons_container.get_style_context(), Gtk.STYLE_CLASS_LINKED)
+		else:
+			self.buttons_container.set_spacing(spacing)
 
 	def add(self, button):
-		if self.orientation == Gtk.Orientation.VERTICAL:
+		if self.orientation == Gtk.Orientation.VERTICAL and not self.linked:
 			hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 			hbox.pack_start(button, True, False, 0)
 			self.buttons_container.add(hbox)

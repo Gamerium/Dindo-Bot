@@ -268,7 +268,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.repeat_spin_button.set_sensitive(False)
 		hbox.pack_end(self.repeat_spin_button, False, False, 0)
 		## Start
-		button_box = CenteredButtonBox()
+		button_box = ButtonBox(centered=True, linked=True)
 		bot_page.pack_end(button_box, False, False, 0)
 		self.start_button = Gtk.Button()
 		self.start_button.set_tooltip_text('Start')
@@ -295,7 +295,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		bot_notebook.append_page(path_page, Gtk.Label('Path'))
 		## Movement
 		path_page.add(Gtk.Label('<b>Movement</b>', xalign=0, use_markup=True))
-		button_box = CenteredButtonBox(orientation=Gtk.Orientation.VERTICAL)
+		button_box = ButtonBox(orientation=Gtk.Orientation.VERTICAL, centered=True)
 		path_page.add(button_box)
 		# Up
 		up_button = Gtk.Button()
@@ -337,7 +337,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Enclos(%s)' % self.enclos_combo.get_active_text()))
-		button_box = CenteredButtonBox()
+		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.pack_end(button_box, False, False, 0)
 		## Zaap
@@ -359,7 +359,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Zaap(from=%s,to=%s)' % (self.zaap_from_combo.get_active_text(), self.zaap_to_combo.get_active_text())))
-		button_box = CenteredButtonBox()
+		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.pack_end(button_box, False, False, 0)
 		## Zaapi
@@ -381,7 +381,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Zaapi(from=%s,to=%s)' % (self.zaapi_from_combo.get_active_text(), self.zaapi_to_combo.get_active_text())))
-		button_box = CenteredButtonBox()
+		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.pack_end(button_box, False, False, 0)
 		## Click
@@ -426,7 +426,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Wait(%d)' % self.duration_spin_button.get_value_as_int()))
-		button_box = CenteredButtonBox()
+		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.pack_end(button_box, False, False, 0)
 		## Keyboard
@@ -462,7 +462,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', self.on_keyboard_add_button_clicked)
-		button_box = CenteredButtonBox()
+		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.pack_end(button_box, False, False, 0)
 		## Separator
