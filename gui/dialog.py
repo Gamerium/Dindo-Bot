@@ -71,6 +71,34 @@ class PlugDialog(Gtk.Dialog):
 		if window_xid.startswith('0x') or window_xid.isdigit():
 			self.parent.plug_game_window(int(window_xid, 0))
 
+class OpenFileDialog(Gtk.FileChooserDialog):
+
+	def __init__(self, title, transient_for=None, filter=None):
+		Gtk.FileChooserDialog.__init__(self, title=title, transient_for=transient_for, action=Gtk.FileChooserAction.OPEN)
+		if filter is not None and len(filter) > 1:
+			name, pattern = filter
+			file_filter = Gtk.FileFilter()
+			file_filter.set_name('%s (%s)' % (name, pattern))
+			file_filter.add_pattern(pattern)
+			self.add_filter(file_filter)
+		self.add_button('_Cancel', Gtk.ResponseType.CANCEL)
+		self.add_button('_Open', Gtk.ResponseType.OK)
+		self.set_default_response(Gtk.ResponseType.OK)
+
+class SaveFileDialog(Gtk.FileChooserDialog):
+
+	def __init__(self, title, transient_for=None, filter=None):
+		Gtk.FileChooserDialog.__init__(self, title=title, transient_for=transient_for, action=Gtk.FileChooserAction.SAVE)
+		if filter is not None and len(filter) > 1:
+			name, pattern = filter
+			file_filter = Gtk.FileFilter()
+			file_filter.set_name('%s (%s)' % (name, pattern))
+			file_filter.add_pattern(pattern)
+			self.add_filter(file_filter)
+		self.add_button('_Cancel', Gtk.ResponseType.CANCEL)
+		self.add_button('_Save', Gtk.ResponseType.OK)
+		self.set_default_response(Gtk.ResponseType.OK)
+
 class PreferencesDialog(Gtk.Dialog):
 
 	def __init__(self, transient_for, title='Preferences'):

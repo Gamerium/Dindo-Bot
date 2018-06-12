@@ -492,25 +492,34 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.save_path_button.set_sensitive(False)
 
 	def on_load_path_button_clicked(self, button):
-		filechooserdialog = Gtk.FileChooserDialog(title='Load Path', transient_for=self, action=Gtk.FileChooserAction.OPEN)
-		filechooserdialog.set_current_folder(tools.get_resource_path('../paths'))
-		pathfilter = Gtk.FileFilter()
-		pathfilter.set_name('Bot Path (*.path)')
-		pathfilter.add_pattern('*.path')
-		filechooserdialog.add_filter(pathfilter)
-		filechooserdialog.add_button('_Cancel', Gtk.ResponseType.CANCEL)
-		filechooserdialog.add_button('_Open', Gtk.ResponseType.OK)
-		filechooserdialog.set_default_response(Gtk.ResponseType.OK)
-		response = filechooserdialog.run()
+		dialog = OpenFileDialog('Load Path', self, ('Bot Path', '*.path'))
+		dialog.set_current_folder(tools.get_resource_path('../paths'))
+		response = dialog.run()
 
 		if response == Gtk.ResponseType.OK:
 			# read file
-			path = tools.read_file(filechooserdialog.get_filename())
+			path = tools.read_file(dialog.get_filename())
 			# append to path listbox
 			for line in path.splitlines():
 				self.path_listbox.append_text(line)
 
-		filechooserdialog.destroy()
+		dialog.destroy()
+
+	def on_save_path_button_clicked(self, button):
+		dialog = SaveFileDialog('Save as', self, ('Bot Path', '*.path'))
+		dialog.set_current_folder(tools.get_resource_path('../paths'))
+		dialog.set_current_name('path_' + tools.get_date_time() + '.path')
+		response = dialog.run()
+
+		if response == Gtk.ResponseType.OK:
+			# get all rows text
+			text = ''
+			for row in self.path_listbox.get_rows():
+				text += self.path_listbox.get_row_text(row) + '\n'
+			# save it to file
+			tools.save_text_to_file(text, dialog.get_filename())
+
+		dialog.destroy()
 
 	def on_keyboard_add_button_clicked(self, button):
 		if self.press_key_radio.get_active():
@@ -613,29 +622,6 @@ class BotWindow(Gtk.ApplicationWindow):
 	def on_stop_button_clicked(self, button):
 		self.bot_thread.stop()
 		self.reset_buttons()
-
-	def on_save_path_button_clicked(self, button):
-		filechooserdialog = Gtk.FileChooserDialog(title='Save as', transient_for=self, action=Gtk.FileChooserAction.SAVE)
-		filechooserdialog.set_current_folder(tools.get_resource_path('../paths'))
-		filechooserdialog.set_current_name('path_' + tools.get_date_time() + '.path')
-		pathfilter = Gtk.FileFilter()
-		pathfilter.set_name('Bot Path (*.path)')
-		pathfilter.add_pattern('*.path')
-		filechooserdialog.add_filter(pathfilter)
-		filechooserdialog.add_button('_Cancel', Gtk.ResponseType.CANCEL)
-		filechooserdialog.add_button('_Save', Gtk.ResponseType.OK)
-		filechooserdialog.set_default_response(Gtk.ResponseType.OK)
-		response = filechooserdialog.run()
-
-		if response == Gtk.ResponseType.OK:
-			# get all rows text
-			text = ''
-			for row in self.path_listbox.get_rows():
-				text += self.path_listbox.get_row_text(row) + '\n'
-			# save it to file
-			tools.save_text_to_file(text, filechooserdialog.get_filename())
-
-		filechooserdialog.destroy()
 
 	def on_bot_path_changed(self, filechooserbutton):
 		self.bot_path = filechooserbutton.get_filename()
