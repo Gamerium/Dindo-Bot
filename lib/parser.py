@@ -1,8 +1,42 @@
 # Dindo Bot
 # Copyright (c) 2018 - 2019 AXeL
 
+# Replace given string index by substitute
+def replace_at_index(string, index, substitute, length=1):
+	return string[:index] + substitute + string[index+length:]
+
+# Replace all occurrences of needle in text with substitute only if needle is surrounded by starts_with & ends_with
+def replace_all_between(text, needle, substitute, starts_with, ends_with):
+	result = text
+	cursor_position = 0
+	proceed = needle != substitute
+	while proceed: # while True:
+		#print('text: "%s", cursor: %d' % (text, cursor_position))
+		if len(text) == 0:
+			break
+		# try to find needle & his surroundings
+		start = text.find(starts_with)
+		needle_position = text.find(needle)
+		end = text.find(ends_with)
+		# if needle is surrounded
+		if start != -1 and end != -1 and needle_position > start and needle_position < end:
+			result = replace_at_index(result, cursor_position+needle_position, substitute, len(needle))
+			cursor_position += end+1-len(needle)+len(substitute)
+			text = text[end+1:]
+			#print('replaced')
+		# else if not surrounded
+		elif needle_position != -1:
+			cursor_position += needle_position+1
+			text = text[needle_position+1:]
+			#print('not surrounded')
+		# else if not find
+		else:
+			#print('break')
+			break
+	return result
+
 # Parse instruction string, e.: 'Move(UP)', 'Enclos([-20,10])'
-def parse_instruction(line):
+def parse_instruction(line, separator=','):
 	result = {}
 	# extract name
 	instruction = line.split('(')
@@ -10,14 +44,15 @@ def parse_instruction(line):
 	result['name'] = name
 	# extract value/parameters
 	if len(instruction) > 1:
-		value = instruction[1][:-1] # [:-1] will remove the last character ')'
-		if not ',' in value or (value.startswith('[') and value.endswith(']')): # do not split map position(s)
-			result['value'] = value.strip()
+		if instruction[1].endswith(')'):
+			origin_value = instruction[1][:-1].strip() # [:-1] will remove the last character ')'
 		else:
-			if '],' in value:
-				parameters = value.replace('],', '];').split(';') # for instructions like Zaap(from=[10,-20], to=[-13,15])
-			else:
-				parameters = value.split(',')
+			origin_value = instruction[1].strip()
+		value = replace_all_between(origin_value, ',', ';', '[', ']') # avoid splitting map position(s)
+		if not separator in value:
+			result['value'] = replace_all_between(value, ';', ',', '[', ']')
+		else:
+			parameters = value.split(separator)
 			for i, parameter in enumerate(parameters):
 				split_parameter = parameter.split('=')
 				if len(split_parameter) > 1:
@@ -26,7 +61,9 @@ def parse_instruction(line):
 				else:
 					key = i
 					value = split_parameter[0]
-				result[key] = value.strip()
+				result[key] = replace_all_between(value.strip(), ';', ',', '[', ']')
+	else:
+		result['value'] = None
 
 	return result
 

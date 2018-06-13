@@ -7,8 +7,8 @@ from gi.repository import Gtk, GdkPixbuf
 from lib import tools
 from lib import shared
 from lib import settings
+from lib import maps
 from .custom import CustomComboBox, MessageBox
-import json
 
 class AboutDialog(Gtk.AboutDialog):
 
@@ -107,12 +107,10 @@ class PlugDialog(CustomDialog):
 
 class LoadMapDialog(CustomDialog):
 
-	filename = 'maps.data'
-
 	def __init__(self, transient_for):
 		CustomDialog.__init__(self, transient_for=transient_for, title='Load Map', destroy_on_response=False)
 		self.parent = transient_for
-		self.data = self.load_data()
+		self.data = maps.load()
 		self.set_size_request(300, -1)
 		self.connect('delete-event', lambda dialog, response: self.destroy())
 		# Map combobox
@@ -137,40 +135,33 @@ class LoadMapDialog(CustomDialog):
 
 	def reset(self):
 		self.error_box.hide()
-		self.action_area.show()
 
 	def on_maps_combo_changed(self, combo):
 		self.reset()
 		if not self.parent.map_data_listbox.is_empty():
 			self.error_box.print_message('Your current data will be erased !')
 
-	def load_data(self):
-		maps_data = tools.read_file(tools.get_resource_path('../' + self.filename))
-		if maps_data:
-			return json.loads(maps_data)
-		else:
-			return {}
-
 	def on_load_button_clicked(self, button):
 		selected = self.maps_combo.get_active_text()
 		if selected:
 			self.parent.map_data_listbox.clear_all()
-			text = json.dumps(self.data[selected])
+			text = maps.to_string(self.data[selected])
 			lines = text[1:-1].split('},') # [1:-1] to remove '[]'
 			for line in lines:
-				if not line.endswith('}'):
-					line += '}'
-				self.parent.map_data_listbox.append_text(line.strip())
+				text = line.strip()
+				if text.startswith('{') and not text.endswith('}'):
+					text += '}'
+				self.parent.map_data_listbox.append_text(text)
 			self.destroy()
 		else:
 			self.error_box.print_message('Please select a map')
 
-class DeleteMapDialog(LoadMapDialog):
+class DeleteMapDialog(CustomDialog):
 
 	def __init__(self, transient_for):
 		CustomDialog.__init__(self, transient_for=transient_for, title='Delete Map', destroy_on_response=False)
 		self.parent = transient_for
-		self.data = self.load_data()
+		self.data = maps.load()
 		self.set_size_request(300, -1)
 		self.connect('delete-event', lambda dialog, response: self.destroy())
 		# Map combobox
@@ -195,6 +186,10 @@ class DeleteMapDialog(LoadMapDialog):
 		self.show_all()
 		self.reset()
 
+	def reset(self):
+		self.error_box.hide()
+		self.action_area.show()
+
 	def delete_data(self):
 		selected = self.maps_combo.get_active()
 		if selected != -1:
@@ -203,7 +198,7 @@ class DeleteMapDialog(LoadMapDialog):
 			del self.data[map_name]
 			self.maps_combo.remove(selected)
 			# save data
-			tools.save_text_to_file(json.dumps(self.data), tools.get_resource_path('../' + self.filename))
+			maps.save(self.data)
 
 	def on_delete_button_clicked(self, button):
 		if self.maps_combo.get_active() != -1:
@@ -212,12 +207,12 @@ class DeleteMapDialog(LoadMapDialog):
 		else:
 			self.error_box.print_message('Please select a map')
 
-class SaveMapDialog(LoadMapDialog):
+class SaveMapDialog(CustomDialog):
 
 	def __init__(self, transient_for):
 		CustomDialog.__init__(self, transient_for=transient_for, title='Save Map', destroy_on_response=False)
 		self.parent = transient_for
-		self.data = self.load_data()
+		self.data = maps.load()
 		self.set_size_request(300, -1)
 		self.connect('delete-event', lambda dialog, response: self.destroy())
 		# Map Name entry
@@ -242,6 +237,10 @@ class SaveMapDialog(LoadMapDialog):
 		self.show_all()
 		self.reset()
 
+	def reset(self):
+		self.error_box.hide()
+		self.action_area.show()
+
 	def get_map_name(self):
 		return self.entry.get_text().strip()
 
@@ -250,11 +249,10 @@ class SaveMapDialog(LoadMapDialog):
 		map_data = []
 		for row in self.parent.map_data_listbox.get_rows():
 			text = self.parent.map_data_listbox.get_row_text(row)
-			#text = text.replace('\'', '"')
-			map_data.append(json.loads(text))
+			map_data.append(maps.to_array(text))
 		data[name] = map_data
 		# save data
-		tools.save_text_to_file(json.dumps(data), tools.get_resource_path('../' + self.filename))
+		maps.save(data)
 		# destroy dialog
 		self.destroy()
 

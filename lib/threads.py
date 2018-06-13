@@ -433,7 +433,10 @@ class BotThread(TimerThread):
 			# increase dragodindes number
 			dragodinde_number += 1
 			# get dragodinde stats
-			self.debug("Get dragodinde '%s' stats" % dragodinde_name)
+			if self.save_dragodindes_images:
+				self.debug("Get dragodinde '%s' stats" % dragodinde_name)
+			else:
+				self.debug('Get dragodinde stats')
 			stats = self.get_dragodinde_stats(dragodinde_image)
 			if stats:
 				Stats = data.DragodindeStats
@@ -544,7 +547,10 @@ class BotThread(TimerThread):
 			# increase dragodindes number
 			dragodinde_number += 1
 			# get dragodinde stats
-			self.debug("Get dragodinde '%s' stats" % dragodinde_name)
+			if self.save_dragodindes_images:
+				self.debug("Get dragodinde '%s' stats" % dragodinde_name)
+			else:
+				self.debug('Get dragodinde stats')
 			stats = self.get_dragodinde_stats(dragodinde_image)
 			if stats:
 				Stats = data.DragodindeStats
