@@ -22,10 +22,7 @@ class AboutDialog(Gtk.AboutDialog):
 		self.set_authors(shared.__authors__)
 		logo = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/cover.png'), 64, 64)
 		self.set_logo(logo)
-		self.connect('response', self.on_response)
-
-	def on_response(self, dialog, response):
-		self.destroy()
+		self.connect('response', lambda dialog, response: self.destroy())
 
 class MessageDialog(Gtk.MessageDialog):
 
@@ -52,18 +49,15 @@ class TextDialog(Gtk.MessageDialog):
 class CustomDialog(Gtk.Dialog):
 
 	def __init__(self, title, transient_for=None, destroy_on_response=True):
-		Gtk.Dialog.__init__(self, transient_for=transient_for, title=title)
+		Gtk.Dialog.__init__(self, modal=True, transient_for=transient_for, title=title)
 		self.set_border_width(10)
 		self.set_resizable(False)
 		if destroy_on_response:
-			self.connect('response', self.on_response)
+			self.connect('response', lambda dialog, response: self.destroy())
 		# Header Bar
 		hb = Gtk.HeaderBar(title=title)
 		hb.set_show_close_button(True)
 		self.set_titlebar(hb)
-
-	def on_response(self, dialog, response):
-		self.destroy()
 
 class PlugDialog(CustomDialog):
 
@@ -92,14 +86,13 @@ class PlugDialog(CustomDialog):
 
 	def on_plug_button_clicked(self, button):
 		window_xid = self.entry.get_text().strip()
-		if window_xid:
-			if window_xid.startswith('0x') or window_xid.isdigit():
-				self.parent.plug_game_window(int(window_xid, 0))
-				self.destroy()
-			else:
-				self.error_box.print_message('ID should be numeric')
-		else:
+		if not window_xid:
 			self.error_box.print_message('Please type an ID')
+		elif window_xid.startswith('0x') or window_xid.isdigit():
+			self.parent.plug_game_window(int(window_xid, 0))
+			self.destroy()
+		else:
+			self.error_box.print_message('ID should be numeric')
 
 class LoadMapDialog(CustomDialog):
 
@@ -109,6 +102,7 @@ class LoadMapDialog(CustomDialog):
 		CustomDialog.__init__(self, transient_for=transient_for, title='Load Map', destroy_on_response=False)
 		self.parent = transient_for
 		self.data = self.load_data()
+		self.set_size_request(300, -1)
 		self.connect('delete-event', lambda dialog, response: self.destroy())
 		# Map
 		content_area = self.get_content_area()
@@ -122,28 +116,22 @@ class LoadMapDialog(CustomDialog):
 		self.error_box = MessageBox(color='red')
 		self.error_box.set_margin_left(10)
 		content_area.add(self.error_box)
-		# Warning box
-		self.warning_box = MessageBox(color='blue', enable_buttons=True)
-		self.warning_box.set_margin_left(10)
-		self.warning_box.yes_button.connect('clicked', lambda button: self.delete_data())
-		self.warning_box.no_button.connect('clicked', lambda button: self.reset())
-		content_area.add(self.warning_box)
 		# Load button
 		self.action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
 		load_button = Gtk.Button('Load')
 		load_button.connect('clicked', self.on_load_button_clicked)
 		self.add_action_widget(load_button, Gtk.ResponseType.OK)
-		# Delete button
-		delete_button = Gtk.Button('Delete')
-		delete_button.connect('clicked', self.on_delete_button_clicked)
-		self.add_action_widget(delete_button, Gtk.ResponseType.OK)
 		self.show_all()
 		self.reset()
 
 	def reset(self):
 		self.error_box.hide()
-		self.warning_box.hide()
 		self.action_area.show()
+
+	def on_maps_combo_changed(self, combo):
+		self.reset()
+		if not self.parent.map_data_listbox.is_empty():
+			self.error_box.print_message('Your current data will be erased !')
 
 	def load_data(self):
 		maps_data = tools.read_file(tools.get_resource_path('../' + self.filename))
@@ -151,22 +139,6 @@ class LoadMapDialog(CustomDialog):
 			return json.loads(maps_data)
 		else:
 			return {}
-
-	def delete_data(self):
-		selected = self.maps_combo.get_active()
-		if selected != -1:
-			# delete
-			map_name = self.maps_combo.get_active_text()
-			del self.data[map_name]
-			self.maps_combo.remove(selected)
-			# save data
-			tools.save_text_to_file(json.dumps(self.data), tools.get_resource_path('../' + self.filename))
-			self.warning_box.hide()
-
-	def on_maps_combo_changed(self, combo):
-		self.reset()
-		if not self.parent.map_data_listbox.is_empty():
-			self.warning_box.print_message('Your current data will be erased !')
 
 	def on_load_button_clicked(self, button):
 		selected = self.maps_combo.get_active_text()
@@ -182,11 +154,50 @@ class LoadMapDialog(CustomDialog):
 		else:
 			self.error_box.print_message('Please select a map')
 
+class DeleteMapDialog(LoadMapDialog):
+
+	def __init__(self, transient_for):
+		CustomDialog.__init__(self, transient_for=transient_for, title='Delete Map', destroy_on_response=False)
+		self.parent = transient_for
+		self.data = self.load_data()
+		self.set_size_request(300, -1)
+		self.connect('delete-event', lambda dialog, response: self.destroy())
+		# Map
+		content_area = self.get_content_area()
+		content_area.set_spacing(5)
+		content_area.add(Gtk.Label('<b>Map</b>', xalign=0, use_markup=True))
+		self.maps_combo = CustomComboBox(self.data, sort=True)
+		self.maps_combo.set_margin_left(10)
+		self.maps_combo.connect('changed', lambda combo: self.reset())
+		content_area.add(self.maps_combo)
+		# Error box
+		self.error_box = MessageBox(color='red', enable_buttons=True)
+		self.error_box.set_margin_left(10)
+		self.error_box.yes_button.connect('clicked', lambda button: self.delete_data())
+		self.error_box.no_button.connect('clicked', lambda button: self.reset())
+		content_area.add(self.error_box)
+		# Delete button
+		self.action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
+		delete_button = Gtk.Button('Delete')
+		delete_button.connect('clicked', self.on_delete_button_clicked)
+		self.add_action_widget(delete_button, Gtk.ResponseType.OK)
+		self.show_all()
+		self.reset()
+
+	def delete_data(self):
+		selected = self.maps_combo.get_active()
+		if selected != -1:
+			# delete
+			map_name = self.maps_combo.get_active_text()
+			del self.data[map_name]
+			self.maps_combo.remove(selected)
+			# save data
+			tools.save_text_to_file(json.dumps(self.data), tools.get_resource_path('../' + self.filename))
+
 	def on_delete_button_clicked(self, button):
 		if self.maps_combo.get_active() != -1:
-			self.error_box.hide()
 			self.action_area.hide()
-			self.warning_box.print_message('Confirm delete?', True)
+			self.error_box.print_message('Confirm delete?', True)
 		else:
 			self.error_box.print_message('Please select a map')
 
@@ -196,6 +207,7 @@ class SaveMapDialog(LoadMapDialog):
 		CustomDialog.__init__(self, transient_for=transient_for, title='Save Map', destroy_on_response=False)
 		self.parent = transient_for
 		self.data = self.load_data()
+		self.set_size_request(300, -1)
 		self.connect('delete-event', lambda dialog, response: self.destroy())
 		# Map Name
 		content_area = self.get_content_area()
@@ -218,10 +230,6 @@ class SaveMapDialog(LoadMapDialog):
 		self.add_action_widget(save_button, Gtk.ResponseType.OK)
 		self.show_all()
 		self.reset()
-
-	def reset(self):
-		self.error_box.hide()
-		self.action_area.show()
 
 	def get_map_name(self):
 		return self.entry.get_text().strip()

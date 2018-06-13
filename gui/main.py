@@ -126,6 +126,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.settings_button.connect('clicked', lambda button: self.popover.show_all())
 		hb.pack_end(self.settings_button)
 		self.popover = Gtk.Popover(relative_to=self.settings_button, position=Gtk.PositionType.BOTTOM)
+		self.popover.set_border_width(2)
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		self.popover.add(box)
 		# Preferences button
@@ -507,12 +508,25 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.select_resource_button.set_image(Gtk.Image(pixbuf=cursor_pixbuf))
 		self.select_resource_button.connect('clicked', self.on_select_resource_button_clicked)
 		self.map_data_listbox.add_button(self.select_resource_button)
+		# Edit
+		edit_map_button = MenuButton()
+		edit_map_button.set_tooltip_text('Edit')
+		edit_map_button.set_image(Gtk.Image(stock=Gtk.STOCK_EDIT))
+		self.map_data_listbox.add_button(edit_map_button)
+		button_box = ButtonBox(linked=True)
+		edit_map_button.add(button_box)
 		# Load
 		load_map_button = Gtk.Button()
 		load_map_button.set_tooltip_text('Load')
 		load_map_button.set_image(Gtk.Image(stock=Gtk.STOCK_OPEN))
 		load_map_button.connect('clicked', self.on_load_map_button_clicked)
-		self.map_data_listbox.add_button(load_map_button)
+		button_box.add(load_map_button)
+		# Delete
+		delete_map_button = Gtk.Button()
+		delete_map_button.set_tooltip_text('Delete')
+		delete_map_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
+		delete_map_button.connect('clicked', self.on_delete_map_button_clicked)
+		button_box.add(delete_map_button)
 		# Save
 		self.save_map_button = Gtk.Button()
 		self.save_map_button.set_tooltip_text('Save')
@@ -528,6 +542,10 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_load_map_button_clicked(self, button):
 		dialog = LoadMapDialog(self)
+		dialog.run()
+
+	def on_delete_map_button_clicked(self, button):
+		dialog = DeleteMapDialog(self)
 		dialog.run()
 
 	def on_save_map_button_clicked(self, button):

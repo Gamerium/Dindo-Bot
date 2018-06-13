@@ -175,13 +175,15 @@ class CustomScaleButton(Gtk.Button):
 
 	def __init__(self, value=0, min=0, max=100, step=1):
 		Gtk.Button.__init__(self, value)
+		self.connect('clicked', self.on_clicked)
+		# scale
 		adjustment = Gtk.Adjustment(value=value, lower=min, upper=max, step_increment=step, page_increment=step, page_size=0)
 		self.scale = Gtk.Scale(orientation=Gtk.Orientation.HORIZONTAL, adjustment=adjustment, digits=0)
 		self.scale.set_size_request(100, -1)
 		self.scale.connect('value-changed', self.on_value_changed)
+		# popover
 		self.popover = Gtk.Popover(relative_to=self, position=Gtk.PositionType.TOP)
 		self.popover.add(self.scale)
-		self.connect('clicked', self.on_clicked)
 
 	def on_clicked(self, button):
 		self.popover.show_all()
@@ -196,17 +198,16 @@ class CustomScaleButton(Gtk.Button):
 class CustomSpinButton(Gtk.Button):
 
 	def __init__(self, min=0, max=100, value=0, step=1):
-		if value < min:
-			value = min
-		Gtk.Button.__init__(self, value)
+		text = min if value < min else value
+		Gtk.Button.__init__(self, text)
+		self.connect('clicked', self.on_clicked)
+		# spin button
 		self.spin_button = SpinButton(min=min, max=max, value=value, step=step, page_step=step)
 		self.spin_button.connect('value-changed', self.on_value_changed)
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.set_border_width(5)
-		hbox.add(self.spin_button)
+		# popover
 		self.popover = Gtk.Popover(relative_to=self, position=Gtk.PositionType.TOP)
-		self.popover.add(hbox)
-		self.connect('clicked', self.on_clicked)
+		self.popover.set_border_width(2)
+		self.popover.add(self.spin_button)
 
 	def on_clicked(self, button):
 		self.popover.show_all()
@@ -302,7 +303,7 @@ class MessageBox(Gtk.Box):
 		# question buttons
 		if enable_buttons:
 			self.button_box = ButtonBox(linked=True)
-			self.add(self.button_box)
+			self.pack_end(self.button_box, False, False, 0)
 			# yes
 			self.yes_button = Gtk.Button()
 			self.yes_button.set_tooltip_text('Yes')
@@ -322,3 +323,18 @@ class MessageBox(Gtk.Box):
 			else:
 				self.button_box.hide()
 		self.show()
+
+class MenuButton(Gtk.Button):
+
+	def __init__(self, text=None, position=Gtk.PositionType.TOP, padding=2):
+		Gtk.Button.__init__(self, text)
+		# popover
+		self.popover = Gtk.Popover(relative_to=self, position=position)
+		self.popover.set_border_width(padding)
+		self.connect('clicked', self.on_clicked)
+
+	def on_clicked(self, button):
+		self.popover.show_all()
+
+	def add(self, widget):
+		self.popover.add(widget)
