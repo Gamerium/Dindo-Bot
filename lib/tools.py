@@ -107,7 +107,10 @@ def screen_game(region, save_to=None):
 
 # Convert bytes to integer
 def bytes_to_int(bytes):
-	return int(bytes.encode('hex'), 16)
+	if type(bytes) is int:
+		return bytes
+	else:
+		return int(bytes.encode('hex'), 16)
 
 # Return pixel color of given x, y coordinates
 def get_pixel_color(x, y):
