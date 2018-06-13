@@ -7,7 +7,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf
 from lib import tools
 from lib import data
 from .custom import CustomComboBox, CustomSpinButton
-from .dialog import TextDialog
+from .dialog import CopyTextDialog
 from threading import Thread
 
 class DevToolsWidget(Gtk.Table):
@@ -188,7 +188,7 @@ class DevToolsWidget(Gtk.Table):
 		if event.type == Gdk.EventType.DOUBLE_BUTTON_PRESS:
 			selected_row = self.get_selected_row()
 			if selected_row:
-				TextDialog(self.parent, "{'x': %d, 'y': %d, 'width': %d, 'height': %d, 'color': %s}" % selected_row)
+				CopyTextDialog(self.parent, "{'x': %d, 'y': %d, 'width': %d, 'height': %d, 'color': %s}" % selected_row)
 
 	def on_selection_changed(self, selection):
 		if not self.simulate_click_button.get_sensitive():

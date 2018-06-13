@@ -659,9 +659,9 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_start_button_clicked(self, button):
 		if not self.game_window:
-			MessageDialog(self, 'Please select a game window')
+			AlertDialog(self, 'Please select a game window')
 		elif not self.bot_path:
-			MessageDialog(self, 'Please select a bot path')
+			AlertDialog(self, 'Please select a bot path')
 		else:
 			# get game location
 			game_location = tools.get_widget_location(self.game_area)

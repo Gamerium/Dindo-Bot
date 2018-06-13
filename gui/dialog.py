@@ -24,28 +24,6 @@ class AboutDialog(Gtk.AboutDialog):
 		self.set_logo(logo)
 		self.connect('response', lambda dialog, response: self.destroy())
 
-class MessageDialog(Gtk.MessageDialog):
-
-	def __init__(self, transient_for, message):
-		Gtk.MessageDialog.__init__(self, transient_for=transient_for, use_markup=True, text=message, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK)
-		self.run()
-		self.destroy()
-
-class TextDialog(Gtk.MessageDialog):
-
-	def __init__(self, transient_for, text):
-		Gtk.MessageDialog.__init__(self, transient_for=transient_for, buttons=Gtk.ButtonsType.CLOSE)
-		self.set_image(Gtk.Image(stock=Gtk.STOCK_PASTE, icon_size=Gtk.IconSize.DIALOG))
-		entry = Gtk.Entry()
-		entry.set_text(text)
-		entry.set_width_chars(60)
-		#entry.set_sensitive(False)
-		message_area = self.get_message_area()
-		message_area.add(entry)
-		self.show_all()
-		self.run()
-		self.destroy()
-
 class CustomDialog(Gtk.Dialog):
 
 	def __init__(self, title, transient_for=None, destroy_on_response=True):
@@ -58,6 +36,39 @@ class CustomDialog(Gtk.Dialog):
 		hb = Gtk.HeaderBar(title=title)
 		hb.set_show_close_button(True)
 		self.set_titlebar(hb)
+
+class AlertDialog(CustomDialog):
+
+	def __init__(self, transient_for, message):
+		CustomDialog.__init__(self, transient_for=transient_for, title='Alert')
+		# message
+		content_area = self.get_content_area()
+		content_area.set_spacing(5)
+		content_area.add(Gtk.Label(message, use_markup=True))
+		# Ok button
+		self.action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
+		ok_button = Gtk.Button('Ok')
+		self.add_action_widget(ok_button, Gtk.ResponseType.OK)
+		self.show_all()
+		self.run()
+
+class CopyTextDialog(CustomDialog):
+
+	def __init__(self, transient_for, text):
+		CustomDialog.__init__(self, transient_for=transient_for, title='Copy Text')
+		# text entry
+		content_area = self.get_content_area()
+		content_area.set_spacing(5)
+		entry = Gtk.Entry()
+		entry.set_text(text)
+		entry.set_width_chars(60)
+		content_area.add(entry)
+		# Close button
+		self.action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
+		close_button = Gtk.Button('Close')
+		self.add_action_widget(close_button, Gtk.ResponseType.OK)
+		self.show_all()
+		self.run()
 
 class PlugDialog(CustomDialog):
 
@@ -104,7 +115,7 @@ class LoadMapDialog(CustomDialog):
 		self.data = self.load_data()
 		self.set_size_request(300, -1)
 		self.connect('delete-event', lambda dialog, response: self.destroy())
-		# Map
+		# Map combobox
 		content_area = self.get_content_area()
 		content_area.set_spacing(5)
 		content_area.add(Gtk.Label('<b>Map</b>', xalign=0, use_markup=True))
@@ -162,7 +173,7 @@ class DeleteMapDialog(LoadMapDialog):
 		self.data = self.load_data()
 		self.set_size_request(300, -1)
 		self.connect('delete-event', lambda dialog, response: self.destroy())
-		# Map
+		# Map combobox
 		content_area = self.get_content_area()
 		content_area.set_spacing(5)
 		content_area.add(Gtk.Label('<b>Map</b>', xalign=0, use_markup=True))
@@ -209,7 +220,7 @@ class SaveMapDialog(LoadMapDialog):
 		self.data = self.load_data()
 		self.set_size_request(300, -1)
 		self.connect('delete-event', lambda dialog, response: self.destroy())
-		# Map Name
+		# Map Name entry
 		content_area = self.get_content_area()
 		content_area.set_spacing(5)
 		content_area.add(Gtk.Label('<b>Map Name</b>', xalign=0, use_markup=True))

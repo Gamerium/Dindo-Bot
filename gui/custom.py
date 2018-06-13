@@ -293,7 +293,7 @@ class ButtonBox(Gtk.Box):
 
 class MessageBox(Gtk.Box):
 
-	def __init__(self, text='', color='black', enable_buttons=False):
+	def __init__(self, text=None, color='black', enable_buttons=False):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		self.enable_buttons = enable_buttons
 		# label
