@@ -9,6 +9,7 @@ from lib import logger
 from lib import data
 from lib import parser
 from lib import settings
+from lib import maps
 from lib.threads import BotThread
 from lib.shared import LogType, DebugLevel, __program_name__
 from .dev import DevToolsWidget
@@ -490,18 +491,14 @@ class BotWindow(Gtk.ApplicationWindow):
 		map_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		map_page.set_border_width(10)
 		bot_notebook.append_page(map_page, Gtk.Label('Map'))
-		## Stack & Stack switcher
-		stack = Gtk.Stack()
-		stack.set_margin_top(5)
-		stack_switcher = Gtk.StackSwitcher()
-		stack_switcher.set_stack(stack)
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		hbox.pack_start(stack_switcher, True, False, 0)
-		map_page.add(hbox)
-		map_page.pack_start(stack, True, True, 0)
+		## View
+		map_page.add(Gtk.Label('<b>View</b>', xalign=0, use_markup=True))
+		self.map_view = MiniMap()
+		map_page.pack_start(self.map_view, True, True, 0)
 		## Data
+		map_page.add(Gtk.Label('<b>Data</b>', xalign=0, use_markup=True))
 		self.map_data_listbox = CustomListBox(allow_moving=False)
-		stack.add_titled(self.map_data_listbox, 'data', 'Data')
+		map_page.pack_start(self.map_data_listbox, True, True, 0)
 		# Select
 		self.select_resource_button = Gtk.Button()
 		self.select_resource_button.set_tooltip_text('Select resource')
@@ -536,13 +533,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.map_data_listbox.add_button(self.save_map_button)
 		self.map_data_listbox.on_add(self.on_map_data_listbox_add)
 		self.map_data_listbox.on_delete(self.on_map_data_listbox_delete)
-		## View
-		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		stack.add_titled(box, 'view', 'View')
 
 	def on_load_map_button_clicked(self, button):
 		dialog = LoadMapDialog(self)
-		dialog.run()
+		response = dialog.run()
 
 	def on_delete_map_button_clicked(self, button):
 		dialog = DeleteMapDialog(self)
@@ -557,7 +551,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		# get pixel color
 		color = tools.get_pixel_color(x, y)
 		# append to listbox
-		self.map_data_listbox.append_text('{"x": "%d", "y": "%d", "width": "%d", "height": "%d", "color": "%s"}' % (x, y, width, height, color))
+		text = '{"x": "%d", "y": "%d", "width": "%d", "height": "%d", "color": "%s"}' % (x, y, width, height, color)
+		self.map_data_listbox.append_text(text)
+		# append to view
+		pin = maps.to_array(text)
+		self.map_view.add_pin(pin)
 		self.select_resource_button.set_sensitive(True)
 		self.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 
@@ -571,7 +569,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		if not self.save_map_button.get_sensitive():
 			self.save_map_button.set_sensitive(True)
 
-	def on_map_data_listbox_delete(self):
+	def on_map_data_listbox_delete(self, row_index):
+		self.map_view.remove_pin(row_index)
 		if self.map_data_listbox.is_empty():
 			self.save_map_button.set_sensitive(False)
 
@@ -579,7 +578,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		if not self.save_path_button.get_sensitive():
 			self.save_path_button.set_sensitive(True)
 
-	def on_path_listbox_delete(self):
+	def on_path_listbox_delete(self, row_index):
 		if self.path_listbox.is_empty():
 			self.save_path_button.set_sensitive(False)
 

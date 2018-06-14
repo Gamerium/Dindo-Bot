@@ -7,6 +7,7 @@ def replace_at_index(string, index, substitute, length=1):
 
 # Replace all occurrences of needle in text with substitute only if needle is surrounded by starts_with & ends_with
 def replace_all_between(text, needle, substitute, starts_with, ends_with):
+	# TODO: use regex
 	result = text
 	cursor_position = 0
 	proceed = needle != substitute
@@ -19,7 +20,7 @@ def replace_all_between(text, needle, substitute, starts_with, ends_with):
 		needle_position = text.find(needle)
 		end = text.find(ends_with)
 		# if needle is surrounded
-		if start != -1 and end != -1 and needle_position > start and needle_position < end:
+		if start != -1 and end != -1 and start < needle_position < end:
 			result = replace_at_index(result, cursor_position+needle_position, substitute, len(needle))
 			cursor_position += end+1-len(needle)+len(substitute)
 			text = text[end+1:]

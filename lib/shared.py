@@ -5,7 +5,7 @@ __program_name__  = 'Dindo Bot'
 __program_desc__  = 'Farming bot for Dofus game'
 __website__       = 'https://github.com/AXeL-dev'
 __website_label__ = 'AXeL-dev'
-__version__       = '1.0.30'
+__version__       = '1.0.31'
 __authors__       = ['AXeL']
 
 class LogType:

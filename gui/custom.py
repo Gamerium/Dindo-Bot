@@ -4,6 +4,8 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, Gio, Pango
+from lib.tools import fit_position_to_destination
+import math
 
 class CustomComboBox(Gtk.ComboBoxText):
 
@@ -133,11 +135,13 @@ class CustomListBox(Gtk.Frame):
 		if self.is_empty():
 			self.clear_all_button.set_sensitive(False)
 
-	def remove_row(self, row):
+	def remove_row(self, row, reset=True):
+		row_index = row.get_index()
 		self.listbox.remove(row)
-		self.reset_buttons()
+		if reset:
+			self.reset_buttons()
 		if self.delete_callback is not None:
-			self.delete_callback()
+			self.delete_callback(row_index)
 
 	def on_delete_button_clicked(self, button):
 		row = self.listbox.get_selected_row()
@@ -161,15 +165,13 @@ class CustomListBox(Gtk.Frame):
 			index = row.get_index()
 			self.move_row(row, index + 1)
 
-	def clear_all(self):
+	def clear(self):
 		for row in self.get_rows():
-			self.listbox.remove(row)
+			self.remove_row(row, False)
 		self.reset_buttons()
-		if self.delete_callback is not None:
-			self.delete_callback()
 
 	def on_clear_all_button_clicked(self, button):
-		self.clear_all()
+		self.clear()
 
 class CustomScaleButton(Gtk.Button):
 
@@ -338,3 +340,78 @@ class MenuButton(Gtk.Button):
 
 	def add(self, widget):
 		self.popover.add(widget)
+
+class MiniMap(Gtk.Frame):
+
+	pins = []
+	pin_colors = {
+		'Monster': 'red',
+		'Resource': 'green',
+		'NPC': 'blue',
+		'Zaap': 'orange',
+		'Zaapi': 'yellow'
+	}
+
+	def __init__(self, background_color='#BBBBBB', show_grid=True, grid_color='#DDDDDD', grid_size=(15, 15)):
+		Gtk.Frame.__init__(self)
+		self.show_grid = show_grid
+		self.grid_color = grid_color
+		self.grid_size = grid_size
+		self.background_color = background_color
+		self.drawing_area = Gtk.DrawingArea()
+		self.drawing_area.connect('draw', self.on_draw)
+		self.add(self.drawing_area)
+
+	def add_pin(self, pin):
+		self.pins.append(pin)
+		self.drawing_area.queue_draw()
+
+	def add_pins(self, pins):
+		for pin in pins:
+			self.pins.append(pin)
+		self.drawing_area.queue_draw()
+
+	def remove_pin(self, index):
+		if 0 <= index < len(self.pins):
+			del self.pins[index]
+			self.drawing_area.queue_draw()
+
+	def clear(self):
+		if self.pins:
+			self.pins = []
+			self.drawing_area.queue_draw()
+
+	def on_draw(self, widget, cr):
+		allocation = widget.get_allocation()
+		square_width, square_height = self.grid_size
+		cr.set_line_width(1)
+		# set color function
+		def set_color(value):
+			color = Gdk.color_parse(value)
+			cr.set_source_rgb(float(color.red) / 65535, float(color.green) / 65535, float(color.blue) / 65535)
+		# fill background with color
+		if self.background_color:
+			cr.rectangle(0, 0, allocation.width, allocation.height)
+			set_color(self.background_color)
+			cr.fill()
+		# draw grid lines
+		if self.show_grid:
+			set_color(self.grid_color)
+			# draw vertical lines
+			for x in range(square_width, allocation.width, square_width + 1): # +1 for line width
+				cr.move_to(x + 0.5, 0) # +0.5 for smooth line
+				cr.line_to(x + 0.5, allocation.height)
+			# draw horizontal lines
+			for y in range(square_height, allocation.height, square_height + 1):
+				cr.move_to(0, y + 0.5)
+				cr.line_to(allocation.width, y + 0.5)
+			cr.stroke()
+		# draw pins
+		for pin in self.pins:
+			x, y, width, height = int(pin['x']), int(pin['y']), int(pin['width']), int(pin['height'])
+			pin_x, pin_y = fit_position_to_destination(x, y, width, height, allocation.width, allocation.height)
+			#set_color('black')
+			cr.arc(pin_x, pin_y, 3, 0, 2*math.pi)
+			#cr.stroke_preserve()
+			set_color(self.pin_colors['Resource'])
+			cr.fill()

@@ -144,7 +144,12 @@ class LoadMapDialog(CustomDialog):
 	def on_load_button_clicked(self, button):
 		selected = self.maps_combo.get_active_text()
 		if selected:
-			self.parent.map_data_listbox.clear_all()
+			# clear listbox & view
+			self.parent.map_data_listbox.clear()
+			self.parent.map_view.clear()
+			# append to view
+			self.parent.map_view.add_pins(self.data[selected])
+			# append to listbox
 			text = maps.to_string(self.data[selected])
 			lines = text[1:-1].split('},') # [1:-1] to remove '[]'
 			for line in lines:
@@ -152,6 +157,7 @@ class LoadMapDialog(CustomDialog):
 				if text.startswith('{') and not text.endswith('}'):
 					text += '}'
 				self.parent.map_data_listbox.append_text(text)
+			# destroy dialog
 			self.destroy()
 		else:
 			self.error_box.print_message('Please select a map')
