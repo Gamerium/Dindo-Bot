@@ -76,7 +76,7 @@ class DevToolsWidget(Gtk.Table):
 		# ComboBox
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		vbox.add(hbox)
-		self.keys_combo = CustomComboBox(data.KeyboardShortcuts, True)
+		self.keys_combo = CustomComboBox(data.KeyboardShortcuts, sort=True)
 		self.keys_combo.connect('changed', self.on_keys_combo_changed)
 		hbox.pack_start(self.keys_combo, True, True, 0)
 		# Simulate

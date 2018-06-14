@@ -333,7 +333,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox.append(label, widget)
 		# Location
 		widget.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
-		self.enclos_combo = CustomComboBox(data=data.Enclos, sort=True)
+		self.enclos_combo = CustomComboBox(data.Enclos, sort=True)
 		self.enclos_combo.set_margin_left(10)
 		widget.add(self.enclos_combo)
 		# Add
@@ -350,13 +350,19 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox.append(label, widget)
 		# From
 		widget.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
-		self.zaap_from_combo = CustomComboBox(data=data.Zaap['From'], sort=True)
+		self.zaap_from_combo = CustomComboBox(data.Zaap['From'], sort=True)
 		self.zaap_from_combo.set_margin_left(10)
+		self.zaap_from_combo.connect('changed', lambda combo: 
+			combo.sync_with_combo(self.zaap_to_combo)
+		)
 		widget.add(self.zaap_from_combo)
 		# To
 		widget.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
-		self.zaap_to_combo = CustomComboBox(data=data.Zaap['To'], sort=True)
+		self.zaap_to_combo = CustomComboBox(data.Zaap['To'], sort=True)
 		self.zaap_to_combo.set_margin_left(10)
+		self.zaap_to_combo.connect('changed', lambda combo: 
+			combo.sync_with_combo(self.zaap_from_combo)
+		)
 		widget.add(self.zaap_to_combo)
 		# Add
 		add_button = Gtk.Button('Add')
@@ -372,13 +378,19 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox.append(label, widget)
 		# From
 		widget.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
-		self.zaapi_from_combo = CustomComboBox(data=data.Zaapi['From'], sort=True)
+		self.zaapi_from_combo = CustomComboBox(data.Zaapi['From'], sort=True)
 		self.zaapi_from_combo.set_margin_left(10)
+		self.zaapi_from_combo.connect('changed', lambda combo: 
+			combo.sync_with_combo(self.zaapi_to_combo, use_contains=True)
+		)
 		widget.add(self.zaapi_from_combo)
 		# To
 		widget.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
-		self.zaapi_to_combo = CustomComboBox(data=data.Zaapi['To'], sort=True)
+		self.zaapi_to_combo = CustomComboBox(data.Zaapi['To'], sort=True)
 		self.zaapi_to_combo.set_margin_left(10)
+		self.zaapi_to_combo.connect('changed', lambda combo: 
+			combo.sync_with_combo(self.zaapi_from_combo, use_contains=True)
+		)
 		widget.add(self.zaapi_to_combo)
 		# Add
 		add_button = Gtk.Button('Add')
@@ -395,22 +407,20 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Map
 		widget.add(Gtk.Label('<b>Map</b>', xalign=0, use_markup=True))
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		self.collect_map_combo = CustomComboBox(data=maps.load(), sort=True)
+		self.collect_map_combo = CustomComboBox(maps.load(), sort=True)
 		self.collect_map_combo.set_margin_left(10)
 		hbox.pack_start(self.collect_map_combo, True, True, 0)
 		reload_button = Gtk.Button()
 		reload_button.set_tooltip_text('Reload')
 		reload_button.set_image(Gtk.Image(stock=Gtk.STOCK_REFRESH))
-		reload_button.connect('clicked', lambda button: (
-				self.collect_map_combo.remove_all(),
-				self.collect_map_combo.append_list(maps.load(), sort=True)
-			)
+		reload_button.connect('clicked', lambda button: 
+			self.collect_map_combo.append_list(maps.load(), sort=True, clear=True)
 		)
 		hbox.add(reload_button)
 		widget.add(hbox)
 		# Bank Path
 		widget.add(Gtk.Label('<b>Bank Path</b>', xalign=0, use_markup=True))
-		self.collect_bank_path_combo = CustomComboBox(data=data.BankPath, sort=True)
+		self.collect_bank_path_combo = CustomComboBox(data.BankPath, sort=True)
 		self.collect_bank_path_combo.set_margin_left(10)
 		widget.add(self.collect_bank_path_combo)
 		# Add
@@ -477,7 +487,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.key_label = Gtk.Label()
 		hbox.add(self.key_label)
 		widget.add(hbox)
-		self.keys_combo = CustomComboBox(data.KeyboardShortcuts, True)
+		self.keys_combo = CustomComboBox(data.KeyboardShortcuts, sort=True)
 		self.keys_combo.set_margin_left(10)
 		self.keys_combo.connect('changed', lambda combo: (
 				self.key_label.set_text('(' + data.KeyboardShortcuts[combo.get_active_text()] + ')'),

@@ -9,38 +9,57 @@ import math
 
 class CustomComboBox(Gtk.ComboBoxText):
 
-	def __init__(self, data=[], sort=False):
+	def __init__(self, data_list=[], sort=False):
 		Gtk.ComboBoxText.__init__(self)
 		# set max chars width
 		for renderer in self.get_cells():
 			renderer.props.max_width_chars = 10
 			renderer.props.ellipsize = Pango.EllipsizeMode.END
 		# append data
-		self.append_list(data, sort)
+		self.append_list(data_list, sort)
 
-	def append_list(self, list, sort=False):
-		# sort list
+	def append_list(self, data_list, sort=False, clear=False):
+		# clear combobox
+		if clear:
+			self.remove_all()
+		# sort data
 		if sort:
-			list = sorted(list)
-		# append list
-		for text in list:
+			data_list = sorted(data_list)
+		# append data
+		for text in data_list:
 			self.append_text(text)
+
+	def sync_with_combo(self, combo, use_contains=False):
+		if self.get_active() != -1 and combo.get_active() != -1:
+			# do not allow same text at same time
+			self_text = self.get_active_text()
+			combo_text = combo.get_active_text()
+			if (use_contains and (self_text in combo_text or combo_text in self_text)) or self_text == combo_text:
+				combo.set_active(-1)
 
 class CustomComboBox2(Gtk.ComboBox):
 
-	def __init__(self, data=[], sort=False):
+	def __init__(self, data_list=[], sort=False):
 		Gtk.ComboBox.__init__(self)
 		renderer_text = Gtk.CellRendererText()
 		renderer_text.props.max_width_chars = 10
 		renderer_text.props.ellipsize = Pango.EllipsizeMode.END
 		model = Gtk.ListStore(str)
 		if sort:
-			data = sorted(data)
-		for text in data:
+			data_list = sorted(data_list)
+		for text in data_list:
 			model.append([text])
 		self.set_model(model)
 		self.pack_start(renderer_text, True)
 		self.add_attribute(renderer_text, 'text', 0)
+
+	def get_active_text(self):
+		active = self.get_active()
+		if active != -1:
+			model = self.get_model()
+			return model[active][0]
+		else:
+			return None
 
 class CustomListBox(Gtk.Frame):
 

@@ -147,6 +147,9 @@ class LoadMapDialog(CustomDialog):
 			# clear listbox & view
 			self.parent.map_data_listbox.clear()
 			self.parent.map_view.clear()
+			# append to view
+			points = list(self.data[selected])
+			self.parent.map_view.add_points(points, MiniMap.point_colors['Resource'])
 			# append to listbox
 			text = maps.to_string(self.data[selected])
 			lines = text[1:-1].split('},') # [1:-1] to remove '[]'
@@ -155,8 +158,6 @@ class LoadMapDialog(CustomDialog):
 				if text.startswith('{') and not text.endswith('}'):
 					text += '}'
 				self.parent.map_data_listbox.append_text(text)
-			# append to view
-			self.parent.map_view.add_points(self.data[selected], MiniMap.point_colors['Resource'])
 			# destroy dialog
 			self.destroy()
 		else:
