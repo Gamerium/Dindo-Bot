@@ -11,10 +11,36 @@ class CustomComboBox(Gtk.ComboBoxText):
 
 	def __init__(self, data=[], sort=False):
 		Gtk.ComboBoxText.__init__(self)
+		# set max chars width
+		for renderer in self.get_cells():
+			renderer.props.max_width_chars = 10
+			renderer.props.ellipsize = Pango.EllipsizeMode.END
+		# append data
+		self.append_list(data, sort)
+
+	def append_list(self, list, sort=False):
+		# sort list
+		if sort:
+			list = sorted(list)
+		# append list
+		for text in list:
+			self.append_text(text)
+
+class CustomComboBox2(Gtk.ComboBox):
+
+	def __init__(self, data=[], sort=False):
+		Gtk.ComboBox.__init__(self)
+		renderer_text = Gtk.CellRendererText()
+		renderer_text.props.max_width_chars = 10
+		renderer_text.props.ellipsize = Pango.EllipsizeMode.END
+		model = Gtk.ListStore(str)
 		if sort:
 			data = sorted(data)
 		for text in data:
-			self.append_text(text)
+			model.append([text])
+		self.set_model(model)
+		self.pack_start(renderer_text, True)
+		self.add_attribute(renderer_text, 'text', 0)
 
 class CustomListBox(Gtk.Frame):
 
@@ -343,8 +369,8 @@ class MenuButton(Gtk.Button):
 
 class MiniMap(Gtk.Frame):
 
-	pins = []
-	pin_colors = {
+	points = []
+	point_colors = {
 		'Monster': 'red',
 		'Resource': 'green',
 		'NPC': 'blue',
@@ -352,33 +378,37 @@ class MiniMap(Gtk.Frame):
 		'Zaapi': 'yellow'
 	}
 
-	def __init__(self, background_color='#BBBBBB', show_grid=True, grid_color='#DDDDDD', grid_size=(15, 15)):
+	def __init__(self, background_color='#BBBBBB', show_grid=True, grid_color='#DDDDDD', grid_size=(15, 15), points_size=3):
 		Gtk.Frame.__init__(self)
 		self.show_grid = show_grid
 		self.grid_color = grid_color
 		self.grid_size = grid_size
+		self.points_size = points_size
 		self.background_color = background_color
 		self.drawing_area = Gtk.DrawingArea()
 		self.drawing_area.connect('draw', self.on_draw)
 		self.add(self.drawing_area)
 
-	def add_pin(self, pin):
-		self.pins.append(pin)
+	def add_point(self, point, color=None, redraw=True):
+		if color is not None:
+			point['color'] = color
+		self.points.append(point)
+		if redraw:
+			self.drawing_area.queue_draw()
+
+	def add_points(self, points, color=None):
+		for point in points:
+			self.add_point(point, color, False)
 		self.drawing_area.queue_draw()
 
-	def add_pins(self, pins):
-		for pin in pins:
-			self.pins.append(pin)
-		self.drawing_area.queue_draw()
-
-	def remove_pin(self, index):
-		if 0 <= index < len(self.pins):
-			del self.pins[index]
+	def remove_point(self, index):
+		if 0 <= index < len(self.points):
+			del self.points[index]
 			self.drawing_area.queue_draw()
 
 	def clear(self):
-		if self.pins:
-			self.pins = []
+		if self.points:
+			self.points = []
 			self.drawing_area.queue_draw()
 
 	def on_draw(self, widget, cr):
@@ -406,12 +436,12 @@ class MiniMap(Gtk.Frame):
 				cr.move_to(0, y + 0.5)
 				cr.line_to(allocation.width, y + 0.5)
 			cr.stroke()
-		# draw pins
-		for pin in self.pins:
-			x, y, width, height = int(pin['x']), int(pin['y']), int(pin['width']), int(pin['height'])
-			pin_x, pin_y = fit_position_to_destination(x, y, width, height, allocation.width, allocation.height)
+		# draw points
+		for point in self.points:
+			x, y, width, height = int(point['x']), int(point['y']), int(point['width']), int(point['height'])
+			point_x, point_y = fit_position_to_destination(x, y, width, height, allocation.width, allocation.height)
 			#set_color('black')
-			cr.arc(pin_x, pin_y, 3, 0, 2*math.pi)
+			cr.arc(point_x, point_y, self.points_size, 0, 2*math.pi)
 			#cr.stroke_preserve()
-			set_color(self.pin_colors['Resource'])
+			set_color(point['color'])
 			cr.fill()

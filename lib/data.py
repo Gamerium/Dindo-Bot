@@ -125,3 +125,17 @@ Zaapi = {
 		'Bank':              {'x': 183, 'y': 153, 'width': 566, 'height': 456, 'location': Locations['Various Menu']}
 	}
 }
+
+# BankPath
+BankPath = {
+	# Bonta
+	'Bonta (From Havenbag)': [
+		'Zaap(from=Havenbag,to=Bonta)',
+		'Zaapi(from=Zaap Bonta,to=Bank)'
+	],
+	# Brakmar
+	'Brakmar (From Havenbag)': [
+		'Zaap(from=Havenbag,to=Brakmar)',
+		'Zaapi(from=Zaap Brakmar,to=Bank)'
+	]
+}

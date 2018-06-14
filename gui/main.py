@@ -386,6 +386,39 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.pack_end(button_box, False, False, 0)
+		## Collect
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/miner.png'), 24, 24)
+		image = Gtk.Image(pixbuf=pixbuf)
+		label = ImageLabel(image, 'Collect')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
+		# Map
+		widget.add(Gtk.Label('<b>Map</b>', xalign=0, use_markup=True))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		self.collect_map_combo = CustomComboBox(data=maps.load(), sort=True)
+		self.collect_map_combo.set_margin_left(10)
+		hbox.pack_start(self.collect_map_combo, True, True, 0)
+		reload_button = Gtk.Button()
+		reload_button.set_tooltip_text('Reload')
+		reload_button.set_image(Gtk.Image(stock=Gtk.STOCK_REFRESH))
+		reload_button.connect('clicked', lambda button: (
+				self.collect_map_combo.remove_all(),
+				self.collect_map_combo.append_list(maps.load(), sort=True)
+			)
+		)
+		hbox.add(reload_button)
+		widget.add(hbox)
+		# Bank Path
+		widget.add(Gtk.Label('<b>Bank Path</b>', xalign=0, use_markup=True))
+		self.collect_bank_path_combo = CustomComboBox(data=data.BankPath, sort=True)
+		self.collect_bank_path_combo.set_margin_left(10)
+		widget.add(self.collect_bank_path_combo)
+		# Add
+		add_button = Gtk.Button('Add')
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Collect(map=%s,bank_path=%s)' % (self.collect_map_combo.get_active_text(), self.collect_bank_path_combo.get_active_text())))
+		button_box = ButtonBox(centered=True)
+		button_box.add(add_button)
+		widget.pack_end(button_box, False, False, 0)
 		## Click
 		pixbuf = Gdk.Cursor(Gdk.CursorType.ARROW).get_image().scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -536,7 +569,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_load_map_button_clicked(self, button):
 		dialog = LoadMapDialog(self)
-		response = dialog.run()
+		dialog.run()
 
 	def on_delete_map_button_clicked(self, button):
 		dialog = DeleteMapDialog(self)
@@ -554,8 +587,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		text = '{"x": "%d", "y": "%d", "width": "%d", "height": "%d", "color": "%s"}' % (x, y, width, height, color)
 		self.map_data_listbox.append_text(text)
 		# append to view
-		pin = maps.to_array(text)
-		self.map_view.add_pin(pin)
+		point = maps.to_array(text)
+		self.map_view.add_point(point, MiniMap.point_colors['Resource'])
 		self.select_resource_button.set_sensitive(True)
 		self.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 
@@ -570,7 +603,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.save_map_button.set_sensitive(True)
 
 	def on_map_data_listbox_delete(self, row_index):
-		self.map_view.remove_pin(row_index)
+		self.map_view.remove_point(row_index)
 		if self.map_data_listbox.is_empty():
 			self.save_map_button.set_sensitive(False)
 
