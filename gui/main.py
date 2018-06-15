@@ -270,15 +270,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.repeat_spin_button.set_sensitive(False)
 		hbox.pack_end(self.repeat_spin_button, False, False, 0)
 		## MiniMap
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		bot_page.add(hbox)
-		hbox.add(Gtk.Label('<b>MiniMap</b>', xalign=0, use_markup=True))
+		bot_page.add(Gtk.Label('<b>MiniMap</b>', xalign=0, use_markup=True))
 		self.minimap = MiniMap(grid_size=(18, 18))
 		self.minimap.set_size_request(-1, 210)
 		self.minimap.set_margin_left(10)
 		bot_page.add(self.minimap)
-		tooltip_image = TooltipImage(stock=Gtk.STOCK_DIALOG_INFO, widget=self.minimap.get_caption_widget())
-		hbox.add(tooltip_image)
 		## Start
 		button_box = ButtonBox(centered=True, linked=True)
 		bot_page.pack_end(button_box, False, False, 0)
@@ -608,7 +604,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.map_data_listbox.append_text(text)
 		# append to view
 		point = maps.to_array(text)
-		self.map_view.add_point(point, MiniMap.point_colors['Resource'])
+		self.map_view.add_point(point, 'Resource', MiniMap.point_colors['Resource'])
 		self.select_resource_button.set_sensitive(True)
 		self.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 

@@ -37,30 +37,6 @@ class CustomComboBox(Gtk.ComboBoxText):
 			if (use_contains and (self_text in combo_text or combo_text in self_text)) or self_text == combo_text:
 				combo.set_active(-1)
 
-class CustomComboBox2(Gtk.ComboBox):
-
-	def __init__(self, data_list=[], sort=False):
-		Gtk.ComboBox.__init__(self)
-		renderer_text = Gtk.CellRendererText()
-		renderer_text.props.max_width_chars = 10
-		renderer_text.props.ellipsize = Pango.EllipsizeMode.END
-		model = Gtk.ListStore(str)
-		if sort:
-			data_list = sorted(data_list)
-		for text in data_list:
-			model.append([text])
-		self.set_model(model)
-		self.pack_start(renderer_text, True)
-		self.add_attribute(renderer_text, 'text', 0)
-
-	def get_active_text(self):
-		active = self.get_active()
-		if active != -1:
-			model = self.get_model()
-			return model[active][0]
-		else:
-			return None
-
 class CustomListBox(Gtk.Frame):
 
 	def __init__(self, allow_moving=True):
@@ -390,9 +366,7 @@ class MiniMap(Gtk.Frame):
 		'Monster': 'red',
 		'Resource': 'green',
 		'NPC': 'blue',
-		'Zaap': 'orange',
-		'Zaapi': 'yellow',
-		'Enclos': 'brown'
+		'None': 'black'
 	}
 
 	def __init__(self, background_color='#CECECE', show_grid=True, grid_color='#DDDDDD', grid_size=(15, 15), point_radius=3):
@@ -405,19 +379,41 @@ class MiniMap(Gtk.Frame):
 		self.grid_size = grid_size
 		self.background_color = background_color
 		self.drawing_area = Gtk.DrawingArea()
+		self.drawing_area.set_has_tooltip(True)
 		self.drawing_area.connect('draw', self.on_draw)
+		self.drawing_area.connect('query-tooltip', self.on_query_tooltip)
 		self.add(self.drawing_area)
 
-	def add_point(self, point, color=None, redraw=True):
+	def add_point(self, point, name=None, color=None, redraw=True):
+		# set point coordinates
+		new_point = {
+			'x': int(point['x']),
+			'y': int(point['y']),
+			'width': int(point['width']),
+			'height': int(point['height'])
+		}
+		# set point name
+		if name is not None:
+			new_point['name'] = name
+		elif 'name' in point:
+			new_point['name'] = point['name']
+		else:
+			new_point['name'] = None
+		# set point color
 		if color is not None:
-			point['color'] = color
-		self.points.append(point)
+			new_point['color'] = color
+		elif 'color' in point:
+			new_point['color'] = point['color']
+		else:
+			new_point['color'] = None
+		# add point
+		self.points.append(new_point)
 		if redraw:
 			self.drawing_area.queue_draw()
 
-	def add_points(self, points, color=None):
+	def add_points(self, points, name=None, color=None):
 		for point in points:
-			self.add_point(point, color, False)
+			self.add_point(point, name, color, False)
 		self.drawing_area.queue_draw()
 
 	def remove_point(self, index):
@@ -431,7 +427,7 @@ class MiniMap(Gtk.Frame):
 			self.drawing_area.queue_draw()
 
 	def on_draw(self, widget, cr):
-		allocation = widget.get_allocation()
+		drawing_area = widget.get_allocation()
 		square_width, square_height = self.grid_size
 		cr.set_line_width(1)
 		# set color function
@@ -440,70 +436,74 @@ class MiniMap(Gtk.Frame):
 			cr.set_source_rgba(float(color.red) / 65535, float(color.green) / 65535, float(color.blue) / 65535, opacity)
 		# fill background with color
 		if self.background_color:
-			cr.rectangle(0, 0, allocation.width, allocation.height)
+			cr.rectangle(0, 0, drawing_area.width, drawing_area.height)
 			set_color(self.background_color)
 			cr.fill()
 		# draw grid lines
 		if self.show_grid:
 			set_color(self.grid_color)
 			# draw vertical lines
-			for x in range(square_width, allocation.width, square_width + 1): # +1 for line width
+			for x in range(square_width, drawing_area.width, square_width + 1): # +1 for line width
 				cr.move_to(x + 0.5, 0) # +0.5 for smooth line
-				cr.line_to(x + 0.5, allocation.height)
+				cr.line_to(x + 0.5, drawing_area.height)
 			# draw horizontal lines
-			for y in range(square_height, allocation.height, square_height + 1):
+			for y in range(square_height, drawing_area.height, square_height + 1):
 				cr.move_to(0, y + 0.5)
-				cr.line_to(allocation.width, y + 0.5)
+				cr.line_to(drawing_area.width, y + 0.5)
 			cr.stroke()
 		# draw points
 		for point in self.points:
-			x, y, width, height = int(point['x']), int(point['y']), int(point['width']), int(point['height'])
-			point_x, point_y = fit_position_to_destination(x, y, width, height, allocation.width, allocation.height)
+			# fit point to drawing area (should keep here, because it's useful when drawing area get resized)
+			x, y = fit_position_to_destination(point['x'], point['y'], point['width'], point['height'], drawing_area.width, drawing_area.height)
 			#set_color('black')
-			cr.arc(point_x, point_y, self.point_radius, 0, 2*math.pi)
+			cr.arc(x, y, self.point_radius, 0, 2*math.pi)
 			#cr.stroke_preserve()
-			set_color(point['color'], self.point_opacity)
+			color = self.point_colors['None'] if point['color'] is None else point['color']
+			set_color(color, self.point_opacity)
 			cr.fill()
 
-	def get_caption_widget(self):
-		# draw function
-		def on_draw(widget, cr, point_height):
+	def get_tooltip_widget(self, point):
+		# on draw function
+		def on_draw(widget, cr):
 			cr.set_line_width(1)
-			cr.set_font_size(10)
-			for i, name in enumerate(self.point_colors):
-				# draw point
-				color = Gdk.color_parse(self.point_colors[name])
-				cr.set_source_rgba(float(color.red) / 65535, float(color.green) / 65535, float(color.blue) / 65535, self.point_opacity)
-				cr.arc(0.5 + self.point_radius, point_height*i + self.point_radius + ((point_height-self.point_radius*2)/2.0), self.point_radius, 0, 2*math.pi)
-				cr.fill()
-				# print point name
-				x, y, width, height, dx, dy = cr.text_extents(name)
-				middle = point_height*i + point_height/2.0 + height/2.0
-				#print('x: %d, y: %d, width: %d, height: %d, dx: %d, dy: %d, middle: %d' % (x, y, width, height, dx, dy, middle))
-				cr.set_source_rgb(1.0, 1.0, 1.0) # white
-				cr.move_to(0.5 + self.point_radius*2 + 5, middle)
-				cr.show_text(name)
-		# widget
-		widget = Gtk.DrawingArea(margin_left=5)
-		width = 100
-		point_height = 20
-		height = point_height*len(self.point_colors)
-		widget.set_size_request(width, height)
-		widget.connect('draw', on_draw, point_height)
+			# draw point
+			color = Gdk.color_parse(point['color'])
+			cr.set_source_rgba(float(color.red) / 65535, float(color.green) / 65535, float(color.blue) / 65535, self.point_opacity)
+			cr.arc(self.point_radius, self.point_radius, self.point_radius, 0, 2*math.pi)
+			cr.fill()
+		# tooltip widget
+		if point['name'] is not None:
+			widget = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
+			if point['color'] is not None:
+				drawing_area = Gtk.DrawingArea()
+				point_diameter = self.point_radius*2
+				drawing_area.set_size_request(point_diameter, point_diameter)
+				drawing_area.connect('draw', on_draw)
+				box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+				box.pack_start(drawing_area, True, False, 0)
+				widget.add(box)
+			widget.add(Gtk.Label(point['name']))
+			widget.show_all()
+		else:
+			widget = None
 		return widget
 
-class TooltipImage(Gtk.Image):
-
-	def __init__(self, widget, stock=None):
-		Gtk.Image.__init__(self)
-		self.tooltip_widget = widget
-		if stock is not None:
-			self.set_from_stock(stock, Gtk.IconSize.BUTTON)
-		self.set_has_tooltip(True)
-		self.connect('query-tooltip', self.on_query_tooltip)
-
 	def on_query_tooltip(self, widget, x, y, keyboard_mode, tooltip):
-		# set tooltip widget
-		tooltip.set_custom(self.tooltip_widget)
-		# show the tooltip
-		return True
+		drawing_area = self.drawing_area.get_allocation()
+		tooltip_widget = None
+		# check if a point is hovered
+		for point in self.points:
+			# fit point to drawing area
+			point_x, point_y = fit_position_to_destination(point['x'], point['y'], point['width'], point['height'], drawing_area.width, drawing_area.height)
+			# TODO: the check below should be circular, not rectangular
+			if point_x - self.point_radius <= x <= point_x + self.point_radius and point_y - self.point_radius <= y <= point_y + self.point_radius:
+				tooltip_widget = self.get_tooltip_widget(point)
+				break
+		# if so
+		if tooltip_widget is not None:
+			# set tooltip widget
+			tooltip.set_custom(tooltip_widget)
+			# show the tooltip
+			return True
+		else:
+			return False

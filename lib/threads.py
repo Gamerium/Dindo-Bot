@@ -11,6 +11,7 @@ from . import tools
 from . import parser
 from . import data
 from . import imgcompare
+from gui.custom import MiniMap
 
 '''
 	TimerThread is a quick implementation of thread class with a timer (not really powerful, but it do the job)
@@ -673,6 +674,13 @@ class BotThread(TimerThread):
 	def await(self):
 		self.pause()
 		GObject.idle_add(self.parent.set_buttons_to_paused)
+
+	def update_minimap(self, points, points_name=None):
+		self.debug('Update MiniMap')
+		# clear minimap
+		GObject.idle_add(self.parent.minimap.clear)
+		# update minimap
+		GObject.idle_add(self.parent.minimap.add_points, points, points_name)
 
 	def monitor_internet_state(self, timeout=30):
 		elapsed_time = 0
