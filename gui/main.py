@@ -19,16 +19,16 @@ from threading import Thread
 
 class BotWindow(Gtk.ApplicationWindow):
 
-	game_window = None
-	game_area = None
-	bot_path = None
-	bot_thread = None
-	args = tools.get_cmd_args()
-
 	def __init__(self, title=__program_name__):
 		GObject.threads_init() # allow threads to update GUI
 		Gtk.Window.__init__(self, title=title)
 		logger.add_separator()
+		# Initialise class attributes
+		self.game_window = None
+		self.game_area = None
+		self.bot_path = None
+		self.bot_thread = None
+		self.args = tools.get_cmd_args()
 		# Get settings
 		self.settings = settings.load()
 		# Header Bar

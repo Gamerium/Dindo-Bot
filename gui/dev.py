@@ -12,12 +12,11 @@ from threading import Thread
 
 class DevToolsWidget(Gtk.Table):
 
-	perform_scroll = False
-
 	def __init__(self, parent):
 		Gtk.Table.__init__(self, 1, 3, True)
 		self.set_border_width(5)
 		self.parent = parent
+		self.perform_scroll = False
 		#self.parent.connect('button-press-event', self.on_click)
 		## Pixel
 		left_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)

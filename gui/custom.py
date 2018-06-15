@@ -63,13 +63,12 @@ class CustomComboBox2(Gtk.ComboBox):
 
 class CustomListBox(Gtk.Frame):
 
-	perform_scroll = False
-	add_callback = None
-	delete_callback = None
-
 	def __init__(self, allow_moving=True):
 		Gtk.Frame.__init__(self)
 		self.allow_moving = allow_moving
+		self.perform_scroll = False
+		self.add_callback = None
+		self.delete_callback = None
 		## ListBox
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 		self.add(vbox)
@@ -286,10 +285,9 @@ class ImageLabel(Gtk.Box):
 
 class StackListBox(Gtk.Box):
 
-	count = 0
-
 	def __init__(self):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		self.count = 0
 		frame = Gtk.Frame()
 		scrolled_window = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER)
 		self.listbox = Gtk.ListBox()
@@ -388,7 +386,6 @@ class MenuButton(Gtk.Button):
 
 class MiniMap(Gtk.Frame):
 
-	points = []
 	point_colors = {
 		'Monster': 'red',
 		'Resource': 'green',
@@ -399,6 +396,7 @@ class MiniMap(Gtk.Frame):
 
 	def __init__(self, background_color='#BBBBBB', show_grid=True, grid_color='#DDDDDD', grid_size=(15, 15), points_size=3):
 		Gtk.Frame.__init__(self)
+		self.points = []
 		self.show_grid = show_grid
 		self.grid_color = grid_color
 		self.grid_size = grid_size
