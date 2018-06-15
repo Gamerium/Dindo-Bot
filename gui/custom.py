@@ -391,16 +391,18 @@ class MiniMap(Gtk.Frame):
 		'Resource': 'green',
 		'NPC': 'blue',
 		'Zaap': 'orange',
-		'Zaapi': 'yellow'
+		'Zaapi': 'yellow',
+		'Enclos': 'brown'
 	}
 
-	def __init__(self, background_color='#BBBBBB', show_grid=True, grid_color='#DDDDDD', grid_size=(15, 15), points_size=3):
+	def __init__(self, background_color='#CECECE', show_grid=True, grid_color='#DDDDDD', grid_size=(15, 15), point_radius=3):
 		Gtk.Frame.__init__(self)
 		self.points = []
+		self.point_opacity = 0.7
+		self.point_radius = point_radius
 		self.show_grid = show_grid
 		self.grid_color = grid_color
 		self.grid_size = grid_size
-		self.points_size = points_size
 		self.background_color = background_color
 		self.drawing_area = Gtk.DrawingArea()
 		self.drawing_area.connect('draw', self.on_draw)
@@ -433,9 +435,9 @@ class MiniMap(Gtk.Frame):
 		square_width, square_height = self.grid_size
 		cr.set_line_width(1)
 		# set color function
-		def set_color(value):
+		def set_color(value, opacity=1.0):
 			color = Gdk.color_parse(value)
-			cr.set_source_rgb(float(color.red) / 65535, float(color.green) / 65535, float(color.blue) / 65535)
+			cr.set_source_rgba(float(color.red) / 65535, float(color.green) / 65535, float(color.blue) / 65535, opacity)
 		# fill background with color
 		if self.background_color:
 			cr.rectangle(0, 0, allocation.width, allocation.height)
@@ -458,7 +460,50 @@ class MiniMap(Gtk.Frame):
 			x, y, width, height = int(point['x']), int(point['y']), int(point['width']), int(point['height'])
 			point_x, point_y = fit_position_to_destination(x, y, width, height, allocation.width, allocation.height)
 			#set_color('black')
-			cr.arc(point_x, point_y, self.points_size, 0, 2*math.pi)
+			cr.arc(point_x, point_y, self.point_radius, 0, 2*math.pi)
 			#cr.stroke_preserve()
-			set_color(point['color'])
+			set_color(point['color'], self.point_opacity)
 			cr.fill()
+
+	def get_caption_widget(self):
+		# draw function
+		def on_draw(widget, cr, point_height):
+			cr.set_line_width(1)
+			cr.set_font_size(10)
+			for i, name in enumerate(self.point_colors):
+				# draw point
+				color = Gdk.color_parse(self.point_colors[name])
+				cr.set_source_rgba(float(color.red) / 65535, float(color.green) / 65535, float(color.blue) / 65535, self.point_opacity)
+				cr.arc(0.5 + self.point_radius, point_height*i + self.point_radius + ((point_height-self.point_radius*2)/2.0), self.point_radius, 0, 2*math.pi)
+				cr.fill()
+				# print point name
+				x, y, width, height, dx, dy = cr.text_extents(name)
+				middle = point_height*i + point_height/2.0 + height/2.0
+				#print('x: %d, y: %d, width: %d, height: %d, dx: %d, dy: %d, middle: %d' % (x, y, width, height, dx, dy, middle))
+				cr.set_source_rgb(1.0, 1.0, 1.0) # white
+				cr.move_to(0.5 + self.point_radius*2 + 5, middle)
+				cr.show_text(name)
+		# widget
+		widget = Gtk.DrawingArea(margin_left=5)
+		width = 100
+		point_height = 20
+		height = point_height*len(self.point_colors)
+		widget.set_size_request(width, height)
+		widget.connect('draw', on_draw, point_height)
+		return widget
+
+class TooltipImage(Gtk.Image):
+
+	def __init__(self, widget, stock=None):
+		Gtk.Image.__init__(self)
+		self.tooltip_widget = widget
+		if stock is not None:
+			self.set_from_stock(stock, Gtk.IconSize.BUTTON)
+		self.set_has_tooltip(True)
+		self.connect('query-tooltip', self.on_query_tooltip)
+
+	def on_query_tooltip(self, widget, x, y, keyboard_mode, tooltip):
+		# set tooltip widget
+		tooltip.set_custom(self.tooltip_widget)
+		# show the tooltip
+		return True
