@@ -15,17 +15,24 @@ def load_defaults():
 			'Level':   DebugLevel.Low
 		},
 		'SaveDragodindesImages': False,
-		'KeepGameOpen':          False
+		'KeepGameOpen':          False,
+		'EnableMiniMap':         False
 	}
 	return settings
 
 def load():
 	text = read_file(get_filename())
+	defaults = load_defaults()
 	if text:
+		# load settings
 		settings = json.loads(text)
+		# check if all settings are there
+		for key in defaults:
+			if not key in settings:
+				settings[key] = defaults[key]
+		return settings
 	else:
-		settings = load_defaults()
-	return settings
+		return defaults
 
 def save(settings):
 	text = json.dumps(settings)
@@ -37,3 +44,29 @@ def update_and_save(settings, key, value, subkey=None):
 	else:
 		settings[key] = value
 	save(settings)
+
+def get(settings, key, subkey=None):
+	if key in settings:
+		if subkey is not None:
+			if subkey in settings[key]:
+				return settings[key][subkey]
+			else:
+				defaults = load_defaults()
+				if key in defaults and subkey in defaults[key]:
+					return defaults[key][subkey]
+				else:
+					return None
+		else:
+			return settings[key]
+	else:
+		defaults = load_defaults()
+		if key in defaults:
+			if subkey is not None:
+				if subkey in defaults[key]:
+					return defaults[key][subkey]
+				else:
+					return None
+			else:
+				return defaults[key]
+		else:
+			return None

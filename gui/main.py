@@ -52,6 +52,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.unplug_button.hide()
 		if not self.settings['Debug']['Enabled']:
 			self.debug_page.hide()
+		if not self.settings['EnableMiniMap']:
+			self.minimap_box.hide()
 
 	def on_key_press(self, widget, event):
 		if self.bot_thread and self.bot_thread.isAlive():
@@ -270,11 +272,13 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.repeat_spin_button.set_sensitive(False)
 		hbox.pack_end(self.repeat_spin_button, False, False, 0)
 		## MiniMap
-		bot_page.add(Gtk.Label('<b>MiniMap</b>', xalign=0, use_markup=True))
+		self.minimap_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		bot_page.add(self.minimap_box)
+		self.minimap_box.add(Gtk.Label('<b>MiniMap</b>', xalign=0, use_markup=True))
 		self.minimap = MiniMap(grid_size=(18, 18))
 		self.minimap.set_size_request(-1, 210)
 		self.minimap.set_margin_left(10)
-		bot_page.add(self.minimap)
+		self.minimap_box.add(self.minimap)
 		## Start
 		button_box = ButtonBox(centered=True, linked=True)
 		bot_page.pack_end(button_box, False, False, 0)

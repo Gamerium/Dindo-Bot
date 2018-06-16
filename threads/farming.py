@@ -5,12 +5,12 @@ from lib.shared import DebugLevel
 from lib import data
 from lib import tools
 from lib import parser
-from .movement import MovementThread
+from .travel import TravelThread
 
-class FarmingThread(MovementThread):
+class FarmingThread(TravelThread):
 
 	def __init__(self, parent, game_location):
-		MovementThread.__init__(self, parent, game_location)
+		TravelThread.__init__(self, parent, game_location)
 		self.save_dragodindes_images = parent.settings['SaveDragodindesImages']
 
 	def get_dragodinde_spec(self, name, dragodinde_screen):

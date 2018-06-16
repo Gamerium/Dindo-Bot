@@ -352,16 +352,38 @@ class PreferencesDialog(CustomDialog):
 		keep_game_on_unplug_check.connect('clicked', 
 			lambda check: settings.update_and_save(self.parent.settings, 'KeepGameOpen', check.get_active()))
 		box.add(keep_game_on_unplug_check)
-		### Farming
+		### Bot
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		stack.add_titled(box, 'farming', 'Farming')
+		stack.add_titled(box, 'bot', 'Bot')
+		## Job
+		box.add(Gtk.Label('<b>Job</b>', xalign=0, use_markup=True))
+		# MiniMap
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		box.add(hbox)
+		hbox.add(Gtk.Label('MiniMap'))
+		minimap_switch = Gtk.Switch()
+		minimap_switch.set_active(self.parent.settings['EnableMiniMap'])
+		minimap_switch.connect('notify::active', self.on_minimap_switch_activated)
+		hbox.pack_end(minimap_switch, False, False, 0)
+		## Farming
+		box.add(Gtk.Label('<b>Farming</b>', xalign=0, use_markup=True))
 		# Save dragodindes images
 		save_dragodindes_images_check = Gtk.CheckButton('Save dragodindes image')
+		save_dragodindes_images_check.set_margin_left(10)
 		save_dragodindes_images_check.set_active(self.parent.settings['SaveDragodindesImages'])
 		save_dragodindes_images_check.connect('clicked', 
 			lambda check: settings.update_and_save(self.parent.settings, 'SaveDragodindesImages', check.get_active()))
 		box.add(save_dragodindes_images_check)
 		self.show_all()
+
+	def on_minimap_switch_activated(self, switch, pspec):
+		value = switch.get_active()
+		if value:
+			self.parent.minimap_box.show()
+		else:
+			self.parent.minimap_box.hide()
+		settings.update_and_save(self.parent.settings, key='EnableMiniMap', value=value)
 
 	def on_debug_switch_activated(self, switch, pspec):
 		value = switch.get_active()

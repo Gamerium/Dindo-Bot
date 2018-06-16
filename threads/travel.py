@@ -12,7 +12,7 @@ from lib import parser
 from lib import imgcompare
 from .base import PausableThread
 
-class MovementThread(PausableThread):
+class TravelThread(PausableThread):
 
 	def __init__(self, parent, game_location):
 		PausableThread.__init__(self, parent, game_location)
