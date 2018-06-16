@@ -10,7 +10,7 @@ from lib import data
 from lib import parser
 from lib import settings
 from lib import maps
-from lib.threads import BotThread
+from threads.bot import BotThread
 from lib.shared import LogType, DebugLevel, __program_name__
 from .dev import DevToolsWidget
 from .custom import *
@@ -717,7 +717,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			if not self.bot_thread or not self.bot_thread.isAlive():
 				start_from_step = self.step_spin_button.get_value_as_int()
 				repeat_path = self.repeat_spin_button.get_value_as_int() if self.repeat_switch.get_active() else 1
-				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path, self.settings['SaveDragodindesImages'])
+				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path)
 				self.bot_thread.start()
 				self.settings_button.set_sensitive(False)
 				self.bot_widgets.set_sensitive(False)
