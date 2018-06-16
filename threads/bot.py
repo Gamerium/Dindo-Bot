@@ -21,14 +21,14 @@ class BotThread(JobThread):
 		self.debug('Bot path: %s, repeat: %d' % (self.parent.bot_path, self.repeat_path))
 		if self.parent.bot_path:
 			instructions = tools.read_file(self.parent.bot_path)
-			repeat_count = 0
-			while repeat_count < self.repeat_path:
+			self.repeat_count = 0
+			while self.repeat_count < self.repeat_path:
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: break
 				# start interpretation
 				self.interpret(instructions)
-				repeat_count += 1
+				self.repeat_count += 1
 
 			# tell user that we have complete the path
 			if not self.suspend:
@@ -90,5 +90,11 @@ class BotThread(JobThread):
 			elif instruction['name'] == 'TypeText':
 				self.type_text(instruction['value'])
 
+			elif instruction['name'] == 'Disconnect':
+				if self.repeat_count == self.repeat_path - 1:
+					self.disconnect()
+				else:
+					self.debug('Instruction ignored', DebugLevel.Low)
+
 			else:
-				self.debug('Unknown instruction')
+				self.debug('Unknown instruction', DebugLevel.Low)

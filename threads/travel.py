@@ -10,12 +10,12 @@ from lib import data
 from lib import tools
 from lib import parser
 from lib import imgcompare
-from .base import PausableThread
+from .game import GameThread
 
-class TravelThread(PausableThread):
+class TravelThread(GameThread):
 
 	def __init__(self, parent, game_location):
-		PausableThread.__init__(self, parent, game_location)
+		GameThread.__init__(self, parent, game_location)
 
 	def click(self, coord, double=False):
 		# adjust coordinates

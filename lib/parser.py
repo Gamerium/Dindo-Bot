@@ -49,20 +49,23 @@ def parse_instruction(line, separator=','):
 			origin_value = instruction[1][:-1].strip() # [:-1] will remove the last character ')'
 		else:
 			origin_value = instruction[1].strip()
-		value = replace_all_between(origin_value, ',', ';', '[', ']') # avoid splitting map position(s)
-		if not separator in value:
-			result['value'] = replace_all_between(value, ';', ',', '[', ']')
+		if not origin_value:
+			result['value'] = None
 		else:
-			parameters = value.split(separator)
-			for i, parameter in enumerate(parameters):
-				split_parameter = parameter.split('=')
-				if len(split_parameter) > 1:
-					key = split_parameter[0].strip()
-					value = split_parameter[1]
-				else:
-					key = i
-					value = split_parameter[0]
-				result[key] = replace_all_between(value.strip(), ';', ',', '[', ']')
+			value = replace_all_between(origin_value, ',', ';', '[', ']') # avoid splitting map position(s)
+			if not separator in value:
+				result['value'] = replace_all_between(value, ';', ',', '[', ']')
+			else:
+				parameters = value.split(separator)
+				for i, parameter in enumerate(parameters):
+					split_parameter = parameter.split('=')
+					if len(split_parameter) > 1:
+						key = split_parameter[0].strip()
+						value = split_parameter[1]
+					else:
+						key = i
+						value = split_parameter[0]
+					result[key] = replace_all_between(value.strip(), ';', ',', '[', ']')
 	else:
 		result['value'] = None
 

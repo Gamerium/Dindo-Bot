@@ -485,7 +485,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box.add(add_button)
 		widget.pack_end(button_box, False, False, 0)
 		## Keyboard
-		image = Gtk.Image(icon_name='input-keyboard', margin=2, pixel_size=20)
+		image = Gtk.Image(icon_name='input-keyboard', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
 		label = ImageLabel(image, 'Keyboard')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack_listbox.append(label, widget)
@@ -520,6 +520,17 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.pack_end(button_box, False, False, 0)
+		## Disconnect
+		image = Gtk.Image(stock=Gtk.STOCK_DISCONNECT, icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+		label = ImageLabel(image, 'Disconnect')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
+		# Add
+		add_button = Gtk.Button('Add')
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Disconnect()'))
+		button_box = ButtonBox(centered=True)
+		button_box.add(add_button)
+		widget.pack_start(button_box, True, False, 0)
 		## Separator
 		path_page.add(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL, margin=5))
 		## Listbox

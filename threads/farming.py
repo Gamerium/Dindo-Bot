@@ -13,11 +13,11 @@ class FarmingThread(TravelThread):
 		TravelThread.__init__(self, parent, game_location)
 		self.save_dragodindes_images = parent.settings['SaveDragodindesImages']
 
-	def get_dragodinde_spec(self, name, dragodinde_screen):
+	def get_dragodinde_spec(self, name, dragodinde_image):
 		# crop dragodinde image
-		location = data.Locations[name]
-		x, y, w, h = (location['x'], location['y'], location['width'], location['height'])
-		image = dragodinde_screen.crop((x, y, w+x, h+y))
+		box = data.Boxes[name]
+		x, y, w, h = (box['x'], box['y'], box['width'], box['height'])
+		image = dragodinde_image.crop((x, y, w+x, h+y))
 		# get specification percentage & state
 		state = data.DragodindeStats.Full
 		percentage = tools.get_color_percentage(image, data.Colors['Full'])
@@ -57,7 +57,7 @@ class FarmingThread(TravelThread):
 	def take_dragodinde_image(self, name, location=None):
 		# get location
 		if location is None:
-			location = self.get_location('Dragodinde Card')
+			location = self.get_box_location('Dragodinde Card')
 		# take dragodinde image
 		if location:
 			if self.save_dragodindes_images:
@@ -71,20 +71,20 @@ class FarmingThread(TravelThread):
 		else:
 			return None
 
-	def get_location(self, location):
+	def get_box_location(self, box_name):
 		if self.game_location:
 			game_x, game_y, game_width, game_height = self.game_location
-			x = data.Locations[location]['x'] + game_x
-			y = data.Locations[location]['y'] + game_y
-			width = data.Locations[location]['width']
-			height = data.Locations[location]['height']
+			x = data.Boxes[box_name]['x'] + game_x
+			y = data.Boxes[box_name]['y'] + game_y
+			width = data.Boxes[box_name]['width']
+			height = data.Boxes[box_name]['height']
 			return (x, y, width, height)
 		else:
 			return None
 
 	def move_dragodinde(self, action, dragodinde_image=None, dragodinde_location=None):
 		if dragodinde_location is None:
-			dragodinde_location = self.get_location('Dragodinde Card')
+			dragodinde_location = self.get_box_location('Dragodinde Card')
 		if dragodinde_image is None:
 			dragodinde_image = tools.screen_game(dragodinde_location)
 		self.press_key(data.KeyboardShortcuts[action])
@@ -106,7 +106,7 @@ class FarmingThread(TravelThread):
 		return True
 
 	def enclos_is_empty(self):
-		location = self.get_location('Enclos First Place')
+		location = self.get_box_location('Enclos First Place')
 		screen = tools.screen_game(location)
 		empty_percentage = tools.get_color_percentage(screen, data.Colors['Enclos Empty'])
 		selected_percentage = tools.get_color_percentage(screen, data.Colors['Row Selected'])
@@ -129,7 +129,7 @@ class FarmingThread(TravelThread):
 		# manage dragodinde(s)
 		dragodinde_number = 0
 		moved_dragodinde_number = 0
-		dragodinde_location = self.get_location('Dragodinde Card')
+		dragodinde_location = self.get_box_location('Dragodinde Card')
 		while dragodinde_number < 10:
 			# check for pause or suspend
 			self.pause_event.wait()
@@ -224,7 +224,7 @@ class FarmingThread(TravelThread):
 		return free_places
 
 	def inventory_is_empty(self):
-		location = self.get_location('Inventory First Place')
+		location = self.get_box_location('Inventory First Place')
 		screen = tools.screen_game(location)
 		percentage = tools.get_color_percentage(screen, data.Colors['Inventory Empty'])
 		is_empty = percentage >= 99
@@ -243,7 +243,7 @@ class FarmingThread(TravelThread):
 		# manage dragodinde(s)
 		dragodinde_number = 0
 		moved_dragodinde_number = 0
-		dragodinde_location = self.get_location('Dragodinde Card')
+		dragodinde_location = self.get_box_location('Dragodinde Card')
 		while moved_dragodinde_number < enclos_free_places:
 			# check for pause or suspend
 			self.pause_event.wait()

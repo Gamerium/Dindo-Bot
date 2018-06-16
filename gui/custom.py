@@ -254,6 +254,7 @@ class ImageLabel(Gtk.Box):
 		self.set_border_width(padding)
 		self.add(image)
 		self.label = Gtk.Label(text, ellipsize=Pango.EllipsizeMode.END)
+		self.label.set_tooltip_text(text)
 		self.add(self.label)
 
 	def get_text(self):

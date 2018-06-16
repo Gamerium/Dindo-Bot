@@ -17,6 +17,12 @@ Locations = {
 	'Various Menu':          {'x': 342, 'y': 75, 'width': 566, 'height': 456},
 	'Select From Enclos':    {'x': 105, 'y': 297, 'width': 566, 'height': 456},
 	'Select From Inventory': {'x': 450, 'y': 165, 'width': 566, 'height': 456},
+	'Exit Button':           {'x': 282, 'y': 236, 'width': 566, 'height': 456},
+	'Exit Confirm Button':   {'x': 252, 'y': 243, 'width': 566, 'height': 456}
+}
+
+# Boxes
+Boxes = {
 	'Dragodinde Card':       {'x': 207, 'y': 42, 'width': 159, 'height': 320},
 	'Dragodinde Energy':     {'x': 75, 'y': 136, 'width': 69, 'height': 1},
 	#'Dragodinde Experience': {'x': 75, 'y': 148, 'width': 69, 'height': 1},
