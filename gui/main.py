@@ -483,7 +483,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Wait(%d)' % self.duration_spin_button.get_value_as_int()))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
-		widget.pack_end(button_box, False, False, 0)
+		widget.pack_end(button_box, True, False, 0)
 		## Keyboard
 		image = Gtk.Image(icon_name='input-keyboard', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
 		label = ImageLabel(image, 'Keyboard')
@@ -525,12 +525,18 @@ class BotWindow(Gtk.ApplicationWindow):
 		label = ImageLabel(image, 'Disconnect')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack_listbox.append(label, widget)
+		# Exit Game
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		widget.add(hbox)
+		hbox.add(Gtk.Label('<b>Exit Game</b>', xalign=0, use_markup=True))
+		self.exit_game_switch = Gtk.Switch()
+		hbox.pack_end(self.exit_game_switch, False, False, 0)
 		# Add
 		add_button = Gtk.Button('Add')
-		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Disconnect()'))
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Disconnect(%s)' % self.exit_game_switch.get_active()))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
-		widget.pack_start(button_box, True, False, 0)
+		widget.pack_end(button_box, True, False, 0)
 		## Separator
 		path_page.add(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL, margin=5))
 		## Listbox

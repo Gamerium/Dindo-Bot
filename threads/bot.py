@@ -92,7 +92,7 @@ class BotThread(JobThread):
 
 			elif instruction['name'] == 'Disconnect':
 				if self.repeat_count == self.repeat_path - 1:
-					self.disconnect()
+					self.disconnect(instruction['value'])
 				else:
 					self.debug('Instruction ignored', DebugLevel.Low)
 
