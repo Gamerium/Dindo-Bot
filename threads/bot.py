@@ -8,8 +8,9 @@ from .job import JobThread
 
 class BotThread(JobThread):
 
-	def __init__(self, parent, game_location, start_from_step, repeat_path):
+	def __init__(self, parent, game_location, bot_path, start_from_step, repeat_path):
 		JobThread.__init__(self, parent, game_location)
+		self.bot_path = bot_path
 		self.start_from_step = start_from_step
 		self.repeat_path = repeat_path
 
@@ -18,9 +19,9 @@ class BotThread(JobThread):
 		self.debug('Bot thread started', DebugLevel.Low)
 
 		# get instructions & interpret them
-		self.debug('Bot path: %s, repeat: %d' % (self.parent.bot_path, self.repeat_path))
-		if self.parent.bot_path:
-			instructions = tools.read_file(self.parent.bot_path)
+		self.debug('Bot path: %s, repeat: %d' % (self.bot_path, self.repeat_path))
+		if self.bot_path:
+			instructions = tools.read_file(self.bot_path)
 			self.repeat_count = 0
 			while self.repeat_count < self.repeat_path:
 				# check for pause or suspend

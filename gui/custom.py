@@ -39,16 +39,14 @@ class CustomComboBox(Gtk.ComboBoxText):
 
 class CustomTreeView(Gtk.Frame):
 
-	def __init__(self, model, columns, orientation=Gtk.Orientation.VERTICAL):
+	def __init__(self, model, columns):
 		Gtk.Frame.__init__(self)
 		self.perform_scroll = False
 		self.model = model
 		self.columns = columns
-		box = Gtk.Box(orientation=orientation)
-		self.add(box)
 		## ScrolledWindow
 		scrolled_window = Gtk.ScrolledWindow()
-		box.pack_start(scrolled_window, True, True, 0)
+		self.add(scrolled_window)
 		# TreeView
 		self.tree_view = Gtk.TreeView(model)
 		scrolled_window.add(self.tree_view)
@@ -56,45 +54,9 @@ class CustomTreeView(Gtk.Frame):
 			self.tree_view.append_column(column)
 		self.tree_view.connect('size-allocate', self.scroll_tree_view)
 		self.selection = self.tree_view.get_selection()
-		self.selection.connect('changed', self.on_selection_changed)
-		## ActionBar
-		if orientation == Gtk.Orientation.VERTICAL:
-			actionbar = Gtk.ActionBar()
-			self.buttons_box = ButtonBox(linked=True)
-			actionbar.pack_start(self.buttons_box)
-		else:
-			separator = Gtk.Separator(orientation=Gtk.Orientation.VERTICAL)
-			#separator.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse('grey'))
-			box.add(separator)
-			actionbar = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-			actionbar.set_border_width(5)
-			self.buttons_box = ButtonBox(linked=True, orientation=Gtk.Orientation.VERTICAL)
-			actionbar.pack_start(self.buttons_box, False, True, 0)
-		box.pack_end(actionbar, False, False, 0)
-		# Delete
-		self.delete_button = Gtk.Button()
-		self.delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
-		self.delete_button.set_tooltip_text('Delete')
-		self.delete_button.set_sensitive(False)
-		self.delete_button.connect('clicked', self.on_delete_button_clicked)
-		self.buttons_box.pack_end(self.delete_button)
 
 	def is_empty(self):
 		return len(self.model) == 0
-
-	def on_selection_changed(self, selection):
-		if self.get_selected_row() is None:
-			self.delete_button.set_sensitive(False)
-		elif not self.delete_button.get_sensitive():
-			self.delete_button.set_sensitive(True)
-
-	def add_button(self, button):
-		self.buttons_box.add(button)
-
-	def on_delete_button_clicked(self, button):
-		# remove selected row
-		model, tree_iter = self.selection.get_selected()
-		model.remove(tree_iter)
 
 	def connect(self, event_name, event_callback):
 		if event_name == 'selection-changed':
@@ -120,6 +82,11 @@ class CustomTreeView(Gtk.Frame):
 			return row
 		else:
 			return None
+
+	def remove_selected_row(self):
+		# remove selected row
+		model, tree_iter = self.selection.get_selected()
+		model.remove(tree_iter)
 
 	def scroll_tree_view(self, widget, event):
 		if self.perform_scroll:
@@ -382,7 +349,7 @@ class StackListBox(Gtk.Box):
 class ButtonBox(Gtk.Box):
 
 	def __init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=5, centered=False, linked=False):
-		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
+		Gtk.Box.__init__(self, orientation=orientation)
 		self.buttons_container = Gtk.Box(orientation=orientation)
 		self.orientation = orientation
 		self.linked = linked
@@ -404,14 +371,6 @@ class ButtonBox(Gtk.Box):
 			self.buttons_container.add(hbox)
 		else:
 			self.buttons_container.add(button)
-
-	def pack_end(self, button, expand=False, fill=False, padding=0):
-		if self.orientation == Gtk.Orientation.VERTICAL and not self.linked:
-			hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-			hbox.pack_start(button, True, False, 0)
-			self.buttons_container.pack_end(hbox, expand, fill, padding)
-		else:
-			self.buttons_container.pack_end(button, expand, fill, padding)
 
 class MessageBox(Gtk.Box):
 

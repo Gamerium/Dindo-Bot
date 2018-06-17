@@ -26,7 +26,6 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Initialise class attributes
 		self.game_window = None
 		self.game_area = None
-		self.bot_path = None
 		self.bot_thread = None
 		self.args = tools.get_cmd_args()
 		# Get settings
@@ -241,11 +240,10 @@ class BotWindow(Gtk.ApplicationWindow):
 			game_window_box.add(self.plug_button)
 		## Bot Path
 		self.bot_widgets.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
-		bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path'))
-		bot_path_filechooserbutton.set_margin_left(10)
-		bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
-		bot_path_filechooserbutton.connect('file-set', self.on_bot_path_changed)
-		self.bot_widgets.add(bot_path_filechooserbutton)
+		self.bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path'))
+		self.bot_path_filechooserbutton.set_margin_left(10)
+		self.bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
+		self.bot_widgets.add(self.bot_path_filechooserbutton)
 		## Start From Step
 		self.bot_widgets.add(Gtk.Label('<b>Start From Step</b>', xalign=0, use_markup=True))
 		self.step_spin_button = SpinButton(min=1, max=10000)
@@ -424,31 +422,31 @@ class BotWindow(Gtk.ApplicationWindow):
 		)
 		hbox.add(reload_button)
 		widget.add(hbox)
-		# Warehouse Path
-		widget.add(Gtk.Label('<b>Warehouse Path</b>', xalign=0, use_markup=True))
+		# Store Path
+		widget.add(Gtk.Label('<b>Store Path</b>', xalign=0, use_markup=True))
 		# Combo
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
-		self.collect_wp_combo_radio = Gtk.RadioButton()
-		self.collect_wp_combo_radio.set_active(True)
-		hbox.add(self.collect_wp_combo_radio)
-		self.collect_wp_combo = CustomComboBox(data.BankPath, sort=True)
-		self.collect_wp_combo.connect('changed', lambda combo: self.collect_wp_combo_radio.set_active(True))
-		hbox.pack_start(self.collect_wp_combo, True, True, 0)
+		self.collect_sp_combo_radio = Gtk.RadioButton()
+		self.collect_sp_combo_radio.set_active(True)
+		hbox.add(self.collect_sp_combo_radio)
+		self.collect_sp_combo = CustomComboBox(data.BankPath, sort=True)
+		self.collect_sp_combo.connect('changed', lambda combo: self.collect_sp_combo_radio.set_active(True))
+		hbox.pack_start(self.collect_sp_combo, True, True, 0)
 		widget.add(hbox)
 		# FileChooserButton
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
-		self.collect_wp_filechooser_radio = Gtk.RadioButton(group=self.collect_wp_combo_radio)
-		hbox.add(self.collect_wp_filechooser_radio)
-		self.collect_wp_filechooserbutton = FileChooserButton(title='Choose warehouse path', filter=('Warehouse Path', '*.path'))
-		self.collect_wp_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
-		self.collect_wp_filechooserbutton.connect('file-set', lambda filechooserbutton: self.collect_wp_filechooser_radio.set_active(True))
-		hbox.pack_start(self.collect_wp_filechooserbutton, True, True, 0)
+		self.collect_sp_filechooser_radio = Gtk.RadioButton(group=self.collect_sp_combo_radio)
+		hbox.add(self.collect_sp_filechooser_radio)
+		self.collect_sp_filechooserbutton = FileChooserButton(title='Choose store path', filter=('Store Path', '*.path'))
+		self.collect_sp_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
+		self.collect_sp_filechooserbutton.connect('file-set', lambda filechooserbutton: self.collect_sp_filechooser_radio.set_active(True))
+		hbox.pack_start(self.collect_sp_filechooserbutton, True, True, 0)
 		widget.add(hbox)
 		# Add
 		add_button = Gtk.Button('Add')
-		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Collect(map=%s,warehouse_path=%s)' % (self.collect_map_combo.get_active_text(), self.collect_wp_combo.get_active_text() if self.collect_wp_combo_radio.get_active() else self.collect_wp_filechooserbutton.get_filename())))
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Collect(map=%s,store_path=%s)' % (self.collect_map_combo.get_active_text(), self.collect_sp_combo.get_active_text() if self.collect_sp_combo_radio.get_active() else self.collect_sp_filechooserbutton.get_filename())))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.add(button_box)
@@ -738,18 +736,19 @@ class BotWindow(Gtk.ApplicationWindow):
 		Thread(target=self.wait_for_click, args=(self.add_click, game_location)).start()
 
 	def on_start_button_clicked(self, button):
-		if not self.game_window:
+		bot_path = self.bot_path_filechooserbutton.get_filename()
+		if self.game_window is None:
 			AlertDialog(self, 'Please select a game window')
-		elif not self.bot_path:
+		elif bot_path is None:
 			AlertDialog(self, 'Please select a bot path')
 		else:
 			# get game location
 			game_location = tools.get_widget_location(self.game_area)
 			# start bot thread or resume it
-			if not self.bot_thread or not self.bot_thread.isAlive():
+			if self.bot_thread is None or not self.bot_thread.isAlive():
 				start_from_step = self.step_spin_button.get_value_as_int()
 				repeat_path = self.repeat_spin_button.get_value_as_int() if self.repeat_switch.get_active() else 1
-				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path)
+				self.bot_thread = BotThread(self, game_location, bot_path, start_from_step, repeat_path)
 				self.bot_thread.start()
 				self.settings_button.set_sensitive(False)
 				self.bot_widgets.set_sensitive(False)
@@ -795,9 +794,6 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.bot_thread.stop()
 		self.reset_buttons()
 
-	def on_bot_path_changed(self, filechooserbutton):
-		self.bot_path = filechooserbutton.get_filename()
-
 	def populate_game_window_combo(self):
 		self.game_window_combo_ignore_change = True
 		self.game_window_combo.remove_all()
@@ -840,7 +836,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.game_window = tools.get_game_window(window_xid)
 		if self.game_window:
 			# create socket if not exist
-			if not self.game_area:
+			if self.game_area is None:
 				self.game_area = Gtk.Socket()
 				#self.game_area.set_can_focus(True)
 				self.game_area.connect('plug-added', self.on_plug_added)

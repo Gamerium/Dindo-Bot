@@ -7,7 +7,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf
 from lib import tools
 from lib import data
 from lib import convert
-from .custom import CustomTreeView, CustomComboBox, CustomSpinButton
+from .custom import CustomTreeView, CustomComboBox, CustomSpinButton, ButtonBox
 from .dialog import CopyTextDialog
 from threading import Thread
 
@@ -21,6 +21,8 @@ class DevToolsWidget(Gtk.Table):
 		## Pixel
 		left_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		left_box.add(Gtk.Label('<b>Pixel</b>', xalign=0, use_markup=True))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+		left_box.pack_start(hbox, True, True, 0)
 		self.attach(left_box, 0, 2, 0, 1)
 		# TreeView
 		model = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str, str, str, str)
@@ -33,23 +35,32 @@ class DevToolsWidget(Gtk.Table):
 			Gtk.TreeViewColumn('Height', text_renderer, text=4),
 			Gtk.TreeViewColumn('Color', text_renderer, text=5)
 		]
-		self.tree_view = CustomTreeView(model, columns, Gtk.Orientation.HORIZONTAL)
+		self.tree_view = CustomTreeView(model, columns)
 		self.tree_view.connect('button-press-event', self.on_tree_view_double_clicked)
 		self.tree_view.connect('selection-changed', self.on_tree_view_selection_changed)
-		left_box.pack_start(self.tree_view, True, True, 0)
+		hbox.pack_start(self.tree_view, True, True, 0)
 		# Select
-		self.select_button = Gtk.Button()
-		self.select_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
-		self.select_button.set_tooltip_text('Select')
-		self.select_button.connect('clicked', self.on_select_button_clicked)
-		self.tree_view.add_button(self.select_button)
+		buttons_box = ButtonBox(orientation=Gtk.Orientation.VERTICAL, centered=True, linked=True)
+		hbox.add(buttons_box)
+		self.select_pixel_button = Gtk.Button()
+		self.select_pixel_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
+		self.select_pixel_button.set_tooltip_text('Select')
+		self.select_pixel_button.connect('clicked', self.on_select_pixel_button_clicked)
+		buttons_box.add(self.select_pixel_button)
 		# Simulate
 		self.simulate_click_button = Gtk.Button()
 		self.simulate_click_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.HAND1).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
 		self.simulate_click_button.set_tooltip_text('Simulate Click')
 		self.simulate_click_button.set_sensitive(False)
 		self.simulate_click_button.connect('clicked', self.on_simulate_click_button_clicked)
-		self.tree_view.add_button(self.simulate_click_button)
+		buttons_box.add(self.simulate_click_button)
+		# Delete
+		self.delete_pixel_button = Gtk.Button()
+		self.delete_pixel_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
+		self.delete_pixel_button.set_tooltip_text('Delete')
+		self.delete_pixel_button.set_sensitive(False)
+		self.delete_pixel_button.connect('clicked', self.on_delete_pixel_button_clicked)
+		buttons_box.add(self.delete_pixel_button)
 		# Separator
 		right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		right_box.add(Gtk.Separator(orientation=Gtk.Orientation.VERTICAL, margin=10))
@@ -124,10 +135,10 @@ class DevToolsWidget(Gtk.Table):
 		color = pixel.getpixel((0, 0))
 		# append to treeview
 		self.tree_view.append([pixbuf, str(x), str(y), str(width), str(height), str(color)])
-		self.select_button.set_sensitive(True)
+		self.select_pixel_button.set_sensitive(True)
 		self.parent.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 
-	def on_select_button_clicked(self, button):
+	def on_select_pixel_button_clicked(self, button):
 		button.set_sensitive(False)
 		self.parent.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSSHAIR))
 		# wait for click
@@ -151,6 +162,9 @@ class DevToolsWidget(Gtk.Table):
 		self.parent.debug('Click on x: %d, y: %d' % (click_x, click_y))
 		tools.perform_click(click_x, click_y)
 
+	def on_delete_pixel_button_clicked(self, button):
+		self.tree_view.remove_selected_row()
+
 	def on_simulate_key_press_button_clicked(self, button):
 		selected = self.keys_combo.get_active_text()
 		key = data.KeyboardShortcuts[selected]
@@ -171,5 +185,7 @@ class DevToolsWidget(Gtk.Table):
 	def on_tree_view_selection_changed(self, selection):
 		if self.tree_view.get_selected_row() is None:
 			self.simulate_click_button.set_sensitive(False)
+			self.delete_pixel_button.set_sensitive(False)
 		elif not self.simulate_click_button.get_sensitive():
 			self.simulate_click_button.set_sensitive(True)
+			self.delete_pixel_button.set_sensitive(True)
