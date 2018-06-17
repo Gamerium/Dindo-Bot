@@ -33,7 +33,7 @@ class GameThread(PausableThread):
 		self.pause_event.wait()
 		if self.suspend: return
 		# confirm disconnect/exit
-		self.click(data.Locations['Confirm Yes Button'])
+		self.press_key(data.KeyboardShortcuts['Enter'])
 
 	def click(self, coord, double=False):
 		# adjust coordinates

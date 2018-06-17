@@ -241,13 +241,9 @@ class BotWindow(Gtk.ApplicationWindow):
 			game_window_box.add(self.plug_button)
 		## Bot Path
 		self.bot_widgets.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
-		bot_path_filechooserbutton = Gtk.FileChooserButton(title='Choose bot path')
-		bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
-		pathfilter = Gtk.FileFilter()
-		pathfilter.set_name('Bot Path (*.path)')
-		pathfilter.add_pattern('*.path')
-		bot_path_filechooserbutton.add_filter(pathfilter)
+		bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path'))
 		bot_path_filechooserbutton.set_margin_left(10)
+		bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
 		bot_path_filechooserbutton.connect('file-set', self.on_bot_path_changed)
 		self.bot_widgets.add(bot_path_filechooserbutton)
 		## Start From Step
@@ -351,7 +347,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Enclos(%s)' % self.enclos_combo.get_active_text()))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
-		widget.pack_end(button_box, False, False, 0)
+		widget.add(button_box)
 		## Zaap
 		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/zaap.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -379,7 +375,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Zaap(from=%s,to=%s)' % (self.zaap_from_combo.get_active_text(), self.zaap_to_combo.get_active_text())))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
-		widget.pack_end(button_box, False, False, 0)
+		widget.add(button_box)
 		## Zaapi
 		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/destination.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -407,7 +403,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Zaapi(from=%s,to=%s)' % (self.zaapi_from_combo.get_active_text(), self.zaapi_to_combo.get_active_text())))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
-		widget.pack_end(button_box, False, False, 0)
+		widget.add(button_box)
 		## Collect
 		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/miner.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -428,17 +424,34 @@ class BotWindow(Gtk.ApplicationWindow):
 		)
 		hbox.add(reload_button)
 		widget.add(hbox)
-		# Bank Path
-		widget.add(Gtk.Label('<b>Bank Path</b>', xalign=0, use_markup=True))
-		self.collect_bank_path_combo = CustomComboBox(data.BankPath, sort=True)
-		self.collect_bank_path_combo.set_margin_left(10)
-		widget.add(self.collect_bank_path_combo)
+		# Warehouse Path
+		widget.add(Gtk.Label('<b>Warehouse Path</b>', xalign=0, use_markup=True))
+		# Combo
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		self.collect_wp_combo_radio = Gtk.RadioButton()
+		self.collect_wp_combo_radio.set_active(True)
+		hbox.add(self.collect_wp_combo_radio)
+		self.collect_wp_combo = CustomComboBox(data.BankPath, sort=True)
+		self.collect_wp_combo.connect('changed', lambda combo: self.collect_wp_combo_radio.set_active(True))
+		hbox.pack_start(self.collect_wp_combo, True, True, 0)
+		widget.add(hbox)
+		# FileChooserButton
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		self.collect_wp_filechooser_radio = Gtk.RadioButton(group=self.collect_wp_combo_radio)
+		hbox.add(self.collect_wp_filechooser_radio)
+		self.collect_wp_filechooserbutton = FileChooserButton(title='Choose warehouse path', filter=('Warehouse Path', '*.path'))
+		self.collect_wp_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
+		self.collect_wp_filechooserbutton.connect('file-set', lambda filechooserbutton: self.collect_wp_filechooser_radio.set_active(True))
+		hbox.pack_start(self.collect_wp_filechooserbutton, True, True, 0)
+		widget.add(hbox)
 		# Add
 		add_button = Gtk.Button('Add')
-		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Collect(map=%s,bank_path=%s)' % (self.collect_map_combo.get_active_text(), self.collect_bank_path_combo.get_active_text())))
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Collect(map=%s,warehouse_path=%s)' % (self.collect_map_combo.get_active_text(), self.collect_wp_combo.get_active_text() if self.collect_wp_combo_radio.get_active() else self.collect_wp_filechooserbutton.get_filename())))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
-		widget.pack_end(button_box, False, False, 0)
+		widget.add(button_box)
 		## Click
 		pixbuf = Gdk.Cursor(Gdk.CursorType.ARROW).get_image().scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -446,24 +459,22 @@ class BotWindow(Gtk.ApplicationWindow):
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack_listbox.append(label, widget)
 		# Twice
-		widget.add(Gtk.Label('<b>Twice</b>', xalign=0, use_markup=True))
-		self.click_twice_yes_radio = Gtk.RadioButton('Yes')
-		click_twice_no_radio = Gtk.RadioButton('No', group=self.click_twice_yes_radio)
-		click_twice_no_radio.set_active(True)
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.set_margin_left(10)
-		hbox.add(self.click_twice_yes_radio)
-		hbox.add(click_twice_no_radio)
+		hbox.add(Gtk.Label('<b>Twice</b>', xalign=0, use_markup=True))
+		self.click_twice_switch = Gtk.Switch()
+		hbox.pack_end(self.click_twice_switch, False, False, 0)
 		widget.add(hbox)
 		# Location
-		widget.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
-		cursor_pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(16, 16, GdkPixbuf.InterpType.BILINEAR)
-		self.select_button = Gtk.Button('Select')
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
+		cursor_pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
+		self.select_button = Gtk.Button()
+		self.select_button.set_size_request(40, -1)
+		self.select_button.set_tooltip_text('Select')
 		self.select_button.set_image(Gtk.Image(pixbuf=cursor_pixbuf))
 		self.select_button.connect('clicked', self.on_select_button_clicked)
-		button_box = Gtk.ButtonBox(orientation=Gtk.Orientation.HORIZONTAL, layout_style=Gtk.ButtonBoxStyle.CENTER)
-		button_box.add(self.select_button)
-		widget.add(button_box)
+		hbox.pack_end(self.select_button, False, False, 0)
+		widget.add(hbox)
 		## Wait
 		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/hourglass.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
@@ -483,7 +494,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Wait(%d)' % self.duration_spin_button.get_value_as_int()))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
-		widget.pack_end(button_box, True, False, 0)
+		widget.add(button_box)
 		## Keyboard
 		image = Gtk.Image(icon_name='input-keyboard', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
 		label = ImageLabel(image, 'Keyboard')
@@ -519,7 +530,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		add_button.connect('clicked', self.on_keyboard_add_button_clicked)
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
-		widget.pack_end(button_box, False, False, 0)
+		widget.add(button_box)
 		## Disconnect
 		image = Gtk.Image(stock=Gtk.STOCK_DISCONNECT, icon_size=Gtk.IconSize.LARGE_TOOLBAR)
 		label = ImageLabel(image, 'Disconnect')
@@ -536,7 +547,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Disconnect(%s)' % self.exit_game_switch.get_active()))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
-		widget.pack_end(button_box, True, False, 0)
+		widget.add(button_box)
 		## Separator
 		path_page.add(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL, margin=5))
 		## Listbox
@@ -711,7 +722,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def add_click(self, location):
 		x, y, width, height = location
-		twice = self.click_twice_yes_radio.get_active()
+		twice = self.click_twice_switch.get_active()
 		self.path_listbox.append_text('Click(x=%d,y=%d,width=%d,height=%d,twice=%s)' % (x, y, width, height, twice))
 		self.select_button.set_sensitive(True)
 		self.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))

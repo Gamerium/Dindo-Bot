@@ -6,7 +6,8 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
 from lib import tools
 from lib import data
-from .custom import CustomComboBox, CustomSpinButton
+from lib import convert
+from .custom import CustomTreeView, CustomComboBox, CustomSpinButton
 from .dialog import CopyTextDialog
 from threading import Thread
 
@@ -16,49 +17,39 @@ class DevToolsWidget(Gtk.Table):
 		Gtk.Table.__init__(self, 1, 3, True)
 		self.set_border_width(5)
 		self.parent = parent
-		self.perform_scroll = False
 		#self.parent.connect('button-press-event', self.on_click)
 		## Pixel
 		left_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		left_box.add(Gtk.Label('<b>Pixel</b>', xalign=0, use_markup=True))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-		left_box.pack_start(hbox, True, True, 0)
 		self.attach(left_box, 0, 2, 0, 1)
 		# TreeView
-		frame = Gtk.Frame()
-		scrolled_window = Gtk.ScrolledWindow()
-		self.pixels_list = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str, str, str, str)
-		pixbuf = Gdk.Cursor(Gdk.CursorType.ARROW).get_image()
-		self.mouse_icon = pixbuf.scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
-		tree_view = Gtk.TreeView(self.pixels_list)
-		tree_view.append_column(Gtk.TreeViewColumn('', Gtk.CellRendererPixbuf(), pixbuf=0))
-		tree_view.append_column(Gtk.TreeViewColumn('X', Gtk.CellRendererText(), text=1))
-		tree_view.append_column(Gtk.TreeViewColumn('Y', Gtk.CellRendererText(), text=2))
-		tree_view.append_column(Gtk.TreeViewColumn('Width', Gtk.CellRendererText(), text=3))
-		tree_view.append_column(Gtk.TreeViewColumn('Height', Gtk.CellRendererText(), text=4))
-		tree_view.append_column(Gtk.TreeViewColumn('Color', Gtk.CellRendererText(), text=5))
-		tree_view.connect('size-allocate', self.scroll_tree_view)
-		tree_view.connect('button-press-event', self.on_double_click)
-		self.tree_view_selection = tree_view.get_selection()
-		self.tree_view_selection.connect('changed', self.on_selection_changed)
-		scrolled_window.add(tree_view)
-		frame.add(scrolled_window)
-		hbox.pack_start(frame, True, True, 0)
+		model = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str, str, str, str)
+		text_renderer = Gtk.CellRendererText()
+		columns = [
+			Gtk.TreeViewColumn('', Gtk.CellRendererPixbuf(), pixbuf=0),
+			Gtk.TreeViewColumn('X', text_renderer, text=1),
+			Gtk.TreeViewColumn('Y', text_renderer, text=2),
+			Gtk.TreeViewColumn('Width', text_renderer, text=3),
+			Gtk.TreeViewColumn('Height', text_renderer, text=4),
+			Gtk.TreeViewColumn('Color', text_renderer, text=5)
+		]
+		self.tree_view = CustomTreeView(model, columns, Gtk.Orientation.HORIZONTAL)
+		self.tree_view.connect('button-press-event', self.on_tree_view_double_clicked)
+		self.tree_view.connect('selection-changed', self.on_tree_view_selection_changed)
+		left_box.pack_start(self.tree_view, True, True, 0)
 		# Select
-		buttons_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		hbox.add(buttons_box)
 		self.select_button = Gtk.Button()
 		self.select_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
 		self.select_button.set_tooltip_text('Select')
 		self.select_button.connect('clicked', self.on_select_button_clicked)
-		buttons_box.add(self.select_button)
+		self.tree_view.add_button(self.select_button)
 		# Simulate
 		self.simulate_click_button = Gtk.Button()
 		self.simulate_click_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.HAND1).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
 		self.simulate_click_button.set_tooltip_text('Simulate Click')
 		self.simulate_click_button.set_sensitive(False)
 		self.simulate_click_button.connect('clicked', self.on_simulate_click_button_clicked)
-		buttons_box.add(self.simulate_click_button)
+		self.tree_view.add_button(self.simulate_click_button)
 		# Separator
 		right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		right_box.add(Gtk.Separator(orientation=Gtk.Orientation.VERTICAL, margin=10))
@@ -128,15 +119,13 @@ class DevToolsWidget(Gtk.Table):
 	def add_pixel(self, location):
 		x, y, width, height = location
 		# get pixel color
-		color = tools.get_pixel_color(x, y)
+		pixel = tools.get_pixel(x, y, size=(10, 10))
+		pixbuf = convert.image2pixbuf(pixel)
+		color = pixel.getpixel((0, 0))
 		# append to treeview
-		self.pixels_list.append([self.mouse_icon, str(x), str(y), str(width), str(height), str(color)])
-		self.perform_scroll = True
+		self.tree_view.append([pixbuf, str(x), str(y), str(width), str(height), str(color)])
 		self.select_button.set_sensitive(True)
 		self.parent.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
-		# select last row in treeview
-		last_row_index = len(self.pixels_list) - 1
-		self.tree_view_selection.select_path(Gtk.TreePath(last_row_index))
 
 	def on_select_button_clicked(self, button):
 		button.set_sensitive(False)
@@ -145,21 +134,10 @@ class DevToolsWidget(Gtk.Table):
 		game_location = tools.get_widget_location(self.parent.game_area)
 		Thread(target=self.parent.wait_for_click, args=(self.add_pixel, game_location)).start()
 
-	def get_selected_row(self):
-		model, tree_iter = self.tree_view_selection.get_selected()
-		if tree_iter:
-			x = int(model.get_value(tree_iter, 1))
-			y = int(model.get_value(tree_iter, 2))
-			width = int(model.get_value(tree_iter, 3))
-			height = int(model.get_value(tree_iter, 4))
-			color = model.get_value(tree_iter, 5)
-			return (x, y, width, height, color)
-		else:
-			return None
-
 	def on_simulate_click_button_clicked(self, button):
 		# get click coordinates
-		x, y, width, height, color = self.get_selected_row()
+		selected_row = self.tree_view.get_selected_row()
+		x, y, width, height = (int(selected_row[1]), int(selected_row[2]), int (selected_row[3]), int(selected_row[4]))
 		#print('x: %d, y: %d, width: %d, height: %d' % (x, y, width, height))
 		# adjust for game area
 		if self.parent.game_area:
@@ -183,18 +161,15 @@ class DevToolsWidget(Gtk.Table):
 	def on_click(self, widget, event):
 		print('x: %d, y: %d' % (event.x, event.y))
 
-	def on_double_click(self, widget, event):
+	def on_tree_view_double_clicked(self, widget, event):
 		if event.type == Gdk.EventType.DOUBLE_BUTTON_PRESS:
-			selected_row = self.get_selected_row()
+			selected_row = self.tree_view.get_selected_row()
 			if selected_row:
-				CopyTextDialog(self.parent, "{'x': %d, 'y': %d, 'width': %d, 'height': %d, 'color': %s}" % selected_row)
+				x, y, width, height, color = (selected_row[1], selected_row[2], selected_row[3], selected_row[4], selected_row[5])
+				CopyTextDialog(self.parent, "{'x': %s, 'y': %s, 'width': %s, 'height': %s, 'color': %s}" % (x, y, width, height, color))
 
-	def on_selection_changed(self, selection):
-		if not self.simulate_click_button.get_sensitive():
+	def on_tree_view_selection_changed(self, selection):
+		if self.tree_view.get_selected_row() is None:
+			self.simulate_click_button.set_sensitive(False)
+		elif not self.simulate_click_button.get_sensitive():
 			self.simulate_click_button.set_sensitive(True)
-
-	def scroll_tree_view(self, widget, event):
-		if self.perform_scroll:
-			adj = widget.get_vadjustment()
-			adj.set_value(adj.get_upper() - adj.get_page_size())
-			self.perform_scroll = False

@@ -19,11 +19,9 @@ import webbrowser
 # Return active game window(s) list
 def get_game_window_list():
 	game_window_list = {}
-
 	screen = Wnck.Screen.get_default()
 	screen.force_update() # recommended per Wnck documentation
 	window_list = screen.get_windows()
-
 	for window in window_list:
 		window_name = window.get_name()
 		instance_name = window.get_class_instance_name()
@@ -34,7 +32,6 @@ def get_game_window_list():
 			else:
 				name = window_name
 			game_window_list[name] = window.get_xid()
-
 	return game_window_list
 
 # Return game window
@@ -77,18 +74,6 @@ def take_window_screenshot(window, save_to='screenshot'):
 	pb = Gdk.pixbuf_get_from_window(window, 0, 0, size.width, size.height)
 	pb.savev(save_to + '.png', 'png', (), ())
 
-# Convert Gdk.Pixbuf to Pillow image
-def pixbuf2image(pix):
-	data = pix.get_pixels()
-	width = pix.props.width
-	height = pix.props.height
-	stride = pix.props.rowstride
-	mode = 'RGB'
-	if pix.props.has_alpha == True:
-		mode = 'RGBA'
-	image = Image.frombytes(mode, (width, height), data, 'raw', mode, stride)
-	return image
-
 # Return a screenshot of the game
 def screen_game(region, save_to=None):
 	dsp = display.Display()
@@ -105,19 +90,18 @@ def screen_game(region, save_to=None):
 		screenshot.save(save_to + '.png')
 	return screenshot
 
-# Convert bytes to integer
-def bytes_to_int(bytes):
-	if type(bytes) is int:
-		return bytes
-	else:
-		return int(bytes.encode('hex'), 16)
+# Return pixel image of given x, y coordinates
+def get_pixel(x, y, size=None):
+	pixel = screen_game((x, y, 1, 1))
+	if size is not None:
+		pixel = pixel.resize(size, Image.ANTIALIAS)
+	return pixel
 
 # Return pixel color of given x, y coordinates
 def get_pixel_color(x, y):
-	window = Gdk.get_default_root_window()
-	pb = Gdk.pixbuf_get_from_window(window, x, y, 1, 1)
-	barray = pb.get_pixels()
-	return '(%d, %d, %d)' % (bytes_to_int(barray[0]), bytes_to_int(barray[1]), bytes_to_int(barray[2]))
+	pixel = get_pixel(x, y)
+	rgb = pixel.getpixel((0, 0))
+	return rgb
 
 # Return date as a string in the given format
 def get_date(format='%d-%m-%y'):
@@ -194,7 +178,6 @@ def fit_position_to_destination(x, y, window_width, window_height, dest_width, d
 	# new coordinate = old coordinate / (window size / destination size)
 	new_x = x / (window_width / float(dest_width))
 	new_y = y / (window_height / float(dest_height))
-
 	return (int(new_x), int(new_y))
 
 # Adjust click position
@@ -211,7 +194,6 @@ def adjust_click_position(click_x, click_y, window_width, window_height, dest_x,
 	else:
 		x = click_x
 		y = click_y
-
 	return (x, y)
 
 # Perform a simple click or double click on x, y position
@@ -249,7 +231,6 @@ def create_directory(directory):
 def color_matches(color, expected_color, tolerance=0):
 	r, g, b = color
 	red, green, blue = expected_color
-
 	return (abs(r - red) <= tolerance) and (abs(g - green) <= tolerance) and (abs(b - blue) <= tolerance)
 
 # Return the percentage of a color in an image
@@ -267,7 +248,6 @@ def get_color_percentage(image, expected_color, tolerance=10):
 	if height == 0: height = 1
 	if width == 0: width = 1
 	percentage = ((expected_color_count / height) / float(width)) * 100
-
 	return round(percentage, 2)
 
 # Open given file in text editor

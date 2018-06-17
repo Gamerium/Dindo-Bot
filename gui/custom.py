@@ -37,6 +37,96 @@ class CustomComboBox(Gtk.ComboBoxText):
 			if (use_contains and (self_text in combo_text or combo_text in self_text)) or self_text == combo_text:
 				combo.set_active(-1)
 
+class CustomTreeView(Gtk.Frame):
+
+	def __init__(self, model, columns, orientation=Gtk.Orientation.VERTICAL):
+		Gtk.Frame.__init__(self)
+		self.perform_scroll = False
+		self.model = model
+		self.columns = columns
+		box = Gtk.Box(orientation=orientation)
+		self.add(box)
+		## ScrolledWindow
+		scrolled_window = Gtk.ScrolledWindow()
+		box.pack_start(scrolled_window, True, True, 0)
+		# TreeView
+		self.tree_view = Gtk.TreeView(model)
+		scrolled_window.add(self.tree_view)
+		for column in columns:
+			self.tree_view.append_column(column)
+		self.tree_view.connect('size-allocate', self.scroll_tree_view)
+		self.selection = self.tree_view.get_selection()
+		self.selection.connect('changed', self.on_selection_changed)
+		## ActionBar
+		if orientation == Gtk.Orientation.VERTICAL:
+			actionbar = Gtk.ActionBar()
+			self.buttons_box = ButtonBox(linked=True)
+			actionbar.pack_start(self.buttons_box)
+		else:
+			separator = Gtk.Separator(orientation=Gtk.Orientation.VERTICAL)
+			#separator.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse('grey'))
+			box.add(separator)
+			actionbar = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+			actionbar.set_border_width(5)
+			self.buttons_box = ButtonBox(linked=True, orientation=Gtk.Orientation.VERTICAL)
+			actionbar.pack_start(self.buttons_box, False, True, 0)
+		box.pack_end(actionbar, False, False, 0)
+		# Delete
+		self.delete_button = Gtk.Button()
+		self.delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
+		self.delete_button.set_tooltip_text('Delete')
+		self.delete_button.set_sensitive(False)
+		self.delete_button.connect('clicked', self.on_delete_button_clicked)
+		self.buttons_box.pack_end(self.delete_button)
+
+	def is_empty(self):
+		return len(self.model) == 0
+
+	def on_selection_changed(self, selection):
+		if self.get_selected_row() is None:
+			self.delete_button.set_sensitive(False)
+		elif not self.delete_button.get_sensitive():
+			self.delete_button.set_sensitive(True)
+
+	def add_button(self, button):
+		self.buttons_box.add(button)
+
+	def on_delete_button_clicked(self, button):
+		# remove selected row
+		model, tree_iter = self.selection.get_selected()
+		model.remove(tree_iter)
+
+	def connect(self, event_name, event_callback):
+		if event_name == 'selection-changed':
+			self.selection.connect('changed', event_callback)
+		else:
+			self.tree_view.connect(event_name, event_callback)
+
+	def append(self, row):
+		# append row
+		self.model.append(row)
+		self.perform_scroll = True
+		# select row
+		path = Gtk.TreePath(len(self.model) - 1)
+		self.selection.select_path(path)
+
+	def get_selected_row(self):
+		model, tree_iter = self.selection.get_selected()
+		if tree_iter:
+			row = []
+			for i in range(len(self.columns)):
+				column_value = model.get_value(tree_iter, i)
+				row.append(column_value)
+			return row
+		else:
+			return None
+
+	def scroll_tree_view(self, widget, event):
+		if self.perform_scroll:
+			adj = widget.get_vadjustment()
+			adj.set_value(adj.get_upper() - adj.get_page_size())
+			self.perform_scroll = False
+
 class CustomListBox(Gtk.Frame):
 
 	def __init__(self, allow_moving=True):
@@ -281,9 +371,11 @@ class StackListBox(Gtk.Box):
 		self.stack.set_visible_child_name(name)
 
 	def append(self, label, widget):
+		# add listbox label
 		self.listbox.add(label)
 		if self.count == 0: # select first row
 			self.listbox.select_row(self.listbox.get_row_at_index(self.count))
+		# add stack widget
 		self.stack.add_named(widget, label.get_text())
 		self.count += 1
 
@@ -312,6 +404,14 @@ class ButtonBox(Gtk.Box):
 			self.buttons_container.add(hbox)
 		else:
 			self.buttons_container.add(button)
+
+	def pack_end(self, button, expand=False, fill=False, padding=0):
+		if self.orientation == Gtk.Orientation.VERTICAL and not self.linked:
+			hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+			hbox.pack_start(button, True, False, 0)
+			self.buttons_container.pack_end(hbox, expand, fill, padding)
+		else:
+			self.buttons_container.pack_end(button, expand, fill, padding)
 
 class MessageBox(Gtk.Box):
 
@@ -360,6 +460,17 @@ class MenuButton(Gtk.Button):
 
 	def add(self, widget):
 		self.popover.add(widget)
+
+class FileChooserButton(Gtk.FileChooserButton):
+
+	def __init__(self, title, filter=None):
+		Gtk.FileChooserButton.__init__(self, title=title)
+		if filter is not None and len(filter) > 1:
+			name, pattern = filter
+			file_filter = Gtk.FileFilter()
+			file_filter.set_name('%s (%s)' % (name, pattern))
+			file_filter.add_pattern(pattern)
+			self.add_filter(file_filter)
 
 class MiniMap(Gtk.Frame):
 

@@ -18,8 +18,7 @@ Locations = {
 	'Select From Enclos':    {'x': 105, 'y': 297, 'width': 566, 'height': 456},
 	'Select From Inventory': {'x': 450, 'y': 165, 'width': 566, 'height': 456},
 	'Disconnect Button':     {'x': 282, 'y': 218, 'width': 566, 'height': 456},
-	'Exit Button':           {'x': 282, 'y': 236, 'width': 566, 'height': 456},
-	'Confirm Yes Button':    {'x': 252, 'y': 243, 'width': 566, 'height': 456}
+	'Exit Button':           {'x': 282, 'y': 236, 'width': 566, 'height': 456}
 }
 
 # Boxes
@@ -56,7 +55,7 @@ Colors = {
 	#'Experience':      (108, 240, 229),
 	#'Tiredness':       (252, 200, 0),
 	'Enclos Empty':    (56, 56, 49),
-	'Row Selected':    (72, 72, 66),
+	'Row Selected':    (83, 83, 77),
 	'Inventory Empty': (53, 53, 45)
 }
 
@@ -73,6 +72,7 @@ KeyboardShortcuts = {
 	'Left':      'left',
 	'Right':     'right',
 	'Backspace': 'backspace',
+	'Enter':     'enter',
 	'Tab':       'tab',
 	'Esc':       'esc'
 	#'Copy':      'ctrl+c',
@@ -82,7 +82,7 @@ KeyboardShortcuts = {
 
 # Enclos
 class EnclosType:
-	Endurance, Maturity, Amour, Energy, NegativeSerenity, PositiveSerenity = ('Endurance', 'Maturity', 'Amour', 'Energy', 'NegativeSerenity', 'PositiveSerenity')
+	Endurance, Maturity, Amour, Energy, NegativeSerenity, PositiveSerenity = ('Endurance', 'Maturity', 'Amour', 'Energy', 'Negative Serenity', 'Positive Serenity')
 
 Enclos = {
 	# Bonta
@@ -136,12 +136,12 @@ Zaapi = {
 # BankPath
 BankPath = {
 	# Bonta
-	'Bonta (From Havenbag)': [
+	'Bank Bonta': [
 		'Zaap(from=Havenbag,to=Bonta)',
 		'Zaapi(from=Zaap Bonta,to=Bank)'
 	],
 	# Brakmar
-	'Brakmar (From Havenbag)': [
+	'Bank Brakmar': [
 		'Zaap(from=Havenbag,to=Brakmar)',
 		'Zaapi(from=Zaap Brakmar,to=Bank)'
 	]
