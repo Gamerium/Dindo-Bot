@@ -3,12 +3,13 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GdkPixbuf
+from gi.repository import Gtk, Gio, GdkPixbuf
 from lib import tools
 from lib import shared
 from lib import settings
+from lib import accounts
 from lib import maps
-from .custom import CustomComboBox, MessageBox, MiniMap
+from .custom import CustomComboBox, CustomTreeView, MessageBox, MiniMap
 
 class AboutDialog(Gtk.AboutDialog):
 
@@ -393,3 +394,123 @@ class PreferencesDialog(CustomDialog):
 		else:
 			self.parent.debug_page.hide()
 		settings.update_and_save(self.parent.settings, key='Debug', subkey='Enabled', value=value)
+
+class AccountsDialog(CustomDialog):
+
+	def __init__(self, transient_for, title='Accounts'):
+		CustomDialog.__init__(self, transient_for=transient_for, title=title)
+		self.parent = transient_for
+		### New
+		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		content_area = self.get_content_area()
+		content_area.add(vbox)
+		vbox.add(Gtk.Label('<b>New</b>', xalign=0, use_markup=True))
+		new_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		vbox.add(new_hbox)
+		new_vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		new_hbox.pack_start(new_vbox, True, False, 0)
+		## Login
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		new_vbox.add(hbox)
+		hbox.add(Gtk.Label('Login'))
+		# Entry
+		self.login_entry = Gtk.Entry()
+		self.login_entry.connect('focus-in-event', lambda entry, event: self.error_box.hide())
+		hbox.pack_end(self.login_entry, False, False, 0)
+		## Password
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		new_vbox.add(hbox)
+		hbox.add(Gtk.Label('Password'))
+		# Show password
+		show_password_button = Gtk.Button()
+		show_password_button.set_tooltip_text('Show password')
+		show_password_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='channel-insecure-symbolic')))
+		show_password_button.set_relief(Gtk.ReliefStyle.NONE)
+		show_password_button.connect('clicked', self.on_show_password_button_clicked)
+		hbox.add(show_password_button)
+		# Entry
+		self.password_entry = Gtk.Entry(visibility=False)
+		self.password_entry.connect('focus-in-event', lambda entry, event: self.error_box.hide())
+		hbox.pack_end(self.password_entry, False, False, 0)
+		## Error box
+		self.error_box = MessageBox(color='red')
+		new_vbox.add(self.error_box)
+		## Add
+		add_button = Gtk.Button('Add')
+		add_button.set_image(Gtk.Image(stock=Gtk.STOCK_ADD))
+		add_button.connect('clicked', self.on_add_button_clicked)
+		button_box = Gtk.ButtonBox(orientation=Gtk.Orientation.HORIZONTAL, layout_style=Gtk.ButtonBoxStyle.CENTER)
+		button_box.add(add_button)
+		new_vbox.add(button_box)
+		### Accounts
+		vbox.add(Gtk.Label('<b>Accounts</b>', xalign=0, use_markup=True))
+		## TreeView
+		model = Gtk.ListStore(str, str, str)
+		text_renderer = Gtk.CellRendererText()
+		columns = [
+			Gtk.TreeViewColumn('ID', text_renderer, text=0),
+			Gtk.TreeViewColumn('Login', text_renderer, text=1),
+			Gtk.TreeViewColumn('Password', text_renderer, text=2)
+		]
+		self.tree_view = CustomTreeView(model, columns)
+		accounts_list = accounts.load()
+		for id in sorted(accounts_list):
+			login = accounts_list[id]['login']
+			pwd = '*' * len(accounts_list[id]['pwd'])
+			self.tree_view.append_row([id, login, pwd], select=False)
+		self.tree_view.set_size_request(400, 160)
+		self.tree_view.connect('selection-changed', self.on_tree_view_selection_changed)
+		vbox.pack_start(self.tree_view, True, True, 0)
+		## ActionBar
+		actionbar = Gtk.ActionBar()
+		self.tree_view.vbox.pack_end(actionbar, False, False, 0)
+		# Delete
+		self.delete_button = Gtk.Button()
+		self.delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
+		self.delete_button.set_tooltip_text('Delete')
+		self.delete_button.set_sensitive(False)
+		self.delete_button.connect('clicked', self.on_delete_button_clicked)
+		actionbar.add(self.delete_button)
+		self.show_all()
+		self.error_box.hide()
+
+	def on_add_button_clicked(self, button):
+		login = self.login_entry.get_text()
+		password = self.password_entry.get_text()
+		if not login:
+			self.error_box.print_message('Please type a login')
+		elif not password:
+			self.error_box.print_message('Please type a password')
+		elif accounts.is_duplicate(login):
+			self.error_box.print_message('Duplicate login, please choose another one')
+		else:
+			# hide error box
+			self.error_box.hide()
+			# add account
+			id = accounts.add(login, password)
+			# append to treeview
+			pwd = '*' * len(password)
+			self.tree_view.append_row([id, login, pwd])
+
+	def on_delete_button_clicked(self, button):
+		# remove selected account
+		id = self.tree_view.get_selected_row()[0]
+		accounts.remove(id)
+		# remove from treeview also
+		self.tree_view.remove_selected_row()
+
+	def on_show_password_button_clicked(self, button):
+		if self.password_entry.get_visibility():
+			self.password_entry.set_visibility(False)
+			button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='channel-insecure-symbolic')))
+			button.set_tooltip_text('Show password')
+		else:
+			self.password_entry.set_visibility(True)
+			button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='channel-secure-symbolic')))
+			button.set_tooltip_text('Hide password')
+
+	def on_tree_view_selection_changed(self, selection):
+		if self.tree_view.get_selected_row() is None:
+			self.delete_button.set_sensitive(False)
+		elif not self.delete_button.get_sensitive():
+			self.delete_button.set_sensitive(True)

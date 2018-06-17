@@ -134,7 +134,7 @@ class DevToolsWidget(Gtk.Table):
 		pixbuf = convert.image2pixbuf(pixel)
 		color = pixel.getpixel((0, 0))
 		# append to treeview
-		self.tree_view.append([pixbuf, str(x), str(y), str(width), str(height), str(color)])
+		self.tree_view.append_row([pixbuf, str(x), str(y), str(width), str(height), str(color)])
 		self.select_pixel_button.set_sensitive(True)
 		self.parent.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 
@@ -186,6 +186,8 @@ class DevToolsWidget(Gtk.Table):
 		if self.tree_view.get_selected_row() is None:
 			self.simulate_click_button.set_sensitive(False)
 			self.delete_pixel_button.set_sensitive(False)
-		elif not self.simulate_click_button.get_sensitive():
-			self.simulate_click_button.set_sensitive(True)
-			self.delete_pixel_button.set_sensitive(True)
+		else:
+			if not self.simulate_click_button.get_sensitive():
+				self.simulate_click_button.set_sensitive(True)
+			if not self.delete_pixel_button.get_sensitive():
+				self.delete_pixel_button.set_sensitive(True)

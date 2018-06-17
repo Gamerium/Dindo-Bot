@@ -44,9 +44,11 @@ class CustomTreeView(Gtk.Frame):
 		self.perform_scroll = False
 		self.model = model
 		self.columns = columns
+		self.vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+		self.add(self.vbox)
 		## ScrolledWindow
 		scrolled_window = Gtk.ScrolledWindow()
-		self.add(scrolled_window)
+		self.vbox.pack_start(scrolled_window, True, True, 0)
 		# TreeView
 		self.tree_view = Gtk.TreeView(model)
 		scrolled_window.add(self.tree_view)
@@ -64,13 +66,14 @@ class CustomTreeView(Gtk.Frame):
 		else:
 			self.tree_view.connect(event_name, event_callback)
 
-	def append(self, row):
+	def append_row(self, row, select=True):
 		# append row
 		self.model.append(row)
 		self.perform_scroll = True
 		# select row
-		path = Gtk.TreePath(len(self.model) - 1)
-		self.selection.select_path(path)
+		if select:
+			path = Gtk.TreePath(len(self.model) - 1)
+			self.selection.select_path(path)
 
 	def get_selected_row(self):
 		model, tree_iter = self.selection.get_selected()
@@ -86,7 +89,8 @@ class CustomTreeView(Gtk.Frame):
 	def remove_selected_row(self):
 		# remove selected row
 		model, tree_iter = self.selection.get_selected()
-		model.remove(tree_iter)
+		if tree_iter:
+			model.remove(tree_iter)
 
 	def scroll_tree_view(self, widget, event):
 		if self.perform_scroll:

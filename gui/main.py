@@ -109,6 +109,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		dialog = PreferencesDialog(transient_for=self)
 		dialog.run()
 
+	def on_accounts_button_clicked(self, button):
+		dialog = AccountsDialog(transient_for=self)
+		dialog.run()
+
 	def on_take_screenshot_button_clicked(self, button):
 		if self.game_window:
 			screenshot_name = 'screenshot_' + tools.get_date_time()
@@ -137,6 +141,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		preferences_button.set_image(Gtk.Image(stock=Gtk.STOCK_PREFERENCES))
 		preferences_button.connect('clicked', self.on_preferences_button_clicked)
 		box.add(preferences_button)
+		# Accounts button
+		accounts_button = Gtk.ModelButton(' Accounts')
+		accounts_button.set_alignment(0, 0.5)
+		accounts_button.set_image(Gtk.Image(stock=Gtk.STOCK_DIALOG_AUTHENTICATION))
+		accounts_button.connect('clicked', self.on_accounts_button_clicked)
+		box.add(accounts_button)
 		# Take game screenshot button
 		self.take_screenshot_button = Gtk.ModelButton(' Take game screenshot')
 		self.take_screenshot_button.set_alignment(0, 0.5)
