@@ -9,6 +9,7 @@ from lib.shared import LogType, DebugLevel
 from lib import data
 from lib import tools
 from lib import imgcompare
+from lib import accounts
 from .base import PausableThread
 
 class GameThread(PausableThread):
@@ -16,15 +17,62 @@ class GameThread(PausableThread):
 	def __init__(self, parent, game_location):
 		PausableThread.__init__(self, parent, game_location)
 
+	def wait_for_screen_change(self, load_time=3):
+		# wait for screen to change
+		self.debug('Waiting for screen to change')
+		if self.monitor_game_screen(timeout=30, tolerance=2.5):
+			# wait for screen to load
+			self.debug('Waiting for screen to load')
+			self.sleep(load_time)
+
+	def connect(self, account_id):
+		account = accounts.get(account_id)
+		if account:
+			# (1) type login
+			self.double_click(data.Locations['Login Input'])
+			self.press_key(data.KeyboardShortcuts['Backspace']) # clean
+			self.type_text(account['login'])
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# (2) type password
+			self.double_click(data.Locations['Password Input'])
+			self.press_key(data.KeyboardShortcuts['Backspace']) # clean
+			self.type_text(account['pwd'])
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# (3) hit enter
+			self.press_key(data.KeyboardShortcuts['Enter'])
+			# wait for screen to change
+			self.wait_for_screen_change()
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# (4) hit enter again
+			self.debug('Hit Play')
+			self.press_key(data.KeyboardShortcuts['Enter'])
+			# wait for game load to start
+			self.debug('Waiting for game load to start')
+			self.sleep(2)
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return
+			# wait for screen to change
+			self.wait_for_screen_change(load_time=5)
+		else:
+			self.await()
+			self.log('Account not found', LogType.Error)
+
 	def disconnect(self, exit):
-		# press 'Esc' key
+		# (1) press 'Esc' key
 		self.press_key(data.KeyboardShortcuts['Esc'])
 		# wait for menu to show
 		self.sleep(1)
 		# check for pause or suspend
 		self.pause_event.wait()
 		if self.suspend: return
-		# click on disconnect/exit
+		# (2) click on disconnect/exit
 		button = 'Exit Button' if exit == 'True' else 'Disconnect Button'
 		self.click(data.Locations[button])
 		# wait for confirmation to show
@@ -32,7 +80,7 @@ class GameThread(PausableThread):
 		# check for pause or suspend
 		self.pause_event.wait()
 		if self.suspend: return
-		# confirm disconnect/exit
+		# (3) confirm disconnect/exit
 		self.press_key(data.KeyboardShortcuts['Enter'])
 
 	def click(self, coord, double=False):

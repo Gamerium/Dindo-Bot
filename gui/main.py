@@ -778,14 +778,22 @@ class BotWindow(Gtk.ApplicationWindow):
 		else:
 			# get game location
 			game_location = tools.get_widget_location(self.game_area)
-			# start bot thread or resume it
+			# start bot thread
 			if self.bot_thread is None or not self.bot_thread.isAlive():
+				# get thread parameters
 				start_from_step = self.step_spin_button.get_value_as_int()
-				repeat_path = self.repeat_spin_button.get_value_as_int() if self.repeat_switch.get_active() else 1
-				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path)
+				if self.repeat_switch.get_active():
+					repeat_path = self.repeat_spin_button.get_value_as_int()
+					connect_disconnect_once = self.connect_disconnect_once_switch.get_active()
+				else:
+					repeat_path = 1
+					connect_disconnect_once = False
+				# run thread
+				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path, connect_disconnect_once)
 				self.bot_thread.start()
 				self.settings_button.set_sensitive(False)
 				self.bot_widgets.set_sensitive(False)
+			# resume bot thread if already started
 			else:
 				self.bot_thread.resume(game_location)
 			# enable/disable buttons
@@ -842,7 +850,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def focus_game(self):
 		if self.game_area:
-			self.debug('Focus game', DebugLevel.High)
+			#self.debug('Focus game', DebugLevel.High)
 			# set keyboard focus
 			self.game_area.child_focus(Gtk.DirectionType.TAB_BACKWARD)
 

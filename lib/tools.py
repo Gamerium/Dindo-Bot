@@ -215,8 +215,13 @@ def press_key(key):
 		pyautogui.hotkey(keys[0], keys[1])
 
 # Type text
-def type_text(text):
-	pyautogui.typewrite(text, interval=0.25)
+def type_text(text, interval=0.1):
+	for c in text:
+		if c.isdigit():
+			pyautogui.hotkey('shift', c)
+		else:
+			pyautogui.press(c)
+		time.sleep(interval)
 
 # Scroll to value
 def scroll_to(value, x=None, y=None):

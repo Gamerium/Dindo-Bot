@@ -55,10 +55,12 @@ def parse_instruction(line, separator=','):
 			result['value'] = None
 		else:
 			value = replace_all_between(origin_value, ',', ';', '[', ']') # avoid splitting map position(s)
-			if not separator in value:
-				result['value'] = replace_all_between(value, ';', ',', '[', ']')
+			parameters = value.split(separator)
+			# if single parameter + without name, return it as instruction value
+			if len(parameters) == 1 and '=' not in parameters[0]:
+				result['value'] = replace_all_between(value, ';', ',', '[', ']') # value & parameters[0] are the same in this case
 			else:
-				parameters = value.split(separator)
+				# return parameter(s) name/index & their value(s)
 				for i, parameter in enumerate(parameters):
 					split_parameter = parameter.split('=')
 					if len(split_parameter) > 1:

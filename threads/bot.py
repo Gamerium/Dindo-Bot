@@ -8,10 +8,11 @@ from .job import JobThread
 
 class BotThread(JobThread):
 
-	def __init__(self, parent, game_location, start_from_step, repeat_path):
+	def __init__(self, parent, game_location, start_from_step, repeat_path, connect_disconnect_once):
 		JobThread.__init__(self, parent, game_location)
 		self.start_from_step = start_from_step
 		self.repeat_path = repeat_path
+		self.connect_disconnect_once = connect_disconnect_once
 
 	def run(self):
 		self.start_timer()
@@ -73,7 +74,12 @@ class BotThread(JobThread):
 				self.use_zaapi(instruction['from'], instruction['to'])
 
 			elif instruction['name'] == 'Click':
-				coordinates = (instruction['x'], instruction['y'], instruction['width'], instruction['height'])
+				coordinates = (
+					int(instruction['x']),
+					int(instruction['y']),
+					int(instruction['width']),
+					int(instruction['height'])
+				)
 				if instruction['twice'] == 'True':
 					self.double_click(coordinates)
 				else:
@@ -90,8 +96,14 @@ class BotThread(JobThread):
 			elif instruction['name'] == 'TypeText':
 				self.type_text(instruction['value'])
 
+			elif instruction['name'] == 'Connect':
+				if not self.connect_disconnect_once or self.repeat_count == 0:
+					self.connect(int(instruction['account_id']))
+				else:
+					self.debug('Instruction ignored', DebugLevel.Low)
+
 			elif instruction['name'] == 'Disconnect':
-				if self.repeat_count == self.repeat_path - 1:
+				if not self.connect_disconnect_once or self.repeat_count == self.repeat_path - 1:
 					self.disconnect(instruction['value'])
 				else:
 					self.debug('Instruction ignored', DebugLevel.Low)

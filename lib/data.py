@@ -18,7 +18,9 @@ Locations = {
 	'Select From Enclos':    {'x': 105, 'y': 297, 'width': 566, 'height': 456},
 	'Select From Inventory': {'x': 450, 'y': 165, 'width': 566, 'height': 456},
 	'Disconnect Button':     {'x': 282, 'y': 218, 'width': 566, 'height': 456},
-	'Exit Button':           {'x': 282, 'y': 236, 'width': 566, 'height': 456}
+	'Exit Button':           {'x': 282, 'y': 236, 'width': 566, 'height': 456},
+	'Login Input':           {'x': 270, 'y': 146, 'width': 566, 'height': 456},
+	'Password Input':        {'x': 270, 'y': 174, 'width': 566, 'height': 456}
 }
 
 # Boxes

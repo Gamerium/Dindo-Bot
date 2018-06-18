@@ -58,3 +58,10 @@ def remove(id):
 	# save
 	save(accounts)
 	return accounts
+
+def get(id):
+	accounts = load()
+	for account in accounts:
+		if account['id'] == id:
+			return account
+	return None
