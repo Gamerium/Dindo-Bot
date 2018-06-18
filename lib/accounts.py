@@ -47,7 +47,7 @@ def add(login, pwd):
 	})
 	# save
 	save(accounts)
-	return id
+	return (id, accounts)
 
 def remove(id):
 	# remove account
@@ -57,3 +57,4 @@ def remove(id):
 			del accounts[i]
 	# save
 	save(accounts)
+	return accounts

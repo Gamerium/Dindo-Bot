@@ -40,7 +40,7 @@ class CustomComboBox(Gtk.ComboBoxText):
 
 class TextValueComboBox(Gtk.ComboBox):
 
-	def __init__(self, data_list=[], text=None, value=None, sort=False):
+	def __init__(self, data_list=[], text_key=None, value_key=None, sort=False):
 		Gtk.ComboBox.__init__(self)
 		# set max chars width
 		renderer_text = Gtk.CellRendererText()
@@ -48,22 +48,22 @@ class TextValueComboBox(Gtk.ComboBox):
 		renderer_text.props.ellipsize = Pango.EllipsizeMode.END
 		# append data
 		self.model = Gtk.ListStore(str, str)
-		self.append_list(data_list, text, value, sort)
+		self.append_list(data_list, text_key, value_key, sort)
 		self.set_model(self.model)
 		self.pack_start(renderer_text, True)
 		self.add_attribute(renderer_text, 'text', 0)
 
-	def append_list(self, data_list, text, value, sort=False, clear=False):
+	def append_list(self, data_list, text_key, value_key, sort=False, clear=False):
 		# clear combobox
 		if clear:
 			self.remove_all()
 		# sort data
 		if sort:
-			data_list = sorted(data_list)
+			data_list = sorted(data_list, key=lambda item: item[text_key])
 		# append data
-		if text is not None and value is not None:
+		if text_key is not None and value_key is not None:
 			for data in data_list:
-				self.model.append([str(data[text]), str(data[value])])
+				self.model.append([str(data[text_key]), str(data[value_key])])
 
 	def _get_active(self, index):
 		active = self.get_active()

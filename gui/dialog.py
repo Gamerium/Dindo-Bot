@@ -206,6 +206,8 @@ class DeleteMapDialog(CustomDialog):
 			self.maps_combo.remove(selected)
 			# save data
 			maps.save(self.data)
+			# update parent window
+			self.parent.collect_map_combo.append_list(self.data, sort=True, clear=True)
 
 	def on_delete_button_clicked(self, button):
 		if self.maps_combo.get_active() != -1:
@@ -260,6 +262,8 @@ class SaveMapDialog(CustomDialog):
 		data[name] = map_data
 		# save data
 		maps.save(data)
+		# update parent window
+		self.parent.collect_map_combo.append_list(data, sort=True, clear=True)
 		# destroy dialog
 		self.destroy()
 
@@ -457,7 +461,7 @@ class AccountsDialog(CustomDialog):
 		self.tree_view.connect('selection-changed', self.on_tree_view_selection_changed)
 		vbox.pack_start(self.tree_view, True, True, 0)
 		# fill treeview
-		for account in sorted(accounts.load()):
+		for account in sorted(accounts.load(), key=lambda item: item['id']):
 			pwd = '*' * len(account['pwd'])
 			self.tree_view.append_row([account['id'], account['login'], pwd], select=False)
 		## ActionBar
@@ -473,6 +477,9 @@ class AccountsDialog(CustomDialog):
 		self.show_all()
 		self.error_box.hide()
 
+	def update_parent_window(self, accounts_list):
+		self.parent.accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort=True, clear=True)
+
 	def on_add_button_clicked(self, button):
 		login = self.login_entry.get_text()
 		password = self.password_entry.get_text()
@@ -486,17 +493,21 @@ class AccountsDialog(CustomDialog):
 			# hide error box
 			self.error_box.hide()
 			# add account
-			id = accounts.add(login, password)
+			id, accounts_list = accounts.add(login, password)
 			# append to treeview
 			pwd = '*' * len(password)
 			self.tree_view.append_row([id, login, pwd])
+			# update parent window
+			self.update_parent_window(accounts_list)
 
 	def on_delete_button_clicked(self, button):
 		# remove selected account
 		id = self.tree_view.get_selected_row()[0]
-		accounts.remove(id)
+		accounts_list = accounts.remove(id)
 		# remove from treeview also
 		self.tree_view.remove_selected_row()
+		# update parent window
+		self.update_parent_window(accounts_list)
 
 	def on_show_password_button_clicked(self, button):
 		if self.password_entry.get_visibility():

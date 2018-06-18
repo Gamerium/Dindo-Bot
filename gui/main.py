@@ -27,6 +27,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Initialise class attributes
 		self.game_window = None
 		self.game_area = None
+		self.bot_path = None
 		self.bot_thread = None
 		self.args = tools.get_cmd_args()
 		# Get settings
@@ -251,31 +252,47 @@ class BotWindow(Gtk.ApplicationWindow):
 			game_window_box.add(self.plug_button)
 		## Bot Path
 		self.bot_widgets.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
-		self.bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path'))
-		self.bot_path_filechooserbutton.set_margin_left(10)
-		self.bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
-		self.bot_widgets.add(self.bot_path_filechooserbutton)
+		bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path'))
+		bot_path_filechooserbutton.set_margin_left(10)
+		bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
+		bot_path_filechooserbutton.connect('file-set', self.on_bot_path_changed)
+		self.bot_widgets.add(bot_path_filechooserbutton)
 		## Start From Step
-		self.bot_widgets.add(Gtk.Label('<b>Start From Step</b>', xalign=0, use_markup=True))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		self.bot_widgets.add(hbox)
+		hbox.add(Gtk.Label('Start From Step'))
 		self.step_spin_button = SpinButton(min=1, max=10000)
 		self.step_spin_button.set_margin_left(10)
-		self.bot_widgets.add(self.step_spin_button)
+		hbox.pack_end(self.step_spin_button, False, False, 0)
 		## Repeat Path
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
 		hbox.add(Gtk.Label('<b>Repeat Path</b>', xalign=0, use_markup=True))
 		self.bot_widgets.add(hbox)
 		# Switch
 		self.repeat_switch = Gtk.Switch()
-		self.repeat_switch.connect('notify::active', lambda switch, pspec: self.repeat_spin_button.set_sensitive(switch.get_active()))
+		self.repeat_switch.connect('notify::active', lambda switch, pspec: self.repeat_path_box.set_sensitive(switch.get_active()))
 		hbox.pack_end(self.repeat_switch, False, False, 0)
-		# Spin button
+		# Box
+		self.repeat_path_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		self.repeat_path_box.set_margin_left(10)
+		self.repeat_path_box.set_sensitive(False)
+		self.bot_widgets.add(self.repeat_path_box)
+		# Number of times
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.set_margin_left(10)
-		self.bot_widgets.add(hbox)
 		hbox.add(Gtk.Label('Number of times'))
+		self.repeat_path_box.add(hbox)
+		# SpinButton
 		self.repeat_spin_button = SpinButton(min=2, max=1000)
-		self.repeat_spin_button.set_sensitive(False)
 		hbox.pack_end(self.repeat_spin_button, False, False, 0)
+		## Connect/Disconnect only once
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.add(Gtk.Label('Connect/Disconnect only once'))
+		self.repeat_path_box.add(hbox)
+		# Switch
+		self.connect_disconnect_once_switch = Gtk.Switch()
+		hbox.pack_end(self.connect_disconnect_once_switch, False, False, 0)
 		## MiniMap
 		self.minimap_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		bot_page.add(self.minimap_box)
@@ -421,18 +438,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox.append(label, widget)
 		# Map
 		widget.add(Gtk.Label('<b>Map</b>', xalign=0, use_markup=True))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.set_margin_left(10)
 		self.collect_map_combo = CustomComboBox(maps.load(), sort=True)
-		hbox.pack_start(self.collect_map_combo, True, True, 0)
-		reload_button = Gtk.Button()
-		reload_button.set_tooltip_text('Reload')
-		reload_button.set_image(Gtk.Image(stock=Gtk.STOCK_REFRESH))
-		reload_button.connect('clicked', lambda button: 
-			self.collect_map_combo.append_list(maps.load(), sort=True, clear=True)
-		)
-		hbox.add(reload_button)
-		widget.add(hbox)
+		self.collect_map_combo.set_margin_left(10)
+		widget.add(self.collect_map_combo)
 		# Store Path
 		widget.add(Gtk.Label('<b>Store Path</b>', xalign=0, use_markup=True))
 		# Combo
@@ -547,18 +555,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox.append(label, widget)
 		# Account
 		widget.add(Gtk.Label('<b>Account</b>', xalign=0, use_markup=True))
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.set_margin_left(10)
-		self.accounts_combo = TextValueComboBox(accounts.load(), text='login', value='id', sort=True)
-		hbox.pack_start(self.accounts_combo, True, True, 0)
-		reload_button = Gtk.Button()
-		reload_button.set_tooltip_text('Reload')
-		reload_button.set_image(Gtk.Image(stock=Gtk.STOCK_REFRESH))
-		reload_button.connect('clicked', lambda button: 
-			self.accounts_combo.append_list(accounts.load(), text='login', value='id', sort=True, clear=True)
-		)
-		hbox.add(reload_button)
-		widget.add(hbox)
+		self.accounts_combo = TextValueComboBox(accounts.load(), text_key='login', value_key='id', sort=True)
+		self.accounts_combo.set_margin_left(10)
+		widget.add(self.accounts_combo)
 		# Add
 		add_button = Gtk.Button('Add')
 		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Connect(account_id=%s)' % self.accounts_combo.get_active_value()))
@@ -772,10 +771,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		Thread(target=self.wait_for_click, args=(self.add_click, game_location)).start()
 
 	def on_start_button_clicked(self, button):
-		bot_path = self.bot_path_filechooserbutton.get_filename()
 		if self.game_window is None:
 			AlertDialog(self, 'Please select a game window')
-		elif bot_path is None:
+		elif not self.bot_path:
 			AlertDialog(self, 'Please select a bot path')
 		else:
 			# get game location
@@ -784,7 +782,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			if self.bot_thread is None or not self.bot_thread.isAlive():
 				start_from_step = self.step_spin_button.get_value_as_int()
 				repeat_path = self.repeat_spin_button.get_value_as_int() if self.repeat_switch.get_active() else 1
-				self.bot_thread = BotThread(self, game_location, bot_path, start_from_step, repeat_path)
+				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path)
 				self.bot_thread.start()
 				self.settings_button.set_sensitive(False)
 				self.bot_widgets.set_sensitive(False)
@@ -829,6 +827,9 @@ class BotWindow(Gtk.ApplicationWindow):
 	def on_stop_button_clicked(self, button):
 		self.bot_thread.stop()
 		self.reset_buttons()
+
+	def on_bot_path_changed(self, filechooserbutton):
+		self.bot_path = filechooserbutton.get_filename()
 
 	def populate_game_window_combo(self):
 		self.game_window_combo_ignore_change = True
