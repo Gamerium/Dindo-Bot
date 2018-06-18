@@ -8,32 +8,45 @@ from .job import JobThread
 
 class BotThread(JobThread):
 
-	def __init__(self, parent, game_location, start_from_step, repeat_path, connect_disconnect_once):
+	def __init__(self, parent, game_location, start_from_step, repeat_path, account_id, disconnect_after):
 		JobThread.__init__(self, parent, game_location)
 		self.start_from_step = start_from_step
 		self.repeat_path = repeat_path
-		self.connect_disconnect_once = connect_disconnect_once
+		self.account_id = account_id
+		self.disconnect_after = disconnect_after
 
 	def run(self):
 		self.start_timer()
 		self.debug('Bot thread started', DebugLevel.Low)
 
+		# connect to account
+		account_connected = False
+		if self.account_id is not None:
+			self.debug('Connect to account (account_id: %s)' % self.account_id)
+			self.connect(self.account_id)
+			account_connected = True
+
 		# get instructions & interpret them
 		self.debug('Bot path: %s, repeat: %d' % (self.parent.bot_path, self.repeat_path))
 		if self.parent.bot_path:
 			instructions = tools.read_file(self.parent.bot_path)
-			self.repeat_count = 0
-			while self.repeat_count < self.repeat_path:
+			repeat_count = 0
+			while repeat_count < self.repeat_path:
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: break
 				# start interpretation
 				self.interpret(instructions)
-				self.repeat_count += 1
+				repeat_count += 1
 
 			# tell user that we have complete the path
 			if not self.suspend:
 				self.log('Bot path completed', LogType.Success)
+
+		# disconnect account
+		if not self.suspend and account_connected and self.disconnect_after:
+			self.debug('Disconnect account')
+			self.disconnect()
 
 		# reset bot window buttons
 		if not self.suspend:
@@ -97,16 +110,14 @@ class BotThread(JobThread):
 				self.type_text(instruction['value'])
 
 			elif instruction['name'] == 'Connect':
-				if not self.connect_disconnect_once or self.repeat_count == 0:
-					self.connect(int(instruction['account_id']))
+				if instruction['account_id'].isdigit():
+					account_id = int(instruction['account_id'])
 				else:
-					self.debug('Instruction ignored', DebugLevel.Low)
+					account_id = instruction['account_id']
+				self.connect(account_id)
 
 			elif instruction['name'] == 'Disconnect':
-				if not self.connect_disconnect_once or self.repeat_count == self.repeat_path - 1:
-					self.disconnect(instruction['value'])
-				else:
-					self.debug('Instruction ignored', DebugLevel.Low)
+				self.disconnect(instruction['value'])
 
 			else:
 				self.debug('Unknown instruction', DebugLevel.Low)

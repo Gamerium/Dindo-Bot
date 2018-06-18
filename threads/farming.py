@@ -337,7 +337,7 @@ class FarmingThread(TravelThread):
 			self.click(enclos)
 			# wait for enclos to open
 			self.debug('Waiting for enclos to open')
-			if self.monitor_game_screen(tolerance=2.5):
+			if self.monitor_game_screen(timeout=30, tolerance=2.5):
 				# wait for enclos to load
 				self.sleep(1)
 			# check for pause or suspend

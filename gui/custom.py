@@ -40,14 +40,17 @@ class CustomComboBox(Gtk.ComboBoxText):
 
 class TextValueComboBox(Gtk.ComboBox):
 
-	def __init__(self, data_list=[], text_key=None, value_key=None, sort=False):
+	def __init__(self, data_list=[], model=None, text_key=None, value_key=None, sort=False):
 		Gtk.ComboBox.__init__(self)
 		# set max chars width
 		renderer_text = Gtk.CellRendererText()
 		renderer_text.props.max_width_chars = 10
 		renderer_text.props.ellipsize = Pango.EllipsizeMode.END
 		# append data
-		self.model = Gtk.ListStore(str, str)
+		if model is None:
+			self.model = Gtk.ListStore(str, str)
+		else:
+			self.model = model
 		self.append_list(data_list, text_key, value_key, sort)
 		self.set_model(self.model)
 		self.pack_start(renderer_text, True)
@@ -63,7 +66,7 @@ class TextValueComboBox(Gtk.ComboBox):
 		# append data
 		if text_key is not None and value_key is not None:
 			for data in data_list:
-				self.model.append([str(data[text_key]), str(data[value_key])])
+				self.model.append([data[text_key], data[value_key]])
 
 	def _get_active(self, index):
 		active = self.get_active()

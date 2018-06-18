@@ -479,6 +479,7 @@ class AccountsDialog(CustomDialog):
 
 	def update_parent_window(self, accounts_list):
 		self.parent.accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort=True, clear=True)
+		self.parent.connect_accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort=True, clear=True)
 
 	def on_add_button_clicked(self, button):
 		login = self.login_entry.get_text()

@@ -262,37 +262,54 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox.set_margin_left(10)
 		self.bot_widgets.add(hbox)
 		hbox.add(Gtk.Label('Start From Step'))
-		self.step_spin_button = SpinButton(min=1, max=10000)
+		self.step_spin_button = SpinButton(min=1, max=1000)
 		self.step_spin_button.set_margin_left(10)
 		hbox.pack_end(self.step_spin_button, False, False, 0)
 		## Repeat Path
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
-		hbox.add(Gtk.Label('<b>Repeat Path</b>', xalign=0, use_markup=True))
+		hbox.add(Gtk.Label('Repeat Path'))
 		self.bot_widgets.add(hbox)
 		# Switch
 		self.repeat_switch = Gtk.Switch()
-		self.repeat_switch.connect('notify::active', lambda switch, pspec: self.repeat_path_box.set_sensitive(switch.get_active()))
-		hbox.pack_end(self.repeat_switch, False, False, 0)
-		# Box
-		self.repeat_path_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		self.repeat_path_box.set_margin_left(10)
-		self.repeat_path_box.set_sensitive(False)
-		self.bot_widgets.add(self.repeat_path_box)
-		# Number of times
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.add(Gtk.Label('Number of times'))
-		self.repeat_path_box.add(hbox)
+		self.repeat_switch.connect('notify::active', lambda switch, pspec: self.repeat_spin_button.set_sensitive(switch.get_active()))
+		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		vbox.pack_start(self.repeat_switch, True, False, 0)
+		hbox.add(vbox)
 		# SpinButton
 		self.repeat_spin_button = SpinButton(min=2, max=1000)
+		self.repeat_spin_button.set_tooltip_text('Number of times')
+		self.repeat_spin_button.set_sensitive(False)
 		hbox.pack_end(self.repeat_spin_button, False, False, 0)
-		## Connect/Disconnect only once
+		## Connect To Account
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.add(Gtk.Label('Connect/Disconnect only once'))
-		self.repeat_path_box.add(hbox)
+		hbox.add(Gtk.Label('<b>Connect To Account</b>', xalign=0, use_markup=True))
+		self.bot_widgets.add(hbox)
 		# Switch
-		self.connect_disconnect_once_switch = Gtk.Switch()
-		hbox.pack_end(self.connect_disconnect_once_switch, False, False, 0)
+		self.connect_to_account_switch = Gtk.Switch()
+		self.connect_to_account_switch.connect('notify::active', lambda switch, pspec: self.connect_to_account_box.set_sensitive(switch.get_active()))
+		hbox.pack_end(self.connect_to_account_switch, False, False, 0)
+		# Box
+		self.connect_to_account_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		self.connect_to_account_box.set_margin_left(10)
+		self.connect_to_account_box.set_sensitive(False)
+		self.bot_widgets.add(self.connect_to_account_box)
+		# Account
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.add(Gtk.Label('Account'))
+		self.connect_to_account_box.add(hbox)
+		# Combo
+		accounts_list = accounts.load()
+		self.accounts_combo = TextValueComboBox(accounts_list, model=Gtk.ListStore(str, int), text_key='login', value_key='id', sort=True)
+		self.accounts_combo.set_size_request(120, -1)
+		hbox.pack_end(self.accounts_combo, False, False, 0)
+		# Disconnect after
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.add(Gtk.Label('Disconnect after'))
+		self.connect_to_account_box.add(hbox)
+		# Switch
+		self.disconnect_after_switch = Gtk.Switch()
+		hbox.pack_end(self.disconnect_after_switch, False, False, 0)
 		## MiniMap
 		self.minimap_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		bot_page.add(self.minimap_box)
@@ -555,12 +572,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox.append(label, widget)
 		# Account
 		widget.add(Gtk.Label('<b>Account</b>', xalign=0, use_markup=True))
-		self.accounts_combo = TextValueComboBox(accounts.load(), text_key='login', value_key='id', sort=True)
-		self.accounts_combo.set_margin_left(10)
-		widget.add(self.accounts_combo)
+		self.connect_accounts_combo = TextValueComboBox(accounts_list, model=Gtk.ListStore(str, int), text_key='login', value_key='id', sort=True)
+		self.connect_accounts_combo.set_margin_left(10)
+		widget.add(self.connect_accounts_combo)
 		# Add
 		add_button = Gtk.Button('Add')
-		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Connect(account_id=%s)' % self.accounts_combo.get_active_value()))
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Connect(account_id=%s)' % self.connect_accounts_combo.get_active_value()))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.add(button_box)
@@ -782,18 +799,19 @@ class BotWindow(Gtk.ApplicationWindow):
 			if self.bot_thread is None or not self.bot_thread.isAlive():
 				# get thread parameters
 				start_from_step = self.step_spin_button.get_value_as_int()
-				if self.repeat_switch.get_active():
-					repeat_path = self.repeat_spin_button.get_value_as_int()
-					connect_disconnect_once = self.connect_disconnect_once_switch.get_active()
+				repeat_path = self.repeat_spin_button.get_value_as_int() if self.repeat_switch.get_active() else 1
+				if self.connect_to_account_switch.get_active():
+					account_id = self.accounts_combo.get_active_value()
+					disconnect_after = self.disconnect_after_switch.get_active()
 				else:
-					repeat_path = 1
-					connect_disconnect_once = False
+					account_id = None
+					disconnect_after = False
 				# run thread
-				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path, connect_disconnect_once)
+				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path, account_id, disconnect_after)
 				self.bot_thread.start()
 				self.settings_button.set_sensitive(False)
 				self.bot_widgets.set_sensitive(False)
-			# resume bot thread if already started
+			# resume bot thread if paused
 			else:
 				self.bot_thread.resume(game_location)
 			# enable/disable buttons

@@ -43,6 +43,7 @@ class GameThread(PausableThread):
 			self.pause_event.wait()
 			if self.suspend: return
 			# (3) hit enter
+			self.debug('Hit Play')
 			self.press_key(data.KeyboardShortcuts['Enter'])
 			# wait for screen to change
 			self.wait_for_screen_change()
@@ -52,8 +53,8 @@ class GameThread(PausableThread):
 			# (4) hit enter again
 			self.debug('Hit Play')
 			self.press_key(data.KeyboardShortcuts['Enter'])
-			# wait for game load to start
-			self.debug('Waiting for game load to start')
+			# wait for load to start
+			self.debug('Waiting for load to start')
 			self.sleep(2)
 			# check for pause or suspend
 			self.pause_event.wait()
@@ -64,7 +65,7 @@ class GameThread(PausableThread):
 			self.await()
 			self.log('Account not found', LogType.Error)
 
-	def disconnect(self, exit):
+	def disconnect(self, exit=False):
 		# (1) press 'Esc' key
 		self.press_key(data.KeyboardShortcuts['Esc'])
 		# wait for menu to show
