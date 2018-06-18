@@ -445,7 +445,7 @@ class AccountsDialog(CustomDialog):
 		### Accounts
 		vbox.add(Gtk.Label('<b>Accounts</b>', xalign=0, use_markup=True))
 		## TreeView
-		model = Gtk.ListStore(str, str, str)
+		model = Gtk.ListStore(int, str, str)
 		text_renderer = Gtk.CellRendererText()
 		columns = [
 			Gtk.TreeViewColumn('ID', text_renderer, text=0),
@@ -453,14 +453,13 @@ class AccountsDialog(CustomDialog):
 			Gtk.TreeViewColumn('Password', text_renderer, text=2)
 		]
 		self.tree_view = CustomTreeView(model, columns)
-		accounts_list = accounts.load()
-		for id in sorted(accounts_list):
-			login = accounts_list[id]['login']
-			pwd = '*' * len(accounts_list[id]['pwd'])
-			self.tree_view.append_row([id, login, pwd], select=False)
 		self.tree_view.set_size_request(400, 160)
 		self.tree_view.connect('selection-changed', self.on_tree_view_selection_changed)
 		vbox.pack_start(self.tree_view, True, True, 0)
+		# fill treeview
+		for account in sorted(accounts.load()):
+			pwd = '*' * len(account['pwd'])
+			self.tree_view.append_row([account['id'], account['login'], pwd], select=False)
 		## ActionBar
 		actionbar = Gtk.ActionBar()
 		self.tree_view.vbox.pack_end(actionbar, False, False, 0)

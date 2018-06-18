@@ -1,6 +1,8 @@
 # Dindo Bot
 # Copyright (c) 2018 - 2019 AXeL
 
+from .convert import rgb2hex
+
 # Replace given string index by substitute
 def replace_at_index(string, index, substitute, length=1):
 	return string[:index] + substitute + string[index+length:]
@@ -106,13 +108,20 @@ def parse_key(key):
 	return result
 
 # Parse color string, e.: '(255, 255, 255)'
-def parse_color(color):
-	if string.startswith('(') and string.endswith(')'):
-		rgb = color[1:-1].split(',') # [1:-1] will remove the first & last parentheses '(' ')'
-	else:
-		return None
-
-	if len(rgb) == 3:
-		return (int(rgb[0]), int(rgb[1]), int(rgb[2]))
+def parse_color(color, as_hex=False):
+	# check if RGB
+	if color.startswith('(') and color.endswith(')'):
+		values = color[1:-1].split(',') # [1:-1] will remove the first & last parentheses '(' ')'
+		if len(values) == 3:
+			rgb = (int(values[0]), int(values[1]), int(values[2]))
+			if as_hex:
+				return rgb2hex(rgb)
+			else:
+				return rgb
+		else:
+			return None
+	# check if HEX
+	elif color.startswith('#') and len(color) in (4, 7): # '#xxx' or '#xxxxxx'
+		return color
 	else:
 		return None

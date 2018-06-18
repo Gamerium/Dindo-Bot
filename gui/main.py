@@ -9,6 +9,7 @@ from lib import logger
 from lib import data
 from lib import parser
 from lib import settings
+from lib import accounts
 from lib import maps
 from threads.bot import BotThread
 from lib.shared import LogType, DebugLevel, __program_name__
@@ -421,8 +422,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Map
 		widget.add(Gtk.Label('<b>Map</b>', xalign=0, use_markup=True))
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
 		self.collect_map_combo = CustomComboBox(maps.load(), sort=True)
-		self.collect_map_combo.set_margin_left(10)
 		hbox.pack_start(self.collect_map_combo, True, True, 0)
 		reload_button = Gtk.Button()
 		reload_button.set_tooltip_text('Reload')
@@ -539,6 +540,31 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.add(button_box)
+		## Connect
+		image = Gtk.Image(stock=Gtk.STOCK_CONNECT, icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+		label = ImageLabel(image, 'Connect')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
+		# Account
+		widget.add(Gtk.Label('<b>Account</b>', xalign=0, use_markup=True))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		self.accounts_combo = TextValueComboBox(accounts.load(), text='login', value='id', sort=True)
+		hbox.pack_start(self.accounts_combo, True, True, 0)
+		reload_button = Gtk.Button()
+		reload_button.set_tooltip_text('Reload')
+		reload_button.set_image(Gtk.Image(stock=Gtk.STOCK_REFRESH))
+		reload_button.connect('clicked', lambda button: 
+			self.accounts_combo.append_list(accounts.load(), text='login', value='id', sort=True, clear=True)
+		)
+		hbox.add(reload_button)
+		widget.add(hbox)
+		# Add
+		add_button = Gtk.Button('Add')
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Connect(account_id=%s)' % self.accounts_combo.get_active_value()))
+		button_box = ButtonBox(centered=True)
+		button_box.add(add_button)
+		widget.add(button_box)
 		## Disconnect
 		image = Gtk.Image(stock=Gtk.STOCK_DISCONNECT, icon_size=Gtk.IconSize.LARGE_TOOLBAR)
 		label = ImageLabel(image, 'Disconnect')
@@ -640,7 +666,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# get pixel color
 		color = tools.get_pixel_color(x, y)
 		# append to listbox
-		text = '{"x": "%d", "y": "%d", "width": "%d", "height": "%d", "color": "%s"}' % (x, y, width, height, color)
+		text = '{"x": %d, "y": %d, "width": %d, "height": %d, "color": "%s"}' % (x, y, width, height, color)
 		self.map_data_listbox.append_text(text)
 		# append to view
 		point = maps.to_array(text)

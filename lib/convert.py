@@ -25,3 +25,14 @@ def image2pixbuf(image):
 	data = GLib.Bytes.new(data)
 	pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(data, GdkPixbuf.Colorspace.RGB, False, 8, w, h, w * 3)
 	return pixbuf
+
+# Convert RGB color to HEX format
+def rgb2hex(rgb):
+	hex = '#%02x%02x%02x' % rgb
+	return hex
+
+# Convert HEX color to RGB format
+def hex2rgb(hex):
+	hexcode = hex.lstrip('#')
+	rgb = tuple(map(ord, hexcode.decode('hex')))
+	return rgb

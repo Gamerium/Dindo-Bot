@@ -25,7 +25,7 @@ class DevToolsWidget(Gtk.Table):
 		left_box.pack_start(hbox, True, True, 0)
 		self.attach(left_box, 0, 2, 0, 1)
 		# TreeView
-		model = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str, str, str, str)
+		model = Gtk.ListStore(GdkPixbuf.Pixbuf, int, int, int, int, str)
 		text_renderer = Gtk.CellRendererText()
 		columns = [
 			Gtk.TreeViewColumn('', Gtk.CellRendererPixbuf(), pixbuf=0),
@@ -134,7 +134,7 @@ class DevToolsWidget(Gtk.Table):
 		pixbuf = convert.image2pixbuf(pixel)
 		color = pixel.getpixel((0, 0))
 		# append to treeview
-		self.tree_view.append_row([pixbuf, str(x), str(y), str(width), str(height), str(color)])
+		self.tree_view.append_row([pixbuf, x, y, width, height, str(color)])
 		self.select_pixel_button.set_sensitive(True)
 		self.parent.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 
@@ -148,7 +148,7 @@ class DevToolsWidget(Gtk.Table):
 	def on_simulate_click_button_clicked(self, button):
 		# get click coordinates
 		selected_row = self.tree_view.get_selected_row()
-		x, y, width, height = (int(selected_row[1]), int(selected_row[2]), int (selected_row[3]), int(selected_row[4]))
+		x, y, width, height = (selected_row[1], selected_row[2], selected_row[3], selected_row[4])
 		#print('x: %d, y: %d, width: %d, height: %d' % (x, y, width, height))
 		# adjust for game area
 		if self.parent.game_area:
@@ -180,7 +180,7 @@ class DevToolsWidget(Gtk.Table):
 			selected_row = self.tree_view.get_selected_row()
 			if selected_row:
 				x, y, width, height, color = (selected_row[1], selected_row[2], selected_row[3], selected_row[4], selected_row[5])
-				CopyTextDialog(self.parent, "{'x': %s, 'y': %s, 'width': %s, 'height': %s, 'color': %s}" % (x, y, width, height, color))
+				CopyTextDialog(self.parent, "{'x': %d, 'y': %d, 'width': %d, 'height': %d, 'color': %s}" % (x, y, width, height, color))
 
 	def on_tree_view_selection_changed(self, selection):
 		if self.tree_view.get_selected_row() is None:
