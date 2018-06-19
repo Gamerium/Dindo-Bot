@@ -40,10 +40,12 @@ def add(login, pwd):
 	# add account
 	accounts = load()
 	id = get_next_id(accounts)
+	position = id - 1
 	accounts.append({
 		'id':    id,
 		'login': login,
-		'pwd':   pwd
+		'pwd':   pwd,
+		'position': position
 	})
 	# save
 	save(accounts)
@@ -55,6 +57,7 @@ def remove(id):
 	for i, account in enumerate(accounts):
 		if account['id'] == id:
 			del accounts[i]
+			break
 	# save
 	save(accounts)
 	return accounts
@@ -66,23 +69,24 @@ def get(id):
 			return account
 	return None
 
-def swap(id, with_id):
+def swap(id1, id2):
 	accounts = load()
-	id_index, with_id_index = (None, None)
-	# get first & second accounts by id
+	account1_index, account2_index = (None, None)
+	# get accounts indexes by id
 	for i, account in enumerate(accounts):
-		if account['id'] == id and id_index is None:
-			id_index = i
-			if with_id_index is not None: # if we have the 2 indexes, break
+		if account['id'] == id1 and account1_index is None:
+			account1_index = i
+			if account2_index is not None: # if we have the 2 indexes, break
 				break
-		elif account['id'] == with_id and with_id_index is None:
-			with_id_index = i
-			if id_index is not None: # if we have the 2 indexes, break
+		elif account['id'] == id2 and account2_index is None:
+			account2_index = i
+			if account1_index is not None: # if we have the 2 indexes, break
 				break
-	# swap ids
-	if id_index is not None and with_id_index is not None:
-		accounts[id_index]['id'] = with_id
-		accounts[with_id_index]['id'] = id
+	# swap positions
+	if account1_index is not None and account2_index is not None:
+		account1_position = accounts[account1_index]['position']
+		accounts[account1_index]['position'] = accounts[account2_index]['position']
+		accounts[account2_index]['position'] = account1_position
 		# save
 		save(accounts)
 	return accounts

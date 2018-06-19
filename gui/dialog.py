@@ -461,7 +461,7 @@ class AccountsDialog(CustomDialog):
 		self.tree_view.connect('selection-changed', self.on_tree_view_selection_changed)
 		vbox.pack_start(self.tree_view, True, True, 0)
 		# fill treeview
-		for account in sorted(accounts.load(), key=lambda item: item['id']):
+		for account in sorted(accounts.load(), key=lambda item: item['position']):
 			pwd = '*' * len(account['pwd'])
 			self.tree_view.append_row([account['id'], account['login'], pwd], select=False)
 		## ActionBar
@@ -494,8 +494,8 @@ class AccountsDialog(CustomDialog):
 		self.error_box.hide()
 
 	def update_parent_window(self, accounts_list):
-		self.parent.accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort_key='id', clear=True)
-		self.parent.connect_accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort_key='id', clear=True)
+		self.parent.accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort_key='position', clear=True)
+		self.parent.connect_accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort_key='position', clear=True)
 
 	def on_add_button_clicked(self, button):
 		login = self.login_entry.get_text()
@@ -517,42 +517,38 @@ class AccountsDialog(CustomDialog):
 			# update parent window
 			self.update_parent_window(accounts_list)
 
-	def swap_accounts(self, index, with_index):
+	def swap_accounts(self, old_index, new_index):
 		# get accounts ids
-		account_id = self.tree_view.model[index][0]
-		with_account_id = self.tree_view.model[with_index][0]
-		# swap accounts ids
-		accounts_list = accounts.swap(account_id, with_account_id)
-		# apply to treeview
-		self.tree_view.model[index][0] = with_account_id
-		self.tree_view.model[with_index][0] = account_id
-		# unselect all (to trigger selection 'changed' event)
-		self.tree_view.selection.unselect_all()
-		# select row
-		self.tree_view.select_row(with_index)
+		account1_id = self.tree_view.model[old_index][0]
+		account2_id = self.tree_view.model[new_index][0]
+		# swap accounts positions
+		accounts_list = accounts.swap(account1_id, account2_id)
 		# update parent window
 		self.update_parent_window(accounts_list)
+		# set move buttons sensitivity
+		self.set_move_buttons_sensitivity(new_index)
 
 	def on_move_up_button_clicked(self, button):
-		selections, model = self.tree_view.selection.get_selected_rows()
-		for row in selections:
-			if self.tree_view.selection.iter_is_selected(row.iter) and row.previous != None:
+		model, tree_iter = self.tree_view.selection.get_selected()
+		if tree_iter:
+			previous_iter = model.iter_previous(tree_iter)
+			if previous_iter is not None:
 				# get row index
-				index = self.tree_view.get_row_index(row.iter)
+				index = self.tree_view.get_row_index(tree_iter)
 				# move up
-				self.tree_view.model.move_before(row.iter, row.previous.iter)
+				model.move_before(tree_iter, previous_iter)
 				# swap accounts
 				self.swap_accounts(index, index - 1)
 
 	def on_move_down_button_clicked(self, button):
-		selections, model = self.tree_view.selection.get_selected_rows()
-		for i in range(len(selections)-1, -1, -1):
-			row = selections[i]
-			if self.tree_view.selection.iter_is_selected(row.iter) and row.next != None:
+		model, tree_iter = self.tree_view.selection.get_selected()
+		if tree_iter:
+			next_iter = model.iter_next(tree_iter)
+			if next_iter is not None:
 				# get row index
-				index = self.tree_view.get_row_index(row.iter)
+				index = self.tree_view.get_row_index(tree_iter)
 				# move down
-				self.tree_view.model.move_after(row.iter, row.next.iter)
+				model.move_after(tree_iter, next_iter)
 				# swap accounts
 				self.swap_accounts(index, index + 1)
 
@@ -575,6 +571,19 @@ class AccountsDialog(CustomDialog):
 			button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='channel-secure-symbolic')))
 			button.set_tooltip_text('Hide password')
 
+	def set_move_buttons_sensitivity(self, index):
+		# Move up
+		if index <= 0:
+			self.move_up_button.set_sensitive(False)
+		elif not self.move_up_button.get_sensitive():
+			self.move_up_button.set_sensitive(True)
+		# Move down
+		rows_count = self.tree_view.get_rows_count()
+		if index >= rows_count - 1:
+			self.move_down_button.set_sensitive(False)
+		elif not self.move_down_button.get_sensitive():
+			self.move_down_button.set_sensitive(True)
+
 	def on_tree_view_selection_changed(self, selection):
 		model, tree_iter = selection.get_selected()
 		if tree_iter is None:
@@ -582,18 +591,9 @@ class AccountsDialog(CustomDialog):
 			self.move_down_button.set_sensitive(False)
 			self.delete_button.set_sensitive(False)
 		else:
+			# Move buttons
 			index = self.tree_view.get_row_index(tree_iter)
-			rows_count = self.tree_view.get_rows_count()
-			# Move up
-			if index <= 0:
-				self.move_up_button.set_sensitive(False)
-			elif not self.move_up_button.get_sensitive():
-				self.move_up_button.set_sensitive(True)
-			# Move down
-			if index >= rows_count - 1:
-				self.move_down_button.set_sensitive(False)
-			elif not self.move_down_button.get_sensitive():
-				self.move_down_button.set_sensitive(True)
-			# Delete
+			self.set_move_buttons_sensitivity(index)
+			# Delete button
 			if not self.delete_button.get_sensitive():
 				self.delete_button.set_sensitive(True)
