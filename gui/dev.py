@@ -56,7 +56,7 @@ class DevToolsWidget(Gtk.Table):
 		buttons_box.add(self.simulate_click_button)
 		# Delete
 		self.delete_pixel_button = Gtk.Button()
-		self.delete_pixel_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
+		self.delete_pixel_button.set_image(Gtk.Image(icon_name='edit-delete-symbolic'))
 		self.delete_pixel_button.set_tooltip_text('Delete')
 		self.delete_pixel_button.set_sensitive(False)
 		self.delete_pixel_button.connect('clicked', self.on_delete_pixel_button_clicked)

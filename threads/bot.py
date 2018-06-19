@@ -43,13 +43,12 @@ class BotThread(JobThread):
 			if not self.suspend:
 				self.log('Bot path completed', LogType.Success)
 
-		# disconnect account
-		if not self.suspend and account_connected and self.disconnect_after:
-			self.debug('Disconnect account')
-			self.disconnect()
-
-		# reset bot window buttons
 		if not self.suspend:
+			# disconnect account
+			if account_connected and self.disconnect_after:
+				self.debug('Disconnect account')
+				self.disconnect()
+			# reset bot window buttons
 			self.reset()
 
 		self.debug('Bot thread ended, elapsed time: ' + self.get_elapsed_time(), DebugLevel.Low)

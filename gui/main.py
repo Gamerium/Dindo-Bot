@@ -57,6 +57,29 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.minimap_box.hide()
 
 	def on_key_press(self, widget, event):
+		# get keyname
+		keyname = Gdk.keyval_name(event.keyval)
+		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
+		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
+		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
+		# handle shortcuts
+		for action in self.settings['Shortcuts']:
+			value = self.settings['Shortcuts'][action]
+			if value is not None:
+				keys = value.split('+')
+				if (len(keys) == 1 and keys[0] == keyname) or (len(keys) == 2 and ((keys[0] == 'Ctrl' and ctrl) or (keys[0] == 'Alt' and alt) or (keys[0] == 'Shift' and shift)) and keys[1] == keyname):
+					# call actions
+					if action == 'Start':
+						self.start_button.emit('clicked')
+					elif action == 'Pause':
+						self.pause_button.emit('clicked')
+					elif action == 'Stop':
+						self.stop_button.emit('clicked')
+					elif action == 'Minimize':
+						self.iconify()
+					# stop event propagation
+					return True
+		# focus game
 		if self.bot_thread and self.bot_thread.isAlive():
 			self.focus_game()
 
@@ -130,7 +153,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.set_titlebar(hb)
 		## Settings button
 		self.settings_button = Gtk.Button()
-		self.settings_button.set_image(Gtk.Image(stock=Gtk.STOCK_PROPERTIES))
+		self.settings_button.set_image(Gtk.Image(icon_name='document-properties'))
 		self.settings_button.connect('clicked', lambda button: self.popover.show_all())
 		hb.pack_end(self.settings_button)
 		self.popover = Gtk.Popover(relative_to=self.settings_button, position=Gtk.PositionType.BOTTOM)
@@ -140,32 +163,32 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Preferences button
 		preferences_button = Gtk.ModelButton(' Preferences')
 		preferences_button.set_alignment(0, 0.5)
-		preferences_button.set_image(Gtk.Image(stock=Gtk.STOCK_PREFERENCES))
+		preferences_button.set_image(Gtk.Image(icon_name='preferences-desktop'))
 		preferences_button.connect('clicked', self.on_preferences_button_clicked)
 		box.add(preferences_button)
 		# Accounts button
 		accounts_button = Gtk.ModelButton(' Accounts')
 		accounts_button.set_alignment(0, 0.5)
-		accounts_button.set_image(Gtk.Image(stock=Gtk.STOCK_DIALOG_AUTHENTICATION))
+		accounts_button.set_image(Gtk.Image(icon_name='dialog-password'))
 		accounts_button.connect('clicked', self.on_accounts_button_clicked)
 		box.add(accounts_button)
 		# Take game screenshot button
 		self.take_screenshot_button = Gtk.ModelButton(' Take game screenshot')
 		self.take_screenshot_button.set_alignment(0, 0.5)
-		self.take_screenshot_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_RECORD))
+		self.take_screenshot_button.set_image(Gtk.Image(icon_name='media-record'))
 		self.take_screenshot_button.set_sensitive(False)
 		self.take_screenshot_button.connect('clicked', self.on_take_screenshot_button_clicked)
 		box.add(self.take_screenshot_button)
 		# Open log file button
 		open_log_button = Gtk.ModelButton(' Open log file')
 		open_log_button.set_alignment(0, 0.5)
-		open_log_button.set_image(Gtk.Image(stock=Gtk.STOCK_FILE))
+		open_log_button.set_image(Gtk.Image(icon_name='text-x-generic'))
 		open_log_button.connect('clicked', lambda button: tools.open_file_in_editor(logger.get_filename()))
 		box.add(open_log_button)
 		# About button
 		about_button = Gtk.ModelButton(' About')
 		about_button.set_alignment(0, 0.5)
-		about_button.set_image(Gtk.Image(stock=Gtk.STOCK_ABOUT))
+		about_button.set_image(Gtk.Image(icon_name='help-about'))
 		about_button.connect('clicked', self.on_about_button_clicked)
 		box.add(about_button)
 
@@ -233,20 +256,20 @@ class BotWindow(Gtk.ApplicationWindow):
 		game_window_box.pack_start(self.game_window_combo, True, True, 0)
 		# Refresh
 		self.refresh_button = Gtk.Button()
-		self.refresh_button.set_image(Gtk.Image(stock=Gtk.STOCK_REFRESH))
+		self.refresh_button.set_image(Gtk.Image(icon_name='view-refresh'))
 		self.refresh_button.set_tooltip_text('Refresh')
 		self.refresh_button.connect('clicked', self.on_refresh_button_clicked)
 		game_window_box.add(self.refresh_button)
 		# Unplug
 		self.unplug_button = Gtk.Button()
-		self.unplug_button.set_image(Gtk.Image(stock=Gtk.STOCK_LEAVE_FULLSCREEN))
+		self.unplug_button.set_image(Gtk.Image(icon_name='view-restore'))
 		self.unplug_button.set_tooltip_text('Unplug')
 		self.unplug_button.connect('clicked', self.on_unplug_button_clicked)
 		game_window_box.add(self.unplug_button)
 		# Plug
 		if '--enable-dev-env' in self.args:
 			self.plug_button = Gtk.Button()
-			self.plug_button.set_image(Gtk.Image(stock=Gtk.STOCK_FIND))
+			self.plug_button.set_image(Gtk.Image(icon_name='window-new-symbolic'))
 			self.plug_button.set_tooltip_text('Plug')
 			self.plug_button.connect('clicked', self.on_plug_button_clicked)
 			game_window_box.add(self.plug_button)
@@ -323,19 +346,19 @@ class BotWindow(Gtk.ApplicationWindow):
 		bot_page.pack_end(button_box, False, False, 0)
 		self.start_button = Gtk.Button()
 		self.start_button.set_tooltip_text('Start')
-		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY))
+		self.start_button.set_image(Gtk.Image(icon_name='media-playback-start'))
 		self.start_button.connect('clicked', self.on_start_button_clicked)
 		button_box.add(self.start_button)
 		## Pause
 		self.pause_button = Gtk.Button()
-		self.pause_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PAUSE))
+		self.pause_button.set_image(Gtk.Image(icon_name='media-playback-pause'))
 		self.pause_button.set_tooltip_text('Pause')
 		self.pause_button.set_sensitive(False)
 		self.pause_button.connect('clicked', self.on_pause_button_clicked)
 		button_box.add(self.pause_button)
 		## Stop
 		self.stop_button = Gtk.Button()
-		self.stop_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_STOP))
+		self.stop_button.set_image(Gtk.Image(icon_name='media-playback-stop'))
 		self.stop_button.set_tooltip_text('Stop')
 		self.stop_button.set_sensitive(False)
 		self.stop_button.connect('clicked', self.on_stop_button_clicked)
@@ -350,24 +373,24 @@ class BotWindow(Gtk.ApplicationWindow):
 		path_page.add(button_box)
 		# Up
 		up_button = Gtk.Button()
-		up_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_UP))
+		up_button.set_image(Gtk.Image(icon_name='go-up'))
 		up_button.connect('clicked', lambda button: self.path_listbox.append_text('Move(UP)'))
 		button_box.add(up_button)
 		# Left
 		left_button = Gtk.Button()
-		left_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_BACK))
+		left_button.set_image(Gtk.Image(icon_name='go-previous'))
 		left_button.connect('clicked', lambda button: self.path_listbox.append_text('Move(LEFT)'))
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=40)
 		hbox.add(left_button)
 		button_box.add(hbox)
 		# Right
 		right_button = Gtk.Button()
-		right_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_FORWARD))
+		right_button.set_image(Gtk.Image(icon_name='go-next'))
 		right_button.connect('clicked', lambda buton: self.path_listbox.append_text('Move(RIGHT)'))
 		hbox.add(right_button)
 		# Down
 		down_button = Gtk.Button()
-		down_button.set_image(Gtk.Image(stock=Gtk.STOCK_GO_DOWN))
+		down_button.set_image(Gtk.Image(icon_name='go-down'))
 		down_button.connect('clicked', lambda button: self.path_listbox.append_text('Move(DOWN)'))
 		button_box.add(down_button)
 		## Action
@@ -566,7 +589,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box.add(add_button)
 		widget.add(button_box)
 		## Connect
-		image = Gtk.Image(stock=Gtk.STOCK_CONNECT, icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+		image = Gtk.Image(icon_name='network-wired', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
 		label = ImageLabel(image, 'Connect')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack_listbox.append(label, widget)
@@ -582,7 +605,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box.add(add_button)
 		widget.add(button_box)
 		## Disconnect
-		image = Gtk.Image(stock=Gtk.STOCK_DISCONNECT, icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+		image = Gtk.Image(icon_name='network-idle', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
 		label = ImageLabel(image, 'Disconnect')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack_listbox.append(label, widget)
@@ -606,14 +629,14 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Load
 		load_path_button = Gtk.Button()
 		load_path_button.set_tooltip_text('Load')
-		load_path_button.set_image(Gtk.Image(stock=Gtk.STOCK_OPEN))
+		load_path_button.set_image(Gtk.Image(icon_name='document-open'))
 		load_path_button.connect('clicked', self.on_load_path_button_clicked)
 		self.path_listbox.add_button(load_path_button)
 		# Save
 		self.save_path_button = Gtk.Button()
 		self.save_path_button.set_tooltip_text('Save')
 		self.save_path_button.set_sensitive(False)
-		self.save_path_button.set_image(Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
+		self.save_path_button.set_image(Gtk.Image(icon_name='document-save-as'))
 		self.save_path_button.connect('clicked', self.on_save_path_button_clicked)
 		self.path_listbox.add_button(self.save_path_button)
 		self.path_listbox.on_add(self.on_path_listbox_add)
@@ -637,29 +660,28 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.select_resource_button.connect('clicked', self.on_select_resource_button_clicked)
 		self.map_data_listbox.add_button(self.select_resource_button)
 		# Edit
-		edit_map_button = MenuButton()
+		edit_map_button = MenuButton(icon_name='document-edit-symbolic')
 		edit_map_button.set_tooltip_text('Edit')
-		edit_map_button.set_image(Gtk.Image(stock=Gtk.STOCK_EDIT))
 		self.map_data_listbox.add_button(edit_map_button)
 		button_box = ButtonBox(linked=True)
 		edit_map_button.add(button_box)
 		# Load
 		load_map_button = Gtk.Button()
 		load_map_button.set_tooltip_text('Load')
-		load_map_button.set_image(Gtk.Image(stock=Gtk.STOCK_OPEN))
+		load_map_button.set_image(Gtk.Image(icon_name='document-open'))
 		load_map_button.connect('clicked', self.on_load_map_button_clicked)
 		button_box.add(load_map_button)
 		# Delete
 		delete_map_button = Gtk.Button()
 		delete_map_button.set_tooltip_text('Delete')
-		delete_map_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
+		delete_map_button.set_image(Gtk.Image(icon_name='edit-delete'))
 		delete_map_button.connect('clicked', self.on_delete_map_button_clicked)
 		button_box.add(delete_map_button)
 		# Save
 		self.save_map_button = Gtk.Button()
 		self.save_map_button.set_tooltip_text('Save')
 		self.save_map_button.set_sensitive(False)
-		self.save_map_button.set_image(Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
+		self.save_map_button.set_image(Gtk.Image(icon_name='document-save-as'))
 		self.save_map_button.connect('clicked', self.on_save_map_button_clicked)
 		self.map_data_listbox.add_button(self.save_map_button)
 		self.map_data_listbox.on_add(self.on_map_data_listbox_add)
@@ -825,11 +847,11 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.start_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif')))
 		else:
 			self.log(tools.print_internet_state(state), LogType.Error)
-			self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_NETWORK))
+			self.start_button.set_image(Gtk.Image(icon_name='network-error'))
 
 	def set_buttons_to_paused(self):
 		self.start_button.set_tooltip_text('Resume')
-		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY))
+		self.start_button.set_image(Gtk.Image(icon_name='media-seek-forward'))
 		self.start_button.set_sensitive(True)
 		self.pause_button.set_sensitive(False)
 
@@ -843,7 +865,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def reset_buttons(self):
 		self.start_button.set_tooltip_text('Start')
-		self.start_button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY))
+		self.start_button.set_image(Gtk.Image(icon_name='media-playback-start'))
 		self.start_button.set_sensitive(True)
 		self.stop_button.set_sensitive(False)
 		self.pause_button.set_sensitive(False)
@@ -851,8 +873,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.bot_widgets.set_sensitive(True)
 
 	def on_stop_button_clicked(self, button):
-		self.bot_thread.stop()
-		self.reset_buttons()
+		if self.bot_thread and self.bot_thread.isAlive():
+			self.reset_buttons()
+			self.bot_thread.stop()
 
 	def on_bot_path_changed(self, filechooserbutton):
 		self.bot_path = filechooserbutton.get_filename()

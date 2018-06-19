@@ -3,7 +3,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk, Gio, Pango
+from gi.repository import Gtk, Gdk, Pango
 from lib.tools import fit_position_to_destination
 from lib.parser import parse_color
 import math
@@ -183,25 +183,25 @@ class CustomListBox(Gtk.Frame):
 			# Move up
 			self.move_up_button = Gtk.Button()
 			self.move_up_button.set_tooltip_text('Move up')
-			self.move_up_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-up-symbolic')))
+			self.move_up_button.set_image(Gtk.Image(icon_name='go-up-symbolic'))
 			self.move_up_button.connect('clicked', self.on_move_up_button_clicked)
 			default_buttons_box.add(self.move_up_button)
 			# Move down
 			self.move_down_button = Gtk.Button()
 			self.move_down_button.set_tooltip_text('Move down')
-			self.move_down_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-down-symbolic')))
+			self.move_down_button.set_image(Gtk.Image(icon_name='go-down-symbolic'))
 			self.move_down_button.connect('clicked', self.on_move_down_button_clicked)
 			default_buttons_box.add(self.move_down_button)
 		# Delete
 		self.delete_button = Gtk.Button()
 		self.delete_button.set_tooltip_text('Delete')
-		self.delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
+		self.delete_button.set_image(Gtk.Image(icon_name='edit-delete-symbolic'))
 		self.delete_button.connect('clicked', self.on_delete_button_clicked)
 		default_buttons_box.add(self.delete_button)
 		# Clear all
 		self.clear_all_button = Gtk.Button()
 		self.clear_all_button.set_tooltip_text('Clear all')
-		self.clear_all_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='edit-clear-all-symbolic')))
+		self.clear_all_button.set_image(Gtk.Image(icon_name='edit-clear-all-symbolic'))
 		self.clear_all_button.connect('clicked', self.on_clear_all_button_clicked)
 		default_buttons_box.add(self.clear_all_button)
 		# Initialise default buttons status
@@ -450,12 +450,12 @@ class MessageBox(Gtk.Box):
 			# yes
 			self.yes_button = Gtk.Button()
 			self.yes_button.set_tooltip_text('Yes')
-			self.yes_button.set_image(Gtk.Image(stock=Gtk.STOCK_YES))
+			self.yes_button.set_image(Gtk.Image(icon_name='emblem-ok-symbolic'))
 			self.button_box.add(self.yes_button)
 			# no
 			self.no_button = Gtk.Button()
 			self.no_button.set_tooltip_text('No')
-			self.no_button.set_image(Gtk.Image(stock=Gtk.STOCK_NO))
+			self.no_button.set_image(Gtk.Image(icon_name='window-close-symbolic'))
 			self.button_box.add(self.no_button)
 
 	def print_message(self, text, is_question=False):
@@ -469,8 +469,9 @@ class MessageBox(Gtk.Box):
 
 class MenuButton(Gtk.Button):
 
-	def __init__(self, text=None, position=Gtk.PositionType.TOP, padding=2):
+	def __init__(self, text=None, position=Gtk.PositionType.BOTTOM, icon_name='pan-down-symbolic', padding=2):
 		Gtk.Button.__init__(self, text)
+		self.set_image(Gtk.Image(icon_name=icon_name))
 		# popover
 		self.popover = Gtk.Popover(relative_to=self, position=position)
 		self.popover.set_border_width(padding)

@@ -14,6 +14,12 @@ def load_defaults():
 			'Enabled': True,
 			'Level':   DebugLevel.Low
 		},
+		'Shortcuts': {
+			'Start':    None,
+			'Pause':    None,
+			'Stop':     None,
+			'Minimize': None
+		},
 		'SaveDragodindesImages': False,
 		'KeepGameOpen':          False,
 		'EnableMiniMap':         False
@@ -28,8 +34,14 @@ def load():
 		settings = json.loads(text)
 		# check if all settings are there
 		for key in defaults:
+			# check keys
 			if not key in settings:
 				settings[key] = defaults[key]
+			# check subkeys
+			elif isinstance(defaults[key], dict):
+				for subkey in defaults[key]:
+					if not subkey in settings[key]:
+						settings[key][subkey] = defaults[key][subkey]
 		return settings
 	else:
 		return defaults

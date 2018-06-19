@@ -1,9 +1,10 @@
+# coding=utf-8
 # Dindo Bot
 # Copyright (c) 2018 - 2019 AXeL
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gio, GdkPixbuf
+from gi.repository import Gtk, Gdk, GdkPixbuf
 from lib import tools
 from lib import shared
 from lib import settings
@@ -357,6 +358,23 @@ class PreferencesDialog(CustomDialog):
 		keep_game_on_unplug_check.connect('clicked', 
 			lambda check: settings.update_and_save(self.parent.settings, 'KeepGameOpen', check.get_active()))
 		box.add(keep_game_on_unplug_check)
+		## Shortcuts
+		box.add(Gtk.Label('<b>Shortcuts</b>', xalign=0, use_markup=True))
+		# TreeView
+		model = Gtk.ListStore(str, str)
+		text_renderer = Gtk.CellRendererText()
+		columns = [
+			Gtk.TreeViewColumn('Action', text_renderer, text=0),
+			Gtk.TreeViewColumn('Shortcut', text_renderer, text=1)
+		]
+		self.shortcuts_tree_view = CustomTreeView(model, columns)
+		self.shortcuts_tree_view.set_size_request(-1, 100)
+		self.shortcuts_tree_view.connect('button-press-event', self.on_shortcuts_tree_view_double_clicked)
+		# fill treeview
+		for action in sorted(self.parent.settings['Shortcuts']):
+			shortcut = self.parent.settings['Shortcuts'][action]
+			self.shortcuts_tree_view.append_row([action, shortcut], select=False)
+		box.add(self.shortcuts_tree_view)
 		### Bot
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack.add_titled(box, 'bot', 'Bot')
@@ -382,6 +400,13 @@ class PreferencesDialog(CustomDialog):
 		box.add(save_dragodindes_images_check)
 		self.show_all()
 
+	def on_shortcuts_tree_view_double_clicked(self, widget, event):
+		if event.type == Gdk.EventType.DOUBLE_BUTTON_PRESS:
+			selected_row = self.shortcuts_tree_view.get_selected_row()
+			if selected_row:
+				dialog = ShortcutsDialog(self, selected_row[0])
+				dialog.run()
+
 	def on_minimap_switch_activated(self, switch, pspec):
 		value = switch.get_active()
 		if value:
@@ -398,6 +423,98 @@ class PreferencesDialog(CustomDialog):
 		else:
 			self.parent.debug_page.hide()
 		settings.update_and_save(self.parent.settings, key='Debug', subkey='Enabled', value=value)
+
+class ShortcutsDialog(CustomDialog):
+
+	def __init__(self, transient_for, action_name):
+		title = '%s Shortcut' % action_name
+		CustomDialog.__init__(self, transient_for=transient_for, title=title, destroy_on_response=False)
+		self.parent = transient_for
+		self.action_name = action_name
+		self.connect('key-press-event', self.on_key_press)
+		self.connect('response', self.on_response)
+		# Action
+		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+		content_area = self.get_content_area()
+		content_area.add(vbox)
+		action_label = Gtk.Label(xalign=0)
+		action_label.set_line_wrap(True)
+		action_label.set_max_width_chars(40)
+		action_label.set_markup('Press the keys on the keyboard that you want to use to trigger the « <b>%s</b> » action' % action_name)
+		vbox.add(action_label)
+		# Shortcut
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+		vbox.add(hbox)
+		hbox.add(Gtk.Label('Shortcut:', xalign=0))
+		self.shortcut_label = Gtk.Label()
+		shortcut = self.parent.parent.settings['Shortcuts'][action_name]
+		if shortcut is not None:
+			self.shortcut_label.set_markup('<b>%s</b>' % shortcut)
+		hbox.add(self.shortcut_label)
+		# Error box
+		self.error_box = MessageBox(color='red')
+		vbox.add(self.error_box)
+		# Clear
+		self.action_area.set_margin_top(10)
+		clear_button = Gtk.Button('Clear')
+		clear_button.set_image(Gtk.Image(icon_name='edit-clear'))
+		self.add_action_widget(clear_button, Gtk.ResponseType.CANCEL)
+		# Save
+		save_button = Gtk.Button('Save')
+		save_button.set_image(Gtk.Image(icon_name='document-save'))
+		self.add_action_widget(save_button, Gtk.ResponseType.OK)
+		self.show_all()
+		self.error_box.hide()
+
+	def on_key_press(self, widget, event):
+		# get keyname
+		keyname = Gdk.keyval_name(event.keyval)
+		# check combinations
+		if event.state & Gdk.ModifierType.CONTROL_MASK:
+			shortcut = 'Ctrl+%s' % keyname
+		elif event.state & Gdk.ModifierType.MOD1_MASK:
+			shortcut = 'Alt+%s' % keyname
+		elif event.state & Gdk.ModifierType.SHIFT_MASK:
+			shortcut = 'Shift+%s' % keyname
+		else:
+			shortcut = keyname
+		# show shortcut
+		self.shortcut_label.set_markup('<b>%s</b>' % shortcut)
+		# hide error box
+		self.error_box.hide()
+		# stop event propagation
+		return True
+
+	def on_response(self, dialog, response):
+		# Save
+		if response == Gtk.ResponseType.OK:
+			# get shortcut
+			shortcut = self.shortcut_label.get_text()
+			if shortcut:
+				# check if duplicated
+				for action in self.parent.parent.settings['Shortcuts']:
+					value = self.parent.parent.settings['Shortcuts'][action]
+					if shortcut == value and action != self.action_name:
+						self.error_box.print_message('Duplicate shortcut, please choose another one')
+						return
+			else:
+				shortcut = None
+			# save shortcut
+			settings.update_and_save(self.parent.parent.settings, key='Shortcuts', subkey=self.action_name, value=shortcut)
+			# apply to treeview
+			for row in self.parent.shortcuts_tree_view.model:
+				if row[0] == self.action_name:
+					row[1] = shortcut
+					break
+		# Clear
+		elif response == Gtk.ResponseType.CANCEL:
+			# clear shortcut label
+			self.shortcut_label.set_text('')
+			# hide error box
+			self.error_box.hide()
+			return
+		# Close
+		self.destroy()
 
 class AccountsDialog(CustomDialog):
 
@@ -428,7 +545,7 @@ class AccountsDialog(CustomDialog):
 		# Show password
 		show_password_button = Gtk.Button()
 		show_password_button.set_tooltip_text('Show password')
-		show_password_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='channel-insecure-symbolic')))
+		show_password_button.set_image(Gtk.Image(icon_name='channel-insecure-symbolic'))
 		show_password_button.set_relief(Gtk.ReliefStyle.NONE)
 		show_password_button.connect('clicked', self.on_show_password_button_clicked)
 		hbox.add(show_password_button)
@@ -441,7 +558,7 @@ class AccountsDialog(CustomDialog):
 		new_vbox.add(self.error_box)
 		## Add
 		add_button = Gtk.Button('Add')
-		add_button.set_image(Gtk.Image(stock=Gtk.STOCK_ADD))
+		add_button.set_image(Gtk.Image(icon_name='list-add-symbolic'))
 		add_button.connect('clicked', self.on_add_button_clicked)
 		button_box = Gtk.ButtonBox(orientation=Gtk.Orientation.HORIZONTAL, layout_style=Gtk.ButtonBoxStyle.CENTER)
 		button_box.add(add_button)
@@ -472,21 +589,21 @@ class AccountsDialog(CustomDialog):
 		# Move up
 		self.move_up_button = Gtk.Button()
 		self.move_up_button.set_tooltip_text('Move up')
-		self.move_up_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-up-symbolic')))
+		self.move_up_button.set_image(Gtk.Image(icon_name='go-up-symbolic'))
 		self.move_up_button.set_sensitive(False)
 		self.move_up_button.connect('clicked', self.on_move_up_button_clicked)
 		buttons_box.add(self.move_up_button)
 		# Move down
 		self.move_down_button = Gtk.Button()
 		self.move_down_button.set_tooltip_text('Move down')
-		self.move_down_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-down-symbolic')))
+		self.move_down_button.set_image(Gtk.Image(icon_name='go-down-symbolic'))
 		self.move_down_button.set_sensitive(False)
 		self.move_down_button.connect('clicked', self.on_move_down_button_clicked)
 		buttons_box.add(self.move_down_button)
 		# Delete
 		self.delete_button = Gtk.Button()
 		self.delete_button.set_tooltip_text('Delete')
-		self.delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
+		self.delete_button.set_image(Gtk.Image(icon_name='edit-delete-symbolic'))
 		self.delete_button.set_sensitive(False)
 		self.delete_button.connect('clicked', self.on_delete_button_clicked)
 		buttons_box.add(self.delete_button)
@@ -564,11 +681,11 @@ class AccountsDialog(CustomDialog):
 	def on_show_password_button_clicked(self, button):
 		if self.password_entry.get_visibility():
 			self.password_entry.set_visibility(False)
-			button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='channel-insecure-symbolic')))
+			button.set_image(Gtk.Image(icon_name='channel-insecure-symbolic'))
 			button.set_tooltip_text('Show password')
 		else:
 			self.password_entry.set_visibility(True)
-			button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='channel-secure-symbolic')))
+			button.set_image(Gtk.Image(icon_name='channel-secure-symbolic'))
 			button.set_tooltip_text('Hide password')
 
 	def set_move_buttons_sensitivity(self, index):

@@ -42,9 +42,9 @@ def add(login, pwd):
 	id = get_next_id(accounts)
 	position = id - 1
 	accounts.append({
-		'id':    id,
-		'login': login,
-		'pwd':   pwd,
+		'id':       id,
+		'login':    login,
+		'pwd':      pwd,
 		'position': position
 	})
 	# save
