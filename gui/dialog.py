@@ -358,23 +358,6 @@ class PreferencesDialog(CustomDialog):
 		keep_game_on_unplug_check.connect('clicked', 
 			lambda check: settings.update_and_save(self.parent.settings, 'KeepGameOpen', check.get_active()))
 		box.add(keep_game_on_unplug_check)
-		## Shortcuts
-		box.add(Gtk.Label('<b>Shortcuts</b>', xalign=0, use_markup=True))
-		# TreeView
-		model = Gtk.ListStore(str, str)
-		text_renderer = Gtk.CellRendererText()
-		columns = [
-			Gtk.TreeViewColumn('Action', text_renderer, text=0),
-			Gtk.TreeViewColumn('Shortcut', text_renderer, text=1)
-		]
-		self.shortcuts_tree_view = CustomTreeView(model, columns)
-		self.shortcuts_tree_view.set_size_request(-1, 100)
-		self.shortcuts_tree_view.connect('button-press-event', self.on_shortcuts_tree_view_double_clicked)
-		# fill treeview
-		for action in sorted(self.parent.settings['Shortcuts']):
-			shortcut = self.parent.settings['Shortcuts'][action]
-			self.shortcuts_tree_view.append_row([action, shortcut], select=False)
-		box.add(self.shortcuts_tree_view)
 		### Bot
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack.add_titled(box, 'bot', 'Bot')
@@ -398,14 +381,51 @@ class PreferencesDialog(CustomDialog):
 		save_dragodindes_images_check.connect('clicked', 
 			lambda check: settings.update_and_save(self.parent.settings, 'SaveDragodindesImages', check.get_active()))
 		box.add(save_dragodindes_images_check)
+		### Shortcuts
+		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack.add_titled(box, 'shortcuts', 'Shortcuts')
+		## TreeView
+		model = Gtk.ListStore(str, str)
+		text_renderer = Gtk.CellRendererText()
+		columns = [
+			Gtk.TreeViewColumn('Action', text_renderer, text=0),
+			Gtk.TreeViewColumn('Shortcut', text_renderer, text=1)
+		]
+		self.shortcuts_tree_view = CustomTreeView(model, columns)
+		self.shortcuts_tree_view.connect('button-press-event', self.on_shortcuts_tree_view_double_clicked)
+		self.shortcuts_tree_view.connect('selection-changed', self.on_shortcuts_tree_view_selection_changed)
+		# fill treeview
+		for action in sorted(self.parent.settings['Shortcuts']):
+			shortcut = self.parent.settings['Shortcuts'][action]
+			self.shortcuts_tree_view.append_row([action, shortcut], select=False, scroll_to=False)
+		box.pack_start(self.shortcuts_tree_view, True, True, 0)
+		# ActionBar
+		actionbar = Gtk.ActionBar()
+		self.shortcuts_edit_button = Gtk.Button()
+		self.shortcuts_edit_button.set_tooltip_text('Edit')
+		self.shortcuts_edit_button.set_image(Gtk.Image(icon_name='document-edit-symbolic'))
+		self.shortcuts_edit_button.set_sensitive(False)
+		self.shortcuts_edit_button.connect('clicked', self.on_shortcuts_edit_button_clicked)
+		actionbar.add(self.shortcuts_edit_button)
+		self.shortcuts_tree_view.vbox.pack_end(actionbar, False, False, 0)
 		self.show_all()
+
+	def show_shortcuts_dialog(self):
+		selected_row = self.shortcuts_tree_view.get_selected_row()
+		if selected_row:
+			dialog = ShortcutsDialog(self, selected_row[0])
+			dialog.run()
+
+	def on_shortcuts_edit_button_clicked(self, button):
+		self.show_shortcuts_dialog()
 
 	def on_shortcuts_tree_view_double_clicked(self, widget, event):
 		if event.type == Gdk.EventType.DOUBLE_BUTTON_PRESS:
-			selected_row = self.shortcuts_tree_view.get_selected_row()
-			if selected_row:
-				dialog = ShortcutsDialog(self, selected_row[0])
-				dialog.run()
+			self.show_shortcuts_dialog()
+
+	def on_shortcuts_tree_view_selection_changed(self, selection):
+		if not self.shortcuts_edit_button.get_sensitive():
+			self.shortcuts_edit_button.set_sensitive(True)
 
 	def on_minimap_switch_activated(self, switch, pspec):
 		value = switch.get_active()

@@ -114,10 +114,12 @@ class CustomTreeView(Gtk.Frame):
 		else:
 			self.tree_view.connect(event_name, event_callback)
 
-	def append_row(self, row, select=True):
+	def append_row(self, row, select=True, scroll_to=True):
 		# append row
 		self.model.append(row)
-		self.perform_scroll = True
+		# scroll to row
+		if scroll_to:
+			self.perform_scroll = True
 		# select row
 		if select:
 			index = len(self.model) - 1

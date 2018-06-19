@@ -84,5 +84,5 @@ class PausableThread(TimerThread):
 		self.stop_timer()
 		self.suspend = True
 		self.pause_event.set() # ensure that thread is resumed (if ever paused)
-		self.join() # wait for thread to exit
+		#self.join() # wait for thread to exit
 		self.debug('Bot thread stopped', DebugLevel.Low)

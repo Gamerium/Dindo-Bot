@@ -851,7 +851,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def set_buttons_to_paused(self):
 		self.start_button.set_tooltip_text('Resume')
-		self.start_button.set_image(Gtk.Image(icon_name='media-seek-forward'))
+		self.start_button.set_image(Gtk.Image(icon_name='media-skip-forward'))
 		self.start_button.set_sensitive(True)
 		self.pause_button.set_sensitive(False)
 
@@ -874,8 +874,8 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_stop_button_clicked(self, button):
 		if self.bot_thread and self.bot_thread.isAlive():
-			self.reset_buttons()
 			self.bot_thread.stop()
+			self.reset_buttons()
 
 	def on_bot_path_changed(self, filechooserbutton):
 		self.bot_path = filechooserbutton.get_filename()
