@@ -65,3 +65,24 @@ def get(id):
 		if account['id'] == id:
 			return account
 	return None
+
+def swap(id, with_id):
+	accounts = load()
+	id_index, with_id_index = (None, None)
+	# get first & second accounts by id
+	for i, account in enumerate(accounts):
+		if account['id'] == id and id_index is None:
+			id_index = i
+			if with_id_index is not None: # if we have the 2 indexes, break
+				break
+		elif account['id'] == with_id and with_id_index is None:
+			with_id_index = i
+			if id_index is not None: # if we have the 2 indexes, break
+				break
+	# swap ids
+	if id_index is not None and with_id_index is not None:
+		accounts[id_index]['id'] = with_id
+		accounts[with_id_index]['id'] = id
+		# save
+		save(accounts)
+	return accounts

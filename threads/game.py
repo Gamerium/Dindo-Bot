@@ -17,14 +17,6 @@ class GameThread(PausableThread):
 	def __init__(self, parent, game_location):
 		PausableThread.__init__(self, parent, game_location)
 
-	def wait_for_screen_change(self, load_time=3):
-		# wait for screen to change
-		self.debug('Waiting for screen to change')
-		if self.monitor_game_screen(timeout=30, tolerance=2.5):
-			# wait for screen to load
-			self.debug('Waiting for screen to load')
-			self.sleep(load_time)
-
 	def connect(self, account_id):
 		account = accounts.get(account_id)
 		if account:
@@ -45,22 +37,23 @@ class GameThread(PausableThread):
 			# (3) hit enter
 			self.debug('Hit Play')
 			self.press_key(data.KeyboardShortcuts['Enter'])
-			# wait for screen to change
-			self.wait_for_screen_change()
-			# check for pause or suspend
-			self.pause_event.wait()
-			if self.suspend: return
-			# (4) hit enter again
-			self.debug('Hit Play')
-			self.press_key(data.KeyboardShortcuts['Enter'])
-			# wait for load to start
-			self.debug('Waiting for load to start')
-			self.sleep(2)
-			# check for pause or suspend
-			self.pause_event.wait()
-			if self.suspend: return
-			# wait for screen to change
-			self.wait_for_screen_change(load_time=5)
+			# wait for Play button to appear
+			self.debug('Waiting for Play button to appear')
+			if self.wait_for_box_appear(box_name='Play Button'):
+				# (4) hit enter again
+				self.debug('Hit Play')
+				self.press_key(data.KeyboardShortcuts['Enter'])
+				# wait for load to start
+				self.debug('Waiting for load to start')
+				self.sleep(2)
+				# check for pause or suspend
+				self.pause_event.wait()
+				if self.suspend: return
+				# wait for screen to change
+				self.wait_for_screen_change(load_time=5)
+			elif not self.suspend:
+				self.await()
+				self.log('Unable to connect to account', LogType.Error)
 		else:
 			self.await()
 			self.log('Account not found', LogType.Error)
@@ -83,6 +76,53 @@ class GameThread(PausableThread):
 		if self.suspend: return
 		# (3) confirm disconnect/exit
 		self.press_key(data.KeyboardShortcuts['Enter'])
+
+	def wait_for_screen_change(self, timeout=30, tolerance=2.5, load_time=3):
+		# wait for screen to change
+		self.debug('Waiting for screen to change')
+		if self.monitor_game_screen(timeout=timeout, tolerance=tolerance):
+			# wait for screen to load
+			self.debug('Waiting for screen to load')
+			self.sleep(load_time)
+
+	def wait_for_box_appear(self, box_name, box_color=None, timeout=30):
+		# set box color
+		if box_color is None:
+			if box_name in data.Colors:
+				box_color = data.Colors[box_name]
+			else:
+				return False
+		# wait for box to appear
+		elapsed_time = 0
+		while elapsed_time < timeout:
+			# wait 1 second
+			self.sleep(1)
+			# check for pause or suspend
+			self.pause_event.wait()
+			if self.suspend: return False
+			# check box color
+			location = self.get_box_location(box_name)
+			screen = tools.screen_game(location)
+			percentage = tools.get_color_percentage(screen, box_color)
+			has_appeared = percentage >= 99
+			debug_level = DebugLevel.Normal if has_appeared else DebugLevel.High
+			self.debug('{} has appeared: {}, percentage: {}%, timeout: {}'.format(box_name, has_appeared, percentage, timeout), debug_level)
+			if has_appeared:
+				return True
+			elapsed_time += 1
+		# if box did not appear before timeout
+		return False
+
+	def get_box_location(self, box_name):
+		if self.game_location:
+			game_x, game_y, game_width, game_height = self.game_location
+			x = data.Boxes[box_name]['x'] + game_x
+			y = data.Boxes[box_name]['y'] + game_y
+			width = data.Boxes[box_name]['width']
+			height = data.Boxes[box_name]['height']
+			return (x, y, width, height)
+		else:
+			return None
 
 	def click(self, coord, double=False):
 		# adjust coordinates

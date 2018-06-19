@@ -71,17 +71,6 @@ class FarmingThread(TravelThread):
 		else:
 			return None
 
-	def get_box_location(self, box_name):
-		if self.game_location:
-			game_x, game_y, game_width, game_height = self.game_location
-			x = data.Boxes[box_name]['x'] + game_x
-			y = data.Boxes[box_name]['y'] + game_y
-			width = data.Boxes[box_name]['width']
-			height = data.Boxes[box_name]['height']
-			return (x, y, width, height)
-		else:
-			return None
-
 	def move_dragodinde(self, action, dragodinde_image=None, dragodinde_location=None):
 		if dragodinde_location is None:
 			dragodinde_location = self.get_box_location('Dragodinde Card')

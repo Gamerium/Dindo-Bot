@@ -40,7 +40,7 @@ class CustomComboBox(Gtk.ComboBoxText):
 
 class TextValueComboBox(Gtk.ComboBox):
 
-	def __init__(self, data_list=[], model=None, text_key=None, value_key=None, sort=False):
+	def __init__(self, data_list=[], model=None, text_key=None, value_key=None, sort_key=None):
 		Gtk.ComboBox.__init__(self)
 		# set max chars width
 		renderer_text = Gtk.CellRendererText()
@@ -51,18 +51,18 @@ class TextValueComboBox(Gtk.ComboBox):
 			self.model = Gtk.ListStore(str, str)
 		else:
 			self.model = model
-		self.append_list(data_list, text_key, value_key, sort)
+		self.append_list(data_list, text_key, value_key, sort_key)
 		self.set_model(self.model)
 		self.pack_start(renderer_text, True)
 		self.add_attribute(renderer_text, 'text', 0)
 
-	def append_list(self, data_list, text_key, value_key, sort=False, clear=False):
+	def append_list(self, data_list, text_key, value_key, sort_key=None, clear=False):
 		# clear combobox
 		if clear:
 			self.remove_all()
 		# sort data
-		if sort:
-			data_list = sorted(data_list, key=lambda item: item[text_key])
+		if sort_key is not None:
+			data_list = sorted(data_list, key=lambda item: item[sort_key])
 		# append data
 		if text_key is not None and value_key is not None:
 			for data in data_list:
@@ -103,6 +103,7 @@ class CustomTreeView(Gtk.Frame):
 			self.tree_view.append_column(column)
 		self.tree_view.connect('size-allocate', self.scroll_tree_view)
 		self.selection = self.tree_view.get_selection()
+		self.selection.set_mode(Gtk.SelectionMode.SINGLE)
 
 	def is_empty(self):
 		return len(self.model) == 0
@@ -119,8 +120,18 @@ class CustomTreeView(Gtk.Frame):
 		self.perform_scroll = True
 		# select row
 		if select:
-			path = Gtk.TreePath(len(self.model) - 1)
-			self.selection.select_path(path)
+			index = len(self.model) - 1
+			self.select_row(index)
+
+	def select_row(self, index):
+		path = Gtk.TreePath(index)
+		self.selection.select_path(path)
+
+	def get_row_index(self, row_iter):
+		return self.model.get_path(row_iter).get_indices()[0]
+
+	def get_rows_count(self):
+		return len(self.model)
 
 	def get_selected_row(self):
 		model, tree_iter = self.selection.get_selected()

@@ -300,7 +300,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.connect_to_account_box.add(hbox)
 		# Combo
 		accounts_list = accounts.load()
-		self.accounts_combo = TextValueComboBox(accounts_list, model=Gtk.ListStore(str, int), text_key='login', value_key='id', sort=True)
+		self.accounts_combo = TextValueComboBox(accounts_list, model=Gtk.ListStore(str, int), text_key='login', value_key='id', sort_key='id')
 		self.accounts_combo.set_size_request(120, -1)
 		hbox.pack_end(self.accounts_combo, False, False, 0)
 		# Disconnect after
@@ -572,7 +572,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox.append(label, widget)
 		# Account
 		widget.add(Gtk.Label('<b>Account</b>', xalign=0, use_markup=True))
-		self.connect_accounts_combo = TextValueComboBox(accounts_list, model=Gtk.ListStore(str, int), text_key='login', value_key='id', sort=True)
+		self.connect_accounts_combo = TextValueComboBox(accounts_list, model=Gtk.ListStore(str, int), text_key='login', value_key='id', sort_key='id')
 		self.connect_accounts_combo.set_margin_left(10)
 		widget.add(self.connect_accounts_combo)
 		# Add

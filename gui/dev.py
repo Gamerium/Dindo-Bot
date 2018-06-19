@@ -183,7 +183,8 @@ class DevToolsWidget(Gtk.Table):
 				CopyTextDialog(self.parent, "{'x': %d, 'y': %d, 'width': %d, 'height': %d, 'color': %s}" % (x, y, width, height, color))
 
 	def on_tree_view_selection_changed(self, selection):
-		if self.tree_view.get_selected_row() is None:
+		model, tree_iter = selection.get_selected()
+		if tree_iter is None:
 			self.simulate_click_button.set_sensitive(False)
 			self.delete_pixel_button.set_sensitive(False)
 		else:

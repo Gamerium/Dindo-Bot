@@ -9,7 +9,7 @@ from lib import shared
 from lib import settings
 from lib import accounts
 from lib import maps
-from .custom import CustomComboBox, CustomTreeView, MessageBox, MiniMap
+from .custom import CustomComboBox, CustomTreeView, ButtonBox, MessageBox, MiniMap
 
 class AboutDialog(Gtk.AboutDialog):
 
@@ -467,19 +467,35 @@ class AccountsDialog(CustomDialog):
 		## ActionBar
 		actionbar = Gtk.ActionBar()
 		self.tree_view.vbox.pack_end(actionbar, False, False, 0)
+		buttons_box = ButtonBox(linked=True)
+		actionbar.add(buttons_box)
+		# Move up
+		self.move_up_button = Gtk.Button()
+		self.move_up_button.set_tooltip_text('Move up')
+		self.move_up_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-up-symbolic')))
+		self.move_up_button.set_sensitive(False)
+		self.move_up_button.connect('clicked', self.on_move_up_button_clicked)
+		buttons_box.add(self.move_up_button)
+		# Move down
+		self.move_down_button = Gtk.Button()
+		self.move_down_button.set_tooltip_text('Move down')
+		self.move_down_button.set_image(Gtk.Image(gicon=Gio.ThemedIcon(name='go-down-symbolic')))
+		self.move_down_button.set_sensitive(False)
+		self.move_down_button.connect('clicked', self.on_move_down_button_clicked)
+		buttons_box.add(self.move_down_button)
 		# Delete
 		self.delete_button = Gtk.Button()
-		self.delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
 		self.delete_button.set_tooltip_text('Delete')
+		self.delete_button.set_image(Gtk.Image(stock=Gtk.STOCK_DELETE))
 		self.delete_button.set_sensitive(False)
 		self.delete_button.connect('clicked', self.on_delete_button_clicked)
-		actionbar.add(self.delete_button)
+		buttons_box.add(self.delete_button)
 		self.show_all()
 		self.error_box.hide()
 
 	def update_parent_window(self, accounts_list):
-		self.parent.accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort=True, clear=True)
-		self.parent.connect_accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort=True, clear=True)
+		self.parent.accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort_key='id', clear=True)
+		self.parent.connect_accounts_combo.append_list(accounts_list, text_key='login', value_key='id', sort_key='id', clear=True)
 
 	def on_add_button_clicked(self, button):
 		login = self.login_entry.get_text()
@@ -501,6 +517,45 @@ class AccountsDialog(CustomDialog):
 			# update parent window
 			self.update_parent_window(accounts_list)
 
+	def swap_accounts(self, index, with_index):
+		# get accounts ids
+		account_id = self.tree_view.model[index][0]
+		with_account_id = self.tree_view.model[with_index][0]
+		# swap accounts ids
+		accounts_list = accounts.swap(account_id, with_account_id)
+		# apply to treeview
+		self.tree_view.model[index][0] = with_account_id
+		self.tree_view.model[with_index][0] = account_id
+		# unselect all (to trigger selection 'changed' event)
+		self.tree_view.selection.unselect_all()
+		# select row
+		self.tree_view.select_row(with_index)
+		# update parent window
+		self.update_parent_window(accounts_list)
+
+	def on_move_up_button_clicked(self, button):
+		selections, model = self.tree_view.selection.get_selected_rows()
+		for row in selections:
+			if self.tree_view.selection.iter_is_selected(row.iter) and row.previous != None:
+				# get row index
+				index = self.tree_view.get_row_index(row.iter)
+				# move up
+				self.tree_view.model.move_before(row.iter, row.previous.iter)
+				# swap accounts
+				self.swap_accounts(index, index - 1)
+
+	def on_move_down_button_clicked(self, button):
+		selections, model = self.tree_view.selection.get_selected_rows()
+		for i in range(len(selections)-1, -1, -1):
+			row = selections[i]
+			if self.tree_view.selection.iter_is_selected(row.iter) and row.next != None:
+				# get row index
+				index = self.tree_view.get_row_index(row.iter)
+				# move down
+				self.tree_view.model.move_after(row.iter, row.next.iter)
+				# swap accounts
+				self.swap_accounts(index, index + 1)
+
 	def on_delete_button_clicked(self, button):
 		# remove selected account
 		id = self.tree_view.get_selected_row()[0]
@@ -521,7 +576,24 @@ class AccountsDialog(CustomDialog):
 			button.set_tooltip_text('Hide password')
 
 	def on_tree_view_selection_changed(self, selection):
-		if self.tree_view.get_selected_row() is None:
+		model, tree_iter = selection.get_selected()
+		if tree_iter is None:
+			self.move_up_button.set_sensitive(False)
+			self.move_down_button.set_sensitive(False)
 			self.delete_button.set_sensitive(False)
-		elif not self.delete_button.get_sensitive():
-			self.delete_button.set_sensitive(True)
+		else:
+			index = self.tree_view.get_row_index(tree_iter)
+			rows_count = self.tree_view.get_rows_count()
+			# Move up
+			if index <= 0:
+				self.move_up_button.set_sensitive(False)
+			elif not self.move_up_button.get_sensitive():
+				self.move_up_button.set_sensitive(True)
+			# Move down
+			if index >= rows_count - 1:
+				self.move_down_button.set_sensitive(False)
+			elif not self.move_down_button.get_sensitive():
+				self.move_down_button.set_sensitive(True)
+			# Delete
+			if not self.delete_button.get_sensitive():
+				self.delete_button.set_sensitive(True)
