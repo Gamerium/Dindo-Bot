@@ -14,6 +14,7 @@ class BotThread(JobThread):
 		self.repeat_path = repeat_path
 		self.account_id = account_id
 		self.disconnect_after = disconnect_after
+		self.exit_game = parent.settings['Account']['ExitGame']
 
 	def run(self):
 		self.start_timer()
@@ -47,7 +48,7 @@ class BotThread(JobThread):
 			# disconnect account
 			if account_connected and self.disconnect_after:
 				self.debug('Disconnect account')
-				self.disconnect()
+				self.disconnect(self.exit_game)
 			# reset bot window buttons
 			self.reset()
 

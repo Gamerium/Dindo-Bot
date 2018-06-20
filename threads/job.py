@@ -11,7 +11,7 @@ class JobThread(FarmingThread):
 
 	def __init__(self, parent, game_location):
 		FarmingThread.__init__(self, parent, game_location)
-		self.minimap_enabled = parent.settings['EnableMiniMap']
+		self.minimap_enabled = parent.settings['Job']['EnableMiniMap']
 
 	def update_minimap(self, points, points_name=None, points_color=None):
 		if self.minimap_enabled:

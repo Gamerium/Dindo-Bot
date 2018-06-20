@@ -11,7 +11,7 @@ class FarmingThread(TravelThread):
 
 	def __init__(self, parent, game_location):
 		TravelThread.__init__(self, parent, game_location)
-		self.save_dragodindes_images = parent.settings['SaveDragodindesImages']
+		self.save_dragodindes_images = parent.settings['Farming']['SaveDragodindesImages']
 
 	def get_dragodinde_spec(self, name, dragodinde_image):
 		# crop dragodinde image

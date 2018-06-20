@@ -354,10 +354,19 @@ class PreferencesDialog(CustomDialog):
 		# Keep game checkbox
 		keep_game_on_unplug_check = Gtk.CheckButton('Keep game open when unplug')
 		keep_game_on_unplug_check.set_margin_left(10)
-		keep_game_on_unplug_check.set_active(self.parent.settings['KeepGameOpen'])
+		keep_game_on_unplug_check.set_active(self.parent.settings['Game']['KeepOpen'])
 		keep_game_on_unplug_check.connect('clicked', 
-			lambda check: settings.update_and_save(self.parent.settings, 'KeepGameOpen', check.get_active()))
+			lambda check: settings.update_and_save(self.parent.settings, key='Game', subkey='KeepOpen', value=check.get_active()))
 		box.add(keep_game_on_unplug_check)
+		## Account
+		box.add(Gtk.Label('<b>Account</b>', xalign=0, use_markup=True))
+		# Exit game checkbox
+		exit_game_on_disconnect_check = Gtk.CheckButton('Exit game when disconnect')
+		exit_game_on_disconnect_check.set_margin_left(10)
+		exit_game_on_disconnect_check.set_active(self.parent.settings['Account']['ExitGame'])
+		exit_game_on_disconnect_check.connect('clicked', 
+			lambda check: settings.update_and_save(self.parent.settings, key='Account', subkey='ExitGame', value=check.get_active()))
+		box.add(exit_game_on_disconnect_check)
 		### Bot
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack.add_titled(box, 'bot', 'Bot')
@@ -369,7 +378,7 @@ class PreferencesDialog(CustomDialog):
 		box.add(hbox)
 		hbox.add(Gtk.Label('MiniMap'))
 		minimap_switch = Gtk.Switch()
-		minimap_switch.set_active(self.parent.settings['EnableMiniMap'])
+		minimap_switch.set_active(self.parent.settings['Job']['EnableMiniMap'])
 		minimap_switch.connect('notify::active', self.on_minimap_switch_activated)
 		hbox.pack_end(minimap_switch, False, False, 0)
 		## Farming
@@ -377,9 +386,9 @@ class PreferencesDialog(CustomDialog):
 		# Save dragodindes images
 		save_dragodindes_images_check = Gtk.CheckButton('Save dragodindes image')
 		save_dragodindes_images_check.set_margin_left(10)
-		save_dragodindes_images_check.set_active(self.parent.settings['SaveDragodindesImages'])
+		save_dragodindes_images_check.set_active(self.parent.settings['Farming']['SaveDragodindesImages'])
 		save_dragodindes_images_check.connect('clicked', 
-			lambda check: settings.update_and_save(self.parent.settings, 'SaveDragodindesImages', check.get_active()))
+			lambda check: settings.update_and_save(self.parent.settings, key='Farming', subkey='SaveDragodindesImages', value=check.get_active()))
 		box.add(save_dragodindes_images_check)
 		### Shortcuts
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -433,7 +442,7 @@ class PreferencesDialog(CustomDialog):
 			self.parent.minimap_box.show()
 		else:
 			self.parent.minimap_box.hide()
-		settings.update_and_save(self.parent.settings, key='EnableMiniMap', value=value)
+		settings.update_and_save(self.parent.settings, key='Job', subkey='EnableMiniMap', value=value)
 
 	def on_debug_switch_activated(self, switch, pspec):
 		value = switch.get_active()
@@ -460,7 +469,7 @@ class ShortcutsDialog(CustomDialog):
 		action_label = Gtk.Label(xalign=0)
 		action_label.set_line_wrap(True)
 		action_label.set_max_width_chars(40)
-		action_label.set_markup('Press the keys on the keyboard that you want to use to trigger the « <b>%s</b> » action' % action_name)
+		action_label.set_markup('Press keys on keyboard that you want to use to trigger « <b>%s</b> » action' % action_name)
 		vbox.add(action_label)
 		# Shortcut
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)

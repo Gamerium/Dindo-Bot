@@ -53,7 +53,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.unplug_button.hide()
 		if not self.settings['Debug']['Enabled']:
 			self.debug_page.hide()
-		if not self.settings['EnableMiniMap']:
+		if not self.settings['Job']['EnableMiniMap']:
 			self.minimap_box.hide()
 
 	def on_key_press(self, widget, event):
@@ -77,6 +77,8 @@ class BotWindow(Gtk.ApplicationWindow):
 						self.stop_button.emit('clicked')
 					elif action == 'Minimize':
 						self.iconify()
+					elif action == 'Take Game Screenshot':
+						self.take_screenshot_button.emit('clicked')
 					# stop event propagation
 					return True
 		# focus game
@@ -172,15 +174,15 @@ class BotWindow(Gtk.ApplicationWindow):
 		accounts_button.set_image(Gtk.Image(icon_name='dialog-password'))
 		accounts_button.connect('clicked', self.on_accounts_button_clicked)
 		box.add(accounts_button)
-		# Take game screenshot button
-		self.take_screenshot_button = Gtk.ModelButton(' Take game screenshot')
+		# Take Game Screenshot button
+		self.take_screenshot_button = Gtk.ModelButton(' Take Game Screenshot')
 		self.take_screenshot_button.set_alignment(0, 0.5)
-		self.take_screenshot_button.set_image(Gtk.Image(icon_name='media-record'))
+		self.take_screenshot_button.set_image(Gtk.Image(icon_name='camera-photo'))
 		self.take_screenshot_button.set_sensitive(False)
 		self.take_screenshot_button.connect('clicked', self.on_take_screenshot_button_clicked)
 		box.add(self.take_screenshot_button)
-		# Open log file button
-		open_log_button = Gtk.ModelButton(' Open log file')
+		# Open Log File button
+		open_log_button = Gtk.ModelButton(' Open Log File')
 		open_log_button.set_alignment(0, 0.5)
 		open_log_button.set_image(Gtk.Image(icon_name='text-x-generic'))
 		open_log_button.connect('clicked', lambda button: tools.open_file_in_editor(logger.get_filename()))
@@ -557,10 +559,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		label = ImageLabel(image, 'Keyboard')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack_listbox.append(label, widget)
-		# Press key
+		# Press Key
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		self.press_key_radio = Gtk.RadioButton()
-		self.press_key_radio.add(Gtk.Label('<b>Press key</b>', xalign=0, use_markup=True))
+		self.press_key_radio.add(Gtk.Label('<b>Press Key</b>', xalign=0, use_markup=True))
 		hbox.add(self.press_key_radio)
 		self.key_label = Gtk.Label()
 		hbox.add(self.key_label)
@@ -573,11 +575,11 @@ class BotWindow(Gtk.ApplicationWindow):
 			)
 		)
 		widget.add(self.keys_combo)
-		# Type text
+		# Type Text
 		self.type_text_radio = Gtk.RadioButton(group=self.press_key_radio)
-		self.type_text_radio.add(Gtk.Label('<b>Type text</b>', xalign=0, use_markup=True))
+		self.type_text_radio.add(Gtk.Label('<b>Type Text</b>', xalign=0, use_markup=True))
 		widget.add(self.type_text_radio)
-		self.type_text_entry = Gtk.Entry(placeholder_text='text')
+		self.type_text_entry = Gtk.Entry(placeholder_text='Text')
 		self.type_text_entry.set_margin_left(10)
 		self.type_text_entry.set_width_chars(10)
 		self.type_text_entry.connect('focus-in-event', lambda entry, event: self.type_text_radio.set_active(True))
@@ -913,7 +915,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		if game_window_destroyed:
 			self.game_window = None
 		# keep or destroy socket
-		if self.settings['KeepGameOpen'] and not game_window_destroyed:
+		if self.settings['Game']['KeepOpen'] and not game_window_destroyed:
 			return True
 		else:
 			self.game_area = None
@@ -960,7 +962,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_unplug_button_clicked(self, button):
 		self.debug('Unplug game window')
-		if self.settings['KeepGameOpen']:
+		if self.settings['Game']['KeepOpen']:
 			self.unplug_game_window()
 		else:
 			self.game_window.destroy()
@@ -982,7 +984,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# We only terminate when the user presses the OK button
 		if response == Gtk.ResponseType.OK:
 			# keep game window
-			if self.settings['KeepGameOpen']:
+			if self.settings['Game']['KeepOpen']:
 				self.unplug_game_window()
 			# stop bot thread
 			if self.bot_thread and self.bot_thread.isAlive():

@@ -15,14 +15,24 @@ def load_defaults():
 			'Level':   DebugLevel.Low
 		},
 		'Shortcuts': {
-			'Start':    None,
-			'Pause':    None,
-			'Stop':     None,
-			'Minimize': None
+			'Start':                None,
+			'Pause':                None,
+			'Stop':                 None,
+			'Minimize':             None,
+			'Take Game Screenshot': None
 		},
-		'SaveDragodindesImages': False,
-		'KeepGameOpen':          False,
-		'EnableMiniMap':         False
+		'Game': {
+			'KeepOpen': False
+		},
+		'Account': {
+			'ExitGame': False
+		},
+		'Job': {
+			'EnableMiniMap': False
+		},
+		'Farming': {
+			'SaveDragodindesImages': False
+		}
 	}
 	return settings
 
