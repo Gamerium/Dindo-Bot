@@ -5,7 +5,6 @@ icons/more/*
 dragodindes/*
 accounts.json
 settings.json
-maps.data
 
 # Python cache
 __pycache__/

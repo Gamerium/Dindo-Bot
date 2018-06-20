@@ -18,9 +18,9 @@ def load_defaults():
 			'Start':                None,
 			'Pause':                None,
 			'Stop':                 None,
-			'Minimize':             None,
-			'Focus Game':           None,
-			'Take Game Screenshot': None
+			'Minimize':             'Alt_L',
+			'Focus Game':           'Ctrl+g',
+			'Take Game Screenshot': 'Ctrl+Print'
 		},
 		'Game': {
 			'KeepOpen': False
@@ -34,7 +34,8 @@ def load_defaults():
 		},
 		'Farming': {
 			'SaveDragodindesImages': False
-		}
+		},
+		'EnableShortcuts': False
 	}
 	return settings
 

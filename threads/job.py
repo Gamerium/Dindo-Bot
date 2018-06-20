@@ -56,9 +56,11 @@ class JobThread(FarmingThread):
 
 	def get_pod(self):
 		# open inventory
+		self.debug('Opening inventory')
+		screen = tools.screen_game(self.game_location)
 		self.press_key(data.KeyboardShortcuts['Inventory'])
 		# wait for inventory to open
-		self.sleep(1)
+		self.monitor_game_screen(tolerance=2.5, screen=screen)
 		# check for pause or suspend
 		self.pause_event.wait()
 		if self.suspend: return
@@ -67,9 +69,11 @@ class JobThread(FarmingThread):
 		screen = tools.screen_game(location)
 		color, percentage = tools.get_dominant_color(screen)
 		# close inventory
+		self.debug('Closing inventory')
+		screen = tools.screen_game(self.game_location)
 		self.press_key(data.KeyboardShortcuts['Inventory'])
 		# wait for inventory to close
-		self.sleep(1)
+		self.monitor_game_screen(tolerance=2.5, screen=screen)
 		# check for pause or suspend
 		self.pause_event.wait()
 		if self.suspend: return

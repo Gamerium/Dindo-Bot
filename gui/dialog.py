@@ -402,7 +402,16 @@ class PreferencesDialog(CustomDialog):
 		### Shortcuts
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack.add_titled(box, 'shortcuts', 'Shortcuts')
-		## TreeView
+		## Keyboard Shortcuts
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		hbox.add(Gtk.Label('<b>Keyboard Shortcuts</b>', xalign=0, use_markup=True))
+		box.add(hbox)
+		# Switch
+		shortcuts_switch = Gtk.Switch()
+		shortcuts_switch.set_active(self.parent.settings['EnableShortcuts'])
+		shortcuts_switch.connect('notify::active', self.on_shortcuts_switch_activated)
+		hbox.pack_end(shortcuts_switch, False, False, 0)
+		# TreeView
 		model = Gtk.ListStore(str, str)
 		text_renderer = Gtk.CellRendererText()
 		columns = [
@@ -410,6 +419,7 @@ class PreferencesDialog(CustomDialog):
 			Gtk.TreeViewColumn('Shortcut', text_renderer, text=1)
 		]
 		self.shortcuts_tree_view = CustomTreeView(model, columns)
+		self.shortcuts_tree_view.vbox.set_sensitive(self.parent.settings['EnableShortcuts'])
 		self.shortcuts_tree_view.connect('button-press-event', self.on_shortcuts_tree_view_double_clicked)
 		self.shortcuts_tree_view.connect('selection-changed', self.on_shortcuts_tree_view_selection_changed)
 		# fill treeview
@@ -427,6 +437,11 @@ class PreferencesDialog(CustomDialog):
 		actionbar.add(self.shortcuts_edit_button)
 		self.shortcuts_tree_view.vbox.pack_end(actionbar, False, False, 0)
 		self.show_all()
+
+	def on_shortcuts_switch_activated(self, switch, pspec):
+		value = switch.get_active()
+		self.shortcuts_tree_view.vbox.set_sensitive(value)
+		settings.update_and_save(self.parent.settings, 'EnableShortcuts', value)
 
 	def show_shortcuts_dialog(self):
 		selected_row = self.shortcuts_tree_view.get_selected_row()

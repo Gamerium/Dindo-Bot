@@ -59,32 +59,33 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.minimap_box.hide()
 
 	def on_key_press(self, widget, event):
-		# get keyname
-		keyname = Gdk.keyval_name(event.keyval)
-		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
-		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
-		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
-		# handle shortcuts
-		for action in self.settings['Shortcuts']:
-			value = self.settings['Shortcuts'][action]
-			if value is not None:
-				keys = value.split('+')
-				if (len(keys) == 1 and keys[0] == keyname) or (len(keys) == 2 and ((keys[0] == 'Ctrl' and ctrl) or (keys[0] == 'Alt' and alt) or (keys[0] == 'Shift' and shift)) and keys[1] == keyname):
-					# run actions
-					if action == 'Start':
-						self.start_button.emit('clicked')
-					elif action == 'Pause':
-						self.pause_button.emit('clicked')
-					elif action == 'Stop':
-						self.stop_button.emit('clicked')
-					elif action == 'Minimize':
-						self.iconify()
-					elif action == 'Take Game Screenshot':
-						self.take_screenshot_button.emit('clicked')
-					elif action == 'Focus Game':
-						self.focus_game()
-					# stop event propagation
-					return True
+		if self.settings['EnableShortcuts']:
+			# get keyname
+			keyname = Gdk.keyval_name(event.keyval)
+			ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
+			alt = (event.state & Gdk.ModifierType.MOD1_MASK)
+			shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
+			# handle shortcuts
+			for action in self.settings['Shortcuts']:
+				value = self.settings['Shortcuts'][action]
+				if value is not None:
+					keys = value.split('+')
+					if (len(keys) == 1 and keys[0] == keyname) or (len(keys) == 2 and ((keys[0] == 'Ctrl' and ctrl) or (keys[0] == 'Alt' and alt) or (keys[0] == 'Shift' and shift)) and keys[1] == keyname):
+						# run actions
+						if action == 'Start':
+							self.start_button.emit('clicked')
+						elif action == 'Pause':
+							self.pause_button.emit('clicked')
+						elif action == 'Stop':
+							self.stop_button.emit('clicked')
+						elif action == 'Minimize':
+							self.iconify()
+						elif action == 'Take Game Screenshot':
+							self.take_screenshot_button.emit('clicked')
+						elif action == 'Focus Game':
+							self.focus_game()
+						# stop event propagation
+						return True
 		# focus game
 		if self.bot_thread and self.bot_thread.isAlive():
 			self.focus_game()
