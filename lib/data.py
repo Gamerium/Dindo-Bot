@@ -35,7 +35,8 @@ Boxes = {
 	'Dragodinde Serenity':   {'x': 26, 'y': 274, 'width': 106, 'height': 1},
 	'Enclos First Place':    {'x': 28, 'y': 295, 'width': 167, 'height': 1},
 	'Inventory First Place': {'x': 377, 'y': 165, 'width': 168, 'height': 1},
-	'Play Button':           {'x': 341, 'y': 362, 'width': 96, 'height': 1}
+	'Play Button':           {'x': 341, 'y': 362, 'width': 96, 'height': 1},
+	'PodBar':                {'x': 419, 'y': 366, 'width': 51, 'height': 1}
 }
 
 # DragodindeSenerity
@@ -57,10 +58,11 @@ Colors = {
 	'In Progress':     (255, 106, 61),
 	#'Experience':      (108, 240, 229),
 	#'Tiredness':       (252, 200, 0),
-	'Enclos Empty':    (56, 56, 49),
-	'Row Selected':    (83, 83, 77),
-	'Inventory Empty': (53, 53, 45),
-	'Play Button':     (215, 247, 0)
+	'Empty Enclos':    (56, 56, 49),
+	'Selected Row':    (83, 83, 77),
+	'Empty Inventory': (53, 53, 45),
+	'Play Button':     (215, 247, 0),
+	'Empty PodBar':    (67, 70, 68)
 }
 
 # Keyboard shortcuts

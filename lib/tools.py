@@ -255,6 +255,20 @@ def get_color_percentage(image, expected_color, tolerance=10):
 	percentage = ((expected_color_count / height) / float(width)) * 100
 	return round(percentage, 2)
 
+# Return the dominant color in an image & his percentage
+def get_dominant_color(image):
+	# get image colors
+	width, height = image.size
+	image = image.convert('RGB')
+	colors = image.getcolors(width * height)
+	# get dominant color
+	count, color = max(colors, key=lambda color: color[0])
+	# convert to percentage
+	if height == 0: height = 1
+	if width == 0: width = 1
+	percentage = ((count / height) / float(width)) * 100
+	return (color, round(percentage, 2))
+
 # Open given file in text editor
 def open_file_in_editor(filename):
 	editor = os.getenv('EDITOR')

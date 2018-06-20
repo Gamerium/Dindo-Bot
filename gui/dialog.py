@@ -372,15 +372,24 @@ class PreferencesDialog(CustomDialog):
 		stack.add_titled(box, 'bot', 'Bot')
 		## Job
 		box.add(Gtk.Label('<b>Job</b>', xalign=0, use_markup=True))
+		# PodBar
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		hbox.add(Gtk.Label('PodBar'))
+		podbar_switch = Gtk.Switch()
+		podbar_switch.set_active(self.parent.settings['Job']['EnablePodBar'])
+		podbar_switch.connect('notify::active', self.on_podbar_switch_activated)
+		hbox.pack_end(podbar_switch, False, False, 0)
+		box.add(hbox)
 		# MiniMap
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
-		box.add(hbox)
 		hbox.add(Gtk.Label('MiniMap'))
 		minimap_switch = Gtk.Switch()
 		minimap_switch.set_active(self.parent.settings['Job']['EnableMiniMap'])
 		minimap_switch.connect('notify::active', self.on_minimap_switch_activated)
 		hbox.pack_end(minimap_switch, False, False, 0)
+		box.add(hbox)
 		## Farming
 		box.add(Gtk.Label('<b>Farming</b>', xalign=0, use_markup=True))
 		# Save dragodindes images
@@ -435,6 +444,14 @@ class PreferencesDialog(CustomDialog):
 	def on_shortcuts_tree_view_selection_changed(self, selection):
 		if not self.shortcuts_edit_button.get_sensitive():
 			self.shortcuts_edit_button.set_sensitive(True)
+
+	def on_podbar_switch_activated(self, switch, pspec):
+		value = switch.get_active()
+		if value:
+			self.parent.podbar_box.show()
+		else:
+			self.parent.podbar_box.hide()
+		settings.update_and_save(self.parent.settings, key='Job', subkey='EnablePodBar', value=value)
 
 	def on_minimap_switch_activated(self, switch, pspec):
 		value = switch.get_active()

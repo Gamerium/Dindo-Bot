@@ -86,6 +86,9 @@ class BotThread(JobThread):
 			elif instruction['name'] == 'Zaapi':
 				self.use_zaapi(instruction['from'], instruction['to'])
 
+			elif instruction['name'] == 'Collect':
+				self.collect(instruction['map'], instruction['store_path'])
+
 			elif instruction['name'] == 'Click':
 				coordinates = (
 					int(instruction['x']),

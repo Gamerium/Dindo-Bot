@@ -29,6 +29,7 @@ def load_defaults():
 			'ExitGame': False
 		},
 		'Job': {
+			'EnablePodBar':  False,
 			'EnableMiniMap': False
 		},
 		'Farming': {

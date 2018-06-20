@@ -1,0 +1,5 @@
+Collect(map=[9,-23],store_path=None)
+Move(DOWN)
+Move(LEFT)
+Move(UP)
+Move(RIGHT)

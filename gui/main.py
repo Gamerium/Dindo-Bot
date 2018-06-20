@@ -53,6 +53,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.unplug_button.hide()
 		if not self.settings['Debug']['Enabled']:
 			self.debug_page.hide()
+		if not self.settings['Job']['EnablePodBar']:
+			self.podbar_box.hide()
 		if not self.settings['Job']['EnableMiniMap']:
 			self.minimap_box.hide()
 
@@ -337,6 +339,14 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Switch
 		self.disconnect_after_switch = Gtk.Switch()
 		hbox.pack_end(self.disconnect_after_switch, False, False, 0)
+		## Pod
+		self.podbar_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		bot_page.add(self.podbar_box)
+		self.podbar_box.add(Gtk.Label('<b>Pod</b>', xalign=0, use_markup=True))
+		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+		self.podbar_box.pack_start(vbox, True, True, 0)
+		self.podbar = Gtk.ProgressBar()
+		vbox.pack_start(self.podbar, True, False, 0)
 		## MiniMap
 		self.minimap_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		bot_page.add(self.minimap_box)

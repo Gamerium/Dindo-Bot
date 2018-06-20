@@ -97,8 +97,8 @@ class FarmingThread(TravelThread):
 	def enclos_is_empty(self):
 		location = self.get_box_location('Enclos First Place')
 		screen = tools.screen_game(location)
-		empty_percentage = tools.get_color_percentage(screen, data.Colors['Enclos Empty'])
-		selected_percentage = tools.get_color_percentage(screen, data.Colors['Row Selected'])
+		empty_percentage = tools.get_color_percentage(screen, data.Colors['Empty Enclos'])
+		selected_percentage = tools.get_color_percentage(screen, data.Colors['Selected Row'])
 		is_empty = empty_percentage >= 99 or selected_percentage >= 99
 		debug_level = DebugLevel.Normal if is_empty else DebugLevel.High
 		self.debug('Enclos is empty: {}, empty percentage: {}%, selected percentage: {}%'.format(is_empty, empty_percentage, selected_percentage), debug_level)
@@ -215,7 +215,7 @@ class FarmingThread(TravelThread):
 	def inventory_is_empty(self):
 		location = self.get_box_location('Inventory First Place')
 		screen = tools.screen_game(location)
-		percentage = tools.get_color_percentage(screen, data.Colors['Inventory Empty'])
+		percentage = tools.get_color_percentage(screen, data.Colors['Empty Inventory'])
 		is_empty = percentage >= 99
 		debug_level = DebugLevel.Normal if is_empty else DebugLevel.High
 		self.debug('Inventory is empty: {}, percentage: {}%'.format(is_empty, percentage), debug_level)
