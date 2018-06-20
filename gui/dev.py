@@ -7,7 +7,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf
 from lib import tools
 from lib import data
 from lib import convert
-from .custom import CustomTreeView, CustomComboBox, CustomSpinButton, ButtonBox
+from .custom import CustomTreeView, CustomComboBox, MenuButton, SpinButton, ButtonBox
 from .dialog import CopyTextDialog
 from threading import Thread
 
@@ -96,8 +96,11 @@ class DevToolsWidget(Gtk.Table):
 		self.scroll_direction_combo.set_active(1)
 		hbox.pack_start(self.scroll_direction_combo, True, True, 0)
 		# Value
-		self.scroll_spin_button = CustomSpinButton(min=1, max=10)
-		hbox.add(self.scroll_spin_button)
+		self.scroll_menu_button = MenuButton(text='1', position=Gtk.PositionType.TOP)
+		self.scroll_spin_button = SpinButton(min=1, max=10)
+		self.scroll_spin_button.connect('value-changed', lambda button: self.scroll_menu_button.set_label(str(button.get_value_as_int())))
+		self.scroll_menu_button.add(self.scroll_spin_button)
+		hbox.add(self.scroll_menu_button)
 		# Simulate
 		simulate_scroll_button = Gtk.Button()
 		simulate_scroll_button.set_image(Gtk.Image(pixbuf=Gdk.Cursor(Gdk.CursorType.SB_V_DOUBLE_ARROW).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)))
@@ -108,7 +111,7 @@ class DevToolsWidget(Gtk.Table):
 	def on_simulate_scroll_button_clicked(self, button):
 		# get scroll value
 		direction = self.scroll_direction_combo.get_active_text()
-		value = self.scroll_spin_button.get_value()
+		value = self.scroll_spin_button.get_value_as_int()
 		clicks = value if direction == 'up' else -value
 		if self.parent.game_area:
 			# get game area location

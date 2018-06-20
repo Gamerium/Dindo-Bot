@@ -314,54 +314,6 @@ class CustomListBox(Gtk.Frame):
 	def on_clear_all_button_clicked(self, button):
 		self.clear()
 
-class CustomScaleButton(Gtk.Button):
-
-	def __init__(self, value=0, min=0, max=100, step=1):
-		Gtk.Button.__init__(self, value)
-		self.connect('clicked', self.on_clicked)
-		# scale
-		adjustment = Gtk.Adjustment(value=value, lower=min, upper=max, step_increment=step, page_increment=step, page_size=0)
-		self.scale = Gtk.Scale(orientation=Gtk.Orientation.HORIZONTAL, adjustment=adjustment, digits=0)
-		self.scale.set_size_request(100, -1)
-		self.scale.connect('value-changed', self.on_value_changed)
-		# popover
-		self.popover = Gtk.Popover(relative_to=self, position=Gtk.PositionType.TOP)
-		self.popover.add(self.scale)
-
-	def on_clicked(self, button):
-		self.popover.show_all()
-
-	def on_value_changed(self, button):
-		value = int(self.scale.get_value())
-		self.set_label(str(value))
-
-	def get_value(self):
-		return int(self.get_label())
-
-class CustomSpinButton(Gtk.Button):
-
-	def __init__(self, min=0, max=100, value=0, step=1):
-		text = min if value < min else value
-		Gtk.Button.__init__(self, text)
-		self.connect('clicked', self.on_clicked)
-		# spin button
-		self.spin_button = SpinButton(min=min, max=max, value=value, step=step, page_step=step)
-		self.spin_button.connect('value-changed', self.on_value_changed)
-		# popover
-		self.popover = Gtk.Popover(relative_to=self, position=Gtk.PositionType.TOP)
-		self.popover.set_border_width(2)
-		self.popover.add(self.spin_button)
-
-	def on_clicked(self, button):
-		self.popover.show_all()
-
-	def on_value_changed(self, button):
-		value = self.spin_button.get_value_as_int()
-		self.set_label(str(value))
-
-	def get_value(self):
-		return int(self.get_label())
-
 class SpinButton(Gtk.SpinButton):
 
 	def __init__(self, min=0, max=100, value=0, step=1, page_step=5):
@@ -471,9 +423,10 @@ class MessageBox(Gtk.Box):
 
 class MenuButton(Gtk.Button):
 
-	def __init__(self, text=None, position=Gtk.PositionType.BOTTOM, icon_name='pan-down-symbolic', padding=2):
+	def __init__(self, text=None, position=Gtk.PositionType.BOTTOM, icon_name=None, padding=2):
 		Gtk.Button.__init__(self, text)
-		self.set_image(Gtk.Image(icon_name=icon_name))
+		if icon_name is not None:
+			self.set_image(Gtk.Image(icon_name=icon_name))
 		# popover
 		self.popover = Gtk.Popover(relative_to=self, position=position)
 		self.popover.set_border_width(padding)
