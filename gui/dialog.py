@@ -339,16 +339,16 @@ class PreferencesDialog(CustomDialog):
 		debug_switch.connect('notify::active', self.on_debug_switch_activated)
 		hbox.pack_end(debug_switch, False, False, 0)
 		# Level
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.set_margin_left(10)
-		box.add(hbox)
-		hbox.add(Gtk.Label('Level'))
-		self.debug_level_combo = CustomComboBox(['High', 'Normal', 'Low'])
-		self.debug_level_combo.set_active(self.parent.settings['Debug']['Level'])
-		self.debug_level_combo.set_sensitive(self.parent.settings['Debug']['Enabled'])
-		self.debug_level_combo.connect('changed', 
+		self.debug_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		self.debug_box.set_margin_left(10)
+		self.debug_box.set_sensitive(self.parent.settings['Debug']['Enabled'])
+		box.add(self.debug_box)
+		self.debug_box.add(Gtk.Label('Level'))
+		debug_level_combo = CustomComboBox(['High', 'Normal', 'Low'])
+		debug_level_combo.set_active(self.parent.settings['Debug']['Level'])
+		debug_level_combo.connect('changed', 
 			lambda combo: settings.update_and_save(self.parent.settings, key='Debug', subkey='Level', value=combo.get_active()))
-		hbox.pack_end(self.debug_level_combo, False, False, 0)
+		self.debug_box.pack_end(debug_level_combo, False, False, 0)
 		## Game
 		box.add(Gtk.Label('<b>Game</b>', xalign=0, use_markup=True))
 		# Keep game checkbox
@@ -446,7 +446,7 @@ class PreferencesDialog(CustomDialog):
 
 	def on_debug_switch_activated(self, switch, pspec):
 		value = switch.get_active()
-		self.debug_level_combo.set_sensitive(value)
+		self.debug_box.set_sensitive(value)
 		if value:
 			self.parent.debug_page.show()
 		else:

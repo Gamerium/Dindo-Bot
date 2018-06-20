@@ -19,7 +19,8 @@ def load_defaults():
 			'Pause':                None,
 			'Stop':                 None,
 			'Minimize':             None,
-			'Take Game Screenshot': None
+			'Take Game Screenshot': None,
+			'Focus Game':           None
 		},
 		'Game': {
 			'KeepOpen': False

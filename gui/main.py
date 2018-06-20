@@ -68,7 +68,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			if value is not None:
 				keys = value.split('+')
 				if (len(keys) == 1 and keys[0] == keyname) or (len(keys) == 2 and ((keys[0] == 'Ctrl' and ctrl) or (keys[0] == 'Alt' and alt) or (keys[0] == 'Shift' and shift)) and keys[1] == keyname):
-					# call actions
+					# run actions
 					if action == 'Start':
 						self.start_button.emit('clicked')
 					elif action == 'Pause':
@@ -79,6 +79,8 @@ class BotWindow(Gtk.ApplicationWindow):
 						self.iconify()
 					elif action == 'Take Game Screenshot':
 						self.take_screenshot_button.emit('clicked')
+					elif action == 'Focus Game':
+						self.focus_game()
 					# stop event propagation
 					return True
 		# focus game
@@ -540,17 +542,24 @@ class BotWindow(Gtk.ApplicationWindow):
 		label = ImageLabel(image, 'Wait')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack_listbox.append(label, widget)
-		# Duration
-		widget.add(Gtk.Label('<b>Duration</b>', xalign=0, use_markup=True))
+		# Pause Bot
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.set_margin_left(10)
-		self.duration_spin_button = SpinButton(min=1, max=60)
-		hbox.pack_start(self.duration_spin_button, True, True, 0)
-		hbox.add(Gtk.Label('second(s)'))
+		hbox.add(Gtk.Label('<b>Pause Bot</b>', xalign=0, use_markup=True))
+		self.pause_bot_switch = Gtk.Switch()
+		self.pause_bot_switch.connect('notify::active', lambda switch, pspec: self.duration_box.set_sensitive(not switch.get_active()))
+		hbox.pack_end(self.pause_bot_switch, False, False, 0)
 		widget.add(hbox)
+		# Duration
+		self.duration_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		label = Gtk.Label('<b>Duration</b>', xalign=0, use_markup=True)
+		label.set_tooltip_text('(in seconds)')
+		self.duration_box.add(label)
+		self.duration_spin_button = SpinButton(min=1, max=60)
+		self.duration_box.pack_end(self.duration_spin_button, False, False, 0)
+		widget.add(self.duration_box)
 		# Add
 		add_button = Gtk.Button('Add')
-		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Wait(%d)' % self.duration_spin_button.get_value_as_int()))
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Wait(duration=%d,pause=%s)' % (0 if self.pause_bot_switch.get_active() else self.duration_spin_button.get_value_as_int(), self.pause_bot_switch.get_active())))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.add(button_box)

@@ -99,9 +99,10 @@ class BotThread(JobThread):
 					self.click(coordinates)
 
 			elif instruction['name'] == 'Wait':
-				duration = instruction['value']
-				if duration.isdigit():
-					self.sleep(int(duration))
+				if instruction['pause'] == 'True':
+					self.await()
+				elif instruction['duration'].isdigit():
+					self.sleep(int(instruction['duration']))
 
 			elif instruction['name'] == 'PressKey':
 				self.press_key(instruction['value'])
