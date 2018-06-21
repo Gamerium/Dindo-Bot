@@ -668,7 +668,21 @@ class BotWindow(Gtk.ApplicationWindow):
 		map_page.set_border_width(10)
 		bot_notebook.append_page(map_page, Gtk.Label('Map'))
 		## View
-		map_page.add(Gtk.Label('<b>View</b>', xalign=0, use_markup=True))
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		map_page.add(hbox)
+		hbox.add(Gtk.Label('<b>View</b>', xalign=0, use_markup=True))
+		# Options
+		menu_image = MenuImage()
+		hbox.add(menu_image)
+		options_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+		menu_image.set_widget(options_box)
+		use_data_colors_check = Gtk.CheckButton('Use data colors')
+		use_data_colors_check.connect('clicked', lambda button: self.map_view.set_use_origin_colors(button.get_active()))
+		options_box.add(use_data_colors_check)
+		add_borders_check = Gtk.CheckButton('Add borders')
+		add_borders_check.connect('clicked', lambda button: self.map_view.set_add_borders(button.get_active()))
+		options_box.add(add_borders_check)
+		# Map View
 		self.map_view = MiniMap()
 		map_page.pack_start(self.map_view, True, True, 0)
 		## Data

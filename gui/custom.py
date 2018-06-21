@@ -427,15 +427,36 @@ class MenuButton(Gtk.Button):
 		Gtk.Button.__init__(self, text)
 		if icon_name is not None:
 			self.set_image(Gtk.Image(icon_name=icon_name))
+		self.connect('clicked', self.on_clicked)
 		# popover
 		self.popover = Gtk.Popover(relative_to=self, position=position)
 		self.popover.set_border_width(padding)
-		self.connect('clicked', self.on_clicked)
 
 	def on_clicked(self, button):
 		self.popover.show_all()
 
 	def add(self, widget):
+		self.popover.add(widget)
+
+class MenuImage(Gtk.EventBox):
+
+	def __init__(self, icon_name='pan-down-symbolic', pixel_size=13, position=Gtk.PositionType.BOTTOM, padding=2):
+		Gtk.EventBox.__init__(self)
+		self.add(Gtk.Image(icon_name=icon_name, pixel_size=pixel_size))
+		self.connect('button-press-event', self.on_button_press)
+		self.connect('enter-notify-event', self.on_enter_notify)
+		# popover
+		self.popover = Gtk.Popover(relative_to=self, position=position)
+		self.popover.set_border_width(padding)
+
+	def on_button_press(self, widget, event):
+		self.popover.show_all()
+
+	def on_enter_notify(self, widget, event):
+		window = self.get_window()
+		window.set_cursor(Gdk.Cursor(Gdk.CursorType.HAND1))
+
+	def set_widget(self, widget):
 		self.popover.add(widget)
 
 class FileChooserButton(Gtk.FileChooserButton):
@@ -467,11 +488,21 @@ class MiniMap(Gtk.Frame):
 		self.grid_color = grid_color
 		self.grid_size = grid_size
 		self.background_color = background_color
+		self.use_origin_colors = False
+		self.add_borders = False
 		self.drawing_area = Gtk.DrawingArea()
 		self.drawing_area.set_has_tooltip(True)
 		self.drawing_area.connect('draw', self.on_draw)
 		self.drawing_area.connect('query-tooltip', self.on_query_tooltip)
 		self.add(self.drawing_area)
+
+	def set_use_origin_colors(self, value):
+		self.use_origin_colors = value
+		self.drawing_area.queue_draw()
+
+	def set_add_borders(self, value):
+		self.add_borders = value
+		self.drawing_area.queue_draw()
 
 	def add_point(self, point, name=None, color=None, redraw=True):
 		# set point coordinates
@@ -489,12 +520,8 @@ class MiniMap(Gtk.Frame):
 		else:
 			new_point['name'] = None
 		# set point color
-		if color is not None:
-			new_point['color'] = color
-		elif 'color' in point:
-			new_point['color'] = parse_color(point['color'], as_hex=True)
-		else:
-			new_point['color'] = None
+		new_point['color'] = color
+		new_point['origin_color'] = parse_color(point['color'], as_hex=True) if 'color' in point else None
 		# add point
 		self.points.append(new_point)
 		if redraw:
@@ -544,10 +571,13 @@ class MiniMap(Gtk.Frame):
 		for point in self.points:
 			# fit point to drawing area (should keep here, because it's useful when drawing area get resized)
 			x, y = fit_position_to_destination(point['x'], point['y'], point['width'], point['height'], drawing_area.width, drawing_area.height)
-			#set_color('black')
+			if self.add_borders:
+				set_color('black')
 			cr.arc(x, y, self.point_radius, 0, 2*math.pi)
-			#cr.stroke_preserve()
-			color = self.point_colors['None'] if point['color'] is None else point['color']
+			if self.add_borders:
+				cr.stroke_preserve()
+			color_key = 'origin_color' if self.use_origin_colors else 'color'
+			color = self.point_colors['None'] if point[color_key] is None else point[color_key]
 			set_color(color, self.point_opacity)
 			cr.fill()
 
@@ -556,14 +586,16 @@ class MiniMap(Gtk.Frame):
 		def on_draw(widget, cr):
 			cr.set_line_width(1)
 			# draw point
-			color = Gdk.color_parse(point['color'])
+			color_key = 'origin_color' if self.use_origin_colors else 'color'
+			color = Gdk.color_parse(point[color_key])
 			cr.set_source_rgba(float(color.red) / 65535, float(color.green) / 65535, float(color.blue) / 65535, self.point_opacity)
 			cr.arc(self.point_radius, self.point_radius, self.point_radius, 0, 2*math.pi)
 			cr.fill()
 		# tooltip widget
 		if point['name'] is not None:
 			widget = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
-			if point['color'] is not None:
+			color_key = 'origin_color' if self.use_origin_colors else 'color'
+			if point[color_key] is not None:
 				drawing_area = Gtk.DrawingArea()
 				point_diameter = self.point_radius*2
 				drawing_area.set_size_request(point_diameter, point_diameter)
