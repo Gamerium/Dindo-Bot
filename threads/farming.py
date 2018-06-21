@@ -317,11 +317,11 @@ class FarmingThread(TravelThread):
 		# print managed dragodindes number when break from loop
 		self.debug('(Inventory) Managed dragodindes: %d, Moved dragodindes: %d' % (dragodinde_number, moved_dragodinde_number), DebugLevel.Low)
 
-	def check_enclos(self, enclos_name):
+	def check_enclos(self, enclos_location, enclos_type):
 		# get enclos coordinates
-		enclos = parser.parse_data(data.Enclos, enclos_name)
+		enclos = parser.parse_data(data.Enclos, enclos_location)
 		if enclos:
-			self.debug('Check enclos %s (%s)' % (enclos_name, enclos['type']))
+			self.debug('Check enclos %s (%s)' % (enclos_location, enclos_type))
 			# click on enclos
 			self.click(enclos)
 			# wait for enclos to open
@@ -335,7 +335,7 @@ class FarmingThread(TravelThread):
 			# check enclos
 			enclos_free_places = 0
 			if not self.enclos_is_empty():
-				enclos_free_places = self.manage_enclos(enclos['type'])
+				enclos_free_places = self.manage_enclos(enclos_type)
 			else:
 				enclos_free_places = 10
 			# check for pause or suspend
@@ -343,7 +343,7 @@ class FarmingThread(TravelThread):
 			if self.suspend: return
 			# check inventory
 			if enclos_free_places > 0 and not self.inventory_is_empty():
-				self.manage_inventory(enclos['type'], enclos_free_places)
+				self.manage_inventory(enclos_type, enclos_free_places)
 			# check for pause or suspend
 			self.pause_event.wait()
 			if self.suspend: return

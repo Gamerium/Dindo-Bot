@@ -78,7 +78,7 @@ class BotThread(JobThread):
 				self.move(instruction['value'])
 
 			elif instruction['name'] == 'Enclos':
-				self.check_enclos(instruction['value'])
+				self.check_enclos(instruction['location'], instruction['type'])
 
 			elif instruction['name'] == 'Zaap':
 				self.use_zaap(instruction['from'], instruction['to'])

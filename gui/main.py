@@ -420,12 +420,17 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox.append(label, widget)
 		# Location
 		widget.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
-		self.enclos_combo = CustomComboBox(data.Enclos, sort=True)
-		self.enclos_combo.set_margin_left(10)
-		widget.add(self.enclos_combo)
+		self.enclos_location_combo = CustomComboBox(data.Enclos, sort=True)
+		self.enclos_location_combo.set_margin_left(10)
+		widget.add(self.enclos_location_combo)
+		# Type
+		widget.add(Gtk.Label('<b>Type</b>', xalign=0, use_markup=True))
+		self.enclos_type_combo = CustomComboBox(data.EnclosType.get_all(), sort=True)
+		self.enclos_type_combo.set_margin_left(10)
+		widget.add(self.enclos_type_combo)
 		# Add
 		add_button = Gtk.Button('Add')
-		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Enclos(%s)' % self.enclos_combo.get_active_text()))
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Enclos(location=%s,type=%s)' % (self.enclos_location_combo.get_active_text(), self.enclos_type_combo.get_active_text())))
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.add(button_box)

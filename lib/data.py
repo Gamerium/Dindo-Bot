@@ -88,23 +88,28 @@ KeyboardShortcuts = {
 
 # Enclos
 class EnclosType:
-	Endurance, Maturity, Amour, Energy, NegativeSerenity, PositiveSerenity = ('Endurance', 'Maturity', 'Amour', 'Energy', 'Negative Serenity', 'Positive Serenity')
+	Endurance, Maturity, Amour, Energy, NegativeSerenity, PositiveSerenity = ('Endurance', 'Maturity', 'Amour', 'Energy', 'NegativeSerenity', 'PositiveSerenity')
+
+	@staticmethod
+	def get_all():
+		types = [attr for attr in dir(EnclosType) if not callable(getattr(EnclosType, attr)) and not attr.startswith('__')]
+		return types
 
 Enclos = {
 	# Bonta
-	'[-37,-56]': {'x': 354, 'y': 144, 'width': 566, 'height': 456, 'type': EnclosType.Amour},
-	'[-38,-56]': {'x': 375, 'y': 118, 'width': 566, 'height': 456, 'type': EnclosType.Endurance},
-	'[-38,-57]': {'x': 179, 'y': 155, 'width': 566, 'height': 456, 'type': EnclosType.NegativeSerenity},
-	'[-37,-57]': {'x': 432, 'y': 175, 'width': 566, 'height': 456, 'type': EnclosType.PositiveSerenity},
-	'[-37,-58]': {'x': 355, 'y': 247, 'width': 566, 'height': 456, 'type': EnclosType.Energy},
-	'[-36,-57]': {'x': 175, 'y': 225, 'width': 566, 'height': 456, 'type': EnclosType.Maturity},
+	'[-37,-56]': {'x': 354, 'y': 144, 'width': 566, 'height': 456},
+	'[-38,-56]': {'x': 375, 'y': 118, 'width': 566, 'height': 456},
+	'[-38,-57]': {'x': 179, 'y': 155, 'width': 566, 'height': 456},
+	'[-37,-57]': {'x': 432, 'y': 175, 'width': 566, 'height': 456},
+	'[-37,-58]': {'x': 355, 'y': 247, 'width': 566, 'height': 456},
+	'[-36,-57]': {'x': 175, 'y': 225, 'width': 566, 'height': 456},
 	# Brakmar
-	'[-30,37]':  {'x': 157, 'y': 102, 'width': 566, 'height': 456, 'type': EnclosType.Amour},
-	'[-31,38]':  {'x': 394, 'y': 89, 'width': 566, 'height': 456, 'type': EnclosType.Endurance},
-	'[-32,38]':  {'x': 356, 'y': 127, 'width': 566, 'height': 456, 'type': EnclosType.NegativeSerenity},
-	'[-30,38]':  {'x': 199, 'y': 125, 'width': 566, 'height': 456, 'type': EnclosType.PositiveSerenity},
-	'[-32,37]':  {'x': 234, 'y': 202, 'width': 566, 'height': 456, 'type': EnclosType.Energy},
-	'[-31,37]':  {'x': 140, 'y': 93, 'width': 566, 'height': 456, 'type': EnclosType.Maturity}
+	'[-30,37]':  {'x': 157, 'y': 102, 'width': 566, 'height': 456},
+	'[-31,38]':  {'x': 394, 'y': 89, 'width': 566, 'height': 456},
+	'[-32,38]':  {'x': 356, 'y': 127, 'width': 566, 'height': 456},
+	'[-30,38]':  {'x': 199, 'y': 125, 'width': 566, 'height': 456},
+	'[-32,37]':  {'x': 234, 'y': 202, 'width': 566, 'height': 456},
+	'[-31,37]':  {'x': 140, 'y': 93, 'width': 566, 'height': 456}
 }
 
 # Zaap
