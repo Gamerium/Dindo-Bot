@@ -498,11 +498,13 @@ class MiniMap(Gtk.Frame):
 
 	def set_use_origin_colors(self, value):
 		self.use_origin_colors = value
-		self.drawing_area.queue_draw()
+		if self.points:
+			self.drawing_area.queue_draw()
 
 	def set_add_borders(self, value):
 		self.add_borders = value
-		self.drawing_area.queue_draw()
+		if self.points:
+			self.drawing_area.queue_draw()
 
 	def get_color_key(self):
 		return 'origin_color' if self.use_origin_colors else 'color'

@@ -145,10 +145,12 @@ BankPath = {
 	'Bank Bonta': [
 		'Zaap(from=Havenbag,to=Bonta)',
 		'Zaapi(from=Zaap Bonta,to=Bank)'
+		# TODO: complete this path...
 	],
 	# Brakmar
 	'Bank Brakmar': [
 		'Zaap(from=Havenbag,to=Brakmar)',
 		'Zaapi(from=Zaap Brakmar,to=Bank)'
+		# TODO: complete this path...
 	]
 }
