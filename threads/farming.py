@@ -155,29 +155,29 @@ class FarmingThread(TravelThread):
 				need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
 				self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance), DebugLevel.High)
 				# enclos 'Amour'
-				if enclos_type == data.EnclosType.Amour:
+				if enclos_type == 'Amour':
 					if amour_state == Stats.Full:
 						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
 				# enclos 'Endurance'
-				elif enclos_type == data.EnclosType.Endurance:
+				elif enclos_type == 'Endurance':
 					if endurance_state == Stats.Full:
 						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
 				# enclos 'NegativeSerenity'
-				elif enclos_type == data.EnclosType.NegativeSerenity:
+				elif enclos_type == 'NegativeSerenity':
 					if serenity_state == Serenity.Negative or (serenity_state == Serenity.Medium and need_maturity):
 						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
 				# enclos 'PositiveSerenity'
-				elif enclos_type == data.EnclosType.PositiveSerenity:
+				elif enclos_type == 'PositiveSerenity':
 					if serenity_state == Serenity.Positive or (serenity_state == Serenity.Medium and need_maturity):
 						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
 				# enclos 'Energy'
-				elif enclos_type == data.EnclosType.Energy:
+				elif enclos_type == 'Energy':
 					if all(state == Stats.Full for state in (energy_state, amour_state, maturity_state, endurance_state)):
 						dragodinde_moved = self.move_dragodinde_to_cowshed(dragodinde_image, dragodinde_location)
 					elif energy_state == Stats.Full:
 						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
 				# enclos 'Maturity'
-				elif enclos_type == data.EnclosType.Maturity:
+				elif enclos_type == 'Maturity':
 					if maturity_state == Stats.Full or not serenity_state == Serenity.Medium:
 						dragodinde_moved = self.move_dragodinde_to_inventory(dragodinde_image, dragodinde_location)
 				# Nothing to do
@@ -269,27 +269,27 @@ class FarmingThread(TravelThread):
 				need_endurance = endurance_state in (Stats.Empty, Stats.InProgress)
 				self.debug('Need Energy: %s, Amour: %s, Maturity: %s, Endurance: %s' % (need_energy, need_amour, need_maturity, need_endurance), DebugLevel.High)
 				# enclos 'Amour'
-				if enclos_type == data.EnclosType.Amour:
+				if enclos_type == 'Amour':
 					if need_amour and serenity_state == Serenity.Positive:
 						dragodinde_moved = self.move_dragodinde_to_enclos(dragodinde_image, dragodinde_location)
 				# enclos 'Endurance'
-				elif enclos_type == data.EnclosType.Endurance:
+				elif enclos_type == 'Endurance':
 					if need_endurance and serenity_state == Serenity.Negative:
 						dragodinde_moved = self.move_dragodinde_to_enclos(dragodinde_image, dragodinde_location)
 				# enclos 'NegativeSerenity'
-				elif enclos_type == data.EnclosType.NegativeSerenity:
+				elif enclos_type == 'NegativeSerenity':
 					if ((need_maturity or (need_endurance and not need_amour)) and serenity_state == Serenity.Positive)  or (need_endurance and serenity_state == Serenity.Medium and maturity_state == Stats.Full):
 						dragodinde_moved = self.move_dragodinde_to_enclos(dragodinde_image, dragodinde_location)
 				# enclos 'PositiveSerenity'
-				elif enclos_type == data.EnclosType.PositiveSerenity:
+				elif enclos_type == 'PositiveSerenity':
 					if ((need_maturity or (need_amour and not need_endurance)) and serenity_state == Serenity.Negative) or (need_amour and serenity_state == Serenity.Medium and maturity_state == Stats.Full):
 						dragodinde_moved = self.move_dragodinde_to_enclos(dragodinde_image, dragodinde_location)
 				# enclos 'Energy'
-				elif enclos_type == data.EnclosType.Energy:
+				elif enclos_type == 'Energy':
 					if need_energy and all(state == Stats.Full for state in (amour_state, maturity_state, endurance_state)):
 						dragodinde_moved = self.move_dragodinde_to_enclos(dragodinde_image, dragodinde_location)
 				# enclos 'Maturity'
-				elif enclos_type == data.EnclosType.Maturity:
+				elif enclos_type == 'Maturity':
 					if need_maturity and serenity_state == Serenity.Medium:
 						dragodinde_moved = self.move_dragodinde_to_enclos(dragodinde_image, dragodinde_location)
 				# Nothing to do
@@ -320,7 +320,7 @@ class FarmingThread(TravelThread):
 	def check_enclos(self, enclos_location, enclos_type):
 		# get enclos coordinates
 		enclos = parser.parse_data(data.Enclos, enclos_location)
-		if enclos:
+		if enclos and enclos_type in data.EnclosType:
 			self.debug('Check enclos %s (%s)' % (enclos_location, enclos_type))
 			# click on enclos
 			self.click(enclos)

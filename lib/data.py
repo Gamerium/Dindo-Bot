@@ -87,13 +87,14 @@ KeyboardShortcuts = {
 }
 
 # Enclos
-class EnclosType:
-	Endurance, Maturity, Amour, Energy, NegativeSerenity, PositiveSerenity = ('Endurance', 'Maturity', 'Amour', 'Energy', 'NegativeSerenity', 'PositiveSerenity')
-
-	@staticmethod
-	def get_all():
-		types = [attr for attr in dir(EnclosType) if not callable(getattr(EnclosType, attr)) and not attr.startswith('__')]
-		return types
+EnclosType = [
+	'Amour',
+	'Energy',
+	'Endurance',
+	'Maturity',
+	'NegativeSerenity',
+	'PositiveSerenity'
+]
 
 Enclos = {
 	# Bonta

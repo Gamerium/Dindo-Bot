@@ -425,7 +425,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		widget.add(self.enclos_location_combo)
 		# Type
 		widget.add(Gtk.Label('<b>Type</b>', xalign=0, use_markup=True))
-		self.enclos_type_combo = CustomComboBox(data.EnclosType.get_all(), sort=True)
+		self.enclos_type_combo = CustomComboBox(data.EnclosType, sort=True)
 		self.enclos_type_combo.set_margin_left(10)
 		widget.add(self.enclos_type_combo)
 		# Add
