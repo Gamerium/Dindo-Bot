@@ -90,16 +90,9 @@ def screen_game(region, save_to=None):
 		screenshot.save(save_to + '.png')
 	return screenshot
 
-# Return pixel image of given x, y coordinates
-def get_pixel(x, y, size=None):
-	pixel = screen_game((x, y, 1, 1))
-	if size is not None:
-		pixel = pixel.resize(size, Image.ANTIALIAS)
-	return pixel
-
 # Return pixel color of given x, y coordinates
 def get_pixel_color(x, y):
-	pixel = get_pixel(x, y)
+	pixel = screen_game((x, y, 1, 1))
 	rgb = pixel.getpixel((0, 0))
 	return rgb
 

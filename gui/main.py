@@ -738,11 +738,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		dialog.run()
 
 	def add_map_data(self, location):
-		x, y, width, height = location
-		# get pixel color
-		color = tools.get_pixel_color(x, y)
 		# append to listbox
-		text = '{"x": %d, "y": %d, "width": %d, "height": %d, "color": "%s"}' % (x, y, width, height, color)
+		text = '{"x": %d, "y": %d, "width": %d, "height": %d, "color": "%s"}' % location
 		self.map_data_listbox.append_text(text)
 		# append to view
 		point = maps.to_array(text)
@@ -816,6 +813,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		# get mouse position & screen size
 		x, y = tools.get_mouse_position()
 		width, height = tools.get_screen_size()
+		# get pixel color
+		color = tools.get_pixel_color(x, y)
+		# adjust location to game window
 		if game_location is not None:
 			# get game area location
 			game_x, game_y, game_width, game_height = game_location
@@ -828,10 +828,10 @@ class BotWindow(Gtk.ApplicationWindow):
 				width = game_width
 				height = game_height
 		# execute callback
-		GObject.idle_add(callback, (x, y, width, height))
+		GObject.idle_add(callback, (x, y, width, height, color))
 
 	def add_click(self, location):
-		x, y, width, height = location
+		x, y, width, height, color = location
 		twice = self.click_twice_switch.get_active()
 		self.path_listbox.append_text('Click(x=%d,y=%d,width=%d,height=%d,twice=%s)' % (x, y, width, height, twice))
 		self.select_button.set_sensitive(True)

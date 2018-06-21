@@ -131,11 +131,11 @@ class DevToolsWidget(Gtk.Table):
 			self.simulate_key_press_button.set_sensitive(True)
 
 	def add_pixel(self, location):
-		x, y, width, height = location
-		# get pixel color
-		pixel = tools.get_pixel(x, y, size=(10, 10))
-		pixbuf = convert.image2pixbuf(pixel)
-		color = pixel.getpixel((0, 0))
+		x, y, width, height, color = location
+		# create pixbuf
+		pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, False, 8, 10, 10)
+		pixel = convert.rgb2pixel(color)
+		pixbuf.fill(pixel)
 		# append to treeview
 		self.tree_view.append_row([pixbuf, x, y, width, height, str(color)])
 		self.select_pixel_button.set_sensitive(True)
