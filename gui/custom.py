@@ -504,6 +504,9 @@ class MiniMap(Gtk.Frame):
 		self.add_borders = value
 		self.drawing_area.queue_draw()
 
+	def get_color_key(self):
+		return 'origin_color' if self.use_origin_colors else 'color'
+
 	def add_point(self, point, name=None, color=None, redraw=True):
 		# set point coordinates
 		new_point = {
@@ -576,7 +579,7 @@ class MiniMap(Gtk.Frame):
 			cr.arc(x, y, self.point_radius, 0, 2*math.pi)
 			if self.add_borders:
 				cr.stroke_preserve()
-			color_key = 'origin_color' if self.use_origin_colors else 'color'
+			color_key = self.get_color_key()
 			color = self.point_colors['None'] if point[color_key] is None else point[color_key]
 			set_color(color, self.point_opacity)
 			cr.fill()
@@ -586,7 +589,7 @@ class MiniMap(Gtk.Frame):
 		def on_draw(widget, cr):
 			cr.set_line_width(1)
 			# draw point
-			color_key = 'origin_color' if self.use_origin_colors else 'color'
+			color_key = self.get_color_key()
 			color = Gdk.color_parse(point[color_key])
 			cr.set_source_rgba(float(color.red) / 65535, float(color.green) / 65535, float(color.blue) / 65535, self.point_opacity)
 			cr.arc(self.point_radius, self.point_radius, self.point_radius, 0, 2*math.pi)
@@ -594,7 +597,7 @@ class MiniMap(Gtk.Frame):
 		# tooltip widget
 		if point['name'] is not None:
 			widget = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
-			color_key = 'origin_color' if self.use_origin_colors else 'color'
+			color_key = self.get_color_key()
 			if point[color_key] is not None:
 				drawing_area = Gtk.DrawingArea()
 				point_diameter = self.point_radius*2
