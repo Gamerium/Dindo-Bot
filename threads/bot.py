@@ -26,23 +26,26 @@ class BotThread(JobThread):
 			self.debug('Connect to account (account_id: %s)' % self.account_id)
 			self.connect(self.account_id)
 			account_connected = True
+			# check for pause
+			self.pause_event.wait()
 
 		# get instructions & interpret them
-		self.debug('Bot path: %s, repeat: %d' % (self.parent.bot_path, self.repeat_path))
-		if self.parent.bot_path:
-			instructions = tools.read_file(self.parent.bot_path)
-			repeat_count = 0
-			while repeat_count < self.repeat_path:
-				# check for pause or suspend
-				self.pause_event.wait()
-				if self.suspend: break
-				# start interpretation
-				self.interpret(instructions)
-				repeat_count += 1
+		if not self.suspend:
+			self.debug('Bot path: %s, repeat: %d' % (self.parent.bot_path, self.repeat_path))
+			if self.parent.bot_path:
+				instructions = tools.read_file(self.parent.bot_path)
+				repeat_count = 0
+				while repeat_count < self.repeat_path:
+					# check for pause or suspend
+					self.pause_event.wait()
+					if self.suspend: break
+					# start interpretation
+					self.interpret(instructions)
+					repeat_count += 1
 
-			# tell user that we have complete the path
-			if not self.suspend:
-				self.log('Bot path completed', LogType.Success)
+				# tell user that we have complete the path
+				if not self.suspend:
+					self.log('Bot path completed', LogType.Success)
 
 		if not self.suspend:
 			# disconnect account

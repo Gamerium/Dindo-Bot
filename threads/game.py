@@ -20,6 +20,8 @@ class GameThread(PausableThread):
 	def connect(self, account_id):
 		account = accounts.get(account_id)
 		if account:
+			# slow down
+			self.sleep(1)
 			# (1) type login
 			self.double_click(data.Locations['Login Input'])
 			self.press_key(data.KeyboardShortcuts['Backspace']) # clean
