@@ -6,10 +6,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import GObject
 from lib.shared import LogType, DebugLevel
-from lib import data
-from lib import tools
-from lib import imgcompare
-from lib import accounts
+from lib import data, tools, imgcompare, accounts
 from .base import PausableThread
 
 class GameThread(PausableThread):

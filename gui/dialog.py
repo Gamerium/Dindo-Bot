@@ -5,11 +5,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
-from lib import tools
-from lib import shared
-from lib import settings
-from lib import accounts
-from lib import maps
+from lib import tools, shared, settings, accounts, maps
 from .custom import CustomComboBox, CustomTreeView, ButtonBox, MessageBox, MiniMap
 
 class AboutDialog(Gtk.AboutDialog):

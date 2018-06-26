@@ -6,10 +6,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import GObject
 from gui.custom import MiniMap
 from lib.shared import LogType, DebugLevel
-from lib import maps
-from lib import data
-from lib import tools
-from lib import parser
+from lib import maps, data, tools, parser
 from .farming import FarmingThread
 
 class JobThread(FarmingThread):

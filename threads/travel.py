@@ -1,9 +1,7 @@
 # Dindo Bot
 # Copyright (c) 2018 - 2019 AXeL
 
-from lib import data
-from lib import tools
-from lib import parser
+from lib import data, tools, parser
 from .game import GameThread
 
 class TravelThread(GameThread):

@@ -4,9 +4,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
-from lib import tools
-from lib import data
-from lib import convert
+from lib import tools, data, convert
 from .custom import CustomTreeView, CustomComboBox, MenuButton, SpinButton, ButtonBox
 from .dialog import CopyTextDialog
 from threading import Thread

@@ -4,13 +4,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
-from lib import tools
-from lib import logger
-from lib import data
-from lib import parser
-from lib import settings
-from lib import accounts
-from lib import maps
+from lib import tools, logger, data, parser, settings, accounts, maps
 from threads.bot import BotThread
 from lib.shared import LogType, DebugLevel, __program_name__
 from .dev import DevToolsWidget

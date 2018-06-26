@@ -2,9 +2,7 @@
 # Copyright (c) 2018 - 2019 AXeL
 
 from lib.shared import DebugLevel
-from lib import data
-from lib import tools
-from lib import parser
+from lib import data, tools, parser
 from .travel import TravelThread
 
 class FarmingThread(TravelThread):

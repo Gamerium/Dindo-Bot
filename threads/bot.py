@@ -2,8 +2,7 @@
 # Copyright (c) 2018 - 2019 AXeL
 
 from lib.shared import LogType, DebugLevel
-from lib import tools
-from lib import parser
+from lib import tools, parser
 from .job import JobThread
 
 class BotThread(JobThread):
