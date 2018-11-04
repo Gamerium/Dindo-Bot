@@ -196,7 +196,7 @@ class FarmingThread(TravelThread):
 			self.debug('Check next dragodinde')
 			self.press_key(data.KeyboardShortcuts['Down'])
 			# break if there is no more dragodinde
-			if not self.monitor_game_screen(tolerance=0.01, screen=dragodinde_image, location=dragodinde_location, await_after_timeout=False):
+			if not self.monitor_game_screen(tolerance=0.01, screen=dragodinde_image, location=dragodinde_location, wait_after_timeout=False):
 				if not self.suspend:
 					self.debug('No more dragodinde')
 					break
@@ -305,7 +305,7 @@ class FarmingThread(TravelThread):
 			self.debug('Check next dragodinde')
 			self.press_key(data.KeyboardShortcuts['Down'])
 			# break if there is no more dragodinde
-			if not self.monitor_game_screen(tolerance=0.01, screen=dragodinde_image, location=dragodinde_location, await_after_timeout=False):
+			if not self.monitor_game_screen(tolerance=0.01, screen=dragodinde_image, location=dragodinde_location, wait_after_timeout=False):
 				if not self.suspend:
 					self.debug('No more dragodinde')
 					break

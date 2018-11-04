@@ -105,7 +105,7 @@ class BotThread(JobThread):
 
 			elif instruction['name'] == 'Wait':
 				if instruction['pause'] == 'True':
-					self.await()
+					self.wait()
 				elif instruction['duration'].isdigit():
 					self.sleep(int(instruction['duration']))
 

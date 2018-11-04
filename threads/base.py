@@ -65,7 +65,7 @@ class PausableThread(TimerThread):
 	def reset(self):
 		GObject.idle_add(self.parent.reset_buttons)
 
-	def await(self):
+	def wait(self):
 		self.pause()
 		GObject.idle_add(self.parent.set_buttons_to_paused)
 

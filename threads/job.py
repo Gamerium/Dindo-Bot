@@ -48,7 +48,7 @@ class JobThread(FarmingThread):
 						# TODO: implement go_to_store function
 						print('go to store')
 					else:
-						self.await()
+						self.wait()
 						self.log('Bot is full pod', LogType.Error)
 
 	def get_pod(self):

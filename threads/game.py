@@ -51,10 +51,10 @@ class GameThread(PausableThread):
 				# wait for screen to change
 				self.wait_for_screen_change(load_time=5)
 			elif not self.suspend:
-				self.await()
+				self.wait()
 				self.log('Unable to connect to account', LogType.Error)
 		else:
-			self.await()
+			self.wait()
 			self.log('Account not found', LogType.Error)
 
 	def disconnect(self, exit=False):
@@ -165,7 +165,7 @@ class GameThread(PausableThread):
 		# get back mouse to initial position
 		tools.move_mouse_to(mouse_position)
 
-	def monitor_game_screen(self, timeout=10, tolerance=0.0, screen=None, location=None, await_after_timeout=True):
+	def monitor_game_screen(self, timeout=10, tolerance=0.0, screen=None, location=None, wait_after_timeout=True):
 		if self.game_location or location:
 			# screen game
 			if location is None:
@@ -196,8 +196,8 @@ class GameThread(PausableThread):
 				prev_screen = new_screen
 				elapsed_time += 1
 			# if game screen hasn't change before timeout
-			if await_after_timeout and elapsed_time == timeout:
-				self.await()
+			if wait_after_timeout and elapsed_time == timeout:
+				self.wait()
 				self.log('Game screen don\'t change', LogType.Error)
 
 		return False
@@ -226,7 +226,7 @@ class GameThread(PausableThread):
 				elapsed_time += 1
 		# if timeout reached
 		if elapsed_time == timeout:
-			self.await()
+			self.wait()
 			self.log('Unable to connect to the internet', LogType.Error)
 
 	def sleep(self, duration=1):
