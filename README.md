@@ -10,15 +10,27 @@ Farming bot for Dofus game.
 
 ## Installation
 
-First, you need to install some dependencies using the following command:
+First, you need to install some dependencies using one of the following commands:
+
+**Debian & derivatives:**
 ```bash
 sudo apt install python-xlib python-pil
+```
+
+**Arch Linux & derivatives:**
+```bash
+sudo pacman -S python-xlib python-pillow
 ```
 
 To run the bot:
 ```bash
 cd /path/to/bot
 python bot.py
+```
+
+To run the bot in developer mode (brings some additional features):
+```bash
+python bot.py --enable-dev-env
 ```
 
 **Note:** you can also run the bot from the [desktop file](dindo-bot.desktop).
