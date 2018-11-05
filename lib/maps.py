@@ -2,10 +2,10 @@
 # Copyright (c) 2018 - 2019 AXeL
 
 import json
-from .tools import read_file, save_text_to_file, get_resource_path
+from .tools import read_file, save_text_to_file, get_full_path
 
 def get_filename():
-	return get_resource_path('../maps.data')
+	return get_full_path('maps.data')
 
 def to_string(data):
 	return json.dumps(data)

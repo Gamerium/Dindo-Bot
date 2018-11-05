@@ -60,7 +60,7 @@ class FarmingThread(TravelThread):
 		if location:
 			if self.save_dragodindes_images:
 				# create directory(s) to store dragodindes images
-				directory = tools.get_resource_path('../dragodindes') + '/' + tools.get_date()
+				directory = tools.get_full_path('dragodindes') + '/' + tools.get_date()
 				tools.create_directory(directory)
 				save_to = directory + '/' + name
 			else:

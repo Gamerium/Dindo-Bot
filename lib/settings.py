@@ -2,11 +2,11 @@
 # Copyright (c) 2018 - 2019 AXeL
 
 import json
-from .tools import read_file, save_text_to_file, get_resource_path
+from .tools import read_file, save_text_to_file, get_full_path
 from .shared import DebugLevel
 
 def get_filename():
-	return get_resource_path('../settings.json')
+	return get_full_path('settings.json')
 
 def load_defaults():
 	settings = {

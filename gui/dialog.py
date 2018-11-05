@@ -18,7 +18,7 @@ class AboutDialog(Gtk.AboutDialog):
 		self.set_website(shared.__website__)
 		self.set_website_label(shared.__website_label__)
 		self.set_authors(shared.__authors__)
-		logo = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/cover.png'), 64, 64)
+		logo = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/cover.png'), 64, 64)
 		self.set_logo(logo)
 		self.connect('response', lambda dialog, response: self.destroy())
 

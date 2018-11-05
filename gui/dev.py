@@ -41,7 +41,7 @@ class DevToolsWidget(Gtk.Table):
 		buttons_box = ButtonBox(orientation=Gtk.Orientation.VERTICAL, centered=True, linked=True)
 		hbox.add(buttons_box)
 		self.select_pixel_button = Gtk.Button()
-		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/crosshair.png'), 16, 16)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/crosshair.png'), 16, 16)
 		#pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
 		self.select_pixel_button.set_image(Gtk.Image(pixbuf=pixbuf))
 		self.select_pixel_button.set_tooltip_text('Select')
@@ -49,7 +49,7 @@ class DevToolsWidget(Gtk.Table):
 		buttons_box.add(self.select_pixel_button)
 		# Simulate
 		self.simulate_click_button = Gtk.Button()
-		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/hand.png'), 16, 16)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/hand.png'), 16, 16)
 		#pixbuf = Gdk.Cursor(Gdk.CursorType.HAND1).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
 		self.simulate_click_button.set_image(Gtk.Image(pixbuf=pixbuf))
 		self.simulate_click_button.set_tooltip_text('Simulate Click')
@@ -105,7 +105,7 @@ class DevToolsWidget(Gtk.Table):
 		hbox.add(self.scroll_menu_button)
 		# Simulate
 		simulate_scroll_button = Gtk.Button()
-		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/scroll.png'), 16, 16)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/scroll.png'), 16, 16)
 		#pixbuf = Gdk.Cursor(Gdk.CursorType.SB_V_DOUBLE_ARROW).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
 		simulate_scroll_button.set_image(Gtk.Image(pixbuf=pixbuf))
 		simulate_scroll_button.set_tooltip_text('Simulate')

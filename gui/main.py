@@ -36,7 +36,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Tabs
 		self.create_tabs()
 		# Window
-		self.set_icon_from_file(tools.get_resource_path('../icons/drago.png'))
+		self.set_icon_from_file(tools.get_full_path('icons/drago.png'))
 		self.set_size_request(900, 700)
 		self.set_resizable(False)
 		self.connect('key-press-event', self.on_key_press)
@@ -142,14 +142,14 @@ class BotWindow(Gtk.ApplicationWindow):
 	def on_take_screenshot_button_clicked(self, button):
 		if self.game_window:
 			screenshot_name = 'screenshot_' + tools.get_date_time()
-			screenshot_path = tools.get_resource_path('../' + screenshot_name)
+			screenshot_path = tools.get_full_path(screenshot_name)
 			tools.take_window_screenshot(self.game_window, screenshot_path)
 			self.log("Screenshot saved to '%s'" % screenshot_path, LogType.Info)
 
 	def create_header_bar(self, title):
 		### Header Bar
 		hb = Gtk.HeaderBar(title=title)
-		hb.pack_start(Gtk.Image(file=tools.get_resource_path('../icons/drago_24.png')))
+		hb.pack_start(Gtk.Image(file=tools.get_full_path('icons/drago_24.png')))
 		hb.set_show_close_button(True)
 		self.set_titlebar(hb)
 		## Settings button
@@ -278,7 +278,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.bot_widgets.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
 		bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path'))
 		bot_path_filechooserbutton.set_margin_left(10)
-		bot_path_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
+		bot_path_filechooserbutton.set_current_folder(tools.get_full_path('paths'))
 		bot_path_filechooserbutton.connect('file-set', self.on_bot_path_changed)
 		self.bot_widgets.add(bot_path_filechooserbutton)
 		## Start From Step
@@ -407,7 +407,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox = StackListBox()
 		path_page.add(stack_listbox)
 		## Enclos
-		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/enclos.png'), 24, 24)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/enclos.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
 		label = ImageLabel(image, 'Enclos')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -429,7 +429,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box.add(add_button)
 		widget.add(button_box)
 		## Zaap
-		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/zaap.png'), 24, 24)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/zaap.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
 		label = ImageLabel(image, 'Zaap')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -457,7 +457,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box.add(add_button)
 		widget.add(button_box)
 		## Zaapi
-		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/destination.png'), 24, 24)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/destination.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
 		label = ImageLabel(image, 'Zaapi')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -485,7 +485,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box.add(add_button)
 		widget.add(button_box)
 		## Collect
-		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/miner.png'), 24, 24)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/miner.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
 		label = ImageLabel(image, 'Collect')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -513,7 +513,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.collect_sp_filechooser_radio = Gtk.RadioButton(group=self.collect_sp_combo_radio)
 		hbox.add(self.collect_sp_filechooser_radio)
 		self.collect_sp_filechooserbutton = FileChooserButton(title='Choose store path', filter=('Store Path', '*.path'))
-		self.collect_sp_filechooserbutton.set_current_folder(tools.get_resource_path('../paths'))
+		self.collect_sp_filechooserbutton.set_current_folder(tools.get_full_path('paths'))
 		self.collect_sp_filechooserbutton.connect('file-set', lambda filechooserbutton: self.collect_sp_filechooser_radio.set_active(True))
 		hbox.pack_start(self.collect_sp_filechooserbutton, True, True, 0)
 		widget.add(hbox)
@@ -524,7 +524,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box.add(add_button)
 		widget.add(button_box)
 		## Click
-		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/arrow.png'), 24, 24)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/arrow.png'), 24, 24)
 		#pixbuf = Gdk.Cursor(Gdk.CursorType.ARROW).get_image().scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
 		image = Gtk.Image(pixbuf=pixbuf)
 		label = ImageLabel(image, 'Click')
@@ -539,7 +539,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Location
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
-		cursor_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/crosshair.png'), 16, 16)
+		cursor_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/crosshair.png'), 16, 16)
 		#cursor_pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
 		self.select_button = Gtk.Button()
 		self.select_button.set_size_request(40, -1)
@@ -549,7 +549,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox.pack_end(self.select_button, False, False, 0)
 		widget.add(hbox)
 		## Wait
-		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/hourglass.png'), 24, 24)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/hourglass.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
 		label = ImageLabel(image, 'Wait')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -773,7 +773,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_load_path_button_clicked(self, button):
 		dialog = OpenFileDialog('Load Path', self, ('Bot Path', '*.path'))
-		dialog.set_current_folder(tools.get_resource_path('../paths'))
+		dialog.set_current_folder(tools.get_full_path('paths'))
 		response = dialog.run()
 
 		if response == Gtk.ResponseType.OK:
@@ -787,7 +787,7 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_save_path_button_clicked(self, button):
 		dialog = SaveFileDialog('Save as', self, ('Bot Path', '*.path'))
-		dialog.set_current_folder(tools.get_resource_path('../paths'))
+		dialog.set_current_folder(tools.get_full_path('paths'))
 		dialog.set_current_name('path_' + tools.get_date_time() + '.path')
 		response = dialog.run()
 
@@ -876,14 +876,14 @@ class BotWindow(Gtk.ApplicationWindow):
 			else:
 				self.bot_thread.resume(game_location)
 			# enable/disable buttons
-			self.start_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif')))
+			self.start_button.set_image(Gtk.Image(file=tools.get_full_path('icons/loader.gif')))
 			self.start_button.set_sensitive(False)
 			self.pause_button.set_sensitive(True)
 			self.stop_button.set_sensitive(True)
 
 	def set_internet_state(self, state):
 		if state:
-			self.start_button.set_image(Gtk.Image(file=tools.get_resource_path('../icons/loader.gif')))
+			self.start_button.set_image(Gtk.Image(file=tools.get_full_path('icons/loader.gif')))
 		else:
 			self.log(tools.print_internet_state(state), LogType.Error)
 			self.start_button.set_image(Gtk.Image(icon_name='network-error'))

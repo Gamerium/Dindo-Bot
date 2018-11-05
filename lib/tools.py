@@ -40,12 +40,13 @@ def get_game_window(window_xid):
 	game_window = GdkX11.X11Window.foreign_new_for_display(gdk_display, window_xid)
 	return game_window
 
-# Return absolute path to resource
-def get_resource_path(rel_path):
+# Return absolute path
+def get_full_path(rel_path):
 	dir_of_py_file = os.path.dirname(__file__)
-	rel_path_to_resource = os.path.join(dir_of_py_file, rel_path)
-	abs_path_to_resource = os.path.abspath(rel_path_to_resource)
-	return abs_path_to_resource
+	root_dir = os.path.join(dir_of_py_file, '..')
+	relative_path = os.path.join(root_dir, rel_path)
+	absolute_path = os.path.abspath(relative_path)
+	return absolute_path
 
 # Return internet state
 def internet_on(host='8.8.8.8', port=53, timeout=3):

@@ -1,10 +1,10 @@
 # Dindo Bot
 # Copyright (c) 2018 - 2019 AXeL
 
-from .tools import save_text_to_file, get_resource_path, get_date, get_time
+from .tools import save_text_to_file, get_full_path, get_date, get_time
 
 def get_filename():
-	return get_resource_path('../logs/' + get_date() + '.log')
+	return get_full_path('logs/' + get_date() + '.log')
 
 def new_entry(text):
 	filename = get_filename()
