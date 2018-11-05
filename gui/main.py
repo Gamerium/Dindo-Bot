@@ -524,7 +524,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		button_box.add(add_button)
 		widget.add(button_box)
 		## Click
-		pixbuf = Gdk.Cursor(Gdk.CursorType.ARROW).get_image().scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/arrow.png'), 24, 24)
+		#pixbuf = Gdk.Cursor(Gdk.CursorType.ARROW).get_image().scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
 		image = Gtk.Image(pixbuf=pixbuf)
 		label = ImageLabel(image, 'Click')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -538,7 +539,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Location
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
-		cursor_pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
+		cursor_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_resource_path('../icons/crosshair.png'), 16, 16)
+		#cursor_pixbuf = Gdk.Cursor(Gdk.CursorType.CROSSHAIR).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
 		self.select_button = Gtk.Button()
 		self.select_button.set_size_request(40, -1)
 		self.select_button.set_tooltip_text('Select')
