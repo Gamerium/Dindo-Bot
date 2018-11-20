@@ -14,12 +14,12 @@ First, you need to install some dependencies using one of the following commands
 
 **Debian & derivatives:**
 ```bash
-sudo apt install python-xlib python-pil
+sudo apt install python-gi gir1.2-gtk-3.0 gir1.2-wnck-3.0 python-xlib python-pil
 ```
 
 **Arch Linux & derivatives:**
 ```bash
-sudo pacman -S python-xlib python-pillow
+sudo pacman -S python-gobject python-xlib python-pillow
 ```
 
 To run the bot:
