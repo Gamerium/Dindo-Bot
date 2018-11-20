@@ -30,7 +30,7 @@ python bot.py
 
 To run the bot in developer mode (brings some additional features):
 ```bash
-python bot.py --enable-dev-env
+python bot.py --dev
 ```
 
 **Note:** you can also run the bot from the [desktop file](dindo-bot.desktop).

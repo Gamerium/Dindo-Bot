@@ -234,7 +234,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.debug_page.add(self.debug_view)
 		log_notebook.append_page(self.debug_page, Gtk.Label('Debug'))
 		# Dev tools Tab
-		if '--enable-dev-env' in self.args:
+		if '--dev' in self.args:
 			dev_tools_page = DevToolsWidget(self)
 			log_notebook.append_page(dev_tools_page, Gtk.Label('Dev Tools'))
 			log_notebook.show_all()
@@ -268,7 +268,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.unplug_button.connect('clicked', self.on_unplug_button_clicked)
 		game_window_box.add(self.unplug_button)
 		# Plug
-		if '--enable-dev-env' in self.args:
+		if '--dev' in self.args:
 			self.plug_button = Gtk.Button()
 			self.plug_button.set_image(Gtk.Image(icon_name='window-new-symbolic'))
 			self.plug_button.set_tooltip_text('Plug')
@@ -942,7 +942,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# enable/disable widgets
 		self.unplug_button.hide()
 		self.refresh_button.show()
-		if '--enable-dev-env' in self.args:
+		if '--dev' in self.args:
 			self.plug_button.show()
 		self.game_window_combo.set_sensitive(True)
 		self.populate_game_window_combo()
@@ -975,7 +975,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			#self.game_window.show() # force show (when minimized)
 			# enable/disable widgets
 			self.refresh_button.hide()
-			if '--enable-dev-env' in self.args:
+			if '--dev' in self.args:
 				self.plug_button.hide()
 			self.unplug_button.show()
 			self.game_window_combo.set_sensitive(False)
