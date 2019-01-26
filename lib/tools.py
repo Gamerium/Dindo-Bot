@@ -26,7 +26,7 @@ def get_game_window_list():
 		window_name = window.get_name()
 		instance_name = window.get_class_instance_name()
 		#print('[' + instance_name + '] ' + window_name)
-		if instance_name == 'Dofus':
+		if instance_name == 'dofus.exe': # use 'sun-awt-X11-XFramePeer' for Wakfu
 			if window_name in game_window_list:
 				name = '%s (%d)' % (window_name, len(game_window_list)+1)
 			else:
