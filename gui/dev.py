@@ -9,19 +9,19 @@ from .custom import CustomTreeView, CustomComboBox, MenuButton, SpinButton, Butt
 from .dialog import CopyTextDialog
 from threading import Thread
 
-class DevToolsWidget(Gtk.Table):
+class DevToolsWidget(Gtk.Box):
 
 	def __init__(self, parent):
-		Gtk.Table.__init__(self, 1, 3, True)
-		self.set_border_width(5)
+		Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		self.set_border_width(10)
 		self.parent = parent
 		#self.parent.connect('button-press-event', self.on_click)
 		## Pixel
-		left_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		left_box.add(Gtk.Label('<b>Pixel</b>', xalign=0, use_markup=True))
+		top_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		top_box.add(Gtk.Label('<b>Pixel</b>', xalign=0, use_markup=True))
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-		left_box.pack_start(hbox, True, True, 0)
-		self.attach(left_box, 0, 2, 0, 1)
+		top_box.pack_start(hbox, True, True, 0)
+		self.add(top_box)
 		# TreeView
 		model = Gtk.ListStore(GdkPixbuf.Pixbuf, int, int, int, int, str)
 		text_renderer = Gtk.CellRendererText()
@@ -63,13 +63,11 @@ class DevToolsWidget(Gtk.Table):
 		self.delete_pixel_button.set_sensitive(False)
 		self.delete_pixel_button.connect('clicked', self.on_delete_pixel_button_clicked)
 		buttons_box.add(self.delete_pixel_button)
-		# Separator
-		right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		right_box.add(Gtk.Separator(orientation=Gtk.Orientation.VERTICAL, margin=10))
-		self.attach(right_box, 2, 3, 0, 1)
 		## Key Press
+		bottom_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		self.add(bottom_box)
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		right_box.pack_start(vbox, True, True, 0)
+		bottom_box.pack_start(vbox, True, True, 0)
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		vbox.add(hbox)
 		hbox.add(Gtk.Label('<b>Key Press</b>', xalign=0, use_markup=True))

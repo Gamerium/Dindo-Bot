@@ -28,16 +28,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.settings = settings.load()
 		# Header Bar
 		self.create_header_bar(title)
-		# Tables
-		self.htable = Gtk.Table(1, 3, True) # horizontal table
-		self.vtable = Gtk.Table(4, 1, True) # vertical table
-		self.htable.attach(self.vtable, 1, 3, 0, 1)
-		self.add(self.htable)
 		# Tabs
 		self.create_tabs()
 		# Window
 		self.set_icon_from_file(tools.get_full_path('icons/drago.png'))
-		self.set_size_request(900, 700)
+		#self.set_size_request(350, 700)
+		self.set_default_size(350, -1)
 		self.set_resizable(False)
 		self.connect('key-press-event', self.on_key_press)
 		self.connect('configure-event', self.on_resize_or_move)
@@ -47,9 +43,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.unplug_button.hide()
 		if not self.settings['Debug']['Enabled']:
 			self.debug_page.hide()
-		if not self.settings['Job']['EnablePodBar']:
+		if not self.settings['State']['EnablePodBar']:
 			self.podbar_box.hide()
-		if not self.settings['Job']['EnableMiniMap']:
+		if not self.settings['State']['EnableMiniMap']:
 			self.minimap_box.hide()
 
 	def on_key_press(self, widget, event):
@@ -202,13 +198,13 @@ class BotWindow(Gtk.ApplicationWindow):
 		adj.set_value(adj.get_upper() - adj.get_page_size())
 
 	def create_tabs(self):
-		log_notebook = Gtk.Notebook()
-		log_notebook.set_border_width(2)
-		self.vtable.attach(log_notebook, 0, 1, 3, 4)
 		bot_notebook = Gtk.Notebook()
 		bot_notebook.set_border_width(2)
-		self.htable.attach(bot_notebook, 0, 1, 0, 1)
-		# Log Tab/Page
+		self.add(bot_notebook)
+		config_notebook = Gtk.Notebook()
+		log_notebook = Gtk.Notebook()
+		log_notebook.set_size_request(-1, 200)
+		## Log Tab
 		log_page = Gtk.ScrolledWindow()
 		self.log_view = Gtk.TextView()
 		self.log_view.set_border_width(5)
@@ -221,7 +217,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.blue_text_tag = self.log_buf.create_tag('blue', foreground='#007bff')
 		log_page.add(self.log_view)
 		log_notebook.append_page(log_page, Gtk.Label('Log'))
-		# Debug Tab
+		## Debug Tab
 		self.debug_page = Gtk.ScrolledWindow()
 		self.debug_view = Gtk.TextView()
 		self.debug_view.set_border_width(5)
@@ -233,22 +229,20 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.debug_buf = self.debug_view.get_buffer()
 		self.debug_page.add(self.debug_view)
 		log_notebook.append_page(self.debug_page, Gtk.Label('Debug'))
-		# Dev tools Tab
-		if '--dev' in self.args:
-			dev_tools_page = DevToolsWidget(self)
-			log_notebook.append_page(dev_tools_page, Gtk.Label('Dev Tools'))
-			log_notebook.show_all()
-			log_notebook.set_current_page(2)
 		### Bot Tab
 		bot_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		bot_page.set_border_width(10)
+		bot_page.set_border_width(2)
+		bot_page.add(config_notebook)
+		bot_page.pack_start(log_notebook, True, True, 0)
 		bot_notebook.append_page(bot_page, Gtk.Label('Bot'))
-		self.bot_widgets = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		bot_page.add(self.bot_widgets)
+		## Config Tab
+		self.bot_config_widgets = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		self.bot_config_widgets.set_border_width(10)
+		config_notebook.append_page(self.bot_config_widgets, Gtk.Label('Config'))
 		## Game Window
-		self.bot_widgets.add(Gtk.Label('<b>Game Window</b>', xalign=0, use_markup=True))
+		self.bot_config_widgets.add(Gtk.Label('<b>Game Window</b>', xalign=0, use_markup=True))
 		game_window_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		self.bot_widgets.add(game_window_box)
+		self.bot_config_widgets.add(game_window_box)
 		# ComboBox
 		self.game_window_combo = Gtk.ComboBoxText()
 		self.game_window_combo.set_margin_left(10)
@@ -275,16 +269,16 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.plug_button.connect('clicked', self.on_plug_button_clicked)
 			game_window_box.add(self.plug_button)
 		## Bot Path
-		self.bot_widgets.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
+		self.bot_config_widgets.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
 		bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path'))
 		bot_path_filechooserbutton.set_margin_left(10)
 		bot_path_filechooserbutton.set_current_folder(tools.get_full_path('paths'))
 		bot_path_filechooserbutton.connect('file-set', self.on_bot_path_changed)
-		self.bot_widgets.add(bot_path_filechooserbutton)
+		self.bot_config_widgets.add(bot_path_filechooserbutton)
 		## Start From Step
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
-		self.bot_widgets.add(hbox)
+		self.bot_config_widgets.add(hbox)
 		hbox.add(Gtk.Label('Start From Step'))
 		self.step_spin_button = SpinButton(min=1, max=1000)
 		self.step_spin_button.set_margin_left(10)
@@ -293,7 +287,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
 		hbox.add(Gtk.Label('Repeat Path'))
-		self.bot_widgets.add(hbox)
+		self.bot_config_widgets.add(hbox)
 		# Switch
 		self.repeat_switch = Gtk.Switch()
 		self.repeat_switch.connect('notify::active', lambda switch, pspec: self.repeat_spin_button.set_sensitive(switch.get_active()))
@@ -308,7 +302,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		## Connect To Account
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.add(Gtk.Label('<b>Connect To Account</b>', xalign=0, use_markup=True))
-		self.bot_widgets.add(hbox)
+		self.bot_config_widgets.add(hbox)
 		# Switch
 		self.connect_to_account_switch = Gtk.Switch()
 		self.connect_to_account_switch.connect('notify::active', lambda switch, pspec: self.connect_to_account_box.set_sensitive(switch.get_active()))
@@ -317,7 +311,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.connect_to_account_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		self.connect_to_account_box.set_margin_left(10)
 		self.connect_to_account_box.set_sensitive(False)
-		self.bot_widgets.add(self.connect_to_account_box)
+		self.bot_config_widgets.add(self.connect_to_account_box)
 		# Account
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.add(Gtk.Label('Account'))
@@ -334,22 +328,31 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Switch
 		self.disconnect_after_switch = Gtk.Switch()
 		hbox.pack_end(self.disconnect_after_switch, False, False, 0)
-		## Pod
+		## State Tab
+		bot_state_widgets = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		bot_state_widgets.set_border_width(10)
+		config_notebook.append_page(bot_state_widgets, Gtk.Label('State'))
+		# Pod
 		self.podbar_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		bot_page.add(self.podbar_box)
+		bot_state_widgets.add(self.podbar_box)
 		self.podbar_box.add(Gtk.Label('<b>Pod</b>', xalign=0, use_markup=True))
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 		self.podbar_box.pack_start(vbox, True, True, 0)
 		self.podbar = Gtk.ProgressBar()
 		vbox.pack_start(self.podbar, True, False, 0)
-		## MiniMap
+		# MiniMap
 		self.minimap_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		bot_page.add(self.minimap_box)
+		bot_state_widgets.add(self.minimap_box)
 		self.minimap_box.add(Gtk.Label('<b>MiniMap</b>', xalign=0, use_markup=True))
-		self.minimap = MiniMap(grid_size=(18, 18))
-		self.minimap.set_size_request(-1, 210)
-		self.minimap.set_margin_left(10)
+		self.minimap = MiniMap(grid_size=(14, 14))
+		self.minimap.set_size_request(-1, 240)
 		self.minimap_box.add(self.minimap)
+		## Dev tools Tab
+		if '--dev' in self.args:
+			dev_tools_page = DevToolsWidget(self)
+			config_notebook.append_page(dev_tools_page, Gtk.Label('Dev Tools'))
+			config_notebook.show_all()
+			config_notebook.set_current_page(2)
 		## Start
 		button_box = ButtonBox(centered=True, linked=True)
 		bot_page.pack_end(button_box, False, False, 0)
@@ -871,7 +874,7 @@ class BotWindow(Gtk.ApplicationWindow):
 				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path, account_id, disconnect_after)
 				self.bot_thread.start()
 				self.settings_button.set_sensitive(False)
-				self.bot_widgets.set_sensitive(False)
+				self.bot_config_widgets.set_sensitive(False)
 			# resume bot thread if paused
 			else:
 				self.bot_thread.resume(game_location)
@@ -909,7 +912,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.stop_button.set_sensitive(False)
 		self.pause_button.set_sensitive(False)
 		self.settings_button.set_sensitive(True)
-		self.bot_widgets.set_sensitive(True)
+		self.bot_config_widgets.set_sensitive(True)
 
 	def on_stop_button_clicked(self, button):
 		if self.bot_thread and self.bot_thread.isAlive():

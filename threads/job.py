@@ -13,8 +13,8 @@ class JobThread(FarmingThread):
 
 	def __init__(self, parent, game_location):
 		FarmingThread.__init__(self, parent, game_location)
-		self.podbar_enabled = parent.settings['Job']['EnablePodBar']
-		self.minimap_enabled = parent.settings['Job']['EnableMiniMap']
+		self.podbar_enabled = parent.settings['State']['EnablePodBar']
+		self.minimap_enabled = parent.settings['State']['EnableMiniMap']
 
 	def collect(self, map_name, store_path):
 		map_data = parser.parse_data(maps.load(), map_name)

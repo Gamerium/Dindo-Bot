@@ -366,14 +366,14 @@ class PreferencesDialog(CustomDialog):
 		### Bot
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack.add_titled(box, 'bot', 'Bot')
-		## Job
-		box.add(Gtk.Label('<b>Job</b>', xalign=0, use_markup=True))
+		## State
+		box.add(Gtk.Label('<b>State</b>', xalign=0, use_markup=True))
 		# PodBar
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
 		hbox.add(Gtk.Label('PodBar'))
 		podbar_switch = Gtk.Switch()
-		podbar_switch.set_active(self.parent.settings['Job']['EnablePodBar'])
+		podbar_switch.set_active(self.parent.settings['State']['EnablePodBar'])
 		podbar_switch.connect('notify::active', self.on_podbar_switch_activated)
 		hbox.pack_end(podbar_switch, False, False, 0)
 		box.add(hbox)
@@ -382,7 +382,7 @@ class PreferencesDialog(CustomDialog):
 		hbox.set_margin_left(10)
 		hbox.add(Gtk.Label('MiniMap'))
 		minimap_switch = Gtk.Switch()
-		minimap_switch.set_active(self.parent.settings['Job']['EnableMiniMap'])
+		minimap_switch.set_active(self.parent.settings['State']['EnableMiniMap'])
 		minimap_switch.connect('notify::active', self.on_minimap_switch_activated)
 		hbox.pack_end(minimap_switch, False, False, 0)
 		box.add(hbox)
@@ -462,7 +462,7 @@ class PreferencesDialog(CustomDialog):
 			self.parent.podbar_box.show()
 		else:
 			self.parent.podbar_box.hide()
-		settings.update_and_save(self.parent.settings, key='Job', subkey='EnablePodBar', value=value)
+		settings.update_and_save(self.parent.settings, key='State', subkey='EnablePodBar', value=value)
 
 	def on_minimap_switch_activated(self, switch, pspec):
 		value = switch.get_active()
@@ -470,7 +470,7 @@ class PreferencesDialog(CustomDialog):
 			self.parent.minimap_box.show()
 		else:
 			self.parent.minimap_box.hide()
-		settings.update_and_save(self.parent.settings, key='Job', subkey='EnableMiniMap', value=value)
+		settings.update_and_save(self.parent.settings, key='State', subkey='EnableMiniMap', value=value)
 
 	def on_debug_switch_activated(self, switch, pspec):
 		value = switch.get_active()

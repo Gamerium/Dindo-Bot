@@ -28,9 +28,9 @@ def load_defaults():
 		'Account': {
 			'ExitGame': False
 		},
-		'Job': {
-			'EnablePodBar':  False,
-			'EnableMiniMap': False
+		'State': {
+			'EnablePodBar':  True,
+			'EnableMiniMap': True
 		},
 		'Farming': {
 			'SaveDragodindesImages': False
