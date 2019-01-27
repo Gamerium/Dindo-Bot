@@ -948,7 +948,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.game_window.show() # force show (when minimized)
 			tools.activate_window(self.game_window)
 			# save game window location
-			self.game_window_location = (game_window_x_position, game_window_y_position, game_window_width, game_window_height)
+			self.game_window_location = (int(game_window_x_position), int(game_window_y_position), int(game_window_width), int(game_window_height))
 			# enable/disable widgets
 			self.refresh_button.hide()
 			self.unbind_button.show()
