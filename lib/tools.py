@@ -34,6 +34,18 @@ def get_game_window_list():
 			game_window_list[name] = window.get_xid()
 	return game_window_list
 
+# Return screen size
+def get_screen_size():
+	screen = Gdk.Screen.get_default()
+	return (screen.get_width(), screen.get_height())
+
+# Activate a window
+def activate_window(window):
+	screen = Wnck.Screen.get_default()
+	screen.force_update()
+	wnckwin = [win for win in screen.get_windows() if win.get_xid() == window.get_xid()][0]
+	wnckwin.activate(GdkX11.x11_get_server_time(window))
+
 # Return game window
 def get_game_window(window_xid):
 	gdk_display = GdkX11.X11Display.get_default()

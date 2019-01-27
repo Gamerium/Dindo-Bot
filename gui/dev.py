@@ -115,11 +115,9 @@ class DevToolsWidget(Gtk.Box):
 		direction = self.scroll_direction_combo.get_active_text()
 		value = self.scroll_spin_button.get_value_as_int()
 		clicks = value if direction == 'up' else -value
-		if self.parent.game_area:
-			# get game area location
-			game_location = tools.get_widget_location(self.parent.game_area)
+		if self.parent.game_window and not self.game_window.is_destroyed() and self.parent.game_window_location:
 			# get the center of the game location
-			x, y = tools.coordinates_center(game_location)
+			x, y = tools.coordinates_center(self.parent.game_window_location)
 		else:
 			x, y = (None, None)
 		# scroll
@@ -147,8 +145,7 @@ class DevToolsWidget(Gtk.Box):
 		button.set_sensitive(False)
 		self.parent.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSSHAIR))
 		# wait for click
-		game_location = tools.get_widget_location(self.parent.game_area)
-		Thread(target=self.parent.wait_for_click, args=(self.add_pixel, game_location)).start()
+		Thread(target=self.parent.wait_for_click, args=(self.add_pixel, self.parent.game_window_location)).start()
 
 	def on_simulate_click_button_clicked(self, button):
 		# get click coordinates
@@ -156,8 +153,8 @@ class DevToolsWidget(Gtk.Box):
 		x, y, width, height = (selected_row[1], selected_row[2], selected_row[3], selected_row[4])
 		#print('x: %d, y: %d, width: %d, height: %d' % (x, y, width, height))
 		# adjust for game area
-		if self.parent.game_area:
-			game_x, game_y, game_width, game_height = tools.get_widget_location(self.parent.game_area)
+		if self.parent.game_window and not self.game_window.is_destroyed() and self.parent.game_window_location:
+			game_x, game_y, game_width, game_height = self.parent.game_window_location
 			#print('game_x: %d, game_y: %d, game_width: %d, game_height: %d' % (game_x, game_y, game_width, game_height))
 			click_x, click_y = tools.adjust_click_position(x, y, width, height, game_x, game_y, game_width, game_height)
 		else:

@@ -68,41 +68,6 @@ class CopyTextDialog(CustomDialog):
 		self.show_all()
 		self.run()
 
-class PlugDialog(CustomDialog):
-
-	def __init__(self, transient_for):
-		CustomDialog.__init__(self, transient_for=transient_for, title='Plug Game Window', destroy_on_response=False)
-		self.parent = transient_for
-		self.connect('delete-event', lambda dialog, response: self.destroy())
-		# Window ID entry
-		content_area = self.get_content_area()
-		content_area.set_spacing(5)
-		content_area.add(Gtk.Label('<b>Window ID</b>', xalign=0, use_markup=True))
-		self.entry = Gtk.Entry()
-		self.entry.set_margin_left(10)
-		self.entry.connect('focus-in-event', lambda entry, event: self.error_box.hide())
-		content_area.add(self.entry)
-		# Error box
-		self.error_box = MessageBox(color='red')
-		self.error_box.set_margin_left(10)
-		content_area.add(self.error_box)
-		# Plug button
-		self.action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
-		plug_button = Gtk.Button('Plug')
-		plug_button.connect('clicked', self.on_plug_button_clicked)
-		self.add_action_widget(plug_button, Gtk.ResponseType.OK)
-		self.show_all()
-
-	def on_plug_button_clicked(self, button):
-		window_xid = self.entry.get_text().strip()
-		if not window_xid:
-			self.error_box.print_message('Please type an ID')
-		elif window_xid.startswith('0x') or window_xid.isdigit():
-			self.parent.plug_game_window(int(window_xid, 0))
-			self.destroy()
-		else:
-			self.error_box.print_message('ID should be numeric')
-
 class LoadMapDialog(CustomDialog):
 
 	def __init__(self, transient_for):
@@ -348,7 +313,7 @@ class PreferencesDialog(CustomDialog):
 		## Game
 		box.add(Gtk.Label('<b>Game</b>', xalign=0, use_markup=True))
 		# Keep game checkbox
-		keep_game_on_unplug_check = Gtk.CheckButton('Keep game open when unplug')
+		keep_game_on_unplug_check = Gtk.CheckButton('Keep game open when unbind')
 		keep_game_on_unplug_check.set_margin_left(10)
 		keep_game_on_unplug_check.set_active(self.parent.settings['Game']['KeepOpen'])
 		keep_game_on_unplug_check.connect('clicked', 

@@ -20,7 +20,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		logger.add_separator()
 		# Initialise class attributes
 		self.game_window = None
-		self.game_area = None
+		self.game_window_location = None
 		self.bot_path = None
 		self.bot_thread = None
 		self.args = tools.get_cmd_args()
@@ -33,14 +33,14 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Window
 		self.set_icon_from_file(tools.get_full_path('icons/drago.png'))
 		#self.set_size_request(350, 700)
-		self.set_default_size(350, -1)
+		self.set_default_size(350, 700)
 		self.set_resizable(False)
 		self.connect('key-press-event', self.on_key_press)
 		self.connect('configure-event', self.on_resize_or_move)
 		self.connect('window-state-event', self.on_minimize)
 		self.connect('destroy', Gtk.main_quit)
 		self.show_all()
-		self.unplug_button.hide()
+		self.unbind_button.hide()
 		if not self.settings['Debug']['Enabled']:
 			self.debug_page.hide()
 		if not self.settings['State']['EnablePodBar']:
@@ -255,19 +255,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.refresh_button.set_tooltip_text('Refresh')
 		self.refresh_button.connect('clicked', self.on_refresh_button_clicked)
 		game_window_box.add(self.refresh_button)
-		# Unplug
-		self.unplug_button = Gtk.Button()
-		self.unplug_button.set_image(Gtk.Image(icon_name='view-restore'))
-		self.unplug_button.set_tooltip_text('Unplug')
-		self.unplug_button.connect('clicked', self.on_unplug_button_clicked)
-		game_window_box.add(self.unplug_button)
-		# Plug
-		if '--dev' in self.args:
-			self.plug_button = Gtk.Button()
-			self.plug_button.set_image(Gtk.Image(icon_name='window-new-symbolic'))
-			self.plug_button.set_tooltip_text('Plug')
-			self.plug_button.connect('clicked', self.on_plug_button_clicked)
-			game_window_box.add(self.plug_button)
+		# Unbind
+		self.unbind_button = Gtk.Button()
+		self.unbind_button.set_image(Gtk.Image(icon_name='view-restore'))
+		self.unbind_button.set_tooltip_text('Unbind')
+		self.unbind_button.connect('clicked', self.on_unbind_button_clicked)
+		game_window_box.add(self.unbind_button)
 		## Bot Path
 		self.bot_config_widgets.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
 		bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path'))
@@ -351,8 +344,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		if '--dev' in self.args:
 			dev_tools_page = DevToolsWidget(self)
 			config_notebook.append_page(dev_tools_page, Gtk.Label('Dev Tools'))
-			config_notebook.show_all()
-			config_notebook.set_current_page(2)
+			#config_notebook.show_all()
+			#config_notebook.set_current_page(2)
 		## Start
 		button_box = ButtonBox(centered=True, linked=True)
 		bot_page.pack_end(button_box, False, False, 0)
@@ -754,8 +747,7 @@ class BotWindow(Gtk.ApplicationWindow):
 	def on_select_resource_button_clicked(self, button):
 		button.set_sensitive(False)
 		self.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSSHAIR))
-		game_location = tools.get_widget_location(self.game_area)
-		Thread(target=self.wait_for_click, args=(self.add_map_data, game_location)).start()
+		Thread(target=self.wait_for_click, args=(self.add_map_data, self.game_window_location)).start()
 
 	def on_map_data_listbox_add(self):
 		if not self.save_map_button.get_sensitive():
@@ -848,8 +840,7 @@ class BotWindow(Gtk.ApplicationWindow):
 	def on_select_button_clicked(self, button):
 		button.set_sensitive(False)
 		self.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSSHAIR))
-		game_location = tools.get_widget_location(self.game_area)
-		Thread(target=self.wait_for_click, args=(self.add_click, game_location)).start()
+		Thread(target=self.wait_for_click, args=(self.add_click, self.game_window_location)).start()
 
 	def on_start_button_clicked(self, button):
 		if self.game_window is None:
@@ -857,8 +848,6 @@ class BotWindow(Gtk.ApplicationWindow):
 		elif not self.bot_path:
 			AlertDialog(self, 'Please select a bot path')
 		else:
-			# get game location
-			game_location = tools.get_widget_location(self.game_area)
 			# start bot thread
 			if self.bot_thread is None or not self.bot_thread.isAlive():
 				# get thread parameters
@@ -871,13 +860,13 @@ class BotWindow(Gtk.ApplicationWindow):
 					account_id = None
 					disconnect_after = False
 				# run thread
-				self.bot_thread = BotThread(self, game_location, start_from_step, repeat_path, account_id, disconnect_after)
+				self.bot_thread = BotThread(self, self.game_window_location, start_from_step, repeat_path, account_id, disconnect_after)
 				self.bot_thread.start()
 				self.settings_button.set_sensitive(False)
 				self.bot_config_widgets.set_sensitive(False)
 			# resume bot thread if paused
 			else:
-				self.bot_thread.resume(game_location)
+				self.bot_thread.resume(self.game_window_location)
 			# enable/disable buttons
 			self.start_button.set_image(Gtk.Image(file=tools.get_full_path('icons/loader.gif')))
 			self.start_button.set_sensitive(False)
@@ -932,55 +921,37 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.game_window_combo_ignore_change = False
 
 	def focus_game(self):
-		if self.game_area:
+		if self.game_window:
 			#self.debug('Focus game', DebugLevel.High)
-			# set keyboard focus
-			self.game_area.child_focus(Gtk.DirectionType.TAB_BACKWARD)
+			# activate game window
+			tools.activate_window(self.game_window)
 
-	def on_plug_added(self, widget):
-		self.debug('Game window plugged')
-
-	def on_plug_removed(self, widget):
-		self.debug('Game window unplugged')
-		# enable/disable widgets
-		self.unplug_button.hide()
-		self.refresh_button.show()
-		if '--dev' in self.args:
-			self.plug_button.show()
-		self.game_window_combo.set_sensitive(True)
-		self.populate_game_window_combo()
-		self.take_screenshot_button.set_sensitive(False)
-		# if game window have been destroyed/closed
-		game_window_destroyed = self.game_window and self.game_window.is_destroyed()
-		if game_window_destroyed:
-			self.game_window = None
-		# keep or destroy socket
-		if self.settings['Game']['KeepOpen'] and not game_window_destroyed:
-			return True
-		else:
-			self.game_area = None
-
-	def plug_game_window(self, window_xid):
+	def bind_game_window(self, window_xid):
 		self.game_window = tools.get_game_window(window_xid)
 		if self.game_window:
-			# create socket if not exist
-			if self.game_area is None:
-				self.game_area = Gtk.Socket()
-				#self.game_area.set_can_focus(True)
-				self.game_area.connect('plug-added', self.on_plug_added)
-				self.game_area.connect('plug-removed', self.on_plug_removed)
-				self.game_area.show_all()
-				self.vtable.attach(self.game_area, 0, 1, 0, 3)
-			# plug game window
-			self.debug('Plug game window (id: %d)' % window_xid, DebugLevel.Low)
-			self.game_area.add_id(window_xid)
-			#self.game_window.reparent(self.game_area.get_window(), 0, 0)
-			#self.game_window.show() # force show (when minimized)
+			bot_width, bot_height = self.get_default_size()
+			screen_width, screen_height = tools.get_screen_size()
+			game_window_left_margin = 1
+			game_window_decoration_height = 36
+			game_window_width = screen_width - bot_width - game_window_left_margin
+			game_window_height = bot_height
+			bot_x_position = screen_width / 2 - (bot_width + game_window_width) / 2
+			bot_y_position = screen_height / 2 - bot_height / 2
+			game_window_x_position = bot_x_position + bot_width + game_window_left_margin
+			game_window_y_position = bot_y_position + game_window_decoration_height
+			# bind game window
+			self.debug('Bind game window (id: %d, width: %d, height: %d)' % (window_xid, game_window_width, game_window_height), DebugLevel.Low)
+			self.move(bot_x_position, bot_y_position)
+			self.game_window.unmaximize()
+			self.game_window.resize(game_window_width, game_window_height)
+			self.game_window.move(game_window_x_position, game_window_y_position)
+			self.game_window.show() # force show (when minimized)
+			tools.activate_window(self.game_window)
+			# save game window location
+			self.game_window_location = (game_window_x_position, game_window_y_position, game_window_width, game_window_height)
 			# enable/disable widgets
 			self.refresh_button.hide()
-			if '--dev' in self.args:
-				self.plug_button.hide()
-			self.unplug_button.show()
+			self.unbind_button.show()
 			self.game_window_combo.set_sensitive(False)
 			self.take_screenshot_button.set_sensitive(True)
 
@@ -989,27 +960,27 @@ class BotWindow(Gtk.ApplicationWindow):
 			# get selected game window
 			selected = combo.get_active_text()
 			window_xid = self.game_windowList[selected]
-			# plug it
-			self.plug_game_window(window_xid)
+			# bind it
+			self.bind_game_window(window_xid)
 
-	def unplug_game_window(self):
-		if self.game_window and not self.game_window.is_destroyed():
-			self.debug('Keep game window open')
-			root = Gdk.get_default_root_window()
-			self.game_window.reparent(root, 0, 0)
-
-		self.game_window = None
-
-	def on_unplug_button_clicked(self, button):
-		self.debug('Unplug game window')
+	def unbind_game_window(self):
+		self.debug('Unbind game window')
 		if self.settings['Game']['KeepOpen']:
-			self.unplug_game_window()
-		else:
+			self.debug('Keep game window open')
+		elif self.game_window and not self.game_window.is_destroyed():
 			self.game_window.destroy()
+		self.game_window = None
+		self.game_window_location = None
+		self.debug('Game window unbinded')
+		# enable/disable widgets
+		self.unbind_button.hide()
+		self.refresh_button.show()
+		self.game_window_combo.set_sensitive(True)
+		self.populate_game_window_combo()
+		self.take_screenshot_button.set_sensitive(False)
 
-	def on_plug_button_clicked(self, button):
-		dialog = PlugDialog(self)
-		dialog.run()
+	def on_unbind_button_clicked(self, button):
+		self.unbind_game_window()
 
 	def on_refresh_button_clicked(self, button):
 		self.populate_game_window_combo()
@@ -1023,9 +994,6 @@ class BotWindow(Gtk.ApplicationWindow):
 
 		# We only terminate when the user presses the OK button
 		if response == Gtk.ResponseType.OK:
-			# keep game window
-			if self.settings['Game']['KeepOpen']:
-				self.unplug_game_window()
 			# stop bot thread
 			if self.bot_thread and self.bot_thread.isAlive():
 				self.bot_thread.stop()

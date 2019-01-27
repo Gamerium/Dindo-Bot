@@ -23,7 +23,7 @@ def load_defaults():
 			'Take Game Screenshot': 'Ctrl+Print'
 		},
 		'Game': {
-			'KeepOpen': False
+			'KeepOpen': True
 		},
 		'Account': {
 			'ExitGame': False
