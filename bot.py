@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Dindo Bot
 # Copyright (c) 2018 - 2019 AXeL
 
