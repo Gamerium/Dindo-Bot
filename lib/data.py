@@ -39,6 +39,9 @@ Boxes = {
 	'PodBar':                {'x': 419, 'y': 366, 'width': 51, 'height': 1}
 }
 
+# Boxes window size
+BoxesWindowSize = (566, 456)
+
 # DragodindeSenerity
 class DragodindeSenerity:
 	Negative, Medium, Positive = ('Negative', 'Medium', 'Positive')

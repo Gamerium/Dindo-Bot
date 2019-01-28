@@ -115,8 +115,8 @@ class GameThread(PausableThread):
 	def get_box_location(self, box_name):
 		if self.game_location:
 			game_x, game_y, game_width, game_height = self.game_location
-			x = data.Boxes[box_name]['x'] + game_x
-			y = data.Boxes[box_name]['y'] + game_y
+			box_window_width, box_window_height = data.BoxesWindowSize
+			x, y = tools.adjust_click_position(data.Boxes[box_name]['x'], data.Boxes[box_name]['y'], box_window_width, box_window_height, game_x, game_y, game_width, game_height)
 			width = data.Boxes[box_name]['width']
 			height = data.Boxes[box_name]['height']
 			return (x, y, width, height)
