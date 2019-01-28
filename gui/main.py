@@ -919,7 +919,11 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.game_window_combo_ignore_change = True
 		self.game_window_combo.remove_all()
 		self.game_windowList = tools.get_game_window_list()
-		self.debug('Populate game window combobox, %d window found' % len(self.game_windowList), DebugLevel.High)
+		count = len(self.game_windowList)
+		if count == 0:
+			self.debug('Populate game window combobox, no window found', DebugLevel.High)
+		else:
+			self.debug('Populate game window combobox, %d window found' % count, DebugLevel.High)
 		for window_name in self.game_windowList:
 			self.game_window_combo.append_text(window_name)
 		self.game_window_combo_ignore_change = False
