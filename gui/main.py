@@ -927,8 +927,9 @@ class BotWindow(Gtk.ApplicationWindow):
 	def focus_game(self):
 		if self.game_window and not self.game_window.is_destroyed():
 			#self.debug('Focus game', DebugLevel.High)
-			# activate game window
+			# activate & focus game window
 			tools.activate_window(self.game_window)
+			#self.game_window.focus(0)
 
 	def move_resize_game_window(self, location):
 		if self.game_window and not self.game_window.is_destroyed() and location:

@@ -213,7 +213,9 @@ def perform_click(x, y, double=False):
 	pyautogui.moveTo(old_position)
 
 # Press key
-def press_key(key):
+def press_key(key, interval=None):
+	if interval is not None:
+		time.sleep(interval)
 	keys = parser.parse_key(key)
 	count = len(keys)
 	if count == 1:

@@ -172,7 +172,7 @@ class DevToolsWidget(Gtk.Box):
 		key = data.KeyboardShortcuts[selected]
 		self.parent.focus_game()
 		self.parent.debug('Press key: %s' % key)
-		tools.press_key(key)
+		tools.press_key(key, 0.5)
 
 	def on_click(self, widget, event):
 		print('x: %d, y: %d' % (event.x, event.y))
