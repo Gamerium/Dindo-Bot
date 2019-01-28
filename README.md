@@ -6,7 +6,7 @@
 
 Farming bot for Dofus game.
 
-![screenshot](screenshot.png)
+![screenshot](screenshot.jpg)
 
 ## Installation
 
@@ -42,7 +42,7 @@ python3 bot.py --dev
 
 ## To Know
 
-- Dindo bot use screen pixels to interact with the game client, so you cannot use your PC for something else while using the bot.
+- Dindo bot use screen pixels to interact with the game client, so you cannot use your PC for something else while using it.
 - Is it detectable by the Anti-bot?
 > It shouldn't be, because it imitates exactly the human behaviour, but as a conclusion, nothing is 100% safe.
 - The main goal of this bot is to simplify repetitive tasks and reduce boredom during your game play.
