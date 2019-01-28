@@ -845,6 +845,8 @@ class BotWindow(Gtk.ApplicationWindow):
 	def on_start_button_clicked(self, button):
 		if self.game_window is None:
 			AlertDialog(self, 'Please select a game window')
+		elif self.game_window.is_destroyed():
+			AlertDialog(self, 'Chosen game window was destroyed')
 		elif not self.bot_path:
 			AlertDialog(self, 'Please select a bot path')
 		else:
@@ -923,7 +925,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.game_window_combo_ignore_change = False
 
 	def focus_game(self):
-		if self.game_window:
+		if self.game_window and not self.game_window.is_destroyed():
 			#self.debug('Focus game', DebugLevel.High)
 			# activate game window
 			tools.activate_window(self.game_window)
