@@ -18,13 +18,13 @@ class TravelThread(GameThread):
 			# wait for map to change
 			self.wait_for_map_change()
 
-	def wait_for_map_change(self, timeout=30, tolerance=2.5, screen=None):
+	def wait_for_map_change(self, timeout=30, tolerance=2.5, screen=None, load_time=3):
 		# wait for map to change
 		self.debug('Waiting for map to change')
 		if self.monitor_game_screen(timeout=timeout, tolerance=tolerance, screen=screen):
 			# wait for map to load
-			self.debug('Waiting for map to load')
-			self.sleep(3)
+			self.debug('Waiting for map to load (%d sec)' % load_time)
+			self.sleep(load_time)
 
 	def use_zaap(self, zaap_from, zaap_to):
 		# get coordinates

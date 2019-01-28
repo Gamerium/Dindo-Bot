@@ -81,7 +81,7 @@ class GameThread(PausableThread):
 		self.debug('Waiting for screen to change')
 		if self.monitor_game_screen(timeout=timeout, tolerance=tolerance):
 			# wait for screen to load
-			self.debug('Waiting for screen to load')
+			self.debug('Waiting for screen to load (%d sec)' % load_time)
 			self.sleep(load_time)
 
 	def wait_for_box_appear(self, box_name, box_color=None, timeout=30):
