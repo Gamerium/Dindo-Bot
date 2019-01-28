@@ -121,8 +121,9 @@ class DevToolsWidget(Gtk.Box):
 		else:
 			x, y = (None, None)
 		# scroll
+		self.parent.focus_game()
 		self.parent.debug('Scroll: %d' % clicks)
-		tools.scroll_to(clicks, x, y)
+		tools.scroll_to(clicks, x, y, 0.5)
 
 	def on_keys_combo_changed(self, combo):
 		selected = combo.get_active_text()

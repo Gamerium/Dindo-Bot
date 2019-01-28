@@ -233,7 +233,9 @@ def type_text(text, interval=0.1):
 		time.sleep(interval)
 
 # Scroll to value
-def scroll_to(value, x=None, y=None):
+def scroll_to(value, x=None, y=None, interval=None):
+	if interval is not None:
+		time.sleep(interval)
 	pyautogui.scroll(value, x, y)
 
 # Create directory(s) if not exist
