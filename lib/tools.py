@@ -36,8 +36,9 @@ def get_game_window_list():
 
 # Return screen size
 def get_screen_size():
-	screen = Gdk.Screen.get_default()
-	return (screen.get_width(), screen.get_height())
+	#screen = Gdk.Screen.get_default()
+	#return (screen.get_width(), screen.get_height())
+	return pyautogui.size()
 
 # Activate a window
 def activate_window(window):
