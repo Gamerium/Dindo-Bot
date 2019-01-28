@@ -848,6 +848,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		elif not self.bot_path:
 			AlertDialog(self, 'Please select a bot path')
 		else:
+			# ensure that game window is in the right place
+			self.move_resize_game_window(self.game_window_location)
 			# start bot thread
 			if self.bot_thread is None or not self.bot_thread.isAlive():
 				# get thread parameters
