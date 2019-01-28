@@ -1,4 +1,4 @@
-# Dindo Bot
+# ![icon](icons/drago_24.png) Dindo Bot
 
 [![Python](https://img.shields.io/badge/python%20%3E%3D-3.0-blue.svg)](#)
 [![GTK](https://img.shields.io/badge/gtk-3.0-brightgreen.svg)](#)
@@ -47,3 +47,10 @@ python3 bot.py --dev
 > It shouldn't be, because it imitates exactly the human behaviour, but as a conclusion, nothing is 100% safe.
 - The main goal of this bot is to simplify repetitive tasks and reduce boredom during your game play.
 - Also, the bot does not encourage multi-boting and does not support it anyway.
+
+## Use Cases
+
+- Auto-connect to your Dofus account(s).
+- Move around the map & save time for long dungeon paths, [paths](paths) pull requests are welcome :+1:.
+- Farming & jobs, but this part still needs to be improved, also the bot cannot handle fights yet.
+- Automated actions like flood.
