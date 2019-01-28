@@ -136,7 +136,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		dialog.run()
 
 	def on_take_screenshot_button_clicked(self, button):
-		if self.game_window:
+		if self.game_window and not self.game_window.is_destroyed():
 			screenshot_name = 'screenshot_' + tools.get_date_time()
 			screenshot_path = tools.get_full_path(screenshot_name)
 			tools.take_window_screenshot(self.game_window, screenshot_path)
