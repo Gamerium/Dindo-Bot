@@ -926,29 +926,36 @@ class BotWindow(Gtk.ApplicationWindow):
 			# activate game window
 			tools.activate_window(self.game_window)
 
+	def move_resize_game_window(self, location):
+		if self.game_window and not self.game_window.is_destroyed() and location:
+			x, y, width, height = location
+			self.debug('Move & resize game window (x: %d, y: %d, width: %d, height: %d)' % (x, y, width, height), DebugLevel.Low)
+			self.game_window.unmaximize()
+			self.game_window.move_resize(x, y, width, height)
+			self.game_window.show() # force show (when minimized)
+			tools.activate_window(self.game_window)
+
 	def bind_game_window(self, window_xid):
+		self.debug('Bind game window (id: %d)' % window_xid, DebugLevel.Low)
 		self.game_window = tools.get_game_window(window_xid)
 		if self.game_window:
-			bot_width, bot_height = self.get_default_size()
+			bot_width, bot_height = self.get_size()
 			screen_width, screen_height = tools.get_screen_size()
 			game_window_left_margin = 1
 			game_window_decoration_height = 36
 			game_window_width = screen_width - bot_width - game_window_left_margin
 			game_window_height = bot_height
+			if game_window_width > 900:
+				game_window_width = 900
 			bot_x_position = screen_width / 2 - (bot_width + game_window_width) / 2
 			bot_y_position = screen_height / 2 - bot_height / 2
 			game_window_x_position = bot_x_position + bot_width + game_window_left_margin
 			game_window_y_position = bot_y_position + game_window_decoration_height
-			# bind game window
-			self.debug('Bind game window (id: %d, width: %d, height: %d)' % (window_xid, game_window_width, game_window_height), DebugLevel.Low)
-			self.move(bot_x_position, bot_y_position)
-			self.game_window.unmaximize()
-			self.game_window.resize(game_window_width, game_window_height)
-			self.game_window.move(game_window_x_position, game_window_y_position)
-			self.game_window.show() # force show (when minimized)
-			tools.activate_window(self.game_window)
 			# save game window location
 			self.game_window_location = (int(game_window_x_position), int(game_window_y_position), int(game_window_width), int(game_window_height))
+			# move bot & game window
+			self.move(bot_x_position, bot_y_position)
+			self.move_resize_game_window(self.game_window_location)
 			# enable/disable widgets
 			self.refresh_button.hide()
 			self.unbind_button.show()
