@@ -14,12 +14,12 @@ First, you need to install some dependencies using one of the following commands
 
 **Debian & derivatives:**
 ```bash
-sudo apt install python3-gi gir1.2-gtk-3.0 gir1.2-wnck-3.0 python3-xlib python3-pil
+sudo apt install python-gi gir1.2-gtk-3.0 gir1.2-wnck-3.0 python-xlib python-pil
 ```
 
 **Arch Linux & derivatives:**
 ```bash
-sudo pacman -S python-gobject python-xlib python-pillow
+sudo pacman -S python-gobject gtk3 libwnck3 python-xlib python-pillow
 ```
 
 Then, clone this repository using git or just [download](https://github.com/AXeL-dev/Dindo-Bot/archive/master.zip) & unzip it:
@@ -30,12 +30,12 @@ git clone https://github.com/AXeL-dev/Dindo-Bot.git
 To run the bot:
 ```bash
 cd /path/to/bot
-python3 bot.py
+python bot.py
 ```
 
 You could even run the bot in developer mode (brings some additional features):
 ```bash
-python3 bot.py --dev
+python bot.py --dev
 ```
 
 **Note:** the [desktop file](dindo-bot.desktop) can also be used to run the bot.
