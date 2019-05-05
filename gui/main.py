@@ -150,7 +150,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.set_titlebar(hb)
 		## Settings button
 		self.settings_button = Gtk.Button()
-		self.settings_button.set_image(Gtk.Image(icon_name='document-properties'))
+		self.settings_button.set_image(Gtk.Image(icon_name='open-menu-symbolic'))
 		self.settings_button.connect('clicked', lambda button: self.popover.show_all())
 		hb.pack_end(self.settings_button)
 		self.popover = Gtk.Popover(relative_to=self.settings_button, position=Gtk.PositionType.BOTTOM)
