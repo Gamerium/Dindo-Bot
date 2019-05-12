@@ -42,10 +42,10 @@ python bot.py --dev
 
 ## To Know
 
-- Dindo bot use screen pixels to interact with the game client, so you cannot use your PC for something else while using it.
+- Dindo bot use screen pixels to interact with the game client, so you cannot use your computer for something else while the bot is running.
 - Is it detectable by the Anti-bot?
 > It shouldn't be, because it imitates exactly the human behaviour, but as a conclusion, nothing is 100% safe.
-- The main goal of this bot is to simplify repetitive tasks and reduce boredom during your game play.
+- The main goal of this bot is to simplify repetitive tasks and reduce boredom during your gameplay.
 - Also, the bot does not encourage multi-boting and does not support it anyway.
 
 ## Use Cases
