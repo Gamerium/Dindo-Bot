@@ -6,7 +6,7 @@
 
 Farming bot for Dofus game.
 
-![screenshot](screenshot.jpg)
+![screenshot](screenshot.png)
 
 ## Installation
 
