@@ -103,6 +103,11 @@ class BotThread(JobThread):
 				else:
 					self.click(coordinates)
 
+			elif instruction['name'] == 'Scroll':
+				times = int(instruction['times'])
+				value = times if instruction['direction'] == 'up' else -times
+				self.scroll(value)
+
 			elif instruction['name'] == 'Wait':
 				if instruction['pause'] == 'True':
 					self.wait()

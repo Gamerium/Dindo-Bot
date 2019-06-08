@@ -544,6 +544,32 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.select_button.connect('clicked', self.on_select_button_clicked)
 		hbox.pack_end(self.select_button, False, False, 0)
 		widget.add(hbox)
+		## Scroll
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/scroll.png'), 24, 24)
+		#pixbuf = Gdk.Cursor(Gdk.CursorType.SB_V_DOUBLE_ARROW).get_image().scale_simple(18, 18, GdkPixbuf.InterpType.BILINEAR)
+		image = Gtk.Image(pixbuf=pixbuf)
+		label = ImageLabel(image, 'Scroll')
+		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		stack_listbox.append(label, widget)
+		# Direction
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.add(Gtk.Label('<b>Direction</b>', xalign=0, use_markup=True))
+		self.scroll_direction_combo = CustomComboBox(['up', 'down'])
+		self.scroll_direction_combo.set_active(1)
+		hbox.pack_end(self.scroll_direction_combo, False, False, 0)
+		widget.add(hbox)
+		# Times
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.add(Gtk.Label('<b>Times</b>', xalign=0, use_markup=True))
+		self.scroll_spin_button = SpinButton(min=1, max=10)
+		hbox.pack_end(self.scroll_spin_button, False, False, 0)
+		widget.add(hbox)
+		# Add
+		add_button = Gtk.Button('Add')
+		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Scroll(direction=%s,times=%s)' % (self.scroll_direction_combo.get_active_text(), self.scroll_spin_button.get_value_as_int())))
+		button_box = ButtonBox(centered=True)
+		button_box.add(add_button)
+		widget.add(button_box)
 		## Wait
 		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/hourglass.png'), 24, 24)
 		image = Gtk.Image(pixbuf=pixbuf)
