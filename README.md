@@ -19,7 +19,7 @@ Farming bot for Dofus game which uses your mouse, keyboard & screen pixels to in
 ## Use Cases
 
 - Auto-connect to your Dofus account(s).
-- Move around the map & save time for long dungeon paths, [paths](paths) pull requests are welcome :+1:.
+- Move around the map & save time for long dungeon paths, [paths](paths) pull requests are welcome :pray:.
 - Farming & jobs (:construction: this part still needs to be improved, also, the bot cannot handle fights yet :warning:).
 - Automated actions like flood :speech_balloon:.
 
@@ -61,7 +61,7 @@ python bot.py --dev
 - Since the bot simulates normal human behavior, you have less chances to get spotted by the Anti-bot (less is not 0).
 > Tips: For more safety, try changing bot paths from time to time.
 - The main goal of this bot is to simplify repetitive tasks and reduce boredom during your gameplay.
-- We do not encourage multi-boting and does not support it anyway (it destroys the server economy :grimacing:).
+- We do not encourage multi-boting and do not support it anyway (it destroys the server economy :grimacing:).
 - Windows & Mac OS are not ~~yet~~ supported [#1](https://github.com/AXeL-dev/Dindo-Bot/issues/1).
 
 ## License
