@@ -1,8 +1,8 @@
 # ![icon](icons/drago_24.png) Dindo Bot
 
-[![Python](https://img.shields.io/badge/python%20%3E%3D-3.0-blue.svg)](#)
-[![GTK](https://img.shields.io/badge/gtk-3.0-brightgreen.svg)](#)
-[![OS](https://img.shields.io/badge/os-Linux-orange.svg)](#)
+[![Python](https://img.shields.io/badge/python%20%3E%3D-3.0-blue.svg)](https://www.python.org/)
+[![GTK](https://img.shields.io/badge/gtk-3.0-brightgreen.svg)](https://www.gtk.org/)
+[![OS](https://img.shields.io/badge/os-Linux-orange.svg)](https://www.ubuntu.com/download/desktop)
 
 Farming bot for Dofus game which uses your mouse, keyboard & screen pixels to interact with the game client.
 
@@ -47,6 +47,7 @@ python bot.py --dev
 > Tips: For more safety, try changing bot paths from time to time.
 - The main goal of this bot is to simplify repetitive tasks and reduce boredom during your gameplay.
 - We do not encourage multi-boting and does not support it anyway (it destroys the server economy :grimacing:).
+- Windows & Mac OS are not ~~yet~~ supported [#1](https://github.com/AXeL-dev/Dindo-Bot/issues/1).
 
 ## Use Cases
 
