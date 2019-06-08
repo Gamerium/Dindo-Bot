@@ -8,6 +8,21 @@ Farming bot for Dofus game which uses your mouse, keyboard & screen pixels to in
 
 ![screenshot](screenshot.png)
 
+## Features
+
+- **Easy control**: play, pause/resume or stop the bot like if you were using your favorite music player.
+- **Smart bot**: Dindo-bot knows when your connection turns off and will wait for it to get back before proceeding or will automatically pause itself if it takes a long time.
+- **Multi accounts management**: you don't have to worry about switching between your accounts, Dindo-bot can handle that for you :wink:.
+- **Integrated Path & Maps builder**: easily create your own custom paths & farming maps.
+- **Keyboard shortcuts**.
+
+## Use Cases
+
+- Auto-connect to your Dofus account(s).
+- Move around the map & save time for long dungeon paths, [paths](paths) pull requests are welcome :+1:.
+- Farming & jobs (:construction: this part still needs to be improved, also, the bot cannot handle fights yet :warning:).
+- Automated actions like flood :speech_balloon:.
+
 ## Installation
 
 First, you need to install some dependencies using one of the following commands:
@@ -48,13 +63,6 @@ python bot.py --dev
 - The main goal of this bot is to simplify repetitive tasks and reduce boredom during your gameplay.
 - We do not encourage multi-boting and does not support it anyway (it destroys the server economy :grimacing:).
 - Windows & Mac OS are not ~~yet~~ supported [#1](https://github.com/AXeL-dev/Dindo-Bot/issues/1).
-
-## Use Cases
-
-- Auto-connect to your Dofus account(s).
-- Move around the map & save time for long dungeon paths, [paths](paths) pull requests are welcome :+1:.
-- Farming & jobs (:construction: this part still needs to be improved, also, the bot cannot handle fights yet :warning:).
-- Automated actions like flood :speech_balloon:.
 
 ## License
 
