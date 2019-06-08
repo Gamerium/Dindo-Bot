@@ -39,12 +39,12 @@ class FarmingThread(TravelThread):
 			if energy[1] == data.DragodindeStats.Full and energy[0] < data.DragodindeEnergy.Max:
 				energy[1] = data.DragodindeStats.InProgress
 			# set serenity state
-			if serenity[0] >= data.DragodindeSenerity.MaxMedium:
-				serenity[1] = data.DragodindeSenerity.Positive
+			if serenity[0] >= data.DragodindeSerenity.MaxMedium:
+				serenity[1] = data.DragodindeSerenity.Positive
 			elif serenity[1] == data.DragodindeStats.Full:
-				serenity[1] = data.DragodindeSenerity.Medium
+				serenity[1] = data.DragodindeSerenity.Medium
 			else:
-				serenity[1] = data.DragodindeSenerity.Negative
+				serenity[1] = data.DragodindeSerenity.Negative
 			# return dragodinde stats
 			stats = (energy, amour, maturity, endurance, serenity)
 			self.debug('Energy: {0[0][0]}% ({0[0][1]}), Amour: {0[1][0]}% ({0[1][1]}), Maturity: {0[2][0]}% ({0[2][1]}), Endurance: {0[3][0]}% ({0[3][1]}), Serenity: {0[4][0]}% ({0[4][1]})'.format(stats))
@@ -137,7 +137,7 @@ class FarmingThread(TravelThread):
 			stats = self.get_dragodinde_stats(dragodinde_image)
 			if stats:
 				Stats = data.DragodindeStats
-				Serenity = data.DragodindeSenerity
+				Serenity = data.DragodindeSerenity
 				# move dragodinde
 				dragodinde_moved = False
 				energy, amour, maturity, endurance, serenity = stats
@@ -251,7 +251,7 @@ class FarmingThread(TravelThread):
 			stats = self.get_dragodinde_stats(dragodinde_image)
 			if stats:
 				Stats = data.DragodindeStats
-				Serenity = data.DragodindeSenerity
+				Serenity = data.DragodindeSerenity
 				# move dragodinde
 				dragodinde_moved = False
 				energy, amour, maturity, endurance, serenity = stats

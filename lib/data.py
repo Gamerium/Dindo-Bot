@@ -42,8 +42,8 @@ Boxes = {
 # Boxes window size
 BoxesWindowSize = (566, 456)
 
-# DragodindeSenerity
-class DragodindeSenerity:
+# DragodindeSerenity
+class DragodindeSerenity:
 	Negative, Medium, Positive = ('Negative', 'Medium', 'Positive')
 	MaxMedium = 57.55
 
