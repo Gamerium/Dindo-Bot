@@ -4,7 +4,7 @@
 [![GTK](https://img.shields.io/badge/gtk-3.0-brightgreen.svg)](#)
 [![OS](https://img.shields.io/badge/os-Linux-orange.svg)](#)
 
-Farming bot for Dofus game.
+Farming bot for Dofus game which uses your mouse, keyboard & screen pixels to interact with the game client.
 
 ![screenshot](screenshot.png)
 
@@ -27,30 +27,34 @@ Then, clone this repository using git or just [download](https://github.com/AXeL
 git clone https://github.com/AXeL-dev/Dindo-Bot.git
 ```
 
-To run the bot:
+To run the bot open a terminal & type:
 ```bash
 cd /path/to/bot
 python bot.py
 ```
 
-You could even run the bot in developer mode (brings some additional features):
+You could even run the bot in developer mode (which brings some additional features):
 ```bash
 python bot.py --dev
 ```
 
-**Note:** the [desktop file](dindo-bot.desktop) can also be used to run the bot.
+**Note:** the [desktop file](dindo-bot.desktop) can also be used to run the bot with a double-click.
 
 ## To Know
 
-- Dindo bot use screen pixels to interact with the game client, so you cannot use your computer for something else while the bot is running.
-- Is it detectable by the Anti-bot?
-> It shouldn't be, because it imitates exactly the human behaviour, but as a conclusion, nothing is 100% safe.
+- You cannot use your computer for something else while Dindo-bot is running.
+- Since the bot simulates normal human behavior, you have less chances to get spotted by the Anti-bot (less is not 0).
+> Tips: For more safety, try changing bot paths from time to time.
 - The main goal of this bot is to simplify repetitive tasks and reduce boredom during your gameplay.
-- Also, the bot does not encourage multi-boting and does not support it anyway.
+- We do not encourage multi-boting and does not support it anyway (it destroys the server economy :grimacing:).
 
 ## Use Cases
 
 - Auto-connect to your Dofus account(s).
 - Move around the map & save time for long dungeon paths, [paths](paths) pull requests are welcome :+1:.
-- Farming & jobs, but this part still needs to be improved, also the bot cannot handle fights yet.
-- Automated actions like flood.
+- Farming & jobs (:construction: this part still needs to be improved, also, the bot cannot handle fights yet :warning:).
+- Automated actions like flood :speech_balloon:.
+
+## License
+
+Dindo-bot is licensed under the [MIT](LICENSE) license.
