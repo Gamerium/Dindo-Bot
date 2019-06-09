@@ -576,24 +576,28 @@ class BotWindow(Gtk.ApplicationWindow):
 		label = ImageLabel(image, 'Wait')
 		widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack_listbox.append(label, widget)
-		# Pause Bot
-		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-		hbox.add(Gtk.Label('<b>Pause Bot</b>', xalign=0, use_markup=True))
-		self.pause_bot_switch = Gtk.Switch()
-		self.pause_bot_switch.connect('notify::active', lambda switch, pspec: self.duration_box.set_sensitive(not switch.get_active()))
-		hbox.pack_end(self.pause_bot_switch, False, False, 0)
-		widget.add(hbox)
 		# Duration
-		self.duration_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		label = Gtk.Label('<b>Duration</b>', xalign=0, use_markup=True)
 		label.set_tooltip_text('(in seconds)')
-		self.duration_box.add(label)
+		self.duration_radio = Gtk.RadioButton()
+		self.duration_radio.add(label)
+		hbox.add(self.duration_radio)
 		self.duration_spin_button = SpinButton(min=1, max=60)
-		self.duration_box.pack_end(self.duration_spin_button, False, False, 0)
-		widget.add(self.duration_box)
+		self.duration_spin_button.connect('value-changed', lambda button: self.duration_radio.set_active(True))
+		hbox.pack_end(self.duration_spin_button, False, False, 0)
+		widget.add(hbox)
+		# Pause Bot
+		self.pause_bot_radio = Gtk.RadioButton(group=self.duration_radio)
+		self.pause_bot_radio.add(Gtk.Label('<b>Pause Bot</b>', xalign=0, use_markup=True))
+		widget.add(self.pause_bot_radio)
+		# Monitor Game Screen
+		self.monitor_game_screen_radio = Gtk.RadioButton(group=self.duration_radio)
+		self.monitor_game_screen_radio.add(Gtk.Label('<b>Monitor Game Screen</b>', xalign=0, use_markup=True))
+		widget.add(self.monitor_game_screen_radio)
 		# Add
 		add_button = Gtk.Button('Add')
-		add_button.connect('clicked', lambda button: self.path_listbox.append_text('Wait(duration=%d,pause=%s)' % (0 if self.pause_bot_switch.get_active() else self.duration_spin_button.get_value_as_int(), self.pause_bot_switch.get_active())))
+		add_button.connect('clicked', self.on_wait_add_button_clicked)
 		button_box = ButtonBox(centered=True)
 		button_box.add(add_button)
 		widget.add(button_box)
@@ -821,6 +825,14 @@ class BotWindow(Gtk.ApplicationWindow):
 			tools.save_text_to_file(text, dialog.get_filename())
 
 		dialog.destroy()
+
+	def on_wait_add_button_clicked(self, button):
+		if self.pause_bot_radio.get_active():
+			self.path_listbox.append_text('Pause()')
+		elif self.monitor_game_screen_radio.get_active():
+			self.path_listbox.append_text('MonitorGameScreen()')
+		else:
+			self.path_listbox.append_text('Wait(%s)' % self.duration_spin_button.get_value_as_int())
 
 	def on_keyboard_add_button_clicked(self, button):
 		if self.press_key_radio.get_active():

@@ -198,7 +198,7 @@ class GameThread(PausableThread):
 			# if game screen hasn't change before timeout
 			if wait_after_timeout and elapsed_time == timeout:
 				self.wait()
-				self.log('Game screen don\'t change', LogType.Error)
+				self.log('Game screen did not change', LogType.Error)
 
 		return False
 

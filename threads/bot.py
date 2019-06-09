@@ -108,11 +108,15 @@ class BotThread(JobThread):
 				value = times if instruction['direction'] == 'up' else -times
 				self.scroll(value)
 
+			elif instruction['name'] == 'Pause':
+				self.wait()
+
+			elif instruction['name'] == 'MonitorGameScreen':
+				self.monitor_game_screen(tolerance=2.5)
+
 			elif instruction['name'] == 'Wait':
-				if instruction['pause'] == 'True':
-					self.wait()
-				elif instruction['duration'].isdigit():
-					self.sleep(int(instruction['duration']))
+				duration = int(instruction['value'])
+				self.sleep(duration)
 
 			elif instruction['name'] == 'PressKey':
 				self.press_key(instruction['value'])
