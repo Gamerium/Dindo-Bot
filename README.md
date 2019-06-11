@@ -1,4 +1,4 @@
-# ![icon](icons/drago_24.png) Dindo Bot
+# <img src="icons/logo.png" alt="logo" width="32"> Dindo Bot
 
 [![Python](https://img.shields.io/badge/python%20%3E%3D-3.0-blue.svg)](https://www.python.org/)
 [![GTK](https://img.shields.io/badge/gtk-3.0-brightgreen.svg)](https://www.gtk.org/)

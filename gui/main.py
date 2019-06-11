@@ -31,7 +31,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Tabs
 		self.create_tabs()
 		# Window
-		self.set_icon_from_file(tools.get_full_path('icons/drago.png'))
+		self.set_icon_from_file(tools.get_full_path('icons/logo.png'))
 		#self.set_size_request(350, 700)
 		self.set_default_size(350, 700)
 		self.set_resizable(False)
@@ -145,7 +145,8 @@ class BotWindow(Gtk.ApplicationWindow):
 	def create_header_bar(self, title):
 		### Header Bar
 		hb = Gtk.HeaderBar(title=title)
-		hb.pack_start(Gtk.Image(file=tools.get_full_path('icons/drago_24.png')))
+		logo = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/logo.png'), 24, 24)
+		hb.pack_start(Gtk.Image(pixbuf=logo))
 		hb.set_show_close_button(True)
 		self.set_titlebar(hb)
 		## Settings button
