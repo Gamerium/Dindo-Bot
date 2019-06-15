@@ -25,22 +25,20 @@ Locations = {
 
 # Boxes
 Boxes = {
-	'Dragodinde Card':       {'x': 207, 'y': 42, 'width': 159, 'height': 320},
-	'Dragodinde Energy':     {'x': 75, 'y': 136, 'width': 69, 'height': 1},
-	#'Dragodinde Experience': {'x': 75, 'y': 148, 'width': 69, 'height': 1},
-	#'Dragodinde Tiredness':  {'x': 75, 'y': 159, 'width': 69, 'height': 1},
-	'Dragodinde Amour':      {'x': 75, 'y': 218, 'width': 69, 'height': 1},
-	'Dragodinde Maturity':   {'x': 75, 'y': 229, 'width': 69, 'height': 1},
-	'Dragodinde Endurance':  {'x': 75, 'y': 240, 'width': 69, 'height': 1},
-	'Dragodinde Serenity':   {'x': 26, 'y': 274, 'width': 106, 'height': 1},
-	'Enclos First Place':    {'x': 28, 'y': 295, 'width': 167, 'height': 1},
-	'Inventory First Place': {'x': 377, 'y': 165, 'width': 168, 'height': 1},
-	'Play Button':           {'x': 341, 'y': 362, 'width': 96, 'height': 1},
-	'PodBar':                {'x': 419, 'y': 366, 'width': 51, 'height': 1}
+	'Dragodinde Card':       {'x': 207, 'y': 42, 'width': 159, 'height': 320, 'windowSize': (566, 456)},
+	'Dragodinde Energy':     {'x': 75, 'y': 136, 'width': 69, 'height': 1, 'windowSize': (566, 456)},
+	#'Dragodinde Experience': {'x': 75, 'y': 148, 'width': 69, 'height': 1, 'windowSize': (566, 456)},
+	#'Dragodinde Tiredness':  {'x': 75, 'y': 159, 'width': 69, 'height': 1, 'windowSize': (566, 456)},
+	'Dragodinde Amour':      {'x': 75, 'y': 218, 'width': 69, 'height': 1, 'windowSize': (566, 456)},
+	'Dragodinde Maturity':   {'x': 75, 'y': 229, 'width': 69, 'height': 1, 'windowSize': (566, 456)},
+	'Dragodinde Endurance':  {'x': 75, 'y': 240, 'width': 69, 'height': 1, 'windowSize': (566, 456)},
+	'Dragodinde Serenity':   {'x': 26, 'y': 274, 'width': 106, 'height': 1, 'windowSize': (566, 456)},
+	'Enclos First Place':    {'x': 28, 'y': 295, 'width': 167, 'height': 1, 'windowSize': (566, 456)},
+	'Inventory First Place': {'x': 377, 'y': 165, 'width': 168, 'height': 1, 'windowSize': (566, 456)},
+	'Play Button':           {'x': 341, 'y': 362, 'width': 96, 'height': 1, 'windowSize': (566, 456)},
+	'PodBar':                {'x': 658, 'y': 564, 'width': 81, 'height': 1, 'windowSize': (900, 700)}
+	# TODO: update all boxes coordinates to (900, 700) window size
 }
-
-# Boxes window size
-BoxesWindowSize = (566, 456)
 
 # DragodindeSerenity
 class DragodindeSerenity:
