@@ -27,6 +27,8 @@ class JobThread(FarmingThread):
 				self.pause_event.wait()
 				if self.suspend: return
 				# TODO: check pixel color
+				# screen game
+				screen = tools.screen_game(self.game_location)
 				# click on resource
 				self.debug("Collecting resource {'x': %d, 'y': %d, 'color': %s}" % (resource['x'], resource['y'], resource['color']))
 				self.click(resource)
@@ -39,7 +41,18 @@ class JobThread(FarmingThread):
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: return
-				# TODO: check for level up
+				# check for level up
+				self.debug('Checking for level up')
+				if self.monitor_game_screen(tolerance=2.5, screen=screen, timeout=1, wait_after_timeout=False):
+					# close level up popup
+					self.debug('Closing level up popup')
+					screen = tools.screen_game(self.game_location)
+					self.press_key(data.KeyboardShortcuts['Esc'])
+					# wait for level up popup to close
+					self.monitor_game_screen(tolerance=2.5, screen=screen)
+					# check for pause or suspend
+					self.pause_event.wait()
+					if self.suspend: return
 				# TODO: check for fight
 				# get pod
 				if self.get_pod() >= 99:
