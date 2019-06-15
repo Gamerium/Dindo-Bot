@@ -971,8 +971,9 @@ class BotWindow(Gtk.ApplicationWindow):
 			else:
 				self.bot_thread.resume(self.game_window_location)
 			# show bot state & debug tabs
-			self.config_notebook.set_current_page(1)
 			self.log_notebook.set_current_page(1)
+			if self.settings['Debug']['Enabled']:
+				self.config_notebook.set_current_page(1)
 			# enable/disable buttons
 			self.start_button.set_image(Gtk.Image(file=tools.get_full_path('icons/loader.gif')))
 			self.start_button.set_sensitive(False)
