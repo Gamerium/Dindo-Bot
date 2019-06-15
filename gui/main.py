@@ -203,8 +203,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		bot_notebook.set_border_width(2)
 		self.add(bot_notebook)
 		self.config_notebook = Gtk.Notebook()
-		log_notebook = Gtk.Notebook()
-		log_notebook.set_size_request(-1, 200)
+		self.log_notebook = Gtk.Notebook()
+		self.log_notebook.set_size_request(-1, 200)
 		## Log Tab
 		log_page = Gtk.ScrolledWindow()
 		self.log_view = Gtk.TextView()
@@ -217,7 +217,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.green_text_tag = self.log_buf.create_tag('green', foreground='#28a745')
 		self.blue_text_tag = self.log_buf.create_tag('blue', foreground='#007bff')
 		log_page.add(self.log_view)
-		log_notebook.append_page(log_page, Gtk.Label('Log'))
+		self.log_notebook.append_page(log_page, Gtk.Label('Log'))
 		## Debug Tab
 		self.debug_page = Gtk.ScrolledWindow()
 		self.debug_view = Gtk.TextView()
@@ -229,12 +229,12 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.debug_view.connect('size-allocate', self.debug_view_auto_scroll)
 		self.debug_buf = self.debug_view.get_buffer()
 		self.debug_page.add(self.debug_view)
-		log_notebook.append_page(self.debug_page, Gtk.Label('Debug'))
+		self.log_notebook.append_page(self.debug_page, Gtk.Label('Debug'))
 		### Bot Tab
 		bot_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		bot_page.set_border_width(2)
 		bot_page.add(self.config_notebook)
-		bot_page.pack_start(log_notebook, True, True, 0)
+		bot_page.pack_start(self.log_notebook, True, True, 0)
 		bot_notebook.append_page(bot_page, Gtk.Label('Bot'))
 		## Config Tab
 		self.bot_config_widgets = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -940,8 +940,9 @@ class BotWindow(Gtk.ApplicationWindow):
 			# resume bot thread if paused
 			else:
 				self.bot_thread.resume(self.game_window_location)
-			# show bot state tab
+			# show bot state & debug tabs
 			self.config_notebook.set_current_page(1)
+			self.log_notebook.set_current_page(1)
 			# enable/disable buttons
 			self.start_button.set_image(Gtk.Image(file=tools.get_full_path('icons/loader.gif')))
 			self.start_button.set_sensitive(False)
