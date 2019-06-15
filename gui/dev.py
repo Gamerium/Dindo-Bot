@@ -162,7 +162,7 @@ class DevToolsWidget(Gtk.Box):
 			click_x = x
 			click_y = y
 		# perform click
-		self.parent.debug('Click on x: %d, y: %d' % (click_x, click_y))
+		self.parent.debug('Simulate click on x: %d, y: %d' % (click_x, click_y))
 		tools.perform_click(click_x, click_y)
 
 	def on_delete_pixel_button_clicked(self, button):

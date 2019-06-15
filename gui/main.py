@@ -725,6 +725,14 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.select_resource_button.set_image(Gtk.Image(pixbuf=cursor_pixbuf))
 		self.select_resource_button.connect('clicked', self.on_select_resource_button_clicked)
 		self.map_data_listbox.add_button(self.select_resource_button)
+		# Simulate click
+		self.simulate_resource_click_button = Gtk.Button()
+		self.simulate_resource_click_button.set_tooltip_text('Simulate click')
+		self.simulate_resource_click_button.set_sensitive(False)
+		pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(tools.get_full_path('icons/hand.png'), 16, 16)
+		self.simulate_resource_click_button.set_image(Gtk.Image(pixbuf=pixbuf))
+		self.simulate_resource_click_button.connect('clicked', self.on_simulate_resource_click_button_clicked)
+		self.map_data_listbox.add_button(self.simulate_resource_click_button)
 		# Edit
 		edit_map_button = MenuButton(icon_name='document-edit-symbolic')
 		edit_map_button.set_tooltip_text('Edit')
@@ -752,6 +760,25 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.map_data_listbox.add_button(self.save_map_button)
 		self.map_data_listbox.on_add(self.on_map_data_listbox_add)
 		self.map_data_listbox.on_delete(self.on_map_data_listbox_delete)
+
+	def on_simulate_resource_click_button_clicked(self, button):
+		selected_row = self.map_data_listbox.listbox.get_selected_row()
+		if selected_row:
+			text = self.map_data_listbox.get_row_text(selected_row)
+			data = maps.to_array(text)
+			x, y, width, height, color = (data['x'], data['y'], data['width'], data['height'], data['color'])
+			#print('x: %d, y: %d, width: %d, height: %d' % (x, y, width, height))
+			# adjust for game area
+			if self.game_window and not self.game_window.is_destroyed() and self.game_window_location:
+				game_x, game_y, game_width, game_height = self.game_window_location
+				#print('game_x: %d, game_y: %d, game_width: %d, game_height: %d' % (game_x, game_y, game_width, game_height))
+				click_x, click_y = tools.adjust_click_position(x, y, width, height, game_x, game_y, game_width, game_height)
+			else:
+				click_x = x
+				click_y = y
+			# perform click
+			self.debug('Simulate click on x: %d, y: %d' % (click_x, click_y))
+			tools.perform_click(click_x, click_y)
 
 	def on_load_map_button_clicked(self, button):
 		dialog = LoadMapDialog(self)
@@ -783,11 +810,14 @@ class BotWindow(Gtk.ApplicationWindow):
 	def on_map_data_listbox_add(self):
 		if not self.save_map_button.get_sensitive():
 			self.save_map_button.set_sensitive(True)
+		if not self.simulate_resource_click_button.get_sensitive():
+			self.simulate_resource_click_button.set_sensitive(True)
 
 	def on_map_data_listbox_delete(self, row_index):
 		self.map_view.remove_point(row_index)
 		if self.map_data_listbox.is_empty():
 			self.save_map_button.set_sensitive(False)
+			self.simulate_resource_click_button.set_sensitive(False)
 
 	def on_path_listbox_add(self):
 		if not self.save_path_button.get_sensitive():
