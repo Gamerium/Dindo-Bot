@@ -64,6 +64,14 @@ python bot.py --dev
 - We do not encourage multi-boting and do not support it anyway (it destroys the server economy :grimacing:).
 - Windows & Mac OS are not ~~yet~~ supported [#1](https://github.com/AXeL-dev/Dindo-Bot/issues/1).
 
+## Version History
+
+- [v1.x](https://github.com/AXeL-dev/Dindo-Bot/tree/v1.x)
+
+## Contributing
+
+Read [contributing guidelines](https://github.com/AXeL-dev/contributing/blob/master/README.md).
+
 ## License
 
 Dindo-bot is licensed under the [MIT](LICENSE) license.
