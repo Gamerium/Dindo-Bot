@@ -202,7 +202,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		bot_notebook = Gtk.Notebook()
 		bot_notebook.set_border_width(2)
 		self.add(bot_notebook)
-		config_notebook = Gtk.Notebook()
+		self.config_notebook = Gtk.Notebook()
 		log_notebook = Gtk.Notebook()
 		log_notebook.set_size_request(-1, 200)
 		## Log Tab
@@ -233,13 +233,13 @@ class BotWindow(Gtk.ApplicationWindow):
 		### Bot Tab
 		bot_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		bot_page.set_border_width(2)
-		bot_page.add(config_notebook)
+		bot_page.add(self.config_notebook)
 		bot_page.pack_start(log_notebook, True, True, 0)
 		bot_notebook.append_page(bot_page, Gtk.Label('Bot'))
 		## Config Tab
 		self.bot_config_widgets = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		self.bot_config_widgets.set_border_width(10)
-		config_notebook.append_page(self.bot_config_widgets, Gtk.Label('Config'))
+		self.config_notebook.append_page(self.bot_config_widgets, Gtk.Label('Config'))
 		## Game Window
 		self.bot_config_widgets.add(Gtk.Label('<b>Game Window</b>', xalign=0, use_markup=True))
 		game_window_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
@@ -325,7 +325,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		## State Tab
 		bot_state_widgets = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		bot_state_widgets.set_border_width(10)
-		config_notebook.append_page(bot_state_widgets, Gtk.Label('State'))
+		self.config_notebook.append_page(bot_state_widgets, Gtk.Label('State'))
 		# Pod
 		self.podbar_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		bot_state_widgets.add(self.podbar_box)
@@ -344,9 +344,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		## Dev tools Tab
 		if '--dev' in self.args:
 			dev_tools_page = DevToolsWidget(self)
-			config_notebook.append_page(dev_tools_page, Gtk.Label('Dev Tools'))
-			#config_notebook.show_all()
-			#config_notebook.set_current_page(2)
+			self.config_notebook.append_page(dev_tools_page, Gtk.Label('Dev Tools'))
+			#self.config_notebook.show_all()
+			#self.config_notebook.set_current_page(2)
 		## Start
 		button_box = ButtonBox(centered=True, linked=True)
 		bot_page.pack_end(button_box, False, False, 0)
@@ -910,6 +910,8 @@ class BotWindow(Gtk.ApplicationWindow):
 			# resume bot thread if paused
 			else:
 				self.bot_thread.resume(self.game_window_location)
+			# show bot state tab
+			self.config_notebook.set_current_page(1)
 			# enable/disable buttons
 			self.start_button.set_image(Gtk.Image(file=tools.get_full_path('icons/loader.gif')))
 			self.start_button.set_sensitive(False)
