@@ -160,8 +160,9 @@ class CustomTreeView(Gtk.Frame):
 
 class CustomListBox(Gtk.Frame):
 
-	def __init__(self, allow_moving=True):
+	def __init__(self, parent=None, allow_moving=True):
 		Gtk.Frame.__init__(self)
+		self.parent = parent
 		self.allow_moving = allow_moving
 		self.perform_scroll = False
 		self.add_callback = None
@@ -312,7 +313,13 @@ class CustomListBox(Gtk.Frame):
 		self.reset_buttons()
 
 	def on_clear_all_button_clicked(self, button):
-		self.clear()
+		dialog = Gtk.MessageDialog(text='Confirm clear all?', transient_for=self.parent, buttons=Gtk.ButtonsType.OK_CANCEL, message_type=Gtk.MessageType.QUESTION)
+		response = dialog.run()
+		dialog.destroy()
+
+		# We only clear when the user presses the OK button
+		if response == Gtk.ResponseType.OK:
+			self.clear()
 
 class SpinButton(Gtk.SpinButton):
 

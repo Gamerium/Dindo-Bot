@@ -674,7 +674,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		## Separator
 		path_page.add(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL, margin=5))
 		## Listbox
-		self.path_listbox = CustomListBox()
+		self.path_listbox = CustomListBox(parent=self)
 		path_page.pack_end(self.path_listbox, True, True, 0)
 		# Load
 		load_path_button = Gtk.Button()
@@ -717,7 +717,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		map_page.pack_start(self.map_view, True, True, 0)
 		## Data
 		map_page.add(Gtk.Label('<b>Data</b>', xalign=0, use_markup=True))
-		self.map_data_listbox = CustomListBox(allow_moving=False)
+		self.map_data_listbox = CustomListBox(parent=self, allow_moving=False)
 		map_page.pack_start(self.map_data_listbox, True, True, 0)
 		# Select
 		self.select_resource_button = Gtk.Button()
