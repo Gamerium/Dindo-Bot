@@ -760,6 +760,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.map_data_listbox.add_button(self.save_map_button)
 		self.map_data_listbox.on_add(self.on_map_data_listbox_add)
 		self.map_data_listbox.on_delete(self.on_map_data_listbox_delete)
+		self.map_data_listbox.on_activate(self.on_map_data_listbox_activate)
 
 	def on_simulate_resource_click_button_clicked(self, button):
 		selected_row = self.map_data_listbox.listbox.get_selected_row()
@@ -815,9 +816,13 @@ class BotWindow(Gtk.ApplicationWindow):
 
 	def on_map_data_listbox_delete(self, row_index):
 		self.map_view.remove_point(row_index)
+		self.simulate_resource_click_button.set_sensitive(False)
 		if self.map_data_listbox.is_empty():
 			self.save_map_button.set_sensitive(False)
-			self.simulate_resource_click_button.set_sensitive(False)
+
+	def on_map_data_listbox_activate(self):
+		if not self.simulate_resource_click_button.get_sensitive():
+			self.simulate_resource_click_button.set_sensitive(True)
 
 	def on_path_listbox_add(self):
 		if not self.save_path_button.get_sensitive():

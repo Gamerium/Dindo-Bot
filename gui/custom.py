@@ -167,6 +167,7 @@ class CustomListBox(Gtk.Frame):
 		self.perform_scroll = False
 		self.add_callback = None
 		self.delete_callback = None
+		self.activate_callback = None
 		## ListBox
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 		self.add(vbox)
@@ -219,6 +220,9 @@ class CustomListBox(Gtk.Frame):
 	def on_delete(self, callback):
 		self.delete_callback = callback
 
+	def on_activate(self, callback):
+		self.activate_callback = callback
+
 	def on_row_activated(self, listbox, row):
 		if self.allow_moving:
 			rows_count = len(self.get_rows())
@@ -233,6 +237,9 @@ class CustomListBox(Gtk.Frame):
 		self.delete_button.set_sensitive(True)
 		# Clear all
 		self.clear_all_button.set_sensitive(True)
+		# Invoke activate callback
+		if self.activate_callback is not None:
+			self.activate_callback()
 
 	def on_size_allocate(self, listbox, event):
 		if self.perform_scroll:
