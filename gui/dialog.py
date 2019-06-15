@@ -119,7 +119,10 @@ class LoadMapDialog(CustomDialog):
 					text += '}'
 				self.parent.map_data_listbox.append_text(text)
 			# append to view
-			self.parent.map_view.add_points(self.data[selected], 'Resource', MiniMap.point_colors['Resource'])
+			if self.parent.show_selected_data_only_check.get_active():
+				self.parent.map_view.add_point(self.data[selected][-1], 'Resource', MiniMap.point_colors['Resource'])
+			else:
+				self.parent.map_view.add_points(self.data[selected], 'Resource', MiniMap.point_colors['Resource'])
 			# destroy dialog
 			self.destroy()
 		else:

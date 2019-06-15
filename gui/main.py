@@ -712,6 +712,10 @@ class BotWindow(Gtk.ApplicationWindow):
 		add_borders_check = Gtk.CheckButton('Add borders')
 		add_borders_check.connect('clicked', lambda button: self.map_view.set_add_borders(button.get_active()))
 		options_box.add(add_borders_check)
+		# Show selected data only
+		self.show_selected_data_only_check = Gtk.CheckButton('Show selected data only')
+		self.show_selected_data_only_check.connect('clicked', self.on_show_selected_data_only_check_clicked)
+		options_box.add(self.show_selected_data_only_check)
 		# Map View
 		self.map_view = MiniMap()
 		map_page.pack_start(self.map_view, True, True, 0)
@@ -761,6 +765,22 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.map_data_listbox.on_add(self.on_map_data_listbox_add)
 		self.map_data_listbox.on_delete(self.on_map_data_listbox_delete)
 		self.map_data_listbox.on_activate(self.on_map_data_listbox_activate)
+
+	def on_show_selected_data_only_check_clicked(self, button):
+		self.map_view.clear()
+		if button.get_active():
+			selected_row = self.map_data_listbox.listbox.get_selected_row()
+			if selected_row:
+				text = self.map_data_listbox.get_row_text(selected_row)
+				point = maps.to_array(text)
+				self.map_view.add_point(point, 'Resource', MiniMap.point_colors['Resource'])
+		else:
+			points = []
+			for row in self.map_data_listbox.get_rows():
+				text = self.map_data_listbox.get_row_text(row)
+				point = maps.to_array(text)
+				points.append(point)
+			self.map_view.add_points(points, 'Resource', MiniMap.point_colors['Resource'])
 
 	def on_simulate_resource_click_button_clicked(self, button):
 		selected_row = self.map_data_listbox.listbox.get_selected_row()
@@ -815,7 +835,10 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.simulate_resource_click_button.set_sensitive(True)
 
 	def on_map_data_listbox_delete(self, row_index):
-		self.map_view.remove_point(row_index)
+		if self.show_selected_data_only_check.get_active():
+			self.map_view.clear()
+		else:
+			self.map_view.remove_point(row_index)
 		self.simulate_resource_click_button.set_sensitive(False)
 		if self.map_data_listbox.is_empty():
 			self.save_map_button.set_sensitive(False)
@@ -823,6 +846,8 @@ class BotWindow(Gtk.ApplicationWindow):
 	def on_map_data_listbox_activate(self):
 		if not self.simulate_resource_click_button.get_sensitive():
 			self.simulate_resource_click_button.set_sensitive(True)
+		if self.show_selected_data_only_check.get_active():
+			self.on_show_selected_data_only_check_clicked(self.show_selected_data_only_check)
 
 	def on_path_listbox_add(self):
 		if not self.save_path_button.get_sensitive():
