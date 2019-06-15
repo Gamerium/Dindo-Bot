@@ -32,9 +32,9 @@ class TravelThread(GameThread):
 		zaap_to_coordinates = parser.parse_data(data.Zaap['To'], zaap_to)
 		if zaap_from_coordinates and zaap_to_coordinates:
 			# if a keyboard shortcut is set (like for Havenbag)
-			if 'keyboard_shortcut' in zaap_from_coordinates:
+			if 'keyboardShortcut' in zaap_from_coordinates:
 				# press key
-				self.press_key(zaap_from_coordinates['keyboard_shortcut'])
+				self.press_key(zaap_from_coordinates['keyboardShortcut'])
 				# wait for map to change
 				self.wait_for_map_change()
 				# check for pause or suspend

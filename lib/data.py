@@ -110,7 +110,7 @@ Enclos = {
 # Zaap
 Zaap = {
 	'From': {
-		'Havenbag':  {'x': 110, 'y': 162, 'width': 566, 'height': 456, 'keyboard_shortcut': KeyboardShortcuts['Havenbag']},
+		'Havenbag':  {'x': 110, 'y': 162, 'width': 566, 'height': 456, 'keyboardShortcut': KeyboardShortcuts['Havenbag']},
 		'Bonta':     {'x': 248, 'y': 140, 'width': 566, 'height': 456},
 		'Brakmar':   {'x': 305, 'y': 106, 'width': 566, 'height': 456}
 	},
