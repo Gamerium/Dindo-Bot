@@ -8,6 +8,7 @@ Movements = {
 	'LEFT':  {'x': 5, 'y': 224, 'width': 566, 'height': 456},
 	'RIGHT': {'x': 561, 'y': 225, 'width': 566, 'height': 456},
 	'DOWN':  {'x': 263, 'y': 397, 'width': 566, 'height': 456}
+	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
 # Locations
@@ -21,6 +22,7 @@ Locations = {
 	'Exit Button':           {'x': 282, 'y': 236, 'width': 566, 'height': 456},
 	'Login Input':           {'x': 270, 'y': 146, 'width': 566, 'height': 456},
 	'Password Input':        {'x': 270, 'y': 174, 'width': 566, 'height': 456}
+	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
 # Boxes
@@ -102,6 +104,7 @@ Enclos = {
 	'[-37,-56]': {'x': 354, 'y': 144, 'width': 566, 'height': 456},
 	# Brakmar
 	'[-32,37]':  {'x': 234, 'y': 202, 'width': 566, 'height': 456}
+	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
 # Zaap
@@ -115,6 +118,7 @@ Zaap = {
 		'Bonta':     {'x': 177, 'y': 274, 'width': 566, 'height': 456, 'scroll': -1},
 		'Brakmar':   {'x': 182, 'y': 295, 'width': 566, 'height': 456, 'scroll': -1}
 	}
+	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
 # Zaapi
@@ -134,6 +138,7 @@ Zaapi = {
 		'Animal SH':         {'x': 203, 'y': 175, 'width': 566, 'height': 456, 'location': Locations['SH Menu']},
 		'Bank':              {'x': 183, 'y': 153, 'width': 566, 'height': 456, 'location': Locations['Various Menu']}
 	}
+	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
 # BankPath
