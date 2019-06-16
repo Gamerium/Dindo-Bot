@@ -28,18 +28,10 @@ class JobThread(FarmingThread):
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: return
-				# check pixel color
-				if self.check_resources_color:
-					game_x, game_y, game_width, game_height = self.game_location
-					x, y = tools.adjust_click_position(resource['x'], resource['y'], resource['width'], resource['height'], game_x, game_y, game_width, game_height)
-					color = tools.get_pixel_color(x, y)
-					resource['color'] = parser.parse_color(resource['color'])
-					if resource['color'] is not None and not tools.color_matches(color, resource['color'], tolerance=10):
-						self.debug("Ignoring non-matching resource {'x': %d, 'y': %d, 'color': %s} on pixel {'x': %d, 'y': %d, 'color': %s}" % (resource['x'], resource['y'], resource['color'], x, y, color))
-						# remove current resource from minimap (index = 0)
-						self.remove_from_minimap(0)
-						# go to next resource
-						continue
+				# check resource color
+				if not self.check_resource_color(resource):
+					# go to next resource
+					continue
 				# screen game
 				screen = tools.screen_game(self.game_location)
 				# click on resource
@@ -72,11 +64,38 @@ class JobThread(FarmingThread):
 				if self.get_pod() >= 99:
 					# pod is full, go to store
 					if store_path != 'None':
-						# TODO: implement go_to_store function
-						print('go to store')
+						self.go_to_store(store_path)
 					else:
 						self.wait()
 						self.log('Bot is full pod', LogType.Error)
+
+	def check_resource_color(self, resource):
+		# check pixel color
+		if self.check_resources_color:
+			game_x, game_y, game_width, game_height = self.game_location
+			x, y = tools.adjust_click_position(resource['x'], resource['y'], resource['width'], resource['height'], game_x, game_y, game_width, game_height)
+			color = tools.get_pixel_color(x, y)
+			resource['color'] = parser.parse_color(resource['color'])
+			if resource['color'] is not None and not tools.color_matches(color, resource['color'], tolerance=10):
+				self.debug("Ignoring non-matching resource {'x': %d, 'y': %d, 'color': %s} on pixel {'x': %d, 'y': %d, 'color': %s}" % (resource['x'], resource['y'], resource['color'], x, y, color))
+				# remove current resource from minimap (index = 0)
+				self.remove_from_minimap(0)
+				return False
+
+		return True
+
+	def go_to_store(self, store_path):
+		self.debug('Go to store (path: %s)' % store_path)
+		if store_path in data.BankPath:
+			instructions = data.BankPath[store_path]
+		else:
+			instructions = tools.read_file(tools.get_full_path(store_path))
+		if instructions:
+			self.interpret(instructions, ignore_start_from_step=True)
+		else:
+			self.wait()
+			self.debug('Could not interpret store path')
+			self.log('Bot is full pod', LogType.Error)
 
 	def get_pod(self):
 		# open inventory

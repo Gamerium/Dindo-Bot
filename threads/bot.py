@@ -56,11 +56,14 @@ class BotThread(JobThread):
 
 		self.debug('Bot thread ended, elapsed time: ' + self.get_elapsed_time(), DebugLevel.Low)
 
-	def interpret(self, instructions):
+	def interpret(self, instructions, ignore_start_from_step=False):
 		# split instructions
-		lines = instructions.splitlines()
+		if not isinstance(instructions, list):
+			lines = instructions.splitlines()
+		else:
+			lines = instructions
 		# ignore instructions before start step
-		if self.start_from_step > 1 and self.start_from_step <= len(lines):
+		if not ignore_start_from_step and self.start_from_step > 1 and self.start_from_step <= len(lines):
 			self.debug('Start from step: %d' % self.start_from_step)
 			step = self.start_from_step - 1
 			lines = lines[step:]
