@@ -15,6 +15,7 @@ class JobThread(FarmingThread):
 		FarmingThread.__init__(self, parent, game_location)
 		self.podbar_enabled = parent.settings['State']['EnablePodBar']
 		self.minimap_enabled = parent.settings['State']['EnableMiniMap']
+		self.check_resources_color = parent.settings['Farming']['CheckResourcesColor']
 
 	def collect(self, map_name, store_path):
 		map_data = parser.parse_data(maps.load(), map_name)
@@ -22,18 +23,31 @@ class JobThread(FarmingThread):
 			# show resources on minimap
 			self.update_minimap(map_data, 'Resource', MiniMap.point_colors['Resource'])
 			# collect resources
-			for i, resource in enumerate(map_data):
+			wait_before_collecting = True
+			for resource in map_data:
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: return
-				# TODO: check pixel color
+				# check pixel color
+				if self.check_resources_color:
+					game_x, game_y, game_width, game_height = self.game_location
+					x, y = tools.adjust_click_position(resource['x'], resource['y'], resource['width'], resource['height'], game_x, game_y, game_width, game_height)
+					color = tools.get_pixel_color(x, y)
+					resource['color'] = parser.parse_color(resource['color'])
+					if resource['color'] is not None and not tools.color_matches(color, resource['color'], tolerance=10):
+						self.debug("Ignoring non-matching resource {'x': %d, 'y': %d, 'color': %s} on pixel {'x': %d, 'y': %d, 'color': %s}" % (resource['x'], resource['y'], resource['color'], x, y, color))
+						# remove current resource from minimap (index = 0)
+						self.remove_from_minimap(0)
+						# go to next resource
+						continue
 				# screen game
 				screen = tools.screen_game(self.game_location)
 				# click on resource
 				self.debug("Collecting resource {'x': %d, 'y': %d, 'color': %s}" % (resource['x'], resource['y'], resource['color']))
 				self.click(resource)
 				# wait before collecting next one
-				if i == 0:
+				if wait_before_collecting:
+					wait_before_collecting = False
 					self.sleep(5) # wait 5 more seconds for 1st resource
 				self.sleep(4)
 				# remove current resource from minimap (index = 0)

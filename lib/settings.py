@@ -33,7 +33,8 @@ def load_defaults():
 			'EnableMiniMap': True
 		},
 		'Farming': {
-			'SaveDragodindesImages': False
+			'SaveDragodindesImages': False,
+			'CheckResourcesColor': True
 		},
 		'EnableShortcuts': False
 	}

@@ -363,6 +363,13 @@ class PreferencesDialog(CustomDialog):
 		save_dragodindes_images_check.connect('clicked', 
 			lambda check: settings.update_and_save(self.parent.settings, key='Farming', subkey='SaveDragodindesImages', value=check.get_active()))
 		box.add(save_dragodindes_images_check)
+		# Check resources color
+		verify_resources_color_check = Gtk.CheckButton('Check resources color')
+		verify_resources_color_check.set_margin_left(10)
+		verify_resources_color_check.set_active(self.parent.settings['Farming']['CheckResourcesColor'])
+		verify_resources_color_check.connect('clicked', 
+			lambda check: settings.update_and_save(self.parent.settings, key='Farming', subkey='CheckResourcesColor', value=check.get_active()))
+		box.add(verify_resources_color_check)
 		### Shortcuts
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack.add_titled(box, 'shortcuts', 'Shortcuts')
