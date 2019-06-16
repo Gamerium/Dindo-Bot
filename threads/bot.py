@@ -68,6 +68,7 @@ class BotThread(JobThread):
 			step = self.start_from_step - 1
 			lines = lines[step:]
 
+		game_screen = None
 		for i, line in enumerate(lines, start=1):
 			# check for pause or suspend
 			self.pause_event.wait()
@@ -77,6 +78,12 @@ class BotThread(JobThread):
 			self.debug('Instruction (%d): %s' % (i, line), DebugLevel.Low)
 			instruction = parser.parse_instruction(line)
 			self.debug('Parse result: ' + str(instruction), DebugLevel.High)
+
+			# save game screen before those instructions
+			if instruction['name'] in ['Click', 'PressKey']:
+				game_screen = tools.screen_game(self.game_location)
+			elif instruction['name'] != 'MonitorGameScreen':
+				game_screen = None
 
 			# begin interpretation
 			if instruction['name'] == 'Move':
@@ -115,7 +122,7 @@ class BotThread(JobThread):
 				self.wait()
 
 			elif instruction['name'] == 'MonitorGameScreen':
-				self.monitor_game_screen(tolerance=2.5)
+				self.monitor_game_screen(tolerance=2.5, screen=game_screen)
 
 			elif instruction['name'] == 'Wait':
 				duration = int(instruction['value'])
