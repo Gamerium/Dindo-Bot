@@ -95,12 +95,12 @@ class BotThread(JobThread):
 				self.collect(instruction['map'], instruction['store_path'])
 
 			elif instruction['name'] == 'Click':
-				coordinates = (
-					int(instruction['x']),
-					int(instruction['y']),
-					int(instruction['width']),
-					int(instruction['height'])
-				)
+				coordinates = {
+					'x': int(instruction['x']),
+					'y': int(instruction['y']),
+					'width': int(instruction['width']),
+					'height': int(instruction['height'])
+				}
 				if instruction['twice'] == 'True':
 					self.double_click(coordinates)
 				else:
