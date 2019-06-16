@@ -122,11 +122,10 @@ class JobThread(FarmingThread):
 		if self.suspend: return
 		# check if podbar is empty
 		if tools.color_matches(color, data.Colors['Empty PodBar'], tolerance=10):
-			return 0
-		else:
-			# update pod bar
-			self.set_pod(percentage)
-			return percentage
+			percentage = 0
+		# update pod bar
+		self.set_pod(percentage)
+		return percentage
 
 	def set_pod(self, percentage):
 		if self.podbar_enabled:
