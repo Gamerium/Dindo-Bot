@@ -227,7 +227,7 @@ def press_key(key, interval=None):
 def type_text(text, interval=0.1):
 	for c in text:
 		if c.isdigit():
-			pyautogui.hotkey('shift', c)
+			pyautogui.hotkey('shift', c, interval=0.1)
 		else:
 			pyautogui.press(c)
 		time.sleep(interval)
