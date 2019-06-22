@@ -15,47 +15,54 @@ class GameThread(PausableThread):
 		PausableThread.__init__(self, parent, game_location)
 
 	def connect(self, account_id):
-		account = accounts.get(account_id)
-		if account:
-			# slow down
-			self.sleep(1)
-			# (1) type login
-			self.double_click(data.Locations['Login Input'])
-			self.press_key(data.KeyboardShortcuts['Backspace']) # clean
-			self.type_text(account['login'])
-			# check for pause or suspend
-			self.pause_event.wait()
-			if self.suspend: return
-			# (2) type password
-			self.double_click(data.Locations['Password Input'])
-			self.press_key(data.KeyboardShortcuts['Backspace']) # clean
-			self.type_text(account['pwd'])
-			# check for pause or suspend
-			self.pause_event.wait()
-			if self.suspend: return
-			# (3) hit enter
-			self.debug('Hit Play')
-			self.press_key(data.KeyboardShortcuts['Enter'])
-			# wait for Play button to appear
-			self.debug('Waiting for Play button to appear')
-			if self.wait_for_box_appear(box_name='Play Button'):
-				# (4) hit enter again
-				self.debug('Hit Play')
-				self.press_key(data.KeyboardShortcuts['Enter'])
-				# wait for load to start
-				self.debug('Waiting for load to start')
-				self.sleep(2)
+		# Login button detection
+		self.debug('Detecting Login button')
+		if self.wait_for_box_appear(box_name='Login Button', timeout=10):
+			# get account
+			account = accounts.get(account_id)
+			if account:
+				# slow down
+				self.sleep(1)
+				# (1) type login
+				self.double_click(data.Locations['Login Input'])
+				self.press_key(data.KeyboardShortcuts['Backspace']) # clean
+				self.type_text(account['login'])
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: return
-				# wait for screen to change
-				self.wait_for_screen_change(load_time=5)
-			elif not self.suspend:
+				# (2) type password
+				self.double_click(data.Locations['Password Input'])
+				self.press_key(data.KeyboardShortcuts['Backspace']) # clean
+				self.type_text(account['pwd'])
+				# check for pause or suspend
+				self.pause_event.wait()
+				if self.suspend: return
+				# (3) hit enter
+				self.debug('Hit Play')
+				self.press_key(data.KeyboardShortcuts['Enter'])
+				# wait for Play button to appear
+				self.debug('Waiting for Play button to appear')
+				if self.wait_for_box_appear(box_name='Play Button'):
+					# (4) hit enter again
+					self.debug('Hit Play')
+					self.press_key(data.KeyboardShortcuts['Enter'])
+					# wait for load to start
+					self.debug('Waiting for load to start')
+					self.sleep(2)
+					# check for pause or suspend
+					self.pause_event.wait()
+					if self.suspend: return
+					# wait for screen to change
+					self.wait_for_screen_change(load_time=5)
+				elif not self.suspend:
+					self.wait()
+					self.log('Unable to connect to account', LogType.Error)
+			else:
 				self.wait()
-				self.log('Unable to connect to account', LogType.Error)
-		else:
+				self.log('Account not found', LogType.Error)
+		elif not self.suspend:
 			self.wait()
-			self.log('Account not found', LogType.Error)
+			self.log('Login button detection failed', LogType.Error)
 
 	def disconnect(self, exit=False):
 		# (1) press 'Esc' key

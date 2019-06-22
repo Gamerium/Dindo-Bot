@@ -38,6 +38,7 @@ Boxes = {
 	'Enclos First Place':    {'x': 28, 'y': 295, 'width': 167, 'height': 1, 'windowSize': (566, 456)},
 	'Inventory First Place': {'x': 377, 'y': 165, 'width': 168, 'height': 1, 'windowSize': (566, 456)},
 	'Play Button':           {'x': 341, 'y': 362, 'width': 96, 'height': 1, 'windowSize': (566, 456)},
+	'Login Button':          {'x': 400, 'y': 385, 'width': 96, 'height': 1, 'windowSize': (900, 700)}, # not accurate
 	'PodBar':                {'x': 658, 'y': 564, 'width': 81, 'height': 1, 'windowSize': (900, 700)}
 	# TODO: update all boxes coordinates to (900, 700) window size
 }
@@ -65,6 +66,7 @@ Colors = {
 	'Selected Row':    (83, 83, 77),
 	'Empty Inventory': (53, 53, 45),
 	'Play Button':     (215, 247, 0),
+	'Login Button':    (214, 246, 0),
 	'Empty PodBar':    (67, 70, 68)
 }
 
