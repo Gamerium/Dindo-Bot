@@ -70,7 +70,7 @@ python bot.py --dev
 
 ## Contributing
 
-Read [contributing guidelines](https://github.com/AXeL-dev/contributing/blob/master/README.md).
+Want to contribute? Check the [todo list](todo.md). You may also read the [contributing guidelines](https://github.com/AXeL-dev/contributing/blob/master/README.md).
 
 ## License
 
