@@ -62,7 +62,7 @@ python bot.py --dev
 > Tips: For more safety, try changing bot paths from time to time.
 - The main goal of this bot is to simplify repetitive tasks and reduce boredom during your gameplay.
 - We do not encourage multi-boting and do not support it anyway (it destroys the server economy :grimacing:).
-- Windows & Mac OS are not ~~yet~~ supported [#1](https://github.com/AXeL-dev/Dindo-Bot/issues/1).
+- Windows & Mac OS are not ~~yet~~ supported [#1](https://github.com/AXeL-dev/Dindo-Bot/issues/1) [#8](https://github.com/AXeL-dev/Dindo-Bot/issues/8).
 
 ## Version History
 
