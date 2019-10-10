@@ -6,6 +6,8 @@
 
 Farming bot for Dofus game which uses your mouse, keyboard & screen pixels to interact with the game client.
 
+> This bot is only available for [Linux](https://www.wikipedia.org/wiki/Linux) at the current time.
+
 [![screenshot](screenshot.png)](http://www.youtube.com/watch?v=1Qh_eNLuTYo "See Dindo-bot in action")
 
 ## Features
