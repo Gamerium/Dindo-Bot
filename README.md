@@ -4,11 +4,15 @@
 [![GTK](https://img.shields.io/badge/gtk-3.0-brightgreen.svg)](https://www.gtk.org/)
 [![OS](https://img.shields.io/badge/os-Linux-orange.svg)](https://www.ubuntu.com/download/desktop)
 
-Farming bot for Dofus game which uses your mouse, keyboard & screen pixels to interact with the game client.
-
-> This bot is only available for [Linux](https://www.wikipedia.org/wiki/Linux) at the current time.
+Farming bot for Dofus game written in python.
 
 [![screenshot](screenshot.png)](http://www.youtube.com/watch?v=1Qh_eNLuTYo "See Dindo-bot in action")
+
+> What's a bot?
+
+A bot is a software that emulates a real game client in order to automate certain tasks. Dindo is a **pixel** bot, which means that it uses screen pixels (+ your mouse & keyboard) to emulate actions & keep tracking the progress in game.
+
+> **WARNING**: This bot is only available for [Linux](https://www.wikipedia.org/wiki/Linux) at the current time.
 
 ## Features
 
