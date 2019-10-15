@@ -4,9 +4,9 @@
 [![GTK](https://img.shields.io/badge/gtk-3.0-brightgreen.svg)](https://www.gtk.org/)
 [![OS](https://img.shields.io/badge/os-Linux-orange.svg)](https://www.ubuntu.com/download/desktop)
 
-Farming bot for Dofus game written in python.
+Farming bot for Dofus game written in python & [GTK](https://www.gtk.org/).
 
-[![screenshot](screenshot.png)](http://www.youtube.com/watch?v=1Qh_eNLuTYo "See Dindo-bot in action")
+[![screenshot](screenshot.png)](http://www.youtube.com/watch?v=1Qh_eNLuTYo "Watch Dindo in action")
 
 > What's a bot?
 
@@ -17,8 +17,8 @@ A bot is a software that emulates a real game client in order to automate certai
 ## Features
 
 - **Easy control**: play, pause/resume or stop the bot like if you were using your favorite music player.
-- **Smart bot**: Dindo-bot knows when your connection turns off and will wait for it to get back before proceeding or will automatically pause itself if it takes a long time.
-- **Multi accounts management**: you don't have to worry about switching between your accounts, Dindo-bot can handle that for you :wink:.
+- **Smart bot**: Dindo knows when your connection turns off and will wait for it to get back before proceeding or will automatically pause itself if it takes a long time.
+- **Multi accounts management**: you don't have to worry about switching between your accounts, Dindo can handle that for you :wink:.
 - **Integrated Path & Maps builder**: easily create your own custom paths & farming maps.
 - **Keyboard shortcuts**.
 
@@ -63,7 +63,7 @@ python bot.py --dev
 
 ## To Know
 
-- You cannot use your computer for something else while Dindo-bot is running.
+- You cannot use your computer for something else while Dindo is running.
 - Since the bot simulates normal human behavior, you have less chances to get spotted by the Anti-bot (less is not 0).
 > Tips: For more safety, try changing bot paths from time to time.
 - The main goal of this bot is to simplify repetitive tasks and reduce boredom during your gameplay.
