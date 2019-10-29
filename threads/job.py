@@ -47,19 +47,24 @@ class JobThread(FarmingThread):
 				# check for pause or suspend
 				self.pause_event.wait()
 				if self.suspend: return
-				# check for level up
-				self.debug('Checking for level up')
+				# check for screen change
+				self.debug('Checking for screen change')
 				if self.monitor_game_screen(tolerance=2.5, screen=screen, timeout=1, wait_after_timeout=False):
-					# close level up popup
-					self.debug('Closing level up popup')
-					screen = tools.screen_game(self.game_location)
-					self.press_key(data.KeyboardShortcuts['Esc'])
-					# wait for level up popup to close
-					self.monitor_game_screen(tolerance=2.5, screen=screen)
+					# check for fight
+					self.debug('Checking for fight')
+					if self.wait_for_box_appear(box_name='Fight Button', timeout=1):
+						self.wait()
+						self.log('Fight detected! human help wanted..', LogType.Error)
+					else:
+						# it should be a popup (level up, ...)
+						self.debug('Closing popup')
+						screen = tools.screen_game(self.game_location)
+						self.press_key(data.KeyboardShortcuts['Esc'])
+						# wait for popup to close
+						self.monitor_game_screen(tolerance=2.5, screen=screen)
 					# check for pause or suspend
 					self.pause_event.wait()
 					if self.suspend: return
-				# TODO: check for fight
 				# get pod
 				if self.get_pod() >= 99:
 					# pod is full, go to store
@@ -95,7 +100,7 @@ class JobThread(FarmingThread):
 		else:
 			self.wait()
 			self.debug('Could not interpret store path')
-			self.log('Bot is full pod', LogType.Error)
+			self.log('Bot is maybe full pod', LogType.Error)
 
 	def get_pod(self):
 		# open inventory
