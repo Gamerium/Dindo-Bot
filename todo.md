@@ -16,5 +16,4 @@
 * If podbar level didn't change after collect, we can consider that the resource was not collected
 * Add an update feature? (from github repo, or simply create a deb package who doesn't erase/update data files)
 * Add more bot state widgets (life widget for example)?
-* Check for fight when moving/farming (if so pause bot)
 * Add french translation
