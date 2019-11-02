@@ -325,6 +325,18 @@ class PreferencesDialog(CustomDialog):
 		game_version_combo.connect('changed', 
 			lambda combo: settings.update_and_save(self.parent.settings, key='Game', subkey='Version', value=combo.get_active()))
 		hbox.pack_end(game_version_combo, False, False, 0)
+		# Window decoration height
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		label = Gtk.Label('Window decoration height')
+		label.set_tooltip_text('(in pixels)')
+		hbox.add(label)
+		window_decoration_height_spin_button = SpinButton(min=10, max=100)
+		window_decoration_height_spin_button.set_value(self.parent.settings['Game']['WindowDecorationHeight'])
+		window_decoration_height_spin_button.connect('value-changed', 
+			lambda button: settings.update_and_save(self.parent.settings, key='Game', subkey='WindowDecorationHeight', value=button.get_value_as_int()))
+		hbox.pack_end(window_decoration_height_spin_button, False, False, 0)
+		box.add(hbox)
 		# Keep game checkbox
 		keep_game_on_unplug_check = Gtk.CheckButton('Keep game open when unbind')
 		keep_game_on_unplug_check.set_margin_left(10)

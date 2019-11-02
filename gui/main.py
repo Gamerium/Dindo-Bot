@@ -1055,7 +1055,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			bot_width, bot_height = self.get_size()
 			screen_width, screen_height = tools.get_screen_size()
 			game_window_left_margin = 1
-			game_window_decoration_height = 36
+			game_window_decoration_height = self.settings['Game']['WindowDecorationHeight']
 			game_window_width = screen_width - bot_width - game_window_left_margin
 			game_window_height = bot_height
 			if game_window_width > 900:
