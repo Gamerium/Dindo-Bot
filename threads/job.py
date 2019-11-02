@@ -16,6 +16,8 @@ class JobThread(FarmingThread):
 		self.podbar_enabled = parent.settings['State']['EnablePodBar']
 		self.minimap_enabled = parent.settings['State']['EnableMiniMap']
 		self.check_resources_color = parent.settings['Farming']['CheckResourcesColor']
+		self.collection_time = parent.settings['Farming']['CollectionTime']
+		self.first_resource_additional_collection_time = parent.settings['Farming']['FirstResourceAdditionalCollectionTime']
 
 	def collect(self, map_name, store_path):
 		map_data = parser.parse_data(maps.load(), map_name)
@@ -23,7 +25,7 @@ class JobThread(FarmingThread):
 			# show resources on minimap
 			self.update_minimap(map_data, 'Resource', MiniMap.point_colors['Resource'])
 			# collect resources
-			wait_before_collecting = True
+			is_first_resource = True
 			for resource in map_data:
 				# check for pause or suspend
 				self.pause_event.wait()
@@ -38,10 +40,10 @@ class JobThread(FarmingThread):
 				self.debug("Collecting resource {'x': %d, 'y': %d, 'color': %s}" % (resource['x'], resource['y'], resource['color']))
 				self.click(resource)
 				# wait before collecting next one
-				if wait_before_collecting:
-					wait_before_collecting = False
-					self.sleep(5) # wait 5 more seconds for 1st resource
-				self.sleep(4)
+				if is_first_resource:
+					is_first_resource = False
+					self.sleep(self.first_resource_additional_collection_time) # wait more for 1st resource
+				self.sleep(self.collection_time)
 				# remove current resource from minimap (index = 0)
 				self.remove_from_minimap(0)
 				# check for pause or suspend

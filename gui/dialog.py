@@ -6,7 +6,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
 from lib import tools, shared, settings, accounts, maps
-from .custom import CustomComboBox, CustomTreeView, ButtonBox, MessageBox, MiniMap
+from .custom import CustomComboBox, CustomTreeView, ButtonBox, MessageBox, MiniMap, SpinButton
 
 class AboutDialog(Gtk.AboutDialog):
 
@@ -370,6 +370,30 @@ class PreferencesDialog(CustomDialog):
 		verify_resources_color_check.connect('clicked', 
 			lambda check: settings.update_and_save(self.parent.settings, key='Farming', subkey='CheckResourcesColor', value=check.get_active()))
 		box.add(verify_resources_color_check)
+		# Collection time
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		label = Gtk.Label('Collection time')
+		label.set_tooltip_text('(in seconds)')
+		hbox.add(label)
+		collection_time_spin_button = SpinButton(min=1, max=60)
+		collection_time_spin_button.set_value(self.parent.settings['Farming']['CollectionTime'])
+		collection_time_spin_button.connect('value-changed', 
+			lambda button: settings.update_and_save(self.parent.settings, key='Farming', subkey='CollectionTime', value=button.get_value_as_int()))
+		hbox.pack_end(collection_time_spin_button, False, False, 0)
+		box.add(hbox)
+		# First resource additional collection time
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		label = Gtk.Label('1st resource collection time')
+		label.set_tooltip_text('(additional time for 1st resource in seconds)')
+		hbox.add(label)
+		first_resource_collection_time_spin_button = SpinButton(min=1, max=60)
+		first_resource_collection_time_spin_button.set_value(self.parent.settings['Farming']['FirstResourceAdditionalCollectionTime'])
+		first_resource_collection_time_spin_button.connect('value-changed', 
+			lambda button: settings.update_and_save(self.parent.settings, key='Farming', subkey='FirstResourceAdditionalCollectionTime', value=button.get_value_as_int()))
+		hbox.pack_end(first_resource_collection_time_spin_button, False, False, 0)
+		box.add(hbox)
 		### Shortcuts
 		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		stack.add_titled(box, 'shortcuts', 'Shortcuts')

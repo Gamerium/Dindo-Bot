@@ -34,7 +34,9 @@ def load_defaults():
 		},
 		'Farming': {
 			'SaveDragodindesImages': False,
-			'CheckResourcesColor': True
+			'CheckResourcesColor': True,
+			'CollectionTime': 4,
+			'FirstResourceAdditionalCollectionTime': 5
 		},
 		'EnableShortcuts': False
 	}
