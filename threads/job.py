@@ -57,8 +57,7 @@ class JobThread(FarmingThread):
 				self.debug('Checking for screen change')
 				if self.monitor_game_screen(tolerance=2.5, screen=screen, timeout=1, wait_after_timeout=False):
 					# check for fight
-					self.debug('Checking for fight')
-					if self.wait_for_box_appear(box_name='Fight Button', timeout=1):
+					if self.game_version != GameVersion.Retro && self.wait_for_box_appear(box_name='Fight Button', timeout=1):
 						self.wait()
 						self.log('Fight detected! human help wanted..', LogType.Error)
 					else:
