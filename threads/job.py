@@ -5,7 +5,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import GObject
 from gui.custom import MiniMap
-from lib.shared import LogType, DebugLevel
+from lib.shared import LogType, DebugLevel, GameVersion
 from lib import maps, data, tools, parser
 from .farming import FarmingThread
 
@@ -18,6 +18,7 @@ class JobThread(FarmingThread):
 		self.check_resources_color = parent.settings['Farming']['CheckResourcesColor']
 		self.collection_time = parent.settings['Farming']['CollectionTime']
 		self.first_resource_additional_collection_time = parent.settings['Farming']['FirstResourceAdditionalCollectionTime']
+		self.game_version = parent.settings['Game']['Version']
 
 	def collect(self, map_name, store_path):
 		map_data = parser.parse_data(maps.load(), map_name)
@@ -39,6 +40,9 @@ class JobThread(FarmingThread):
 				# click on resource
 				self.debug("Collecting resource {'x': %d, 'y': %d, 'color': %s}" % (resource['x'], resource['y'], resource['color']))
 				self.click(resource)
+				if self.game_version == GameVersion.Retro:
+					# re-click to validate
+					self.click({'x': resource['x'] + 30, 'y': resource['y'] + 40, 'width': resource['width'], 'height': resource['height']})
 				# wait before collecting next one
 				if is_first_resource:
 					is_first_resource = False
@@ -61,14 +65,14 @@ class JobThread(FarmingThread):
 						# it should be a popup (level up, ...)
 						self.debug('Closing popup')
 						screen = tools.screen_game(self.game_location)
-						self.press_key(data.KeyboardShortcuts['Esc'])
+						self.press_key(data.KeyboardShortcuts['Enter'] if self.game_version == GameVersion.Retro else data.KeyboardShortcuts['Esc'])
 						# wait for popup to close
 						self.monitor_game_screen(tolerance=2.5, screen=screen)
 					# check for pause or suspend
 					self.pause_event.wait()
 					if self.suspend: return
 				# get pod
-				if self.get_pod() >= 99:
+				if self.game_version != GameVersion.Retro and self.get_pod() >= 99:
 					# pod is full, go to store
 					if store_path != 'None':
 						self.go_to_store(store_path)

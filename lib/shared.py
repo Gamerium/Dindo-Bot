@@ -18,3 +18,6 @@ class DebugLevel:
 	Low: The lowest level (for text to always show when debug is enabled)
 	'''
 	High, Normal, Low = range(3)
+
+class GameVersion:
+    Retro, Two = range(2)

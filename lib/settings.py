@@ -3,7 +3,7 @@
 
 import json
 from .tools import read_file, save_text_to_file, get_full_path
-from .shared import DebugLevel
+from .shared import DebugLevel, GameVersion
 
 def get_filename():
 	return get_full_path('settings.json')
@@ -23,6 +23,7 @@ def load_defaults():
 			'Take Game Screenshot': 'Ctrl+Print'
 		},
 		'Game': {
+			'Version': GameVersion.Two,
 			'KeepOpen': True
 		},
 		'Account': {

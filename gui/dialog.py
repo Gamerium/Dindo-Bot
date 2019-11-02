@@ -315,6 +315,16 @@ class PreferencesDialog(CustomDialog):
 		self.debug_box.pack_end(debug_level_combo, False, False, 0)
 		## Game
 		box.add(Gtk.Label('<b>Game</b>', xalign=0, use_markup=True))
+		# Version
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		box.add(hbox)
+		hbox.add(Gtk.Label('Version'))
+		game_version_combo = CustomComboBox(['Retro', '2.x'])
+		game_version_combo.set_active(self.parent.settings['Game']['Version'])
+		game_version_combo.connect('changed', 
+			lambda combo: settings.update_and_save(self.parent.settings, key='Game', subkey='Version', value=combo.get_active()))
+		hbox.pack_end(game_version_combo, False, False, 0)
 		# Keep game checkbox
 		keep_game_on_unplug_check = Gtk.CheckButton('Keep game open when unbind')
 		keep_game_on_unplug_check.set_margin_left(10)
