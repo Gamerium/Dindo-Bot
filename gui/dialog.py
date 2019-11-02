@@ -322,8 +322,7 @@ class PreferencesDialog(CustomDialog):
 		hbox.add(Gtk.Label('Version'))
 		game_version_combo = CustomComboBox(['Retro', '2.x'])
 		game_version_combo.set_active(self.parent.settings['Game']['Version'])
-		game_version_combo.connect('changed', 
-			lambda combo: settings.update_and_save(self.parent.settings, key='Game', subkey='Version', value=combo.get_active()))
+		game_version_combo.connect('changed', self.on_game_version_combo_changed)
 		hbox.pack_end(game_version_combo, False, False, 0)
 		# Window decoration height
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
@@ -331,11 +330,11 @@ class PreferencesDialog(CustomDialog):
 		label = Gtk.Label('Window decoration height')
 		label.set_tooltip_text('(in pixels)')
 		hbox.add(label)
-		window_decoration_height_spin_button = SpinButton(min=10, max=100)
-		window_decoration_height_spin_button.set_value(self.parent.settings['Game']['WindowDecorationHeight'])
-		window_decoration_height_spin_button.connect('value-changed', 
+		self.window_decoration_height_spin_button = SpinButton(min=5, max=100)
+		self.window_decoration_height_spin_button.set_value(self.parent.settings['Game']['WindowDecorationHeight'])
+		self.window_decoration_height_spin_button.connect('value-changed', 
 			lambda button: settings.update_and_save(self.parent.settings, key='Game', subkey='WindowDecorationHeight', value=button.get_value_as_int()))
-		hbox.pack_end(window_decoration_height_spin_button, False, False, 0)
+		hbox.pack_end(self.window_decoration_height_spin_button, False, False, 0)
 		box.add(hbox)
 		# Keep game checkbox
 		keep_game_on_unplug_check = Gtk.CheckButton('Keep game open when unbind')
@@ -386,23 +385,23 @@ class PreferencesDialog(CustomDialog):
 			lambda check: settings.update_and_save(self.parent.settings, key='Farming', subkey='SaveDragodindesImages', value=check.get_active()))
 		box.add(save_dragodindes_images_check)
 		# Check resources color
-		verify_resources_color_check = Gtk.CheckButton('Check resources color')
-		verify_resources_color_check.set_margin_left(10)
-		verify_resources_color_check.set_active(self.parent.settings['Farming']['CheckResourcesColor'])
-		verify_resources_color_check.connect('clicked', 
+		self.verify_resources_color_check = Gtk.CheckButton('Check resources color')
+		self.verify_resources_color_check.set_margin_left(10)
+		self.verify_resources_color_check.set_active(self.parent.settings['Farming']['CheckResourcesColor'])
+		self.verify_resources_color_check.connect('clicked', 
 			lambda check: settings.update_and_save(self.parent.settings, key='Farming', subkey='CheckResourcesColor', value=check.get_active()))
-		box.add(verify_resources_color_check)
+		box.add(self.verify_resources_color_check)
 		# Collection time
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
 		label = Gtk.Label('Collection time')
 		label.set_tooltip_text('(in seconds)')
 		hbox.add(label)
-		collection_time_spin_button = SpinButton(min=1, max=60)
-		collection_time_spin_button.set_value(self.parent.settings['Farming']['CollectionTime'])
-		collection_time_spin_button.connect('value-changed', 
+		self.collection_time_spin_button = SpinButton(min=1, max=60)
+		self.collection_time_spin_button.set_value(self.parent.settings['Farming']['CollectionTime'])
+		self.collection_time_spin_button.connect('value-changed', 
 			lambda button: settings.update_and_save(self.parent.settings, key='Farming', subkey='CollectionTime', value=button.get_value_as_int()))
-		hbox.pack_end(collection_time_spin_button, False, False, 0)
+		hbox.pack_end(self.collection_time_spin_button, False, False, 0)
 		box.add(hbox)
 		# First resource additional collection time
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
@@ -454,6 +453,18 @@ class PreferencesDialog(CustomDialog):
 		actionbar.add(self.shortcuts_edit_button)
 		self.shortcuts_tree_view.vbox.pack_end(actionbar, False, False, 0)
 		self.show_all()
+
+	def on_game_version_combo_changed(self, combo):
+		value = combo.get_active()
+		settings.update_and_save(self.parent.settings, key='Game', subkey='Version', value=value)
+		if value == shared.GameVersion.Retro:
+			self.window_decoration_height_spin_button.set_value(10)
+			self.verify_resources_color_check.set_active(False)
+			self.collection_time_spin_button.set_value(11)
+		else:
+			self.window_decoration_height_spin_button.set_value(36)
+			self.verify_resources_color_check.set_active(True)
+			self.collection_time_spin_button.set_value(4)
 
 	def on_shortcuts_switch_activated(self, switch, pspec):
 		value = switch.get_active()
