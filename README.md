@@ -61,6 +61,10 @@ python bot.py --dev
 
 **Note:** the [desktop file](dindo-bot.desktop) can also be used to run the bot with a double-click.
 
+## Tutorials
+
+- [Farming tutorial](https://www.youtube.com/watch?v=obGDT9_AXvk)
+
 ## To Know
 
 - You cannot use your computer for something else while Dindo is running.
