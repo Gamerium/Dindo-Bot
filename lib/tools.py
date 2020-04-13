@@ -101,10 +101,11 @@ def screen_game(region, save_to=None):
 		else:
 			# for PIL
 			screenshot = Image.fromstring('RGB', (width, height), raw.data, 'raw', 'BGRX')
+		if save_to is not None:
+			screenshot.save(save_to + '.png')
 	except:
-		screenshot = pyautogui.screenshot(None, region)
-	if save_to is not None:
-		screenshot.save(save_to + '.png')
+		filename = save_to + '.png' if save_to is not None else None
+		screenshot = pyautogui.screenshot(filename, region)
 	return screenshot
 
 # Return pixel color of given x, y coordinates
