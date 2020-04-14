@@ -595,7 +595,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		widget.add(self.pause_bot_radio)
 		# Monitor Game Screen
 		self.monitor_game_screen_radio = Gtk.RadioButton(group=self.duration_radio)
-		self.monitor_game_screen_radio.add(Gtk.Label('<b>Monitor Game Screen</b>', xalign=0, use_markup=True))
+		self.monitor_game_screen_radio.add(Gtk.Label('<b>Until map/screen changes</b>', xalign=0, use_markup=True))
 		widget.add(self.monitor_game_screen_radio)
 		# Add
 		add_button = Gtk.Button('Add')

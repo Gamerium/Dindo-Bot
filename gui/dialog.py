@@ -337,7 +337,7 @@ class PreferencesDialog(CustomDialog):
 		hbox.pack_end(self.window_decoration_height_spin_button, False, False, 0)
 		box.add(hbox)
 		# Keep game checkbox
-		keep_game_on_unplug_check = Gtk.CheckButton('Keep game open when unbind')
+		keep_game_on_unplug_check = Gtk.CheckButton('Keep game open when unbinding')
 		keep_game_on_unplug_check.set_margin_left(10)
 		keep_game_on_unplug_check.set_active(self.parent.settings['Game']['KeepOpen'])
 		keep_game_on_unplug_check.connect('clicked', 
@@ -346,7 +346,7 @@ class PreferencesDialog(CustomDialog):
 		## Account
 		box.add(Gtk.Label('<b>Account</b>', xalign=0, use_markup=True))
 		# Exit game checkbox
-		exit_game_on_disconnect_check = Gtk.CheckButton('Exit game when disconnect')
+		exit_game_on_disconnect_check = Gtk.CheckButton('Exit game when disconnecting')
 		exit_game_on_disconnect_check.set_margin_left(10)
 		exit_game_on_disconnect_check.set_active(self.parent.settings['Account']['ExitGame'])
 		exit_game_on_disconnect_check.connect('clicked', 
@@ -378,7 +378,7 @@ class PreferencesDialog(CustomDialog):
 		## Farming
 		box.add(Gtk.Label('<b>Farming</b>', xalign=0, use_markup=True))
 		# Save dragodindes images
-		save_dragodindes_images_check = Gtk.CheckButton('Save dragodindes image')
+		save_dragodindes_images_check = Gtk.CheckButton('Save dragodindes images')
 		save_dragodindes_images_check.set_margin_left(10)
 		save_dragodindes_images_check.set_active(self.parent.settings['Farming']['SaveDragodindesImages'])
 		save_dragodindes_images_check.connect('clicked', 
