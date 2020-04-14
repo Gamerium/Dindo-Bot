@@ -6,13 +6,13 @@
 
 Farming bot for Dofus game written in python & [GTK](https://www.gtk.org/).
 
-[![screenshot](screenshot.png)](http://www.youtube.com/watch?v=1Qh_eNLuTYo "Watch Dindo in action")
+[![screenshot](screenshot.png)](http://www.youtube.com/watch?v=1Qh_eNLuTYo "Watch Dindo-bot in action")
 
 > What's a bot?
 
-A bot is a software that emulates a real game client in order to automate certain tasks. Dindo is a **pixel** bot, which means that it uses screen pixels (+ your mouse & keyboard) to emulate actions & keep tracking the progress in game.
+A bot is a software that emulates a real game client in order to automate some tasks. Dindo is a **pixel** bot, which means that it uses screen pixels (+ your mouse & keyboard) to emulate actions & keep tracking the progress in game.
 
-> **WARNING**: This bot is only available for [Linux](https://www.wikipedia.org/wiki/Linux) at the current time.
+:warning: Better know that this bot is only available on [Linux](https://www.wikipedia.org/wiki/Linux) for now.
 
 ## Features
 
