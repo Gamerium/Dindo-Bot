@@ -8,13 +8,17 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Wnck', '3.0')
 from gi.repository import Gtk, Gdk, GdkX11, Wnck
 from datetime import datetime
-from Xlib import display, X
+from Xlib import display, X, Xatom
 from PIL import Image
 from . import parser
 import pyautogui
 import time
 import socket
 import webbrowser
+
+disp = display.Display()
+root = disp.screen().root
+NET_FRAME_EXTENTS = disp.intern_atom('_NET_FRAME_EXTENTS')
 
 # Return active game window(s) list
 def get_game_window_list():
@@ -53,6 +57,13 @@ def get_game_window(window_xid):
 	game_window = GdkX11.X11Window.foreign_new_for_display(gdk_display, window_xid)
 	return game_window
 
+# Return game window decoration height
+def get_game_window_decoration_height(window_xid):
+	window = disp.create_resource_object('window', window_xid)
+	window_decoration_property = window.get_full_property(NET_FRAME_EXTENTS, Xatom.CARDINAL).value # return array(left, right, top, bottom) of borders width
+	window_decoration_height = int(window_decoration_property[2]) + int(window_decoration_property[3])
+	return window_decoration_height
+
 # Return absolute path
 def get_full_path(rel_path):
 	dir_of_py_file = os.path.dirname(__file__)
@@ -90,8 +101,6 @@ def take_window_screenshot(window, save_to='screenshot'):
 
 # Return a screenshot of the game
 def screen_game(region, save_to=None):
-	dsp = display.Display()
-	root = dsp.screen().root
 	x, y, width, height = region
 	try:
 		raw = root.get_image(x, y, width, height, X.ZPixmap, 0xffffffff)
