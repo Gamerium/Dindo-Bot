@@ -55,9 +55,8 @@ class TextValueComboBox(Gtk.ComboBox):
 		self.set_model(self.model)
 		self.pack_start(renderer_text, True)
 		self.add_attribute(renderer_text, 'text', 0)
-		# save data list & value key (for further use)
-		self.data_list = data_list
-		self.value_key = value_key
+		# save data list values (for further use)
+		self.values = [ item[value_key] for item in data_list ]
 
 	def append_list(self, data_list, text_key, value_key, sort_key=None, clear=False):
 		# clear combobox
@@ -85,8 +84,7 @@ class TextValueComboBox(Gtk.ComboBox):
 		return self._get_active(1)
 
 	def set_active_value(self, value):
-		values = [ item[self.value_key] for item in self.data_list ]
-		self.set_active(values.index(value))
+		self.set_active(self.values.index(value))
 
 	def remove_all(self):
 		self.model.clear()
