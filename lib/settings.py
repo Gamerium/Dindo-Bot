@@ -24,7 +24,6 @@ def load_defaults():
 		},
 		'Game': {
 			'Version': GameVersion.Two,
-			'WindowDecorationHeight': 36,
 			'KeepOpen': True
 		},
 		'Account': {
