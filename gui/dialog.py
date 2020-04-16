@@ -6,7 +6,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
 from lib import tools, shared, settings, accounts, maps
-from .custom import CustomComboBox, CustomTreeView, ButtonBox, MessageBox, MiniMap, SpinButton
+from .custom import CustomComboBox, CustomTreeView, TextValueComboBox, ButtonBox, MessageBox, MiniMap, SpinButton
 
 class AboutDialog(Gtk.AboutDialog):
 
@@ -320,8 +320,12 @@ class PreferencesDialog(CustomDialog):
 		hbox.set_margin_left(10)
 		box.add(hbox)
 		hbox.add(Gtk.Label('Version'))
-		game_version_combo = CustomComboBox(['Retro', '2.x'])
-		game_version_combo.set_active(self.parent.settings['Game']['Version'])
+		game_version_list = [
+			{ 'label': 'Retro', 'value': shared.GameVersion.Retro },
+			{ 'label': '2.x', 'value': shared.GameVersion.Two }
+		]
+		game_version_combo = TextValueComboBox(game_version_list, model=Gtk.ListStore(str, int), text_key='label', value_key='value')
+		game_version_combo.set_active_value(self.parent.settings['Game']['Version'])
 		game_version_combo.connect('changed', self.on_game_version_combo_changed)
 		hbox.pack_end(game_version_combo, False, False, 0)
 		# Keep game checkbox
@@ -443,7 +447,7 @@ class PreferencesDialog(CustomDialog):
 		self.show_all()
 
 	def on_game_version_combo_changed(self, combo):
-		value = combo.get_active()
+		value = combo.get_active_value()
 		settings.update_and_save(self.parent.settings, key='Game', subkey='Version', value=value)
 		if value == shared.GameVersion.Retro:
 			self.verify_resources_color_check.set_active(False)

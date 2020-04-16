@@ -20,4 +20,4 @@ class DebugLevel:
 	High, Normal, Low = range(3)
 
 class GameVersion:
-    Retro, Two = range(2)
+    Retro, Two = 1, 2
