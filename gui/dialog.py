@@ -328,6 +328,26 @@ class PreferencesDialog(CustomDialog):
 		game_version_combo.set_active_value(self.parent.settings['Game']['Version'])
 		game_version_combo.connect('changed', self.on_game_version_combo_changed)
 		hbox.pack_end(game_version_combo, False, False, 0)
+		# Window decoration height
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.set_margin_left(10)
+		use_custom_window_decoration_height_check = Gtk.CheckButton('Window decoration height')
+		use_custom_window_decoration_height_check.set_active(self.parent.settings['Game']['UseCustomWindowDecorationHeight'])
+		use_custom_window_decoration_height_check.set_tooltip_text('(in pixels)')
+		use_custom_window_decoration_height_check.connect('clicked', 
+			lambda check: (
+				settings.update_and_save(self.parent.settings, key='Game', subkey='UseCustomWindowDecorationHeight', value=check.get_active()),
+				self.window_decoration_height_spin_button.set_sensitive(check.get_active())
+			)
+		)
+		hbox.add(use_custom_window_decoration_height_check)
+		self.window_decoration_height_spin_button = SpinButton(min=5, max=100)
+		self.window_decoration_height_spin_button.set_value(self.parent.settings['Game']['WindowDecorationHeight'])
+		self.window_decoration_height_spin_button.set_sensitive(self.parent.settings['Game']['UseCustomWindowDecorationHeight'])
+		self.window_decoration_height_spin_button.connect('value-changed', 
+			lambda button: settings.update_and_save(self.parent.settings, key='Game', subkey='WindowDecorationHeight', value=button.get_value_as_int()))
+		hbox.pack_end(self.window_decoration_height_spin_button, False, False, 0)
+		box.add(hbox)
 		# Keep game checkbox
 		keep_game_on_unplug_check = Gtk.CheckButton('Keep game open when unbinding')
 		keep_game_on_unplug_check.set_margin_left(10)
@@ -457,9 +477,11 @@ class PreferencesDialog(CustomDialog):
 		value = combo.get_active_value()
 		settings.update_and_save(self.parent.settings, key='Game', subkey='Version', value=value)
 		if value == shared.GameVersion.Retro:
+			self.window_decoration_height_spin_button.set_value(10)
 			self.verify_resources_color_check.set_active(False)
 			self.collection_time_spin_button.set_value(11)
 		else:
+			self.window_decoration_height_spin_button.set_value(36)
 			self.verify_resources_color_check.set_active(True)
 			self.collection_time_spin_button.set_value(4)
 

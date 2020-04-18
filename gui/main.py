@@ -1055,9 +1055,9 @@ class BotWindow(Gtk.ApplicationWindow):
 			bot_decoration_height = self.get_titlebar().get_allocated_height()
 			screen_width, screen_height = tools.get_screen_size()
 			game_window_left_margin = 1
-			game_window_decoration_height = tools.get_game_window_decoration_height(window_xid)
+			game_window_decoration_height = self.settings['Game']['WindowDecorationHeight'] if self.settings['Game']['UseCustomWindowDecorationHeight'] else tools.get_game_window_decoration_height(window_xid)
 			game_window_width = screen_width - bot_width - game_window_left_margin
-			game_window_height = bot_height + bot_decoration_height - game_window_decoration_height
+			game_window_height = bot_height if self.settings['Game']['UseCustomWindowDecorationHeight'] else bot_height + bot_decoration_height - game_window_decoration_height
 			if game_window_width > 900:
 				game_window_width = 900
 			bot_x_position = screen_width / 2 - (bot_width + game_window_width) / 2
