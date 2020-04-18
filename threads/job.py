@@ -16,6 +16,7 @@ class JobThread(FarmingThread):
 		self.podbar_enabled = parent.settings['State']['EnablePodBar']
 		self.minimap_enabled = parent.settings['State']['EnableMiniMap']
 		self.check_resources_color = parent.settings['Farming']['CheckResourcesColor']
+		self.auto_close_popups = parent.settings['Farming']['AutoClosePopups']
 		self.collection_time = parent.settings['Farming']['CollectionTime']
 		self.first_resource_additional_collection_time = parent.settings['Farming']['FirstResourceAdditionalCollectionTime']
 		self.game_version = parent.settings['Game']['Version']
@@ -60,7 +61,7 @@ class JobThread(FarmingThread):
 					if self.game_version != GameVersion.Retro and self.wait_for_box_appear(box_name='Fight Button', timeout=1):
 						self.pause()
 						self.log('Fight detected! human help wanted..', LogType.Error)
-					else:
+					elif self.auto_close_popups:
 						# it should be a popup (level up, ...)
 						self.debug('Closing popup')
 						screen = tools.screen_game(self.game_location)

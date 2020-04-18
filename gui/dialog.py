@@ -383,6 +383,13 @@ class PreferencesDialog(CustomDialog):
 		self.verify_resources_color_check.connect('clicked', 
 			lambda check: settings.update_and_save(self.parent.settings, key='Farming', subkey='CheckResourcesColor', value=check.get_active()))
 		box.add(self.verify_resources_color_check)
+		# Auto close popups
+		self.auto_close_popups_check = Gtk.CheckButton('Auto close popups (level up, invitation, ...)')
+		self.auto_close_popups_check.set_margin_left(10)
+		self.auto_close_popups_check.set_active(self.parent.settings['Farming']['AutoClosePopups'])
+		self.auto_close_popups_check.connect('clicked', 
+			lambda check: settings.update_and_save(self.parent.settings, key='Farming', subkey='AutoClosePopups', value=check.get_active()))
+		box.add(self.auto_close_popups_check)
 		# Collection time
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.set_margin_left(10)
