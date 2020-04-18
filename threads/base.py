@@ -65,11 +65,11 @@ class PausableThread(TimerThread):
 	def reset(self):
 		GObject.idle_add(self.parent.reset_buttons)
 
-	def wait(self):
-		self.pause()
+	def pause(self):
+		self._pause()
 		GObject.idle_add(self.parent.set_buttons_to_paused)
 
-	def pause(self):
+	def _pause(self):
 		self.pause_timer()
 		self.pause_event.clear()
 		self.debug('Bot thread paused', DebugLevel.Low)

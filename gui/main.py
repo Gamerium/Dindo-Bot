@@ -997,7 +997,6 @@ class BotWindow(Gtk.ApplicationWindow):
 	def pause_bot(self):
 		if self.bot_thread and self.bot_thread.isAlive() and self.bot_thread.pause_event.isSet():
 			self.bot_thread.pause()
-			self.set_buttons_to_paused()
 
 	def on_pause_button_clicked(self, button):
 		self.pause_bot()

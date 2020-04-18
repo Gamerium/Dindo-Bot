@@ -119,7 +119,7 @@ class BotThread(JobThread):
 				self.scroll(value)
 
 			elif instruction['name'] == 'Pause':
-				self.wait()
+				self.pause()
 
 			elif instruction['name'] == 'MonitorGameScreen':
 				self.monitor_game_screen(tolerance=2.5, screen=game_screen)

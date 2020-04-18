@@ -55,13 +55,13 @@ class GameThread(PausableThread):
 					# wait for screen to change
 					self.wait_for_screen_change(load_time=5)
 				elif not self.suspend:
-					self.wait()
+					self.pause()
 					self.log('Unable to connect to account', LogType.Error)
 			else:
-				self.wait()
+				self.pause()
 				self.log('Account not found', LogType.Error)
 		elif not self.suspend:
-			self.wait()
+			self.pause()
 			self.log('Login button detection failed', LogType.Error)
 
 	def disconnect(self, exit=False):
@@ -204,7 +204,7 @@ class GameThread(PausableThread):
 				elapsed_time += 1
 			# if game screen hasn't change before timeout
 			if wait_after_timeout and elapsed_time == timeout:
-				self.wait()
+				self.pause()
 				self.log('Game screen did not change', LogType.Error)
 
 		return False
@@ -233,7 +233,7 @@ class GameThread(PausableThread):
 				elapsed_time += 1
 		# if timeout reached
 		if elapsed_time == timeout:
-			self.wait()
+			self.pause()
 			self.log('Unable to connect to the internet', LogType.Error)
 
 	def sleep(self, duration=1):

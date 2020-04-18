@@ -58,7 +58,7 @@ class JobThread(FarmingThread):
 				if self.monitor_game_screen(tolerance=2.5, screen=screen, timeout=1, wait_after_timeout=False):
 					# check for fight
 					if self.game_version != GameVersion.Retro and self.wait_for_box_appear(box_name='Fight Button', timeout=1):
-						self.wait()
+						self.pause()
 						self.log('Fight detected! human help wanted..', LogType.Error)
 					else:
 						# it should be a popup (level up, ...)
@@ -76,7 +76,7 @@ class JobThread(FarmingThread):
 					if store_path != 'None':
 						self.go_to_store(store_path)
 					else:
-						self.wait()
+						self.pause()
 						self.log('Bot is full pod', LogType.Error)
 
 	def check_resource_color(self, resource):
@@ -103,7 +103,7 @@ class JobThread(FarmingThread):
 		if instructions:
 			self.interpret(instructions, ignore_start_from_step=True)
 		else:
-			self.wait()
+			self.pause()
 			self.debug('Could not interpret store path')
 			self.log('Bot is maybe full pod', LogType.Error)
 
