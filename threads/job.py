@@ -64,7 +64,13 @@ class JobThread(FarmingThread):
 						# it should be a popup (level up, ...)
 						self.debug('Closing popup')
 						screen = tools.screen_game(self.game_location)
-						self.press_key(data.KeyboardShortcuts['Enter'] if self.game_version == GameVersion.Retro else data.KeyboardShortcuts['Esc'])
+						if self.game_version == GameVersion.Retro:
+							self.press_key(data.KeyboardShortcuts['Enter'])
+						elif self.wait_for_box_appear(box_name='Job Level Up Popup', timeout=1):
+							location = self.get_box_location('Job Level Up Popup')
+							self.click(location)
+						else:
+							self.press_key(data.KeyboardShortcuts['Esc'])
 						# wait for popup to close
 						self.monitor_game_screen(tolerance=2.5, screen=screen)
 					# check for pause or suspend

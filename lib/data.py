@@ -7,7 +7,7 @@ Movements = {
 	'UP':    {'x': 266, 'y': 4, 'width': 566, 'height': 456},
 	'LEFT':  {'x': 5, 'y': 224, 'width': 566, 'height': 456},
 	'RIGHT': {'x': 561, 'y': 225, 'width': 566, 'height': 456},
-	'DOWN':  {'x': 263, 'y': 397, 'width': 566, 'height': 456}
+	'DOWN':  {'x': 263, 'y': 397, 'width': 566, 'height': 456},
 	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
@@ -21,7 +21,7 @@ Locations = {
 	'Disconnect Button':     {'x': 282, 'y': 218, 'width': 566, 'height': 456},
 	'Exit Button':           {'x': 282, 'y': 236, 'width': 566, 'height': 456},
 	'Login Input':           {'x': 270, 'y': 146, 'width': 566, 'height': 456},
-	'Password Input':        {'x': 270, 'y': 174, 'width': 566, 'height': 456}
+	'Password Input':        {'x': 270, 'y': 174, 'width': 566, 'height': 456},
 	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
@@ -40,7 +40,8 @@ Boxes = {
 	'Play Button':           {'x': 341, 'y': 362, 'width': 96, 'height': 1, 'windowSize': (566, 456)},
 	'Login Button':          {'x': 400, 'y': 385, 'width': 96, 'height': 1, 'windowSize': (900, 700)}, # not accurate
 	'PodBar':                {'x': 658, 'y': 564, 'width': 81, 'height': 1, 'windowSize': (900, 700)},
-	'Fight Button':          {'x': 706, 'y': 640, 'width': 81, 'height': 1, 'windowSize': (900, 700)}
+	'Fight Button':          {'x': 706, 'y': 640, 'width': 81, 'height': 1, 'windowSize': (900, 700)},
+	'Job Level Up Popup':    {'x': 249, 'y': 397, 'width': 11, 'height': 1, 'windowSize': (900, 713)},
 	# TODO: update all boxes coordinates to (900, 700) window size
 }
 
@@ -59,17 +60,18 @@ class DragodindeStats:
 
 # Colors
 Colors = {
-	'Full':            (204, 246, 0),
-	'In Progress':     (255, 106, 61),
-	#'Experience':      (108, 240, 229),
-	#'Tiredness':       (252, 200, 0),
-	'Empty Enclos':    (56, 56, 49),
-	'Selected Row':    (83, 83, 77),
-	'Empty Inventory': (53, 53, 45),
-	'Play Button':     (215, 247, 0),
-	'Login Button':    (214, 246, 0),
-	'Empty PodBar':    (67, 70, 68),
-	'Fight Button':    (216, 244, 0)
+	'Full':               (204, 246, 0),
+	'In Progress':        (255, 106, 61),
+	#'Experience':         (108, 240, 229),
+	#'Tiredness':          (252, 200, 0),
+	'Empty Enclos':       (56, 56, 49),
+	'Selected Row':       (83, 83, 77),
+	'Empty Inventory':    (53, 53, 45),
+	'Play Button':        (215, 247, 0),
+	'Login Button':       (214, 246, 0),
+	'Empty PodBar':       (67, 70, 68),
+	'Fight Button':       (216, 244, 0),
+	'Job Level Up Popup': (229, 249, 0),
 }
 
 # Keyboard shortcuts
@@ -90,7 +92,7 @@ KeyboardShortcuts = {
 	'Esc':       'esc'
 	#'Copy':      'ctrl+c',
 	#'Cut':       'ctrl+x',
-	#'Paste':     'ctrl+v'
+	#'Paste':     'ctrl+v',
 }
 
 # Enclos
@@ -100,14 +102,14 @@ EnclosType = [
 	'Endurance',
 	'Maturity',
 	'NegativeSerenity',
-	'PositiveSerenity'
+	'PositiveSerenity',
 ]
 
 Enclos = {
 	# Bonta
 	'[-37,-56]': {'x': 354, 'y': 144, 'width': 566, 'height': 456},
 	# Brakmar
-	'[-32,37]':  {'x': 234, 'y': 202, 'width': 566, 'height': 456}
+	'[-32,37]':  {'x': 234, 'y': 202, 'width': 566, 'height': 456},
 	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
@@ -116,11 +118,11 @@ Zaap = {
 	'From': {
 		'Havenbag':  {'x': 110, 'y': 162, 'width': 566, 'height': 456, 'keyboardShortcut': KeyboardShortcuts['Havenbag']},
 		'Bonta':     {'x': 248, 'y': 140, 'width': 566, 'height': 456},
-		'Brakmar':   {'x': 305, 'y': 106, 'width': 566, 'height': 456}
+		'Brakmar':   {'x': 305, 'y': 106, 'width': 566, 'height': 456},
 	},
 	'To': {
 		'Bonta':     {'x': 177, 'y': 274, 'width': 566, 'height': 456, 'scroll': -1},
-		'Brakmar':   {'x': 182, 'y': 295, 'width': 566, 'height': 456, 'scroll': -1}
+		'Brakmar':   {'x': 182, 'y': 295, 'width': 566, 'height': 456, 'scroll': -1},
 	}
 	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
@@ -135,12 +137,12 @@ Zaapi = {
 		# Brakmar
 		'Zaap Brakmar':      {'x': 435, 'y': 161, 'width': 566, 'height': 456},
 		'Bank Brakmar':      {'x': 154, 'y': 45, 'width': 566, 'height': 456},
-		'Animal SH Brakmar': {'x': 434, 'y': 62, 'width': 566, 'height': 456}
+		'Animal SH Brakmar': {'x': 434, 'y': 62, 'width': 566, 'height': 456},
 	},
 	'To': {
 		'Zaap':              {'x': 176, 'y': 298, 'width': 566, 'height': 456, 'scroll': -2, 'location': Locations['Various Menu']},
 		'Animal SH':         {'x': 203, 'y': 175, 'width': 566, 'height': 456, 'location': Locations['SH Menu']},
-		'Bank':              {'x': 183, 'y': 153, 'width': 566, 'height': 456, 'location': Locations['Various Menu']}
+		'Bank':              {'x': 183, 'y': 153, 'width': 566, 'height': 456, 'location': Locations['Various Menu']},
 	}
 	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
@@ -150,13 +152,13 @@ BankPath = {
 	# Bonta
 	'Bank Bonta': [
 		'Zaap(from=Havenbag,to=Bonta)',
-		'Zaapi(from=Zaap Bonta,to=Bank)'
+		'Zaapi(from=Zaap Bonta,to=Bank)',
 		# TODO: complete this path...
 	],
 	# Brakmar
 	'Bank Brakmar': [
 		'Zaap(from=Havenbag,to=Brakmar)',
-		'Zaapi(from=Zaap Brakmar,to=Bank)'
+		'Zaapi(from=Zaap Brakmar,to=Bank)',
 		# TODO: complete this path...
 	]
 }
