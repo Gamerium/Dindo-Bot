@@ -31,35 +31,31 @@ A bot is a software that emulates a real game client in order to automate some t
 
 ## Installation
 
-First, you need to install some dependencies using one of the following commands:
+First, clone this repository using git or just [download](https://github.com/AXeL-dev/Dindo-Bot/archive/master.zip) & unzip it:
 
-**Debian & derivatives:**
-```bash
-sudo apt install git python-gi gir1.2-gtk-3.0 gir1.2-wnck-3.0 python-xlib python-pil scrot
-```
+<details>
+  <summary>git installation</summary>
+  
+  ```bash
+    sudo apt install git
+  ```
+</details>
 
-**Arch Linux & derivatives:**
-```bash
-sudo pacman -S git python-gobject gtk3 libwnck3 python-xlib python-pillow scrot
-```
-
-Then, clone this repository using git or just [download](https://github.com/AXeL-dev/Dindo-Bot/archive/master.zip) & unzip it:
 ```bash
 git clone https://github.com/AXeL-dev/Dindo-Bot.git
 ```
 
-To run the bot open a terminal & type:
+Then, open a terminal & launch the installation script as below:
 ```bash
 cd /path/to/bot
-python bot.py
+chmod +x install.sh
+sudo ./install.sh
 ```
 
-You could even run the bot in developer mode (which brings some additional features):
+Once installed, you can run the bot from your app launcher or using the command below:
 ```bash
-python bot.py --dev
+dindo-bot
 ```
-
-**Note:** the [desktop file](dindo-bot.desktop) can also be used to run the bot with a double-click.
 
 ## Tutorials
 

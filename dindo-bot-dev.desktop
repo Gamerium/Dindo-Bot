@@ -1,13 +1,13 @@
 [Desktop Entry]
 Type=Application
 Encoding=UTF-8
-Name=Dindo Bot
-GenericName=Dindo Bot
+Name=Dindo Bot (dev mode)
+GenericName=Dindo Bot (dev mode)
 Comment=Farming bot for Dofus game
 #Icon=icons/logo.png
 Icon=/usr/share/icons/hicolor/128x128/apps/dindo-bot.png
 #Exec=bot.py
-Exec=sh -e -c "chmod +x \\"\\$(dirname \\"\\$0\\")/bot.py\\" && exec \\"\\$(dirname \\"\\$0\\")/bot.py\\"" %k
+Exec=sh -e -c "chmod +x \\"\\$(dirname \\"\\$0\\")/bot.py\\" && exec \\"\\$(dirname \\"\\$0\\")/bot.py\\" --dev" %k
 Terminal=false
 StartupNotify=false
 Categories=Application;Game
