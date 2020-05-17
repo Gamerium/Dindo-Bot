@@ -2,7 +2,7 @@
 # Copyright (c) 2018 - 2019 AXeL
 
 from lib.shared import LogType, DebugLevel
-from lib import tools, parser
+from lib import tools, parser, data
 from .job import JobThread
 
 class BotThread(JobThread):
@@ -29,22 +29,25 @@ class BotThread(JobThread):
 			self.pause_event.wait()
 
 		# get instructions & interpret them
-		if not self.suspend:
-			self.debug('Bot path: %s, repeat: %d' % (self.parent.bot_path, self.repeat_path))
-			if self.parent.bot_path:
-				instructions = tools.read_file(self.parent.bot_path)
-				repeat_count = 0
-				while repeat_count < self.repeat_path:
-					# check for pause or suspend
-					self.pause_event.wait()
-					if self.suspend: break
-					# start interpretation
-					self.interpret(instructions)
-					repeat_count += 1
+		while True:
+			if not self.suspend:
+				for bot_path in self.parent.bot_paths:
+					self.debug('Bot path: %s, repeat: %d' % (bot_path, self.repeat_path))
+					if bot_path:
+						instructions = tools.read_file(bot_path)
+						repeat_count = 0
+						while repeat_count < self.repeat_path:
+							# check for pause or suspend
+							self.pause_event.wait()
+							if self.suspend: break
+							# start interpretation
+							if self.interpret(instructions):
+								self.interpret("GoToBank()")
+							repeat_count += 1
 
-				# tell user that we have complete the path
-				if not self.suspend:
-					self.log('Bot path completed', LogType.Success)
+						# tell user that we have complete the path
+						if not self.suspend:
+							self.log('Bot path completed', LogType.Success)
 
 		if not self.suspend:
 			# disconnect account
@@ -74,6 +77,9 @@ class BotThread(JobThread):
 			self.pause_event.wait()
 			if self.suspend: break
 
+			if self.wait_for_box_appear(box_name='Fight Button Light', timeout=1):
+				self.handle_fight()
+
 			# parse instruction
 			self.debug('Instruction (%d): %s' % (i, line), DebugLevel.Low)
 			instruction = parser.parse_instruction(line)
@@ -99,7 +105,9 @@ class BotThread(JobThread):
 				self.use_zaapi(instruction['from'], instruction['to'])
 
 			elif instruction['name'] == 'Collect':
-				self.collect(instruction['map'], instruction['store_path'])
+				if self.collect(instruction['map'], instruction['store_path']):
+					# If collect return 1, we need to go to the bank. We forward 1 to the caller
+					return 1
 
 			elif instruction['name'] == 'Click':
 				coordinates = {
@@ -108,10 +116,26 @@ class BotThread(JobThread):
 					'width': int(instruction['width']),
 					'height': int(instruction['height'])
 				}
-				if instruction['twice'] == 'True':
+				# Handle the case when the click location need to match the stored color
+				if 'r' in instruction:
+					coordinates['color'] = f"({instruction['r']}, {instruction['g']}, {instruction['b']})"
+					while not self.check_location_color(coordinates):
+						self.log("Click location has a different color, waiting ...")
+						self.pause_event.wait()
+						if self.suspend: return
+						self.sleep(0.01)
+
+				if 'hotkey' in instruction:
+					self.hot_click(instruction['hotkey'], coordinates, instruction['twice'])
+				elif instruction['twice'] == 'True':
 					self.double_click(coordinates)
 				else:
 					self.click(coordinates)
+
+			elif instruction['name'] == 'GoToBank':
+				self.go_to_bank()
+				# Return to skip the end of the ongoing path
+				return
 
 			elif instruction['name'] == 'Scroll':
 				times = int(instruction['times'])
@@ -146,3 +170,13 @@ class BotThread(JobThread):
 
 			else:
 				self.debug('Unknown instruction', DebugLevel.Low)
+
+	def go_to_bank(self):
+		path_to_bank = data.BankPath
+		self.debug(f"Go to Bank (path: {path_to_bank})")
+		instructions = tools.read_file(tools.get_full_path(path_to_bank))
+		if instructions:
+			self.interpret(instructions, ignore_start_from_step=True)
+		else:
+			self.pause()
+			self.log('Error: Could not interpret to go to bank path')

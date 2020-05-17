@@ -109,8 +109,16 @@ def parse_key(key):
 
 	return result
 
-# Parse color string, e.: '(255, 255, 255)'
 def parse_color(color, as_hex=False):
+	'''
+	Parse color string and returns a tuple
+		Examples:
+			RGB: '(255, 255, 255)'
+			Hex: #F424BE
+	'''
+	# To avoid problems if color was already decoded
+	if isinstance(color, tuple):
+		return color
 	# check if RGB
 	if color.startswith('(') and color.endswith(')'):
 		values = color[1:-1].split(',') # [1:-1] will remove the first & last parentheses '(' ')'
