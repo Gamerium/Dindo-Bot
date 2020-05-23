@@ -4,7 +4,7 @@
 
 # Movements
 Movements = {
-	'UP':    {'x': 266, 'y': 4, 'width': 566, 'height': 456},
+	'UP':    {'x': 266, 'y': 1, 'width': 566, 'height': 456},
 	'LEFT':  {'x': 5, 'y': 224, 'width': 566, 'height': 456},
 	'RIGHT': {'x': 561, 'y': 225, 'width': 566, 'height': 456},
 	'DOWN':  {'x': 263, 'y': 397, 'width': 566, 'height': 456},
@@ -20,6 +20,7 @@ Locations = {
 	'Select From Inventory': {'x': 450, 'y': 165, 'width': 566, 'height': 456},
 	'Disconnect Button':     {'x': 282, 'y': 218, 'width': 566, 'height': 456},
 	'Exit Button':           {'x': 282, 'y': 236, 'width': 566, 'height': 456},
+	'Exit Defeat Message':   {'x': 556, 'y': 503, 'width': 900, 'height': 712},
 	'Login Input':           {'x': 270, 'y': 146, 'width': 566, 'height': 456},
 	'Password Input':        {'x': 270, 'y': 174, 'width': 566, 'height': 456},
 	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
@@ -39,9 +40,13 @@ Boxes = {
 	'Inventory First Place': {'x': 377, 'y': 165, 'width': 168, 'height': 1, 'windowSize': (566, 456)},
 	'Play Button':           {'x': 341, 'y': 362, 'width': 96, 'height': 1, 'windowSize': (566, 456)},
 	'Login Button':          {'x': 400, 'y': 385, 'width': 96, 'height': 1, 'windowSize': (900, 700)}, # not accurate
-	'PodBar':                {'x': 658, 'y': 564, 'width': 81, 'height': 1, 'windowSize': (900, 700)},
-	'Fight Button':          {'x': 706, 'y': 640, 'width': 81, 'height': 1, 'windowSize': (900, 700)},
-	'Job Level Up Popup':    {'x': 249, 'y': 397, 'width': 11, 'height': 1, 'windowSize': (900, 713)},
+	'PodBar':                {'x': 364, 'y': 692, 'width': 322, 'height': 1, 'windowSize': (900, 704)},
+	'Fight Button Light':    {'x': 720, 'y': 661, 'width': 1, 'height': 1, 'windowSize': (900, 712)},
+	'Fight Button Dark':     {'x': 720, 'y': 661, 'width': 1, 'height': 1, 'windowSize': (900, 712)},
+    'Victory':               {'x': 492, 'y': 479, 'width': 3, 'height': 3, 'windowSize': (900, 704)},
+	'NewVictory':            {'x': 101, 'y': 205, 'width': 3, 'height': 3, 'windowSize': (900, 704)},
+    'Defeat':                {'x': 494, 'y': 487, 'width': 3, 'height': 3, 'windowSize': (900, 712)},
+	'Job Level Up Popup':    {'x': 249, 'y': 397, 'width': 11, 'height': 1, 'windowSize': (900, 713)}
 	# TODO: update all boxes coordinates to (900, 700) window size
 }
 
@@ -69,13 +74,18 @@ Colors = {
 	'Empty Inventory':    (53, 53, 45),
 	'Play Button':        (215, 247, 0),
 	'Login Button':       (214, 246, 0),
-	'Empty PodBar':       (67, 70, 68),
-	'Fight Button':       (216, 244, 0),
+	'Empty PodBar':       (0, 0, 0),
+	'Fight Button Light': (206, 240, 0),
+	'Fight Button Dark':  (123,143,0),
 	'Job Level Up Popup': (229, 249, 0),
+	'Victory':            (206,150,20),
+	'NewVictory':         (255,235,165),
+	'Defeat':             (161,75,67)
 }
 
 # Keyboard shortcuts
 KeyboardShortcuts = {
+	'None':      '',
 	'Havenbag':  'h',
 	'Inventory': 'i',
 	'Store':     '&',
@@ -89,7 +99,11 @@ KeyboardShortcuts = {
 	'Backspace': 'backspace',
 	'Enter':     'enter',
 	'Tab':       'tab',
-	'Esc':       'esc'
+	'Esc':       'esc',
+	'Ctrl':      'crtl',
+	'arakne':    '-',
+	'epee':      '(',
+	'EndTurn':   ','
 	#'Copy':      'ctrl+c',
 	#'Cut':       'ctrl+x',
 	#'Paste':     'ctrl+v',
@@ -115,15 +129,18 @@ Enclos = {
 
 # Zaap
 Zaap = {
-	'From': {
-		'Havenbag':  {'x': 110, 'y': 162, 'width': 566, 'height': 456, 'keyboardShortcut': KeyboardShortcuts['Havenbag']},
-		'Bonta':     {'x': 248, 'y': 140, 'width': 566, 'height': 456},
-		'Brakmar':   {'x': 305, 'y': 106, 'width': 566, 'height': 456},
-	},
-	'To': {
-		'Bonta':     {'x': 177, 'y': 274, 'width': 566, 'height': 456, 'scroll': -1},
-		'Brakmar':   {'x': 182, 'y': 295, 'width': 566, 'height': 456, 'scroll': -1},
-	}
+	'To': ['Bonta',
+            'Rocky Roads',
+            'Tailena',
+            'Astrub City',
+            'Madrestam',
+            'Lousy Big',
+            'Frigost Island',
+            'Rocky Plains',
+            'Gobball Corner'],
+	'SearchBar': {'x': 497, 'y': 136, 'width': 900, 'height': 704},
+	'FirstDestination': {'x': 470, 'y': 194, 'width': 900, 'height': 704},
+	'ZaapItself': {'x': 180, 'y': 241, 'width': 900, 'height': 704}
 	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
@@ -147,18 +164,4 @@ Zaapi = {
 	# TODO: rename 'width' & 'height' to 'windowSize' (this may impact many parts of code)
 }
 
-# BankPath
-BankPath = {
-	# Bonta
-	'Bank Bonta': [
-		'Zaap(from=Havenbag,to=Bonta)',
-		'Zaapi(from=Zaap Bonta,to=Bank)',
-		# TODO: complete this path...
-	],
-	# Brakmar
-	'Bank Brakmar': [
-		'Zaap(from=Havenbag,to=Brakmar)',
-		'Zaapi(from=Zaap Brakmar,to=Bank)',
-		# TODO: complete this path...
-	]
-}
+BankPath = "./paths/path-to-bank.path"

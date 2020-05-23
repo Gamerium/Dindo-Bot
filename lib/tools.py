@@ -117,11 +117,13 @@ def screen_game(region, save_to=None):
 		screenshot = pyautogui.screenshot(filename, region)
 	return screenshot
 
-# Return pixel color of given x, y coordinates
+# Return pixel RGB color of given x, y coordinates
 def get_pixel_color(x, y):
-	pixel = screen_game((x, y, 1, 1))
-	rgb = pixel.getpixel((0, 0))
-	return rgb
+	# pixel = screen_game((x, y, 1, 1))
+	# rgb = pixel.getpixel((0, 0))
+	# return rgb
+	pixel = pyautogui.pixel(x, y)
+	return (pixel.red, pixel.green, pixel.blue)
 
 # Return date as a string in the given format
 def get_date(format='%d-%m-%y'):
@@ -207,7 +209,6 @@ def adjust_click_position(click_x, click_y, window_width, window_height, dest_x,
 	if screen_width > window_width and screen_height > window_height:
 		# fit position to destination size
 		new_x, new_y = fit_position_to_destination(click_x, click_y, window_width, window_height, dest_width, dest_height)
-		#print('new_x: %d, new_y: %d, dest_x: %d, dest_y: %d' % (new_x, new_y, dest_x, dest_y))
 		# scale to screen
 		x = new_x + dest_x
 		y = new_y + dest_y
@@ -225,6 +226,10 @@ def perform_click(x, y, double=False):
 		pyautogui.click(x=x, y=y)
 	pyautogui.moveTo(old_position)
 
+# Move mouse
+def move_mouse(x, y):
+	pyautogui.moveTo((x,y))
+
 # Press key
 def press_key(key, interval=None):
 	if interval is not None:
@@ -235,6 +240,14 @@ def press_key(key, interval=None):
 		pyautogui.press(keys[0])
 	elif count == 2:
 		pyautogui.hotkey(keys[0], keys[1])
+
+# Press key and keep it down until key_up is called
+def key_down(key):
+	pyautogui.keyDown(key)
+
+# Unpress a key previously pressed
+def key_up(key):
+	pyautogui.keyUp(key)
 
 # Type text
 def type_text(text, interval=0.1):
@@ -256,7 +269,7 @@ def create_directory(directory):
 	if not os.path.exists(directory):
 		os.makedirs(directory)
 
-# Check if color matches expected color
+# Check if RGB color matches expected RGB color
 def color_matches(color, expected_color, tolerance=0):
 	r, g, b = color
 	red, green, blue = expected_color

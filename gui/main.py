@@ -1,6 +1,7 @@
 # Dindo Bot
 # Copyright (c) 2018 - 2019 AXeL
 
+import os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
@@ -21,7 +22,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		# Initialise class attributes
 		self.game_window = None
 		self.game_window_location = None
-		self.bot_path = None
+		self.bot_paths = []
 		self.bot_thread = None
 		self.args = tools.get_cmd_args()
 		# Get settings
@@ -264,7 +265,8 @@ class BotWindow(Gtk.ApplicationWindow):
 		game_window_box.add(self.unbind_button)
 		## Bot Path
 		self.bot_config_widgets.add(Gtk.Label('<b>Bot Path</b>', xalign=0, use_markup=True))
-		bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path'))
+		# To do multiple paths, the user can load a .paths file which contains many .path
+		bot_path_filechooserbutton = FileChooserButton(title='Choose bot path', filter=('Bot Path', '*.path*'))
 		bot_path_filechooserbutton.set_margin_left(10)
 		bot_path_filechooserbutton.set_current_folder(tools.get_full_path('paths'))
 		bot_path_filechooserbutton.connect('file-set', self.on_bot_path_changed)
@@ -433,9 +435,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		stack_listbox.append(label, widget)
 		# From
 		widget.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
-		self.zaap_from_combo = CustomComboBox(data.Zaap['From'], sort=True)
+		self.zaap_from_combo = CustomComboBox(['Havenbag'], sort=True)
 		self.zaap_from_combo.set_margin_left(10)
-		self.zaap_from_combo.connect('changed', lambda combo: 
+		self.zaap_from_combo.connect('changed', lambda combo:
 			combo.sync_with_combo(self.zaap_to_combo)
 		)
 		widget.add(self.zaap_from_combo)
@@ -443,7 +445,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		widget.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
 		self.zaap_to_combo = CustomComboBox(data.Zaap['To'], sort=True)
 		self.zaap_to_combo.set_margin_left(10)
-		self.zaap_to_combo.connect('changed', lambda combo: 
+		self.zaap_to_combo.connect('changed', lambda combo:
 			combo.sync_with_combo(self.zaap_from_combo)
 		)
 		widget.add(self.zaap_to_combo)
@@ -463,7 +465,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		widget.add(Gtk.Label('<b>From</b>', xalign=0, use_markup=True))
 		self.zaapi_from_combo = CustomComboBox(data.Zaapi['From'], sort=True)
 		self.zaapi_from_combo.set_margin_left(10)
-		self.zaapi_from_combo.connect('changed', lambda combo: 
+		self.zaapi_from_combo.connect('changed', lambda combo:
 			combo.sync_with_combo(self.zaapi_to_combo, use_contains=True)
 		)
 		widget.add(self.zaapi_from_combo)
@@ -471,7 +473,7 @@ class BotWindow(Gtk.ApplicationWindow):
 		widget.add(Gtk.Label('<b>To</b>', xalign=0, use_markup=True))
 		self.zaapi_to_combo = CustomComboBox(data.Zaapi['To'], sort=True)
 		self.zaapi_to_combo.set_margin_left(10)
-		self.zaapi_to_combo.connect('changed', lambda combo: 
+		self.zaapi_to_combo.connect('changed', lambda combo:
 			combo.sync_with_combo(self.zaapi_from_combo, use_contains=True)
 		)
 		widget.add(self.zaapi_to_combo)
@@ -534,6 +536,16 @@ class BotWindow(Gtk.ApplicationWindow):
 		self.click_twice_switch = Gtk.Switch()
 		hbox.pack_end(self.click_twice_switch, False, False, 0)
 		widget.add(hbox)
+		# Color sentitive
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hbox.add(Gtk.Label('<b>Color Sensitive</b>', xalign=0, use_markup=True))
+		self.click_color_sensitive = Gtk.Switch()
+		hbox.pack_end(self.click_color_sensitive, False, False, 0)
+		widget.add(hbox)
+		# Hot key to be pressed before click (ex : ctrl + click)
+		self.hot_keys_combo = CustomComboBox(data.KeyboardShortcuts, sort=True)
+		self.hot_keys_combo.set_margin_left(10)
+		widget.add(self.hot_keys_combo)
 		# Location
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hbox.add(Gtk.Label('<b>Location</b>', xalign=0, use_markup=True))
@@ -929,7 +941,14 @@ class BotWindow(Gtk.ApplicationWindow):
 	def add_click(self, location):
 		x, y, width, height, color = location
 		twice = self.click_twice_switch.get_active()
-		self.path_listbox.append_text('Click(x=%d,y=%d,width=%d,height=%d,twice=%s)' % (x, y, width, height, twice))
+		color_sensitive = self.click_color_sensitive.get_active()
+		hot_key = self.hot_keys_combo.get_active_text()
+		instruction = ""
+		if color_sensitive:
+			instruction = f"Click(x={x},y={y},width={width},height={height},twice={twice},hotkey={hot_key}, r={color[0]}, g={color[1]}, b={color[2]})"
+		else:
+			instruction = f"Click(x={x},y={y},width={width},height={height},twice={twice},hotkey={hot_key})"
+		self.path_listbox.append_text(instruction)
 		self.select_button.set_sensitive(True)
 		self.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 
@@ -947,7 +966,7 @@ class BotWindow(Gtk.ApplicationWindow):
 			AlertDialog(self, 'Please select a game window')
 		elif self.game_window.is_destroyed():
 			AlertDialog(self, 'Chosen game window was destroyed')
-		elif not self.bot_path:
+		elif not self.bot_paths:
 			AlertDialog(self, 'Please select a bot path')
 		else:
 			# ensure that game window is in the right place
@@ -1016,7 +1035,19 @@ class BotWindow(Gtk.ApplicationWindow):
 			self.reset_buttons()
 
 	def on_bot_path_changed(self, filechooserbutton):
-		self.bot_path = filechooserbutton.get_filename()
+		'''
+		This function populates the self.bot_paths attribute
+		with the paths specified. The chosen file can either be
+		single path or a list of paths provided in a .paths file.
+		'''
+		path_filename = filechooserbutton.get_filename()
+		_, ext = os.path.splitext(path_filename)
+		if ext == ".paths":
+			with open(path_filename, "r") as f:
+				for path in f:
+					self.bot_paths.append(tools.get_full_path("paths/"+path.splitlines()[0]))
+		else:
+			self.bot_paths = [path_filename]
 
 	def populate_game_window_combo(self):
 		self.game_window_combo_ignore_change = True

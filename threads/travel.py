@@ -2,12 +2,12 @@
 # Copyright (c) 2018 - 2019 AXeL
 
 from lib import data, tools, parser
-from .game import GameThread
+from .fighting import FightingThread
 
-class TravelThread(GameThread):
+class TravelThread(FightingThread):
 
 	def __init__(self, parent, game_location):
-		GameThread.__init__(self, parent, game_location)
+		FightingThread.__init__(self, parent, game_location)
 
 	def move(self, direction):
 		# get coordinates
@@ -27,40 +27,28 @@ class TravelThread(GameThread):
 			self.sleep(load_time)
 
 	def use_zaap(self, zaap_from, zaap_to):
-		# get coordinates
-		zaap_from_coordinates = parser.parse_data(data.Zaap['From'], zaap_from)
-		zaap_to_coordinates = parser.parse_data(data.Zaap['To'], zaap_to)
-		if zaap_from_coordinates and zaap_to_coordinates:
-			# if a keyboard shortcut is set (like for Havenbag)
-			if 'keyboardShortcut' in zaap_from_coordinates:
-				# press key
-				self.press_key(zaap_from_coordinates['keyboardShortcut'])
-				# wait for map to change
-				self.wait_for_map_change()
-				# check for pause or suspend
-				self.pause_event.wait()
-				if self.suspend: return
-			# click on zaap from
-			screen = tools.screen_game(self.game_location)
-			self.click(zaap_from_coordinates)
-			# wait for zaap list to show
-			self.debug('Waiting for zaap list to show')
-			self.monitor_game_screen(tolerance=2.5, screen=screen)
-			# check for pause or suspend
-			self.pause_event.wait()
-			if self.suspend: return
-			# if we need to scroll zaap list
-			if 'scroll' in zaap_to_coordinates:
-				# scroll
-				self.scroll(zaap_to_coordinates['scroll'])
-				# check for pause or suspend
-				self.pause_event.wait()
-				if self.suspend: return
-			# double click on zaap to
-			screen = tools.screen_game(self.game_location)
-			self.double_click(zaap_to_coordinates)
-			# wait for map to change
-			self.wait_for_map_change(screen=screen)
+		'''
+		Always use the havenbag to 'from' location and searches the destination
+		by clicking in the search bar and typing the name of destination
+		'''
+		self.press_key(data.KeyboardShortcuts['Havenbag'])
+		self.wait_for_map_change()
+		# check for pause or suspend
+		self.pause_event.wait()
+		if self.suspend: return
+		self.click(data.Zaap['ZaapItself'])
+		self.sleep(3.0)
+		self.click(data.Zaap['SearchBar'])
+		self.sleep(1.0)
+		for letter in zaap_to:
+			if letter == " ":
+				letter = "space"
+			self.press_key(letter)
+		self.sleep(3.0)
+		screen = tools.screen_game(self.game_location)
+		self.double_click(data.Zaap['FirstDestination'])
+		# wait for map to change
+		self.wait_for_map_change(screen=screen)
 
 	def use_zaapi(self, zaapi_from, zaapi_to):
 		# get coordinates
