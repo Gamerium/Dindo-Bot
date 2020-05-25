@@ -93,7 +93,7 @@ class JobThread(FarmingThread):
 					return 1
 			if self.ratio_collection:
 				ratio = (len(map_data)-miss)/len(map_data)
-				tools.save_text_to_file(f"{map_name}: {ratio}\n", self.name_ratio_collection_map, 'a+')
+				tools.save_text_to_file(tools.fformat("{map_name}: {ratio}\n"), self.name_ratio_collection_map, 'a+')
 
 
 	def check_location_color(self, location):
@@ -119,7 +119,7 @@ class JobThread(FarmingThread):
 		# check pixel color
 		if self.check_resources_color:
 			if not self.check_location_color(resource):
-				self.debug(f"Ignoring non-matching resource 'x': {resource['x']}, 'y': {resource['x']}, 'color': {resource['color']}")
+				self.debug(tools.fformat("Ignoring non-matching resource 'x': {resource['x']}, 'y': {resource['y']}, 'color': {resource['color']}"))
 				# remove current resource from minimap (index = 0)
 				self.remove_from_minimap(0)
 				return False
@@ -138,13 +138,13 @@ class JobThread(FarmingThread):
 		if tools.color_matches(color, data.Colors['Empty PodBar'], tolerance=10):
 			percentage = 100.0 - percentage
 		# update pod bar
-		self.log(f"Pod {percentage}%, color: {color}")
+		self.log(tools.fformat("Pod {percentage}%, color: {color}"))
 		self.set_pod(percentage)
 		return percentage
 
 	def set_pod(self, percentage):
 		if self.podbar_enabled:
-			self.debug(f"Update PodBar (percentage: {percentage}%)")
+			self.debug(tools.fformat("Update PodBar (percentage: {percentage}%)"))
 			# set podbar value
 			GObject.idle_add(self.parent.podbar.set_fraction, percentage / 100.0)
 

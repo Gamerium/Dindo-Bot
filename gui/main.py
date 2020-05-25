@@ -945,9 +945,9 @@ class BotWindow(Gtk.ApplicationWindow):
 		hot_key = self.hot_keys_combo.get_active_text()
 		instruction = ""
 		if color_sensitive:
-			instruction = f"Click(x={x},y={y},width={width},height={height},twice={twice},hotkey={hot_key}, r={color[0]}, g={color[1]}, b={color[2]})"
+			instruction = tools.fformat("Click(x={x},y={y},width={width},height={height},twice={twice},hotkey={hot_key}, r={color[0]}, g={color[1]}, b={color[2]})")
 		else:
-			instruction = f"Click(x={x},y={y},width={width},height={height},twice={twice},hotkey={hot_key})"
+			instruction = tools.fformat("Click(x={x},y={y},width={width},height={height},twice={twice},hotkey={hot_key})")
 		self.path_listbox.append_text(instruction)
 		self.select_button.set_sensitive(True)
 		self.set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))

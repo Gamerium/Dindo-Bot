@@ -73,7 +73,7 @@ class FightingThread(GameThread):
 
                 im = Image.fromarray(difference_screen)
                 if self.save_screenshots:
-                    im.save(f"screenshots/difference-{self.index}.jpeg")
+                    im.save(tools.fformat("screenshots/difference-{self.index}.jpeg"))
 
                 image = difference_screen
                 resized = imutils.resize(image, width=300)
@@ -124,7 +124,7 @@ class FightingThread(GameThread):
 
                     im = Image.fromarray(image)
                     if self.save_screenshots:
-                        im.save(f"screenshots/processed-{self.index}.jpeg")
+                        im.save(tools.fformat("screenshots/processed-{self.index}.jpeg"))
                         self.index += 1
                 if not len(cX):
                     self.debug("No contours found. Can\'t invoke the arakne", DebugLevel.High)
@@ -136,7 +136,7 @@ class FightingThread(GameThread):
                     blue_box['width'] = width
                     blue_box['height'] = height
                     self.click(blue_box)
-                    self.debug(f"Invoked Spider on {blue_box['x']}, {blue_box['y']}", DebugLevel.High)
+                    self.debug(tools.fformat("Invoked Spider on {blue_box['x']}, {blue_box['y']}", DebugLevel.High))
 
                 self.sleep(2.0)
                 self.debug("End Turn .. ", DebugLevel.High)

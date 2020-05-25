@@ -103,7 +103,7 @@ class GameThread(PausableThread):
 		percentage = tools.get_color_percentage(screen, box_color)
 		has_appeared = percentage >= 70
 		debug_level = DebugLevel.Normal if has_appeared else DebugLevel.High
-		self.debug(f"{box_name} has appeared: {has_appeared}, percentage: {percentage}", debug_level)
+		self.debug(tools.fformat("{box_name} has appeared: {has_appeared}, percentage: {percentage}"), debug_level)
 		return has_appeared
 
 	def wait_for_box_appear(self, box_name, box_color=None, timeout=30, sleep=1):

@@ -118,7 +118,7 @@ class BotThread(JobThread):
 				}
 				# Handle the case when the click location need to match the stored color
 				if 'r' in instruction:
-					coordinates['color'] = f"({instruction['r']}, {instruction['g']}, {instruction['b']})"
+					coordinates['color'] = tools.fformat("({instruction['r']}, {instruction['g']}, {instruction['b']})")
 					while not self.check_location_color(coordinates):
 						self.log("Click location has a different color, waiting ...")
 						self.pause_event.wait()
@@ -173,7 +173,7 @@ class BotThread(JobThread):
 
 	def go_to_bank(self):
 		path_to_bank = data.BankPath
-		self.debug(f"Go to Bank (path: {path_to_bank})")
+		self.debug(tools.fformat("Go to Bank (path: {path_to_bank})"))
 		instructions = tools.read_file(tools.get_full_path(path_to_bank))
 		if instructions:
 			self.interpret(instructions, ignore_start_from_step=True)
