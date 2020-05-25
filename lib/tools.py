@@ -335,7 +335,7 @@ def get_screen_size():
 def move_mouse_to(position):
 	pyautogui.moveTo(position)
 
-# stolen from: https://stackoverflow.com/a/45757729
+# Brings python 3.6 f-strings feature to older versions, stolen from: https://stackoverflow.com/a/45757729
 def fformat(string):
   caller_frame = inspect.currentframe().f_back
   names = dict(caller_frame.f_globals, **caller_frame.f_locals)
