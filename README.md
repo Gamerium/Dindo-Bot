@@ -6,6 +6,8 @@
 
 Farming bot for Dofus game written in python & [GTK](https://www.gtk.org/).
 
+> :construction: version 3 is work in progress, you can test it or contribute on the [v3-alpha](https://github.com/AXeL-dev/Dindo-Bot/tree/v3-alpha) branch.
+
 [![screenshot](screenshot.png)](http://www.youtube.com/watch?v=1Qh_eNLuTYo "Watch Dindo-bot in action")
 
 > What's a bot?
