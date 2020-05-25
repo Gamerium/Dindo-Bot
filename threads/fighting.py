@@ -2,16 +2,11 @@
 
 import random
 import numpy as np
-import time
-import gi
 import cv2
 import imutils
-gi.require_version('Gtk', '3.0')
-from gi.repository import GObject
 from lib.shared import LogType, DebugLevel
-from lib import data, tools, imgcompare, accounts
+from lib import data, tools
 from .game import GameThread
-import pyscreenshot as ImageGrab
 from PIL import Image
 
 class FightingThread(GameThread):
@@ -62,11 +57,11 @@ class FightingThread(GameThread):
                 # being anywhere on the screen. It will fail if the character has no
                 # space around.
                 x, y, width, height = self.game_location
-                before = ImageGrab.grab(bbox=(x,y, x+width, y+height), backend='pygdk3')
+                before = tools.screen_game((x,y, x+width, y+height))
                 screen_initial = np.array(before)
                 self.press_key(data.KeyboardShortcuts['arakne'])
                 self.sleep(3.0)
-                after = ImageGrab.grab(bbox=(x,y, x+width, y+height), backend='pygdk3')
+                after = tools.screen_game((x,y, x+width, y+height))
                 screen_spell = np.array(after)
                 self.sleep(1.0)
                 difference_screen = screen_initial - screen_spell
