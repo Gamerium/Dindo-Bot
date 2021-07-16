@@ -1,5 +1,6 @@
 ### TODO
 
+* Add plugins system (for example: fight handling can be embedded into a plugin & plugged if needed)
 * Use OCR to detect dd number in enclos/inventory
 * Add an XP system for dd
 * Display global dd stats in log text view or in a widget

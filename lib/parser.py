@@ -32,7 +32,7 @@ def replace_all_between(text, needle, substitute, starts_with, ends_with):
 			cursor_position += needle_position+1
 			text = text[needle_position+1:]
 			#print('not surrounded')
-		# else if not find
+		# else if not found
 		else:
 			#print('break')
 			break
@@ -80,7 +80,7 @@ def parse_data(data, key, subkeys=[]):
 	if key in data:
 		if subkeys:
 			count = len(subkeys)
-			many = {} # dict to store subkeys data if there are more than 1
+			many = {} # dict to store subkeys data if there is more than 1
 			for subkey in subkeys:
 				if subkey in data[key]:
 					if count == 1:
