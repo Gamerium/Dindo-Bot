@@ -14,12 +14,13 @@ APT_CMD=$(which apt)
 PACMAN_CMD=$(which pacman)
 
 # python version detection
-PYTHON_VER=$(python -c"import sys; print(sys.version_info.major)")
+#PYTHON_VER=$(python -c"import sys; print(sys.version_info.major)")
+PYTHON_VER="3"
 
 # install dependencies
 if [[ ! -z $APT_CMD ]]; then
   if [ $PYTHON_VER -eq 3 ]; then
-    sudo apt -y install python-gi gir1.2-gtk-3.0 gir1.2-wnck-3.0 python3-xlib python3-pil scrot
+    sudo apt -y install python3-gi gir1.2-gtk-3.0 gir1.2-wnck-3.0 python3-xlib python3-pil scrot
   else
     sudo apt -y install python-gi gir1.2-gtk-3.0 gir1.2-wnck-3.0 python-xlib python-pil scrot
   fi
