@@ -23,19 +23,22 @@ NET_FRAME_EXTENTS = disp.intern_atom('_NET_FRAME_EXTENTS')
 # Return active game window(s) list
 def get_game_window_list():
 	game_window_list = {}
-	screen = Wnck.Screen.get_default()
-	screen.force_update() # recommended per Wnck documentation
-	window_list = screen.get_windows()
-	for window in window_list:
-		window_name = window.get_name()
-		instance_name = window.get_class_instance_name()
-		#print('[' + instance_name + '] ' + window_name)
-		if instance_name == 'dofus.exe' or instance_name == 'dofus': # use 'sun-awt-X11-XFramePeer' for Wakfu
-			if window_name in game_window_list:
-				name = '%s (%d)' % (window_name, len(game_window_list)+1)
-			else:
-				name = window_name
-			game_window_list[name] = window.get_xid()
+	try:
+		screen = Wnck.Screen.get_default()
+		screen.force_update() # recommended per Wnck documentation
+		window_list = screen.get_windows()
+		for window in window_list:
+			window_name = window.get_name()
+			instance_name = window.get_class_instance_name()
+			#print('[' + instance_name + '] ' + window_name)
+			if instance_name == 'dofus.exe' or instance_name == 'dofus': # use 'sun-awt-X11-XFramePeer' for Wakfu
+				if window_name in game_window_list:
+					name = '%s (%d)' % (window_name, len(game_window_list)+1)
+				else:
+					name = window_name
+				game_window_list[name] = window.get_xid()
+	except Exception as ex:
+		print(ex.message)
 	return game_window_list
 
 # Return screen size
