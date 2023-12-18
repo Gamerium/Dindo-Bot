@@ -5,7 +5,19 @@
 
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Enable version updates for Python
+  - package-ecosystem: "pip"
+    directory: "/"
+    # Check for updates every day
     schedule:
-      interval: "weekly"
+      interval: "daily"
+  - package-ecosystem: "pipenv"
+    directory: "/"
+    # Check for updates every day
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pip-compile"
+    directory: "/"
+    # Check for updates every day
+    schedule:
+      interval: "daily"
