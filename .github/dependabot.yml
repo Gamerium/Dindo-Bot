@@ -11,13 +11,3 @@ updates:
     # Check for updates every day
     schedule:
       interval: "daily"
-  - package-ecosystem: "pipenv"
-    directory: "/"
-    # Check for updates every day
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "pip-compile"
-    directory: "/"
-    # Check for updates every day
-    schedule:
-      interval: "daily"
